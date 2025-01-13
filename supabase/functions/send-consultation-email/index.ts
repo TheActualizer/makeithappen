@@ -18,6 +18,7 @@ interface ConsultationRequest {
   consultationTime: string;
   projectType: string;
   description: string;
+  zoomLink: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -32,49 +33,69 @@ const handler = async (req: Request): Promise<Response> => {
     const consultation: ConsultationRequest = await req.json();
     console.log("Received consultation data:", consultation);
 
-    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      throw new Error("Missing Supabase configuration");
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not configured");
     }
 
     // Store appointment in database
-    const supabase = createClient(
-      SUPABASE_URL,
-      SUPABASE_SERVICE_ROLE_KEY
-    );
-
-    const { error: dbError } = await supabase
-      .from('appointments')
-      .insert({
-        name: consultation.name,
-        email: consultation.email,
-        consultation_date: consultation.consultationDate,
-        consultation_time: consultation.consultationTime,
-        project_type: consultation.projectType,
-        status: 'scheduled'
-      });
-
-    if (dbError) {
-      console.error("Database error:", dbError);
-      throw new Error(`Failed to store appointment: ${dbError.message}`);
-    }
-
-    // Send confirmation email
-    if (!RESEND_API_KEY) {
-      console.warn("RESEND_API_KEY not configured, skipping email send");
-      return new Response(
-        JSON.stringify({ success: true, message: "Appointment scheduled (email notification skipped)" }), 
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    if (SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY) {
+      const supabase = createClient(
+        SUPABASE_URL,
+        SUPABASE_SERVICE_ROLE_KEY
       );
+
+      const { error: dbError } = await supabase
+        .from('appointments')
+        .insert({
+          name: consultation.name,
+          email: consultation.email,
+          consultation_date: consultation.consultationDate,
+          consultation_time: consultation.consultationTime,
+          project_type: consultation.projectType,
+          status: 'scheduled'
+        });
+
+      if (dbError) {
+        console.error("Database error:", dbError);
+        throw new Error(`Failed to store appointment: ${dbError.message}`);
+      }
     }
 
-    const emailHtml = `
-      <h2>Consultation Confirmation</h2>
+    // Email template for customer
+    const customerEmailHtml = `
+      <h2>Your Consultation is Confirmed!</h2>
       <p>Hello ${consultation.name},</p>
       <p>Your consultation has been scheduled for ${consultation.consultationDate} at ${consultation.consultationTime}.</p>
+      
+      <h3>Meeting Details:</h3>
+      <p><strong>Zoom Link:</strong> <a href="${consultation.zoomLink}">${consultation.zoomLink}</a></p>
+      <p>Please click the link above at the scheduled time to join the meeting.</p>
+      
       <h3>Project Details:</h3>
       <p><strong>Type:</strong> ${consultation.projectType}</p>
       <p><strong>Description:</strong> ${consultation.description}</p>
+      
+      <p>If you need to reschedule or have any questions, please don't hesitate to reach out.</p>
       <p>We look forward to speaking with you!</p>
+      
+      <p>Best regards,<br>The Team</p>
+    `;
+
+    // Email template for admin
+    const adminEmailHtml = `
+      <h2>New Consultation Scheduled</h2>
+      <h3>Client Information:</h3>
+      <p><strong>Name:</strong> ${consultation.name}</p>
+      <p><strong>Email:</strong> ${consultation.email}</p>
+      <p><strong>Date:</strong> ${consultation.consultationDate}</p>
+      <p><strong>Time:</strong> ${consultation.consultationTime}</p>
+      
+      <h3>Meeting Details:</h3>
+      <p><strong>Zoom Link:</strong> <a href="${consultation.zoomLink}">${consultation.zoomLink}</a></p>
+      
+      <h3>Project Details:</h3>
+      <p><strong>Type:</strong> ${consultation.projectType}</p>
+      <p><strong>Description:</strong> ${consultation.description}</p>
     `;
 
     // Send email to customer
@@ -88,23 +109,11 @@ const handler = async (req: Request): Promise<Response> => {
         from: "Lovable <onboarding@resend.dev>",
         to: [consultation.email],
         subject: "Your Consultation Confirmation",
-        html: emailHtml,
+        html: customerEmailHtml,
       }),
     });
 
     // Send copy to admin
-    const adminEmailHtml = `
-      <h2>New Consultation Request</h2>
-      <h3>Client Information:</h3>
-      <p><strong>Name:</strong> ${consultation.name}</p>
-      <p><strong>Email:</strong> ${consultation.email}</p>
-      <p><strong>Date:</strong> ${consultation.consultationDate}</p>
-      <p><strong>Time:</strong> ${consultation.consultationTime}</p>
-      <h3>Project Details:</h3>
-      <p><strong>Type:</strong> ${consultation.projectType}</p>
-      <p><strong>Description:</strong> ${consultation.description}</p>
-    `;
-
     const adminRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -122,11 +131,10 @@ const handler = async (req: Request): Promise<Response> => {
     if (!customerRes.ok || !adminRes.ok) {
       const error = await customerRes.text();
       console.error("Resend API error:", error);
-      // Don't throw here since appointment was created successfully
       return new Response(
         JSON.stringify({ 
           success: true, 
-          message: "Appointment scheduled (email notification failed)" 
+          message: "Appointment scheduled but email notification failed" 
         }), 
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
