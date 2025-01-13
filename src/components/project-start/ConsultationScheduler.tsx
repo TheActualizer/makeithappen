@@ -53,18 +53,20 @@ Additional Context:
       <p className="text-sm text-muted-foreground mb-4">
         Please select a time that works best for you to discuss your project in detail.
       </p>
-      <CalendlyEmbed 
-        url="https://calendly.com/belchonen18/30min" 
-        prefill={{
-          name: formData.name,
-          email: formData.email,
-          customAnswers: {
-            a1: formData.company || 'Not provided',
-            a2: formData.phone || 'Not provided',
-            a3: meetingPrep
-          }
-        }}
-      />
+      <div className="rounded-lg overflow-hidden border">
+        <CalendlyEmbed 
+          url="https://calendly.com/belchonen18/30min" 
+          prefill={{
+            name: formData.name,
+            email: formData.email,
+            customAnswers: {
+              a1: formData.company || 'Not provided',
+              a2: formData.phone || 'Not provided',
+              a3: meetingPrep
+            }
+          }}
+        />
+      </div>
     </div>
   );
 };
