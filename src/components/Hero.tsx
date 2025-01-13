@@ -28,23 +28,25 @@ const Hero = () => {
           <div className="space-y-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-6 animate-fade-in">
               <Sparkles className="w-4 h-4 text-secondary animate-pulse" />
-              <span className="text-sm text-gray-300">Transforming Ideas into Reality</span>
+              <span className="text-sm text-gray-300">From Simple Websites to Enterprise SaaS Solutions</span>
             </div>
             
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              Building the Future with{" "}
+              Building{" "}
               <span className="relative">
                 <span className="absolute -inset-1 blur-xl bg-gradient-to-r from-secondary via-primary to-secondary opacity-30"></span>
                 <span className="relative bg-gradient-to-r from-secondary via-primary to-secondary bg-clip-text text-transparent">
-                  AI-Powered Solutions
+                  Next-Generation
                 </span>
-              </span>
+              </span>{" "}
+              Digital Solutions
             </h1>
             
             <p className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto backdrop-blur-sm">
-              Accelerate your business growth with cutting-edge AI solutions, robust
-              database architecture, and intelligent workflow automation tailored to
-              your needs.
+              Transform your vision into reality with our comprehensive development solutions. 
+              From responsive websites to sophisticated enterprise SaaS platforms powered by AI, 
+              we deliver scalable solutions with advanced reporting, third-party integrations, 
+              and complex computational capabilities.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-12">
@@ -62,7 +64,7 @@ const Hero = () => {
                 onClick={() => document.getElementById("services")?.scrollIntoView({ behavior: 'smooth' })}
                 className="border-gray-500 hover:border-white transition-colors min-w-[200px] backdrop-blur-sm"
               >
-                Explore Services
+                Explore Solutions
               </Button>
             </div>
           </div>
