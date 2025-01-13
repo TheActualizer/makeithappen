@@ -60,26 +60,6 @@ const ProjectStartModal = ({
     }
   };
 
-  const formatBudgetRange = (range: string | undefined) => {
-    if (!range) return null;
-    
-    const matches = range.match(/\d+/g);
-    if (!matches) return null;
-    
-    let min = parseInt(matches[0]);
-    let max = matches.length > 1 ? parseInt(matches[1]) : min;
-    
-    if (range === "under-10000") {
-      min = 0;
-      max = 10000;
-    } else if (range === "200000+") {
-      min = 200000;
-      max = 1000000;
-    }
-    
-    return `[${min},${max}]`;
-  };
-
   const handleSubmit = async () => {
     console.log("[handleSubmit] Starting submission process");
     try {
@@ -95,10 +75,6 @@ const ProjectStartModal = ({
         description: formData.description,
         timeline: formData.timeline,
         pain_points: formData.pain_points || [],
-        complexity: formData.complexity,
-        team_size: formData.teamSize ? parseInt(formData.teamSize) : null,
-        budget_range: formatBudgetRange(formData.budgetRange),
-        workforce_simulation_scope: formData.workforce_simulation_scope,
         ai_agent_requirements: formData.ai_agent_requirements || []
       };
 
@@ -110,7 +86,7 @@ const ProjectStartModal = ({
 
       if (error) {
         console.error('[handleSubmit] Project submission error:', error);
-        throw new Error(error.message);
+        throw error;
       }
 
       console.log('[handleSubmit] Project saved successfully');
@@ -120,7 +96,6 @@ const ProjectStartModal = ({
         description: "Your project details have been saved. Let's schedule a consultation!",
       });
 
-      // Important: Set showCalendly to true AFTER successful submission
       setShowCalendly(true);
       console.log("[handleSubmit] showCalendly set to true");
       
