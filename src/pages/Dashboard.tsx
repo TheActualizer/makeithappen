@@ -10,15 +10,18 @@ import {
   MessageSquare,
   FileText,
   Activity,
+  Settings,
 } from "lucide-react";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { DashboardForms } from "@/components/dashboard/DashboardForms";
 import { DashboardCalendar } from "@/components/dashboard/DashboardCalendar";
 import { DashboardActivity } from "@/components/dashboard/DashboardActivity";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 const Dashboard = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("overview");
+  const { isAdmin, isLoading: isLoadingAdmin } = useIsAdmin();
 
   // Subscribe to real-time updates
   useEffect(() => {
@@ -45,9 +48,22 @@ const Dashboard = () => {
     };
   }, [toast]);
 
+  if (isLoadingAdmin) {
+    return <div className="container mx-auto py-8">Loading...</div>;
+  }
+
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-4xl font-bold mb-8">Dashboard</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-4xl font-bold">
+          {isAdmin ? "Admin Dashboard" : "Dashboard"}
+        </h1>
+        {isAdmin && (
+          <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+            Admin
+          </span>
+        )}
+      </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-5 mb-8">
@@ -57,16 +73,18 @@ const Dashboard = () => {
           </TabsTrigger>
           <TabsTrigger value="forms" className="flex items-center gap-2">
             <FileText className="h-4 w-4" />
-            Forms
+            {isAdmin ? "All Forms" : "My Forms"}
           </TabsTrigger>
           <TabsTrigger value="calendar" className="flex items-center gap-2">
             <Calendar className="h-4 w-4" />
             Calendar
           </TabsTrigger>
-          <TabsTrigger value="users" className="flex items-center gap-2">
-            <Users className="h-4 w-4" />
-            Users
-          </TabsTrigger>
+          {isAdmin && (
+            <TabsTrigger value="users" className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              Users
+            </TabsTrigger>
+          )}
           <TabsTrigger value="activity" className="flex items-center gap-2">
             <Activity className="h-4 w-4" />
             Activity
@@ -74,28 +92,30 @@ const Dashboard = () => {
         </TabsList>
 
         <TabsContent value="overview">
-          <DashboardStats />
+          <DashboardStats isAdmin={isAdmin} />
         </TabsContent>
 
         <TabsContent value="forms">
-          <DashboardForms />
+          <DashboardForms isAdmin={isAdmin} />
         </TabsContent>
 
         <TabsContent value="calendar">
           <DashboardCalendar />
         </TabsContent>
 
-        <TabsContent value="users">
-          <Card className="p-6">
-            <h2 className="text-2xl font-semibold mb-4">User Management</h2>
-            <p className="text-muted-foreground">
-              User management features coming soon...
-            </p>
-          </Card>
-        </TabsContent>
+        {isAdmin && (
+          <TabsContent value="users">
+            <Card className="p-6">
+              <h2 className="text-2xl font-semibold mb-4">User Management</h2>
+              <p className="text-muted-foreground">
+                Admin user management features coming soon...
+              </p>
+            </Card>
+          </TabsContent>
+        )}
 
         <TabsContent value="activity">
-          <DashboardActivity />
+          <DashboardActivity isAdmin={isAdmin} />
         </TabsContent>
       </Tabs>
     </div>

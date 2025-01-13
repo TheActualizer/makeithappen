@@ -163,6 +163,30 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          id: string
+          role: Database["public"]["Enums"]["user_role"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          id: string
+          role?: Database["public"]["Enums"]["user_role"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"] | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       project_tech_stack: {
         Row: {
           category: Database["public"]["Enums"]["tech_stack_category"]
@@ -280,6 +304,7 @@ export type Database = {
         | "database"
         | "cloud"
         | "other"
+      user_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never

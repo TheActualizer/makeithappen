@@ -2,21 +2,39 @@ import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 
-export const DashboardActivity = () => {
+interface DashboardActivityProps {
+  isAdmin?: boolean;
+}
+
+export const DashboardActivity = ({ isAdmin }: DashboardActivityProps) => {
   const { data: activities, isLoading } = useQuery({
-    queryKey: ["dashboard-activity"],
+    queryKey: ["dashboard-activity", isAdmin],
     queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+
+      const projectsQuery = supabase
+        .from("projects")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(5);
+
+      const contactsQuery = supabase
+        .from("contact_submissions")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(5);
+
+      if (!isAdmin && user?.id) {
+        projectsQuery.eq("user_id", user.id);
+      }
+
+      if (!isAdmin && user?.email) {
+        contactsQuery.eq("email", user.email);
+      }
+
       const [projects, contacts] = await Promise.all([
-        supabase
-          .from("projects")
-          .select("*")
-          .order("created_at", { ascending: false })
-          .limit(5),
-        supabase
-          .from("contact_submissions")
-          .select("*")
-          .order("created_at", { ascending: false })
-          .limit(5),
+        projectsQuery,
+        contactsQuery,
       ]);
 
       const combinedActivities = [
@@ -38,7 +56,9 @@ export const DashboardActivity = () => {
 
   return (
     <Card className="p-6">
-      <h2 className="text-2xl font-semibold mb-4">Recent Activity</h2>
+      <h2 className="text-2xl font-semibold mb-4">
+        {isAdmin ? "All Recent Activity" : "My Recent Activity"}
+      </h2>
       <div className="space-y-4">
         {isLoading ? (
           <p>Loading activities...</p>

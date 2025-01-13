@@ -10,16 +10,27 @@ import {
 } from "@/components/ui/table";
 import { supabase } from "@/integrations/supabase/client";
 
-export const DashboardForms = () => {
+interface DashboardFormsProps {
+  isAdmin?: boolean;
+}
+
+export const DashboardForms = ({ isAdmin }: DashboardFormsProps) => {
   const { data: forms, isLoading } = useQuery({
-    queryKey: ["dashboard-forms"],
+    queryKey: ["dashboard-forms", isAdmin],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      const query = supabase
         .from("contact_submissions")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(10);
 
+      if (!isAdmin && user?.email) {
+        query.eq("email", user.email);
+      }
+
+      const { data, error } = await query;
       if (error) throw error;
       return data;
     },
@@ -27,7 +38,9 @@ export const DashboardForms = () => {
 
   return (
     <Card className="p-6">
-      <h2 className="text-2xl font-semibold mb-4">Recent Form Submissions</h2>
+      <h2 className="text-2xl font-semibold mb-4">
+        {isAdmin ? "All Form Submissions" : "My Form Submissions"}
+      </h2>
       <Table>
         <TableHeader>
           <TableRow>

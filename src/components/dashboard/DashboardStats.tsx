@@ -3,31 +3,51 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { FileText, Users, Calendar, MessageSquare } from "lucide-react";
 
-export const DashboardStats = () => {
+interface DashboardStatsProps {
+  isAdmin?: boolean;
+}
+
+export const DashboardStats = ({ isAdmin }: DashboardStatsProps) => {
   const { data: stats, isLoading } = useQuery({
-    queryKey: ["dashboard-stats"],
+    queryKey: ["dashboard-stats", isAdmin],
     queryFn: async () => {
-      const [projects, contacts] = await Promise.all([
-        supabase.from("projects").select("count"),
-        supabase.from("contact_submissions").select("count"),
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      const [projects, contacts, profiles] = await Promise.all([
+        isAdmin
+          ? supabase.from("projects").select("count")
+          : supabase
+              .from("projects")
+              .select("count")
+              .eq("user_id", user?.id),
+        isAdmin
+          ? supabase.from("contact_submissions").select("count")
+          : supabase
+              .from("contact_submissions")
+              .select("count")
+              .eq("email", user?.email),
+        isAdmin
+          ? supabase.from("profiles").select("count")
+          : { count: null },
       ]);
 
       return {
         totalProjects: projects.count || 0,
         totalContacts: contacts.count || 0,
+        totalUsers: profiles.count || 0,
       };
     },
   });
 
   const statCards = [
     {
-      title: "Total Projects",
+      title: isAdmin ? "Total Projects" : "My Projects",
       value: stats?.totalProjects || 0,
       icon: FileText,
       color: "text-blue-500",
     },
     {
-      title: "Contact Forms",
+      title: isAdmin ? "Contact Forms" : "My Forms",
       value: stats?.totalContacts || 0,
       icon: MessageSquare,
       color: "text-green-500",
@@ -39,8 +59,8 @@ export const DashboardStats = () => {
       color: "text-purple-500",
     },
     {
-      title: "Active Users",
-      value: "Coming soon",
+      title: isAdmin ? "Total Users" : "Active Users",
+      value: isAdmin ? stats?.totalUsers || 0 : "Coming soon",
       icon: Users,
       color: "text-orange-500",
     },
