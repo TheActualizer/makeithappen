@@ -35,7 +35,20 @@ const Navbar = () => {
   return (
     <nav className="fixed w-full bg-accent/95 backdrop-blur-sm z-50 py-4">
       <div className="container mx-auto px-4 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold text-white">
+        {/* Mobile Menu Button - Moved before the logo */}
+        <div className="md:hidden">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsOpen(!isOpen)}
+            className="text-white -ml-2" // Negative margin to align with container
+          >
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
+        </div>
+
+        {/* Logo - Centered on mobile */}
+        <Link to="/" className="text-2xl font-bold text-white absolute left-1/2 transform -translate-x-1/2 md:static md:translate-x-0">
           MakeITHappen
         </Link>
 
@@ -78,17 +91,8 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        <div className="md:hidden">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsOpen(!isOpen)}
-            className="text-white"
-          >
-            {isOpen ? <X /> : <Menu />}
-          </Button>
-        </div>
+        {/* Empty div for layout balance on mobile */}
+        <div className="w-10 md:hidden"></div>
       </div>
 
       {/* Mobile Menu */}
