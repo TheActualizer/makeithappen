@@ -27,6 +27,9 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/settings/profile" element={<div>Profile Settings (Coming Soon)</div>} />
+          <Route path="/settings/preferences" element={<div>Preferences (Coming Soon)</div>} />
+          <Route path="/settings/notifications" element={<div>Notifications (Coming Soon)</div>} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
