@@ -64,24 +64,22 @@ export const useProjectForm = () => {
 
       console.log("[handleSubmit] Mapped project data:", projectData);
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('projects')
-        .insert([projectData])
-        .select();
+        .insert([projectData]);
 
       if (error) {
         console.error('[handleSubmit] Project submission error:', error);
         throw error;
       }
 
-      console.log('[handleSubmit] Project saved successfully:', data);
+      console.log('[handleSubmit] Project saved successfully');
       
       toast({
         title: "Success!",
         description: "Your project details have been saved. Let's schedule a consultation!",
       });
 
-      // Important: Set showCalendly to true AFTER successful submission
       setShowCalendly(true);
       console.log("[handleSubmit] showCalendly set to true");
       
