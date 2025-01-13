@@ -16,7 +16,6 @@ interface CalendlyEmbedProps {
 
 const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
   useEffect(() => {
-    // Add Calendly event listener
     const handleCalendlyEvent = (e: any) => {
       if (e.data.event === "calendly.event_scheduled") {
         const eventData = e.data.payload;
