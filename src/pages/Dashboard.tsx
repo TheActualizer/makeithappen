@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -10,9 +9,9 @@ import {
   MessageSquare,
   FileText,
   Activity,
-  Settings,
   PlusCircle,
   Briefcase,
+  ExternalLink,
 } from "lucide-react";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { DashboardDocuments } from "@/components/dashboard/DashboardDocuments";
@@ -24,13 +23,14 @@ import { ProjectScope } from "@/components/dashboard/ProjectScope";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { Button } from "@/components/ui/button";
 import ProjectStartModal from "@/components/ProjectStartModal";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState("overview");
   const { isAdmin, isLoading: isLoadingAdmin } = useIsAdmin();
   const [activeProjectId, setActiveProjectId] = useState<string | undefined>();
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFirstProject = async () => {
@@ -82,6 +82,11 @@ const Dashboard = () => {
     return <div className="min-h-screen bg-background"><DashboardHeader />Loading...</div>;
   }
 
+  const handleExpandSection = (section: string) => {
+    // Navigate to a dedicated page for the section
+    navigate(`/dashboard/${section}`);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <DashboardHeader />
@@ -107,75 +112,111 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-7 mb-8">
-            <TabsTrigger value="overview" className="flex items-center gap-2">
-              <BarChart className="h-4 w-4" />
-              Overview
-            </TabsTrigger>
-            <TabsTrigger value="progress" className="flex items-center gap-2">
-              <Activity className="h-4 w-4" />
-              Progress
-            </TabsTrigger>
-            <TabsTrigger value="scope" className="flex items-center gap-2">
-              <Briefcase className="h-4 w-4" />
-              Project Scope
-            </TabsTrigger>
-            <TabsTrigger value="documents" className="flex items-center gap-2">
-              <FileText className="h-4 w-4" />
-              {isAdmin ? "All Documents" : "My Documents"}
-            </TabsTrigger>
-            <TabsTrigger value="calendar" className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              Calendar
-            </TabsTrigger>
-            {isAdmin && (
-              <TabsTrigger value="users" className="flex items-center gap-2">
-                <Users className="h-4 w-4" />
-                Users
-              </TabsTrigger>
-            )}
-            <TabsTrigger value="activity" className="flex items-center gap-2">
-              <MessageSquare className="h-4 w-4" />
-              Activity
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="overview">
+        <div className="grid gap-6">
+          {/* Stats Section */}
+          <section>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-semibold flex items-center gap-2">
+                <BarChart className="h-5 w-5" />
+                Overview
+              </h2>
+            </div>
             <DashboardStats isAdmin={isAdmin} />
-          </TabsContent>
+          </section>
 
-          <TabsContent value="progress">
+          {/* Project Progress Section */}
+          <section>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-semibold flex items-center gap-2">
+                <Activity className="h-5 w-5" />
+                Project Progress
+              </h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleExpandSection('progress')}
+              >
+                <ExternalLink className="h-4 w-4" />
+              </Button>
+            </div>
             <ProjectProgress projectId={activeProjectId} />
-          </TabsContent>
+          </section>
 
-          <TabsContent value="scope">
+          {/* Project Scope Section */}
+          <section>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-semibold flex items-center gap-2">
+                <Briefcase className="h-5 w-5" />
+                Project Scope
+              </h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleExpandSection('scope')}
+              >
+                <ExternalLink className="h-4 w-4" />
+              </Button>
+            </div>
             <ProjectScope />
-          </TabsContent>
+          </section>
 
-          <TabsContent value="documents">
+          {/* Documents Section */}
+          <section>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-semibold flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                {isAdmin ? "All Documents" : "My Documents"}
+              </h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleExpandSection('documents')}
+              >
+                <ExternalLink className="h-4 w-4" />
+              </Button>
+            </div>
             <DashboardDocuments isAdmin={isAdmin} />
-          </TabsContent>
+          </section>
 
-          <TabsContent value="calendar">
+          {/* Calendar Section */}
+          <section>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-semibold flex items-center gap-2">
+                <Calendar className="h-5 w-5" />
+                Calendar
+              </h2>
+            </div>
             <DashboardCalendar />
-          </TabsContent>
+          </section>
 
+          {/* Activity Section */}
+          <section>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-semibold flex items-center gap-2">
+                <MessageSquare className="h-5 w-5" />
+                Recent Activity
+              </h2>
+            </div>
+            <DashboardActivity isAdmin={isAdmin} />
+          </section>
+
+          {/* Admin Users Section */}
           {isAdmin && (
-            <TabsContent value="users">
+            <section>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-semibold flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  User Management
+                </h2>
+              </div>
               <Card className="p-6">
-                <h2 className="text-2xl font-semibold mb-4">User Management</h2>
                 <p className="text-muted-foreground">
                   Admin user management features coming soon...
                 </p>
               </Card>
-            </TabsContent>
+            </section>
           )}
-
-          <TabsContent value="activity">
-            <DashboardActivity isAdmin={isAdmin} />
-          </TabsContent>
-        </Tabs>
+        </div>
       </div>
 
       <ProjectStartModal 
