@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import type { Message, Conversation, Profile } from '@/types/message';
 
@@ -85,7 +85,7 @@ export const useMessages = () => {
           created_at,
           conversation_id,
           type,
-          profiles!messages_sender_id_fkey (
+          profiles (
             first_name,
             last_name,
             email,
