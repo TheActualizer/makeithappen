@@ -52,6 +52,7 @@ export const Messages = () => {
           console.log('New message received:', payload);
           const newMessage = payload.new as Message;
           if (newMessage.conversation_id === selectedConversation) {
+            console.log('Adding new message to state:', newMessage);
             setMessages(prev => [...prev, newMessage]);
           }
         }
@@ -65,6 +66,7 @@ export const Messages = () => {
   }, [selectedConversation]);
 
   useEffect(() => {
+    console.log('Initial load - fetching conversations');
     fetchConversations();
   }, []);
 
@@ -141,6 +143,12 @@ export const Messages = () => {
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Send message triggered with:', { 
+      newMessage, 
+      selectedConversation, 
+      isLoading 
+    });
+
     if (!newMessage.trim() || !selectedConversation || isLoading) {
       console.log('Message send prevented:', {
         hasContent: !!newMessage.trim(),
@@ -151,20 +159,21 @@ export const Messages = () => {
     }
 
     const messageContent = newMessage.trim();
+    console.log('Message content prepared:', messageContent);
+    
     setIsLoading(true);
     setNewMessage(''); // Clear input immediately for better UX
 
-    console.log('Attempting to send message:', {
-      content: messageContent,
-      conversationId: selectedConversation
-    });
-
     try {
+      console.log('Getting current user...');
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
+        console.error('No authenticated user found');
         throw new Error('Not authenticated');
       }
+      console.log('Current user:', user);
 
+      console.log('Inserting message into database...');
       const { error: messageError } = await supabase
         .from('messages')
         .insert([
@@ -183,9 +192,7 @@ export const Messages = () => {
         throw messageError;
       }
 
-      console.log('Message inserted successfully');
-
-      // Notify admin about the new message
+      console.log('Message inserted successfully, notifying admin...');
       const { error: notifyError } = await supabase.functions.invoke('notify-admin', {
         body: {
           message: messageContent,
@@ -196,7 +203,7 @@ export const Messages = () => {
 
       if (notifyError) {
         console.error('Error notifying admin:', notifyError);
-        // Don't throw here, as the message was already sent successfully
+        // Don't throw here as the message was already sent successfully
       }
 
       console.log('Message sent and admin notified successfully');
