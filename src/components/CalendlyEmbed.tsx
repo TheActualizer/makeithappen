@@ -35,7 +35,8 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
             consultationTime: new Date(eventData.event.start_time).toLocaleTimeString(),
             projectType: prefill?.customAnswers?.a1 || "Not specified",
             description: prefill?.customAnswers?.a3 || "No description provided",
-            zoomLink: eventData.event.location?.join_url || "Will be provided separately"
+            zoomLink: eventData.event.location?.join_url || "Will be provided separately",
+            eventUri: eventData.uri
           }),
         }).then(response => {
           console.log("Email notification response:", response);
