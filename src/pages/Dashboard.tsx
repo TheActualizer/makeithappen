@@ -1,253 +1,125 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import {
-  BarChart, Users, Calendar, MessageSquare, FileText,
-  Activity, PlusCircle, Briefcase, ExternalLink, DollarSign,
-  ChevronDown,
-} from "lucide-react";
-import { DashboardStats } from "@/components/dashboard/DashboardStats";
-import { DashboardDocuments } from "@/components/dashboard/DashboardDocuments";
-import { DashboardCalendar } from "@/components/dashboard/DashboardCalendar";
-import { DashboardActivity } from "@/components/dashboard/DashboardActivity";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { ProjectProgress } from "@/components/dashboard/ProjectProgress";
-import { ProjectScope } from "@/components/dashboard/ProjectScope";
-import { FinancialMetrics } from "@/components/dashboard/FinancialMetrics";
-import { useIsAdmin } from "@/hooks/useIsAdmin";
-import { Button } from "@/components/ui/button";
-import ProjectStartModal from "@/components/ProjectStartModal";
+import ProjectProgress from "@/components/dashboard/ProjectProgress";
 import { useNavigate } from "react-router-dom";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Button } from "@/components/ui/button";
+import { LineChart, BarChart, Calendar, MessageSquare } from "lucide-react";
+import useMessages from "@/hooks/useMessages";
 
 const Dashboard = () => {
-  const { toast } = useToast();
-  const { isAdmin, isLoading: isLoadingAdmin } = useIsAdmin();
-  const [activeProjectId, setActiveProjectId] = useState<string | undefined>();
-  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const navigate = useNavigate();
+  const [selectedProject, setSelectedProject] = useState(null);
+  const { data: messages, isLoading } = useMessages("default-conversation");
 
-  useEffect(() => {
-    const fetchFirstProject = async () => {
-      const { data: projects, error } = await supabase
-        .from("projects")
-        .select("id")
-        .limit(1)
-        .single();
-
-      if (error) {
-        console.error("Error fetching project:", error);
-        return;
-      }
-
-      if (projects) {
-        setActiveProjectId(projects.id);
-      }
-    };
-
-    fetchFirstProject();
-  }, []);
-
-  useEffect(() => {
-    const channel = supabase
-      .channel("dashboard-changes")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-        },
-        (payload) => {
-          console.log("Real-time update:", payload);
-          toast({
-            title: "New Activity",
-            description: "Dashboard data has been updated.",
-          });
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [toast]);
-
-  if (isLoadingAdmin) {
-    return <div className="min-h-screen bg-background"><DashboardHeader />Loading...</div>;
-  }
-
-  const handleExpandSection = (section: string) => {
-    navigate(`/dashboard/${section}`);
-  };
-
-  const renderSectionHeader = (title: string, icon: React.ReactNode, onExpand?: () => void) => (
-    <div className="flex justify-between items-center mb-4">
-      <h2 className="text-2xl font-semibold flex items-center gap-2">
-        {icon}
-        {title}
-      </h2>
-      {onExpand && (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onExpand}
-        >
-          <ExternalLink className="h-4 w-4" />
-        </Button>
-      )}
-    </div>
-  );
+  const stats = [
+    {
+      title: "Active Projects",
+      value: "12",
+      change: "+2",
+      icon: <LineChart className="w-6 h-6 text-primary" />,
+    },
+    {
+      title: "Tasks Completed",
+      value: "48",
+      change: "+5",
+      icon: <BarChart className="w-6 h-6 text-secondary" />,
+    },
+    {
+      title: "Upcoming Meetings",
+      value: "3",
+      change: "0",
+      icon: <Calendar className="w-6 h-6 text-primary" />,
+    },
+    {
+      title: "Unread Messages",
+      value: "7",
+      change: "+3",
+      icon: <MessageSquare className="w-6 h-6 text-secondary" />,
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
-      <DashboardHeader />
-      
-      <div className="container mx-auto py-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">
-            {isAdmin ? "Admin Dashboard" : "Dashboard"}
-          </h1>
-          <div className="flex items-center gap-4">
-            <Button
-              onClick={() => setIsProjectModalOpen(true)}
-              className="flex items-center gap-2"
-            >
-              <PlusCircle className="h-4 w-4" />
-              New Project
-            </Button>
-            {isAdmin && (
-              <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                Admin
-              </span>
-            )}
-          </div>
+      <div className="container mx-auto px-4 py-8">
+        <ProjectProgress />
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+          {stats.map((stat, index) => (
+            <Card key={index} className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="bg-accent/50 p-3 rounded-lg">
+                  {stat.icon}
+                </div>
+                <span className={`text-sm ${
+                  stat.change.startsWith('+') ? 'text-green-500' : 
+                  stat.change.startsWith('-') ? 'text-red-500' : 
+                  'text-gray-500'
+                }`}>
+                  {stat.change}
+                </span>
+              </div>
+              <h3 className="text-lg font-semibold">{stat.title}</h3>
+              <p className="text-3xl font-bold mt-2">{stat.value}</p>
+            </Card>
+          ))}
         </div>
 
-        <div className="grid gap-6">
-          {/* Stats Section */}
-          <Collapsible>
-            <CollapsibleTrigger className="w-full">
-              <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
-                {renderSectionHeader("Overview", <BarChart className="h-5 w-5" />)}
-                <ChevronDown className="h-4 w-4" />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+          <Card className="p-6">
+            <h2 className="text-2xl font-semibold mb-4">Recent Activity</h2>
+            {isLoading ? (
+              <p>Loading messages...</p>
+            ) : (
+              <div className="space-y-4">
+                {messages?.slice(0, 5).map((message: any) => (
+                  <div key={message.id} className="flex items-start space-x-4">
+                    <div className="flex-1">
+                      <p className="text-sm text-gray-500">
+                        {new Date(message.created_at).toLocaleDateString()}
+                      </p>
+                      <p className="mt-1">{message.content}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="pt-4">
-              <DashboardStats isAdmin={isAdmin} />
-            </CollapsibleContent>
-          </Collapsible>
+            )}
+          </Card>
 
-          {/* Documents Section */}
-          <Collapsible>
-            <CollapsibleTrigger className="w-full">
-              <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
-                {renderSectionHeader(
-                  isAdmin ? "All Documents" : "My Documents",
-                  <FileText className="h-5 w-5" />
-                )}
-                <ChevronDown className="h-4 w-4" />
-              </div>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="pt-4">
-              <DashboardDocuments isAdmin={isAdmin} />
-            </CollapsibleContent>
-          </Collapsible>
-
-          {/* Project Scope Section */}
-          <Collapsible>
-            <CollapsibleTrigger className="w-full">
-              <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
-                {renderSectionHeader("Project Scope", <Briefcase className="h-5 w-5" />)}
-                <ChevronDown className="h-4 w-4" />
-              </div>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="pt-4">
-              <ProjectScope />
-            </CollapsibleContent>
-          </Collapsible>
-
-          {/* Project Progress Section */}
-          <Collapsible>
-            <CollapsibleTrigger className="w-full">
-              <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
-                {renderSectionHeader("Project Progress", <Activity className="h-5 w-5" />)}
-                <ChevronDown className="h-4 w-4" />
-              </div>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="pt-4">
-              <ProjectProgress projectId={activeProjectId} />
-            </CollapsibleContent>
-          </Collapsible>
-
-          {/* Calendar Section */}
-          <Collapsible>
-            <CollapsibleTrigger className="w-full">
-              <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
-                {renderSectionHeader("Calendar", <Calendar className="h-5 w-5" />)}
-                <ChevronDown className="h-4 w-4" />
-              </div>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="pt-4">
-              <DashboardCalendar />
-            </CollapsibleContent>
-          </Collapsible>
-
-          {/* Activity Section */}
-          <Collapsible>
-            <CollapsibleTrigger className="w-full">
-              <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
-                {renderSectionHeader("Recent Activity", <MessageSquare className="h-5 w-5" />)}
-                <ChevronDown className="h-4 w-4" />
-              </div>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="pt-4">
-              <DashboardActivity isAdmin={isAdmin} />
-            </CollapsibleContent>
-          </Collapsible>
-
-          {/* Financial Metrics Section */}
-          <Collapsible>
-            <CollapsibleTrigger className="w-full">
-              <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
-                {renderSectionHeader("Financial Metrics", <DollarSign className="h-5 w-5" />)}
-                <ChevronDown className="h-4 w-4" />
-              </div>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="pt-4">
-              <FinancialMetrics projectId={activeProjectId} />
-            </CollapsibleContent>
-          </Collapsible>
-
-          {/* Admin Users Section */}
-          {isAdmin && (
-            <Collapsible>
-              <CollapsibleTrigger className="w-full">
-                <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
-                  {renderSectionHeader("User Management", <Users className="h-5 w-5" />)}
-                  <ChevronDown className="h-4 w-4" />
-                </div>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="pt-4">
-                <Card className="p-6">
-                  <p className="text-muted-foreground">
-                    Admin user management features coming soon...
-                  </p>
-                </Card>
-              </CollapsibleContent>
-            </Collapsible>
-          )}
+          <Card className="p-6">
+            <h2 className="text-2xl font-semibold mb-4">Quick Actions</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => navigate("/start-project")}
+              >
+                New Project
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => navigate("/messages")}
+              >
+                Messages
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => navigate("/calendar")}
+              >
+                Schedule
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => navigate("/reports")}
+              >
+                Reports
+              </Button>
+            </div>
+          </Card>
         </div>
       </div>
-
-      <ProjectStartModal 
-        isOpen={isProjectModalOpen}
-        onClose={() => setIsProjectModalOpen(false)}
-      />
     </div>
   );
 };
