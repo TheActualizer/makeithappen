@@ -280,6 +280,7 @@ export type Database = {
           conversation_id: string | null
           created_at: string | null
           id: string
+          is_admin_message: boolean | null
           sender_id: string | null
           type: Database["public"]["Enums"]["message_type"] | null
           updated_at: string | null
@@ -289,6 +290,7 @@ export type Database = {
           conversation_id?: string | null
           created_at?: string | null
           id?: string
+          is_admin_message?: boolean | null
           sender_id?: string | null
           type?: Database["public"]["Enums"]["message_type"] | null
           updated_at?: string | null
@@ -298,6 +300,7 @@ export type Database = {
           conversation_id?: string | null
           created_at?: string | null
           id?: string
+          is_admin_message?: boolean | null
           sender_id?: string | null
           type?: Database["public"]["Enums"]["message_type"] | null
           updated_at?: string | null
