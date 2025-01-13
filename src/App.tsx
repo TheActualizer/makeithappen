@@ -11,6 +11,7 @@ import StartProject from "./pages/StartProject";
 import Dashboard from "./pages/Dashboard";
 import Blog from "./pages/Blog";
 import Login from "./pages/Login";
+import Services from "./pages/Services";
 import ProfileSettings from "./pages/settings/ProfileSettings";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/services" element={<Services />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/start-project" element={<StartProject />} />
