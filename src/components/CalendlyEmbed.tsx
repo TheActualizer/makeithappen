@@ -20,55 +20,99 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
     const handleCalendlyEvent = (e: any) => {
       if (e.data.event === "calendly.event_scheduled") {
         const eventData = e.data.payload;
-        console.log("Full Calendly event data:", eventData);
         
-        // Enhanced Zoom link extraction with detailed logging
+        // Comprehensive logging of the entire event data structure
+        console.log("========== CALENDLY EVENT DATA ==========");
+        console.log("Full event payload:", JSON.stringify(eventData, null, 2));
+        console.log("Event type:", e.data.event);
+        console.log("Event URI:", eventData.uri);
+        
+        // Detailed logging of event details
+        console.log("\n========== EVENT DETAILS ==========");
+        console.log("Event:", {
+          type: eventData.event.type,
+          start_time: eventData.event.start_time,
+          end_time: eventData.event.end_time,
+          status: eventData.event.status,
+        });
+        
+        // Invitee information logging
+        console.log("\n========== INVITEE DETAILS ==========");
+        console.log("Invitee:", {
+          name: eventData.invitee.name,
+          email: eventData.invitee.email,
+          timezone: eventData.invitee.timezone,
+          uuid: eventData.invitee.uuid,
+        });
+        
+        // Detailed location/Zoom link extraction logging
+        console.log("\n========== LOCATION/ZOOM DETAILS ==========");
         let zoomLink = null;
         
         if (eventData.event && eventData.event.location) {
-          console.log("Location data type:", typeof eventData.event.location);
-          console.log("Location data:", eventData.event.location);
-          
           const location = eventData.event.location;
+          console.log("Raw location data:", location);
+          console.log("Location data type:", typeof location);
           
-          // Case 1: Direct Zoom URL
-          if (typeof location === 'string' && location.includes('zoom.us')) {
-            console.log("Found direct Zoom URL");
-            zoomLink = location;
-          }
-          // Case 2: Location object with join_url
-          else if (typeof location === 'object') {
+          if (typeof location === 'string') {
+            console.log("Location is a string:", location);
+            if (location.includes('zoom.us')) {
+              console.log("Direct Zoom URL found in string location");
+              zoomLink = location;
+            }
+          } else if (typeof location === 'object') {
+            console.log("Location is an object, checking properties:", Object.keys(location));
+            
+            // Case 1: Direct join_url
             if (location.join_url) {
-              console.log("Found join_url in location object");
+              console.log("Found join_url directly in location object:", location.join_url);
               zoomLink = location.join_url;
             }
-            // Case 3: Nested data structure
-            else if (location.data) {
-              console.log("Found data object in location");
-              const data = location.data;
-              if (data.join_url) {
-                console.log("Found join_url in data object");
-                zoomLink = data.join_url;
+            
+            // Case 2: Nested in data object
+            if (location.data) {
+              console.log("Found data object in location:", location.data);
+              if (location.data.join_url) {
+                console.log("Found join_url in data object:", location.data.join_url);
+                zoomLink = location.data.join_url;
               }
             }
-            // Case 4: Status and other fields
-            else if (location.status === 'confirmed' && location.settings) {
-              console.log("Found confirmed status with settings");
+            
+            // Case 3: In settings
+            if (location.settings) {
+              console.log("Found settings object:", location.settings);
               if (location.settings.global_join_url) {
+                console.log("Found global_join_url in settings:", location.settings.global_join_url);
                 zoomLink = location.settings.global_join_url;
               }
             }
+            
+            // Additional Zoom-related properties
+            if (location.data?.host_url) {
+              console.log("Host URL found:", location.data.host_url);
+            }
+            if (location.data?.id) {
+              console.log("Zoom Meeting ID found:", location.data.id);
+            }
           }
+        } else {
+          console.warn("No location data found in event");
         }
-
-        // Additional logging
-        console.log("Final extracted Zoom link:", zoomLink);
         
+        // Final Zoom link status
+        console.log("\n========== FINAL ZOOM LINK STATUS ==========");
+        console.log("Extracted Zoom link:", zoomLink);
         if (!zoomLink) {
-          console.warn("No Zoom link found in the event data");
+          console.warn("No Zoom link could be extracted from any known location");
         }
-
+        
+        // Additional event metadata logging
+        console.log("\n========== ADDITIONAL METADATA ==========");
+        console.log("Tracking:", eventData.tracking);
+        console.log("Custom questions:", prefill?.customAnswers);
+        
         // Send webhook to our edge function
+        console.log("\n========== SENDING EMAIL NOTIFICATION ==========");
         fetch("/functions/send-consultation-email", {
           method: "POST",
           headers: {
@@ -86,6 +130,11 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
           }),
         }).then(response => {
           console.log("Email notification response:", response);
+          response.json().then(data => {
+            console.log("Email notification response data:", data);
+          }).catch(error => {
+            console.error("Error parsing email notification response:", error);
+          });
         }).catch(error => {
           console.error("Error sending email notification:", error);
         });
