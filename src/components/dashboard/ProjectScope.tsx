@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/toast";
+import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface Project {
@@ -30,6 +30,8 @@ export const ProjectScope = () => {
       try {
         const { data: userData } = await supabase.auth.getUser();
         if (!userData.user?.email) return;
+
+        console.log("Fetching projects for email:", userData.user.email);
 
         const { data, error } = await supabase
           .from("projects")
