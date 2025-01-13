@@ -11,28 +11,28 @@ const CaseStudies = () => {
 
   const caseStudies = [
     {
-      title: "AI-Powered Digital Workforce Transformation",
-      company: "Global Manufacturing Corp",
-      description: "Implemented an intelligent automation system that reduced manual data processing by 95% and saved $2.5M annually.",
-      impact: ["95% reduction in processing time", "100% accuracy in data entry", "$2.5M annual savings"],
+      title: "AI-Enhanced Process Automation",
+      company: "Manufacturing Solutions Co",
+      description: "Implemented an intelligent automation system that reduced manual data processing time by 75% and improved operational efficiency.",
+      impact: ["75% reduction in processing time", "98% accuracy in data entry", "$150K annual savings"],
       industry: "Manufacturing",
       icon: <Rocket className="w-6 h-6 text-primary" />,
       tags: ["AI Automation", "Process Optimization", "Digital Transformation"]
     },
     {
-      title: "Enterprise-Wide Business Process Automation",
-      company: "Financial Services Leader",
-      description: "Deployed intelligent agents across 12 departments, automating complex workflows and improving customer response times by 80%.",
-      impact: ["80% faster response times", "24/7 operation capability", "90% reduction in errors"],
+      title: "Smart Workflow Automation",
+      company: "Regional Financial Services",
+      description: "Deployed intelligent automation across key departments, streamlining workflows and improving customer response times significantly.",
+      impact: ["60% faster response times", "16/5 operation capability", "85% reduction in manual tasks"],
       industry: "Financial Services",
       icon: <ChartBar className="w-6 h-6 text-primary" />,
-      tags: ["Workflow Automation", "AI Agents", "Customer Service"]
+      tags: ["Workflow Automation", "AI Integration", "Customer Service"]
     },
     {
-      title: "Intelligent Document Processing Revolution",
-      company: "Healthcare Provider Network",
-      description: "Revolutionized document processing with AI, handling 1M+ documents monthly with near-perfect accuracy.",
-      impact: ["1M+ documents processed monthly", "99.9% accuracy", "75% cost reduction"],
+      title: "Intelligent Document Processing",
+      company: "Healthcare Provider",
+      description: "Revolutionized document processing with AI, handling thousands of documents monthly with high accuracy and compliance.",
+      impact: ["25K+ documents processed monthly", "99% accuracy", "40% cost reduction"],
       industry: "Healthcare",
       icon: <Award className="w-6 h-6 text-primary" />,
       tags: ["Document Processing", "Healthcare", "Cost Optimization"]
