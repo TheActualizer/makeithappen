@@ -9,19 +9,11 @@ import { MonitoringPanel } from './monitoring/MonitoringPanel';
 export const Messages = () => {
   const { isAdmin } = useIsAdmin();
   const {
-    data: { 
-      conversations,
-      messages,
-      selectedConversation,
-      setSelectedConversation,
-      fetchMessages 
-    } = {
-      conversations: [],
-      messages: [],
-      selectedConversation: null,
-      setSelectedConversation: () => {},
-      fetchMessages: () => {}
-    }
+    conversations,
+    messages,
+    selectedConversation,
+    setSelectedConversation,
+    fetchMessages
   } = useMessages();
 
   const {
