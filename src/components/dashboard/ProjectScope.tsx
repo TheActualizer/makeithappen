@@ -3,6 +3,8 @@ import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 
 interface Project {
   name: string;
@@ -25,6 +27,13 @@ interface Project {
   estimated_cost?: number;
   budget_spent?: number;
   budget_remaining?: number;
+  advancement_status?: {
+    requirements_completed: number;
+    design_completed: number;
+    development_completed: number;
+    testing_completed: number;
+    deployment_completed: number;
+  };
 }
 
 export const ProjectScope = () => {
@@ -64,6 +73,12 @@ export const ProjectScope = () => {
     fetchProjects();
   }, [toast]);
 
+  const getAdvancementColor = (percentage: number) => {
+    if (percentage >= 80) return "bg-green-500";
+    if (percentage >= 50) return "bg-yellow-500";
+    return "bg-blue-500";
+  };
+
   if (loading) {
     return <Skeleton className="w-full h-48" />;
   }
@@ -76,75 +91,78 @@ export const ProjectScope = () => {
     );
   }
 
-  const getStatusColor = (status?: string) => {
-    switch (status) {
-      case 'active':
-        return 'bg-green-100 text-green-800';
-      case 'completed':
-        return 'bg-blue-100 text-blue-800';
-      case 'on_hold':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'planning':
-        return 'bg-purple-100 text-purple-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const getPriorityColor = (priority?: string) => {
-    switch (priority) {
-      case 'high':
-        return 'bg-red-100 text-red-800';
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'low':
-        return 'bg-green-100 text-green-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
   return (
     <div className="space-y-6">
       {projects.map((project, index) => (
         <Card key={index} className="p-6">
           <div className="space-y-6">
+            {/* Project Header */}
             <section className="space-y-2">
               <div className="flex justify-between items-start">
                 <h3 className="text-lg font-semibold">{project.name}</h3>
                 <div className="flex gap-2">
                   {project.status && (
-                    <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(project.status)}`}>
+                    <Badge variant="secondary">
                       {project.status.replace('_', ' ')}
-                    </span>
+                    </Badge>
                   )}
                   {project.priority && (
-                    <span className={`px-2 py-1 text-xs rounded-full ${getPriorityColor(project.priority)}`}>
+                    <Badge variant={project.priority === 'high' ? 'destructive' : 'outline'}>
                       {project.priority}
-                    </span>
+                    </Badge>
                   )}
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="font-medium">Email:</span> {project.email}
+              
+              {/* Project Advancements */}
+              <div className="mt-4 space-y-3">
+                <h4 className="text-sm font-medium text-muted-foreground">Project Advancement</h4>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Requirements</span>
+                    <span>{project.advancement_status?.requirements_completed || 0}%</span>
+                  </div>
+                  <Progress 
+                    value={project.advancement_status?.requirements_completed || 0} 
+                    className="h-2"
+                  />
+                  
+                  <div className="flex justify-between text-sm">
+                    <span>Design</span>
+                    <span>{project.advancement_status?.design_completed || 0}%</span>
+                  </div>
+                  <Progress 
+                    value={project.advancement_status?.design_completed || 0} 
+                    className="h-2"
+                  />
+                  
+                  <div className="flex justify-between text-sm">
+                    <span>Development</span>
+                    <span>{project.advancement_status?.development_completed || 0}%</span>
+                  </div>
+                  <Progress 
+                    value={project.advancement_status?.development_completed || 0} 
+                    className="h-2"
+                  />
+                  
+                  <div className="flex justify-between text-sm">
+                    <span>Testing</span>
+                    <span>{project.advancement_status?.testing_completed || 0}%</span>
+                  </div>
+                  <Progress 
+                    value={project.advancement_status?.testing_completed || 0} 
+                    className="h-2"
+                  />
+                  
+                  <div className="flex justify-between text-sm">
+                    <span>Deployment</span>
+                    <span>{project.advancement_status?.deployment_completed || 0}%</span>
+                  </div>
+                  <Progress 
+                    value={project.advancement_status?.deployment_completed || 0} 
+                    className="h-2"
+                  />
                 </div>
-                {project.phone && (
-                  <div>
-                    <span className="font-medium">Phone:</span> {project.phone}
-                  </div>
-                )}
-                {project.company && (
-                  <div>
-                    <span className="font-medium">Company:</span> {project.company}
-                  </div>
-                )}
-                {project.last_updated && (
-                  <div>
-                    <span className="font-medium">Last Updated:</span>{' '}
-                    {new Date(project.last_updated).toLocaleDateString()}
-                  </div>
-                )}
               </div>
             </section>
 
