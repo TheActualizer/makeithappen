@@ -111,7 +111,17 @@ const ProjectStartModal = ({
   };
 
   const handleBookDemo = () => {
-    window.open('https://calendly.com/belchonen18/30min', '_blank');
+    // Open Calendly in a popup window
+    const width = 550;
+    const height = 700;
+    const left = window.innerWidth / 2 - width / 2;
+    const top = window.innerHeight / 2 - height / 2;
+    
+    window.open(
+      'https://calendly.com/belchonen18/30min',
+      'Book a Demo',
+      `width=${width},height=${height},top=${top},left=${left},toolbar=0,location=0,menubar=0,directories=0,scrollbars=1`
+    );
   };
 
   const renderStep = () => {
@@ -180,7 +190,7 @@ const ProjectStartModal = ({
                   onClick={handleSubmit}
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Saving..." : "Save & Return"}
+                  {isSubmitting ? "Saving..." : "Save & Close"}
                 </Button>
               </div>
             ) : (
