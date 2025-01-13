@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Bot, Brain, Cpu } from "lucide-react";
+import { ArrowRight, Bot, Brain, Stethoscope } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
@@ -11,10 +11,10 @@ const Blog = () => {
 
   const featuredArticles = [
     {
-      title: "Agentic Systems",
-      description: "Discover how autonomous AI agents are revolutionizing business processes and decision-making.",
-      icon: <Bot className="h-8 w-8 text-primary" />,
-      link: "/blog/agentic-systems"
+      title: "Modernizing Healthcare with FHIR & AI",
+      description: "Explore how FHIR protocols and modern AI are transforming healthcare while maintaining HIPAA compliance.",
+      icon: <Stethoscope className="h-8 w-8 text-primary" />,
+      link: "/blog/healthcare-tech"
     },
     {
       title: "Vector Databases & Memory",
@@ -23,10 +23,10 @@ const Blog = () => {
       link: "/blog/vector-memory"
     },
     {
-      title: "Transformative Case Studies",
-      description: "Real-world examples of AI implementation success stories across different industries.",
-      icon: <Cpu className="h-8 w-8 text-primary" />,
-      link: "/blog/transformative-case-studies"
+      title: "Agentic Systems",
+      description: "Discover how autonomous AI agents are revolutionizing business processes and decision-making.",
+      icon: <Bot className="h-8 w-8 text-primary" />,
+      link: "/blog/agentic-systems"
     }
   ];
 
