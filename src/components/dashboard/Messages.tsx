@@ -12,6 +12,7 @@ interface Message {
   created_at: string;
   conversation_id?: string;
   type?: 'text' | 'system' | 'ai';
+  is_admin_message?: boolean;
   profiles?: {
     first_name: string | null;
     last_name: string | null;
@@ -155,7 +156,8 @@ export const Messages = () => {
         throw new Error('Not authenticated');
       }
 
-      const { error } = await supabase
+      // Insert the message
+      const { error: messageError } = await supabase
         .from('messages')
         .insert([
           {
@@ -166,9 +168,23 @@ export const Messages = () => {
           },
         ]);
 
-      if (error) {
-        console.error('Error sending message:', error);
-        throw error;
+      if (messageError) {
+        console.error('Error sending message:', messageError);
+        throw messageError;
+      }
+
+      // Notify admin via edge function
+      const { error: notifyError } = await supabase.functions.invoke('notify-admin', {
+        body: {
+          message: newMessage,
+          userId: user.id,
+          conversationId: selectedConversation,
+        },
+      });
+
+      if (notifyError) {
+        console.error('Error notifying admin:', notifyError);
+        // Don't throw here, as the message was already sent successfully
       }
 
       console.log('Message sent successfully');
