@@ -47,7 +47,7 @@ export const useMessages = () => {
     try {
       const { data, error } = await supabase
         .from('conversations')
-        .select('id, title, created_at')
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (error) {
@@ -79,13 +79,7 @@ export const useMessages = () => {
       const { data, error } = await supabase
         .from('messages')
         .select(`
-          id,
-          content,
-          sender_id,
-          created_at,
-          conversation_id,
-          type,
-          is_admin_message,
+          *,
           profiles (
             first_name,
             last_name,

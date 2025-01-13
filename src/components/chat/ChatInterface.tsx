@@ -91,6 +91,7 @@ const ChatInterface = () => {
       console.log('Conversation created successfully:', data);
       setConversationId(data.id);
 
+      // Create initial system message
       const { error: messageError } = await supabase
         .from('messages')
         .insert([
@@ -135,8 +136,8 @@ const ChatInterface = () => {
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      const userId = user?.id;
-
+      
+      // Insert user message
       const { error: messageError } = await supabase
         .from('messages')
         .insert([
@@ -144,7 +145,7 @@ const ChatInterface = () => {
             conversation_id: conversationId,
             content: messageContent,
             type: 'text',
-            sender_id: userId
+            sender_id: user?.id
           },
         ]);
 
@@ -153,21 +154,7 @@ const ChatInterface = () => {
         throw messageError;
       }
 
-      // Notify admin about the new message
-      if (userId) {
-        const { error: notifyError } = await supabase.functions.invoke('notify-admin', {
-          body: {
-            message: messageContent,
-            userId,
-            conversationId,
-          },
-        });
-
-        if (notifyError) {
-          console.error('Error notifying admin:', notifyError);
-        }
-      }
-
+      // Call AI service
       console.log('User message saved, calling AI service...');
       const { data, error } = await supabase.functions.invoke('chat', {
         body: {
@@ -188,6 +175,7 @@ const ChatInterface = () => {
         throw new Error('No answer received from AI');
       }
 
+      // Insert AI response
       const { error: aiMessageError } = await supabase
         .from('messages')
         .insert([
@@ -208,7 +196,7 @@ const ChatInterface = () => {
       console.error('Error in sendMessage:', error);
       toast({
         title: "Error",
-        description: "Failed to get AI response. Please try again.",
+        description: "Failed to send message. Please try again.",
         variant: "destructive",
       });
     } finally {
