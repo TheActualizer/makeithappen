@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
 import ChatButton from './ChatButton';
 import ChatHeader from './ChatHeader';
 import ChatMessages from './ChatMessages';
@@ -25,9 +24,7 @@ const ChatInterface = () => {
   const [selectedModel, setSelectedModel] = useState<AIModel>('dify');
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
   const { toast } = useToast();
 
   const scrollToBottom = () => {
@@ -39,24 +36,10 @@ const ChatInterface = () => {
   }, [messages]);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setIsAuthenticated(!!session);
-    };
-    checkAuth();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsAuthenticated(!!session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    if (isOpen && !conversationId && isAuthenticated) {
+    if (isOpen && !conversationId) {
       createNewConversation();
     }
-  }, [isOpen, isAuthenticated]);
+  }, [isOpen]);
 
   useEffect(() => {
     if (conversationId) {
@@ -84,26 +67,14 @@ const ChatInterface = () => {
   }, [conversationId]);
 
   const createNewConversation = async () => {
-    if (!isAuthenticated) {
-      toast({
-        title: "Authentication Required",
-        description: "Please log in to start a conversation.",
-        variant: "destructive",
-      });
-      navigate('/login');
-      return;
-    }
-
     try {
       console.log('Creating new conversation...');
-      const { data: { user } } = await supabase.auth.getUser();
       
       const { data, error } = await supabase
         .from('conversations')
         .insert([{ 
           title: 'New Chat',
-          provider: selectedModel === 'dify' ? 'dify' : 'openai',
-          created_by: user?.id
+          provider: selectedModel === 'dify' ? 'dify' : 'openai'
         }])
         .select()
         .single();
@@ -147,7 +118,6 @@ const ChatInterface = () => {
 
     try {
       console.log('Sending message:', messageContent);
-      const { data: { user } } = await supabase.auth.getUser();
       
       const { error: messageError } = await supabase
         .from('messages')
@@ -156,7 +126,6 @@ const ChatInterface = () => {
             conversation_id: conversationId,
             content: messageContent,
             type: 'text',
-            sender_id: user?.id
           },
         ]);
 
@@ -205,7 +174,7 @@ const ChatInterface = () => {
 
   const handleOpen = (open: boolean) => {
     setIsOpen(open);
-    if (open && !conversationId && isAuthenticated) {
+    if (open && !conversationId) {
       createNewConversation();
     }
   };
