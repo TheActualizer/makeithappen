@@ -64,7 +64,8 @@ export const useProjectForm = () => {
 
       const { error } = await supabase
         .from('projects')
-        .insert([projectData]);
+        .insert([projectData])
+        .single();
 
       if (error) {
         console.error('[handleSubmit] Project submission error:', error);
