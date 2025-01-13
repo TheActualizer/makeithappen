@@ -22,6 +22,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
+import { supabase } from "@/integrations/supabase/client";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -48,8 +49,21 @@ const Contact = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
-      console.log("Form submitted:", values);
-      // TODO: Implement form submission logic
+      console.log("Submitting form to Supabase:", values);
+      
+      const { error } = await supabase.from("contact_submissions").insert({
+        name: values.name,
+        email: values.email,
+        phone: values.phone || null,
+        project_type: values.projectType,
+        message: values.message,
+      });
+
+      if (error) {
+        console.error("Supabase error:", error);
+        throw error;
+      }
+
       toast.success("Message sent successfully! We'll be in touch soon.");
       form.reset();
     } catch (error) {
