@@ -1,29 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-
-interface Profile {
-  first_name: string | null;
-  last_name: string | null;
-  email: string | null;
-  avatar_url: string | null;
-}
-
-interface Message {
-  id: string;
-  content: string;
-  sender_id: string | null;
-  created_at: string;
-  conversation_id?: string;
-  type?: 'text' | 'system' | 'ai';
-  profiles?: Profile | null;
-}
-
-interface Conversation {
-  id: string;
-  title: string;
-  created_at: string;
-}
+import type { Message, Conversation } from '@/types/message';
 
 export const useMessages = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -107,7 +85,7 @@ export const useMessages = () => {
           created_at,
           conversation_id,
           type,
-          profiles (
+          profiles:sender_id (
             first_name,
             last_name,
             email,
