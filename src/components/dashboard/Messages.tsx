@@ -76,7 +76,6 @@ export const Messages = () => {
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Error fetching conversations:', error);
         throw error;
       }
 
@@ -86,7 +85,7 @@ export const Messages = () => {
       if (data && data.length > 0 && !selectedConversation) {
         console.log('Setting initial conversation:', data[0].id);
         setSelectedConversation(data[0].id);
-        fetchMessages(data[0].id);
+        await fetchMessages(data[0].id);
       }
     } catch (error) {
       console.error('Error in fetchConversations:', error);
@@ -116,7 +115,6 @@ export const Messages = () => {
         .order('created_at', { ascending: true });
 
       if (error) {
-        console.error('Error fetching messages:', error);
         throw error;
       }
 
@@ -135,31 +133,19 @@ export const Messages = () => {
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || !selectedConversation || isLoading) {
-      console.log('Message send prevented:', { 
-        hasContent: !!newMessage.trim(), 
-        hasSelectedConversation: !!selectedConversation,
-        isLoading 
-      });
       return;
     }
 
     setIsLoading(true);
     const messageContent = newMessage;
-    setNewMessage(''); // Clear input immediately for better UX
-
-    console.log('Sending message:', { 
-      content: messageContent, 
-      conversationId: selectedConversation 
-    });
+    setNewMessage('');
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        console.error('No authenticated user found');
         throw new Error('Not authenticated');
       }
 
-      // Insert the message
       const { error: messageError } = await supabase
         .from('messages')
         .insert([
@@ -172,11 +158,9 @@ export const Messages = () => {
         ]);
 
       if (messageError) {
-        console.error('Error sending message:', messageError);
         throw messageError;
       }
 
-      // Notify admin via edge function
       const { error: notifyError } = await supabase.functions.invoke('notify-admin', {
         body: {
           message: messageContent,
@@ -197,7 +181,7 @@ export const Messages = () => {
         title: "Error",
         description: "Failed to send message",
       });
-      setNewMessage(messageContent); // Restore message content on error
+      setNewMessage(messageContent);
     } finally {
       setIsLoading(false);
     }
