@@ -187,7 +187,6 @@ export const Messages = () => {
 
       if (notifyError) {
         console.error('Error notifying admin:', notifyError);
-        // Don't throw here, as the message was already sent successfully
       }
 
       console.log('Message sent successfully');
