@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import type { Message, Conversation } from '@/types/message';
+import type { Message, Conversation, Profile } from '@/types/message';
 
 export const useMessages = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -107,12 +107,12 @@ export const useMessages = () => {
         created_at: msg.created_at,
         conversation_id: msg.conversation_id,
         type: msg.type || 'text',
-        profiles: msg.profiles || {
-          first_name: null,
-          last_name: null,
-          email: null,
-          avatar_url: null
-        }
+        profiles: msg.profiles ? {
+          first_name: msg.profiles.first_name,
+          last_name: msg.profiles.last_name,
+          email: msg.profiles.email,
+          avatar_url: msg.profiles.avatar_url
+        } : null
       }));
 
       console.log('Messages fetched:', typedMessages);
