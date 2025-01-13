@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import { ServicesShowcase } from "@/components/ServicesShowcase";
 import CalendarDemo from "@/components/CalendarDemo";
 
 const Index = () => {
@@ -7,6 +8,7 @@ const Index = () => {
     <div className="min-h-screen bg-accent">
       <Navbar />
       <Hero />
+      <ServicesShowcase />
       <CalendarDemo />
     </div>
   );
