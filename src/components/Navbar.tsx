@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,27 +9,37 @@ const Navbar = () => {
   const navItems = [
     { name: "Services", href: "#services" },
     { name: "Case Studies", href: "#case-studies" },
-    { name: "About", href: "#about" },
+    { name: "About", href: "/about" },
     { name: "Contact", href: "#contact" },
   ];
 
   return (
     <nav className="fixed w-full bg-accent/95 backdrop-blur-sm z-50 py-4">
       <div className="container mx-auto px-4 flex justify-between items-center">
-        <a href="/" className="text-2xl font-bold text-white">
+        <Link to="/" className="text-2xl font-bold text-white">
           MakeITHappen
-        </a>
+        </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-8">
           {navItems.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className="text-gray-300 hover:text-white transition-colors"
-            >
-              {item.name}
-            </a>
+            item.href.startsWith("#") ? (
+              <a
+                key={item.name}
+                href={item.href}
+                className="text-gray-300 hover:text-white transition-colors"
+              >
+                {item.name}
+              </a>
+            ) : (
+              <Link
+                key={item.name}
+                to={item.href}
+                className="text-gray-300 hover:text-white transition-colors"
+              >
+                {item.name}
+              </Link>
+            )
           ))}
           <Button variant="secondary">Get Started</Button>
         </div>
@@ -51,14 +62,25 @@ const Navbar = () => {
         <div className="md:hidden absolute top-full left-0 right-0 bg-accent/95 backdrop-blur-sm py-4">
           <div className="container mx-auto px-4 flex flex-col space-y-4">
             {navItems.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="text-gray-300 hover:text-white transition-colors"
-                onClick={() => setIsOpen(false)}
-              >
-                {item.name}
-              </a>
+              item.href.startsWith("#") ? (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="text-gray-300 hover:text-white transition-colors"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.name}
+                </a>
+              ) : (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className="text-gray-300 hover:text-white transition-colors"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              )
             ))}
             <Button variant="secondary" className="w-full">
               Get Started
