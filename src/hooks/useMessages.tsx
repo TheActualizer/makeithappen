@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import type { Message, Conversation, Profile } from '@/types/message';
+import type { Message, Conversation } from '@/types/message';
 
 export const useMessages = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -50,10 +50,7 @@ export const useMessages = () => {
         .select('id, title, created_at')
         .order('created_at', { ascending: false });
 
-      if (error) {
-        console.error('Error fetching conversations:', error);
-        throw error;
-      }
+      if (error) throw error;
 
       console.log('Conversations fetched:', data);
       setConversations(data || []);
@@ -85,7 +82,7 @@ export const useMessages = () => {
           created_at,
           conversation_id,
           type,
-          profiles (
+          profiles:sender_id (
             first_name,
             last_name,
             email,
@@ -95,10 +92,7 @@ export const useMessages = () => {
         .eq('conversation_id', conversationId)
         .order('created_at', { ascending: true });
 
-      if (error) {
-        console.error('Error fetching messages:', error);
-        throw error;
-      }
+      if (error) throw error;
 
       const typedMessages: Message[] = (data || []).map(msg => ({
         id: msg.id,
@@ -107,12 +101,7 @@ export const useMessages = () => {
         created_at: msg.created_at,
         conversation_id: msg.conversation_id,
         type: msg.type || 'text',
-        profiles: msg.profiles ? {
-          first_name: msg.profiles.first_name,
-          last_name: msg.profiles.last_name,
-          email: msg.profiles.email,
-          avatar_url: msg.profiles.avatar_url
-        } : null
+        profiles: msg.profiles || null
       }));
 
       console.log('Messages fetched:', typedMessages);
