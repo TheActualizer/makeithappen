@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -147,8 +148,8 @@ export const DocumentsTable = ({ documents, isLoading, onView }: DocumentsTableP
               Loading...
             </TableCell>
           </TableRow>
-        ) : (
-          documents?.map((doc) => (
+        ) : documents && documents.length > 0 ? (
+          documents.map((doc) => (
             <TableRow key={doc.id}>
               <TableCell>
                 {editingDocument?.id === doc.id ? (
@@ -235,6 +236,12 @@ export const DocumentsTable = ({ documents, isLoading, onView }: DocumentsTableP
               </TableCell>
             </TableRow>
           ))
+        ) : (
+          <TableRow>
+            <TableCell colSpan={6} className="text-center">
+              No documents found
+            </TableCell>
+          </TableRow>
         )}
       </TableBody>
     </Table>
