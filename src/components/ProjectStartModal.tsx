@@ -34,24 +34,7 @@ const ProjectStartModal = ({
   const navigate = useNavigate();
 
   const handleNext = () => {
-    if (step === 1 && (!formData.name || !formData.email)) {
-      toast({
-        title: "Required Fields",
-        description: "Please fill in your name and email",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    if (step === 2 && !formData.description) {
-      toast({
-        title: "Required Fields",
-        description: "Please provide a project description",
-        variant: "destructive",
-      });
-      return;
-    }
-
+    // Remove validation checks since no fields are required
     if (step < 3) {
       setStep(step + 1);
     }
@@ -78,6 +61,10 @@ const ProjectStartModal = ({
           project_type: formData.projectType,
           description: formData.description,
           timeline: formData.timeline,
+          pain_points: formData.pain_points,
+          complexity: formData.complexity,
+          team_size: formData.teamSize,
+          budget_range: formData.budgetRange,
         }]);
 
       if (projectError) {
@@ -113,7 +100,6 @@ const ProjectStartModal = ({
   };
 
   const handleBookDemo = () => {
-    // Open Calendly in a popup window
     const width = 550;
     const height = 700;
     const left = window.innerWidth / 2 - width / 2;

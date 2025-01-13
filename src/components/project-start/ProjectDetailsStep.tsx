@@ -44,7 +44,7 @@ const teamSizes = [
 ];
 
 const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) => {
-  const [selectedPainPoints, setSelectedPainPoints] = useState<string[]>([]);
+  const [selectedPainPoints, setSelectedPainPoints] = useState<string[]>(formData.pain_points || []);
 
   const handlePainPointChange = (pointId: string) => {
     setSelectedPainPoints(current => {
@@ -125,7 +125,7 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
                 key={level.value}
                 variant={formData.complexity === level.value ? "default" : "outline"}
                 size="sm"
-                onClick={() => setFormData({ ...formData, complexity: level.value })}
+                onClick={() => setFormData({ ...formData, complexity: level.value as FormData["complexity"] })}
                 className="flex-1"
               >
                 {level.label}
