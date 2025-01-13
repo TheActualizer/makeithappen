@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/toast";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface Project {
@@ -33,7 +33,7 @@ export const ProjectScope = () => {
 
         const { data, error } = await supabase
           .from("projects")
-          .select("*")
+          .select("name, email, phone, company, project_type, description, timeline, budget_range, team_size, complexity, workforce_simulation_scope, ai_agent_requirements, pain_points")
           .eq("email", userData.user.email);
 
         if (error) throw error;

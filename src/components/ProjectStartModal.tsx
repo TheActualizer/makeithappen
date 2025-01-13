@@ -93,18 +93,16 @@ const ProjectStartModal = ({
 
       console.log("Formatted project data:", projectData);
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('projects')
-        .insert(projectData)
-        .select('id')
-        .single();
+        .insert(projectData);
 
       if (error) {
         console.error('Project submission error:', error);
         throw new Error(error.message);
       }
 
-      console.log('Project saved successfully:', data);
+      console.log('Project saved successfully');
 
       toast({
         title: "Success!",
