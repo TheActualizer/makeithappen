@@ -22,6 +22,7 @@ import { DashboardDocuments } from "./components/dashboard/DashboardDocuments";
 import { ProjectProgress } from "./components/dashboard/ProjectProgress";
 import { ProjectScope } from "./components/dashboard/ProjectScope";
 import { DashboardActivity } from "./components/dashboard/DashboardActivity";
+import { Messages } from "./components/dashboard/Messages";
 
 const queryClient = new QueryClient();
 
@@ -62,7 +63,7 @@ const App = () => (
             <Route path="/dashboard/messages" element={
               <DashboardLayout>
                 <h1 className="text-3xl font-bold mb-8">Messages</h1>
-                <div className="text-muted-foreground">Messaging feature coming soon...</div>
+                <Messages />
               </DashboardLayout>
             } />
             <Route path="/dashboard/documents" element={
