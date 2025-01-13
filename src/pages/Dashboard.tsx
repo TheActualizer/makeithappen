@@ -12,6 +12,7 @@ import {
   PlusCircle,
   Briefcase,
   ExternalLink,
+  DollarSign,
 } from "lucide-react";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { DashboardDocuments } from "@/components/dashboard/DashboardDocuments";
@@ -20,6 +21,7 @@ import { DashboardActivity } from "@/components/dashboard/DashboardActivity";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { ProjectProgress } from "@/components/dashboard/ProjectProgress";
 import { ProjectScope } from "@/components/dashboard/ProjectScope";
+import { FinancialMetrics } from "@/components/dashboard/FinancialMetrics";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { Button } from "@/components/ui/button";
 import ProjectStartModal from "@/components/ProjectStartModal";
@@ -122,6 +124,24 @@ const Dashboard = () => {
               </h2>
             </div>
             <DashboardStats isAdmin={isAdmin} />
+          </section>
+
+          {/* Financial Metrics Section */}
+          <section>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-semibold flex items-center gap-2">
+                <DollarSign className="h-5 w-5" />
+                Financial Metrics
+              </h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleExpandSection('financials')}
+              >
+                <ExternalLink className="h-4 w-4" />
+              </Button>
+            </div>
+            <FinancialMetrics projectId={activeProjectId} />
           </section>
 
           {/* Project Progress Section */}

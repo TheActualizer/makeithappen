@@ -398,6 +398,97 @@ export type Database = {
         }
         Relationships: []
       }
+      project_expenses: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string | null
+          date: string | null
+          description: string
+          id: string
+          project_id: string | null
+          receipt_url: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          category: string
+          created_at?: string | null
+          date?: string | null
+          description: string
+          id?: string
+          project_id?: string | null
+          receipt_url?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string | null
+          date?: string | null
+          description?: string
+          id?: string
+          project_id?: string | null
+          receipt_url?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_expenses_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_payments: {
+        Row: {
+          amount: number
+          created_at: string | null
+          date: string | null
+          id: string
+          payment_method: string | null
+          project_id: string | null
+          status: string
+          transaction_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          date?: string | null
+          id?: string
+          payment_method?: string | null
+          project_id?: string | null
+          status: string
+          transaction_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          date?: string | null
+          id?: string
+          payment_method?: string | null
+          project_id?: string | null
+          status?: string
+          transaction_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_payments_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       project_tech_stack: {
         Row: {
           category: Database["public"]["Enums"]["tech_stack_category"]
@@ -435,12 +526,15 @@ export type Database = {
       }
       projects: {
         Row: {
+          actual_cost: number | null
           ai_agent_requirements: string[] | null
           automation_categories: string[] | null
           automation_opportunities: string[] | null
           automation_requirements: Json | null
           budget_breakdown: Json | null
           budget_range: unknown | null
+          budget_remaining: number | null
+          budget_spent: number | null
           business_objectives: string[] | null
           business_procedures: Json | null
           business_processes: string[] | null
@@ -458,16 +552,22 @@ export type Database = {
           digital_transformation_goals: string[] | null
           digital_workforce_requirements: Json | null
           email: string
+          estimated_cost: number | null
           expected_roi: string | null
           has_existing_codebase: boolean | null
+          hourly_rate: number | null
           id: string
           industry_vertical: string | null
           integration_points: string[] | null
           integration_requirements: string[] | null
           key_automation_metrics: string[] | null
+          last_payment_date: string | null
           name: string
+          next_payment_date: string | null
           operational_policies: Json | null
           pain_points: string[] | null
+          payment_schedule: string | null
+          payment_status: string | null
           phone: string | null
           preferred_technologies: string[] | null
           pricing_tier: string | null
@@ -480,16 +580,20 @@ export type Database = {
           target_completion_date: string | null
           team_size: number | null
           timeline: string
+          total_hours_logged: number | null
           user_id: string | null
           workforce_simulation_scope: string | null
         }
         Insert: {
+          actual_cost?: number | null
           ai_agent_requirements?: string[] | null
           automation_categories?: string[] | null
           automation_opportunities?: string[] | null
           automation_requirements?: Json | null
           budget_breakdown?: Json | null
           budget_range?: unknown | null
+          budget_remaining?: number | null
+          budget_spent?: number | null
           business_objectives?: string[] | null
           business_procedures?: Json | null
           business_processes?: string[] | null
@@ -507,16 +611,22 @@ export type Database = {
           digital_transformation_goals?: string[] | null
           digital_workforce_requirements?: Json | null
           email: string
+          estimated_cost?: number | null
           expected_roi?: string | null
           has_existing_codebase?: boolean | null
+          hourly_rate?: number | null
           id?: string
           industry_vertical?: string | null
           integration_points?: string[] | null
           integration_requirements?: string[] | null
           key_automation_metrics?: string[] | null
+          last_payment_date?: string | null
           name: string
+          next_payment_date?: string | null
           operational_policies?: Json | null
           pain_points?: string[] | null
+          payment_schedule?: string | null
+          payment_status?: string | null
           phone?: string | null
           preferred_technologies?: string[] | null
           pricing_tier?: string | null
@@ -529,16 +639,20 @@ export type Database = {
           target_completion_date?: string | null
           team_size?: number | null
           timeline: string
+          total_hours_logged?: number | null
           user_id?: string | null
           workforce_simulation_scope?: string | null
         }
         Update: {
+          actual_cost?: number | null
           ai_agent_requirements?: string[] | null
           automation_categories?: string[] | null
           automation_opportunities?: string[] | null
           automation_requirements?: Json | null
           budget_breakdown?: Json | null
           budget_range?: unknown | null
+          budget_remaining?: number | null
+          budget_spent?: number | null
           business_objectives?: string[] | null
           business_procedures?: Json | null
           business_processes?: string[] | null
@@ -556,16 +670,22 @@ export type Database = {
           digital_transformation_goals?: string[] | null
           digital_workforce_requirements?: Json | null
           email?: string
+          estimated_cost?: number | null
           expected_roi?: string | null
           has_existing_codebase?: boolean | null
+          hourly_rate?: number | null
           id?: string
           industry_vertical?: string | null
           integration_points?: string[] | null
           integration_requirements?: string[] | null
           key_automation_metrics?: string[] | null
+          last_payment_date?: string | null
           name?: string
+          next_payment_date?: string | null
           operational_policies?: Json | null
           pain_points?: string[] | null
+          payment_schedule?: string | null
+          payment_status?: string | null
           phone?: string | null
           preferred_technologies?: string[] | null
           pricing_tier?: string | null
@@ -578,6 +698,7 @@ export type Database = {
           target_completion_date?: string | null
           team_size?: number | null
           timeline?: string
+          total_hours_logged?: number | null
           user_id?: string | null
           workforce_simulation_scope?: string | null
         }
