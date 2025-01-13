@@ -7,7 +7,7 @@ export interface FormData {
   email: string;
   phone: string;
   company: string;
-  projectType: ProjectType;
+  projectType: string[];  // Changed to string[] for multi-select
   description: string;
   timeline: Timeline;
   consultationDate?: Date;

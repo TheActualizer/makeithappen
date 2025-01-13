@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { FormData } from "./types";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -23,15 +21,14 @@ import {
   Workflow
 } from "lucide-react";
 
-// Moving these to a separate configuration file would be a good next step
 const serviceTypes = [
-  { value: "website", label: "Website Development" },
-  { value: "crm", label: "CRM System Setup" },
-  { value: "accounting", label: "Accounting System" },
-  { value: "marketing", label: "Marketing Automation" },
-  { value: "digital-workforce", label: "AI Workforce Setup" },
-  { value: "legal", label: "Legal Department Setup" },
-  { value: "hr", label: "HR Department Setup" },
+  { value: "website", label: "Website & Digital Presence" },
+  { value: "crm", label: "Customer Relationship Management" },
+  { value: "accounting", label: "Financial & Accounting Systems" },
+  { value: "marketing", label: "Marketing & Automation" },
+  { value: "digital-workforce", label: "Digital Workforce & AI" },
+  { value: "legal", label: "Legal Operations" },
+  { value: "hr", label: "Human Resources" },
   { value: "other", label: "Other Services" }
 ];
 
@@ -60,33 +57,15 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
   const [selectedPainPoints, setSelectedPainPoints] = useState<string[]>(formData.pain_points || []);
   const [selectedAgents, setSelectedAgents] = useState<string[]>(formData.ai_agent_requirements || []);
 
-  const handlePainPointChange = (pointId: string) => {
-    setSelectedPainPoints(current => {
-      const updated = current.includes(pointId)
-        ? current.filter(id => id !== pointId)
-        : [...current, pointId];
-      
-      setFormData({
-        ...formData,
-        pain_points: updated
-      });
-      
-      return updated;
-    });
-  };
-
-  const handleAgentRequirementChange = (agentId: string) => {
-    setSelectedAgents(current => {
-      const updated = current.includes(agentId)
-        ? current.filter(id => id !== agentId)
-        : [...current, agentId];
-      
-      setFormData({
-        ...formData,
-        ai_agent_requirements: updated
-      });
-      
-      return updated;
+  const handleServiceTypeChange = (serviceValue: string) => {
+    const currentServices = formData.projectType || [];
+    const updatedServices = currentServices.includes(serviceValue)
+      ? currentServices.filter(type => type !== serviceValue)
+      : [...currentServices, serviceValue];
+    
+    setFormData({
+      ...formData,
+      projectType: updatedServices
     });
   };
 
@@ -102,15 +81,15 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
           <div className="space-y-4">
             <label className="text-sm font-medium flex items-center gap-2">
               <BriefcaseIcon className="w-4 h-4" />
-              Service Type
+              Services Required
             </label>
             <div className="grid grid-cols-2 gap-3">
               {serviceTypes.map((type) => (
                 <Button
                   key={type.value}
-                  variant={formData.projectType === type.value ? "default" : "outline"}
+                  variant={formData.projectType?.includes(type.value) ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setFormData({ ...formData, projectType: type.value })}
+                  onClick={() => handleServiceTypeChange(type.value)}
                   className="justify-start"
                 >
                   {type.label}
