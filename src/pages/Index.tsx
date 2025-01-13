@@ -29,8 +29,10 @@ const Index = () => {
                 Book a time that works best for you, and let's discuss how we can help transform your business with AI solutions.
               </p>
             </div>
-            <div className="mb-20">
-              <CalendlyEmbed url="https://calendly.com/belchonen18/30min" />
+            <div className="bg-white/5 backdrop-blur-sm rounded-lg p-6 mb-20">
+              <div className="h-[700px]">
+                <CalendlyEmbed url="https://calendly.com/belchonen18/30min" />
+              </div>
             </div>
           </div>
         </div>
