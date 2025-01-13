@@ -141,7 +141,17 @@ const ProjectStartModal = ({
             Thank you for submitting your project details. Let's schedule a time to discuss your requirements in detail.
           </p>
           <div className="h-[600px]">
-            <CalendlyEmbed url="https://calendly.com/belchonen18/30min" />
+            <CalendlyEmbed 
+              url="https://calendly.com/belchonen18/30min" 
+              prefill={{
+                name: formData.name,
+                email: formData.email,
+                customAnswers: {
+                  a1: formData.company || 'Not provided',
+                  a2: formData.phone || 'Not provided'
+                }
+              }}
+            />
           </div>
         </div>
       );

@@ -1,18 +1,29 @@
+import { useEffect } from "react";
 import { InlineWidget } from "react-calendly";
+
+interface PrefillData {
+  name?: string;
+  email?: string;
+  customAnswers?: {
+    [key: string]: string;
+  };
+}
 
 interface CalendlyEmbedProps {
   url: string;
-  styles?: React.CSSProperties;
+  prefill?: PrefillData;
 }
 
-const CalendlyEmbed = ({ url, styles }: CalendlyEmbedProps) => {
+const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
   return (
-    <div className="w-full h-[700px] bg-accent/40 backdrop-blur-sm rounded-lg border border-accent/20 overflow-hidden">
-      <InlineWidget
-        url={url}
-        styles={{ height: '100%', ...styles }}
-      />
-    </div>
+    <InlineWidget
+      url={url}
+      prefill={prefill}
+      styles={{
+        height: '100%',
+        width: '100%',
+      }}
+    />
   );
 };
 
