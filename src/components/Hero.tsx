@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import ProjectStartModal from "./ProjectStartModal";
 
 const Hero = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-accent via-accent to-primary/20 pt-16">
       <div className="container mx-auto px-4">
@@ -18,7 +22,7 @@ const Hero = () => {
             <Button
               size="lg"
               className="group"
-              onClick={() => document.getElementById("contact")?.scrollIntoView()}
+              onClick={() => setIsModalOpen(true)}
             >
               Start Your Project
               <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -33,6 +37,10 @@ const Hero = () => {
           </div>
         </div>
       </div>
+      <ProjectStartModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </div>
   );
 };
