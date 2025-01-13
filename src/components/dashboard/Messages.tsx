@@ -77,6 +77,7 @@ export const Messages = () => {
         .order('created_at', { ascending: false });
 
       if (error) {
+        console.error('Error fetching conversations:', error);
         throw error;
       }
 
@@ -116,6 +117,7 @@ export const Messages = () => {
         .order('created_at', { ascending: true });
 
       if (error) {
+        console.error('Error fetching messages:', error);
         throw error;
       }
 
@@ -134,12 +136,19 @@ export const Messages = () => {
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || !selectedConversation || isLoading) {
+      console.log('Message send prevented:', {
+        hasContent: !!newMessage.trim(),
+        hasConversation: !!selectedConversation,
+        isLoading
+      });
       return;
     }
 
     setIsLoading(true);
-    const messageContent = newMessage;
-    setNewMessage('');
+    console.log('Attempting to send message:', {
+      content: newMessage,
+      conversationId: selectedConversation
+    });
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -152,19 +161,25 @@ export const Messages = () => {
         .insert([
           {
             conversation_id: selectedConversation,
-            content: messageContent,
+            content: newMessage,
             sender_id: user.id,
+            type: 'text',
             is_admin_message: isAdmin
           },
         ]);
 
       if (messageError) {
+        console.error('Error inserting message:', messageError);
         throw messageError;
       }
 
+      console.log('Message inserted successfully');
+      setNewMessage('');
+
+      // Notify admin about the new message
       const { error: notifyError } = await supabase.functions.invoke('notify-admin', {
         body: {
-          message: messageContent,
+          message: newMessage,
           userId: user.id,
           conversationId: selectedConversation,
         },
@@ -172,9 +187,10 @@ export const Messages = () => {
 
       if (notifyError) {
         console.error('Error notifying admin:', notifyError);
+        // Don't throw here, as the message was already sent successfully
       }
 
-      console.log('Message sent successfully');
+      console.log('Message sent and admin notified successfully');
     } catch (error) {
       console.error('Error in sendMessage:', error);
       toast({
@@ -182,7 +198,8 @@ export const Messages = () => {
         title: "Error",
         description: "Failed to send message",
       });
-      setNewMessage(messageContent);
+      // Keep the message in the input if sending failed
+      setNewMessage(newMessage);
     } finally {
       setIsLoading(false);
     }
