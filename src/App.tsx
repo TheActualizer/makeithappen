@@ -8,6 +8,7 @@ import TransformativeCaseStudies from "@/pages/blog/TransformativeCaseStudies";
 import AITrends from "@/pages/blog/AITrends";
 import CaseStudies from "@/pages/blog/CaseStudies";
 import HealthcareTech from "@/pages/blog/HealthcareTech";
+import GDPRCompliance from "@/pages/blog/GDPRCompliance";
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/blog/ai-trends" element={<AITrends />} />
         <Route path="/blog/case-studies" element={<CaseStudies />} />
         <Route path="/blog/healthcare-tech" element={<HealthcareTech />} />
+        <Route path="/blog/gdpr-compliance" element={<GDPRCompliance />} />
       </Routes>
       <ChatInterface />
       <Toaster />

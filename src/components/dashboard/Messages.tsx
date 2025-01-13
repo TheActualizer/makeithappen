@@ -9,29 +9,20 @@ import { MonitoringPanel } from './monitoring/MonitoringPanel';
 export const Messages = () => {
   const { isAdmin } = useIsAdmin();
   const {
-    data: { 
-      conversations,
-      messages,
-      selectedConversation,
-      setSelectedConversation,
-      fetchMessages 
-    } = {
-      conversations: [],
-      messages: [],
-      selectedConversation: null,
-      setSelectedConversation: () => {},
-      fetchMessages: () => {}
-    }
-  } = useMessages();
+    data: messages,
+    selectedConversation,
+    setSelectedConversation,
+    fetchMessages 
+  } = useMessages(selectedConversation?.id || '');
 
   const {
     newMessage,
     setNewMessage,
     isLoading,
     sendMessage
-  } = useMessageSender(selectedConversation, () => {
+  } = useMessageSender(selectedConversation?.id || '', () => {
     if (selectedConversation) {
-      fetchMessages(selectedConversation);
+      fetchMessages(selectedConversation.id);
     }
   });
 
@@ -46,12 +37,12 @@ export const Messages = () => {
       {isAdmin && <MonitoringPanel />}
       <div className="flex h-[calc(100vh-12rem)] gap-4">
         <ConversationList
-          conversations={conversations}
+          conversations={messages?.conversations || []}
           selectedConversation={selectedConversation}
           onSelectConversation={selectConversation}
         />
         <MessageArea
-          messages={messages}
+          messages={messages?.messages || []}
           newMessage={newMessage}
           setNewMessage={setNewMessage}
           onSendMessage={sendMessage}
