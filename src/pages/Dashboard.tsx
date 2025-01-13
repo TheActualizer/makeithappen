@@ -12,6 +12,7 @@ import {
   Activity,
   Settings,
   PlusCircle,
+  Briefcase,
 } from "lucide-react";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { DashboardDocuments } from "@/components/dashboard/DashboardDocuments";
@@ -19,11 +20,10 @@ import { DashboardCalendar } from "@/components/dashboard/DashboardCalendar";
 import { DashboardActivity } from "@/components/dashboard/DashboardActivity";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { ProjectProgress } from "@/components/dashboard/ProjectProgress";
+import { ProjectScope } from "@/components/dashboard/ProjectScope";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { Button } from "@/components/ui/button";
 import ProjectStartModal from "@/components/ProjectStartModal";
-
-// ... keep existing code (imports and component start)
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -108,7 +108,7 @@ const Dashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-6 mb-8">
+          <TabsList className="grid w-full grid-cols-7 mb-8">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart className="h-4 w-4" />
               Overview
@@ -116,6 +116,10 @@ const Dashboard = () => {
             <TabsTrigger value="progress" className="flex items-center gap-2">
               <Activity className="h-4 w-4" />
               Progress
+            </TabsTrigger>
+            <TabsTrigger value="scope" className="flex items-center gap-2">
+              <Briefcase className="h-4 w-4" />
+              Project Scope
             </TabsTrigger>
             <TabsTrigger value="documents" className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
@@ -143,6 +147,10 @@ const Dashboard = () => {
 
           <TabsContent value="progress">
             <ProjectProgress projectId={activeProjectId} />
+          </TabsContent>
+
+          <TabsContent value="scope">
+            <ProjectScope />
           </TabsContent>
 
           <TabsContent value="documents">
