@@ -8,6 +8,13 @@ interface Message {
   type: 'text' | 'system' | 'ai';
   sender_id: string | null;
   created_at: string;
+  conversation_id?: string;
+  profiles?: {
+    first_name: string | null;
+    last_name: string | null;
+    email: string | null;
+    avatar_url: string | null;
+  } | null;
 }
 
 interface ChatMessagesProps {
@@ -18,7 +25,7 @@ interface ChatMessagesProps {
 const ChatMessages = ({ messages, messagesEndRef }: ChatMessagesProps) => {
   return (
     <ScrollArea className="flex-1 p-4">
-      <div className="space-y-4">
+      <div className="space-y-6">
         {messages.map((message) => (
           <ChatMessage key={message.id} message={message} />
         ))}
