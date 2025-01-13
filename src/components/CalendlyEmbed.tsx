@@ -20,14 +20,31 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
     const handleCalendlyEvent = (e: any) => {
       if (e.data.event === "calendly.event_scheduled") {
         const eventData = e.data.payload;
-        console.log("Calendly event scheduled:", eventData);
+        console.log("Full Calendly event data:", eventData);
+        console.log("Location data:", eventData.event.location);
         
-        // Get the Zoom link from the location data
-        const zoomLink = eventData.event.location?.includes('zoom.us') 
-          ? eventData.event.location 
-          : eventData.event.location?.join_url || "Will be provided separately";
+        // Enhanced Zoom link extraction
+        let zoomLink = "Will be provided separately";
+        
+        if (eventData.event.location) {
+          // Check if location is a string containing zoom.us
+          if (typeof eventData.event.location === 'string' && eventData.event.location.includes('zoom.us')) {
+            zoomLink = eventData.event.location;
+          } 
+          // Check if location is an object with join_url
+          else if (typeof eventData.event.location === 'object' && eventData.event.location.join_url) {
+            zoomLink = eventData.event.location.join_url;
+          }
+          // Check if location is an object with a data property
+          else if (typeof eventData.event.location === 'object' && eventData.event.location.data) {
+            const locationData = eventData.event.location.data;
+            if (locationData.join_url) {
+              zoomLink = locationData.join_url;
+            }
+          }
+        }
 
-        console.log("Zoom link extracted:", zoomLink);
+        console.log("Extracted Zoom link:", zoomLink);
         
         // Send webhook to our edge function
         fetch("/functions/send-consultation-email", {
