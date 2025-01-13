@@ -13,11 +13,13 @@ import { supabase } from "@/integrations/supabase/client";
 const initialFormData: FormData = {
   name: "",
   email: "",
-  phone: "",
-  company: "",
+  phone: null,
+  company: null,
   projectType: [],
   description: "",
   timeline: "asap",
+  pain_points: [],
+  ai_agent_requirements: []
 };
 
 const ProjectStartModal = ({
@@ -47,7 +49,23 @@ const ProjectStartModal = ({
 
   const formatBudgetRange = (range: string | undefined) => {
     if (!range) return null;
-    const [min, max] = range.split('-').map(Number);
+    
+    // Extract numbers from the range string
+    const matches = range.match(/\d+/g);
+    if (!matches) return null;
+    
+    let min = parseInt(matches[0]);
+    let max = matches.length > 1 ? parseInt(matches[1]) : min;
+    
+    // Handle special cases
+    if (range === "under-10000") {
+      min = 0;
+      max = 10000;
+    } else if (range === "200000+") {
+      min = 200000;
+      max = 1000000; // Set a reasonable upper limit
+    }
+    
     return `[${min},${max}]`;
   };
 

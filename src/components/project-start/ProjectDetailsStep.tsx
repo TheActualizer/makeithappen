@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import { FormData } from "./types";
+import { FormData, Timeline } from "./types";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -11,14 +11,6 @@ import {
   DollarSign,
   Users,
   Bot,
-  AlertCircle,
-  Globe,
-  LayoutDashboard,
-  Calculator,
-  Megaphone,
-  Scale,
-  UserCog,
-  Workflow,
   Calendar
 } from "lucide-react";
 
@@ -49,7 +41,7 @@ const teamSizes = [
   { value: "20+", label: "20+ members" }
 ];
 
-const timelineOptions = [
+const timelineOptions: { value: Timeline; label: string }[] = [
   { value: "asap", label: "As Soon As Possible" },
   { value: "1-3-months", label: "1-3 Months" },
   { value: "3-6-months", label: "3-6 Months" },
@@ -81,7 +73,7 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
     <div className="space-y-8">
       <div className="space-y-4">
         <h2 className="text-lg font-semibold flex items-center gap-2">
-          <LayoutDashboard className="w-5 h-5" />
+          <BriefcaseIcon className="w-5 h-5" />
           Project Scope Details
         </h2>
         
@@ -161,7 +153,7 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
                   key={option.value}
                   variant={formData.timeline === option.value ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setFormData({ ...formData, timeline: option.value })}
+                  onClick={() => setFormData({ ...formData, timeline: option.value as Timeline })}
                 >
                   {option.label}
                 </Button>
