@@ -1,137 +1,115 @@
-import { motion } from "framer-motion";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import React from "react";
+import { ArrowLeft, BarChart3, Brain, Calculator, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, TrendingUp, LineChart, Zap } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import Navbar from "@/components/Navbar";
 
 const TransformativeCaseStudies = () => {
   const navigate = useNavigate();
 
-  const caseStudies = [
-    {
-      title: "E-commerce Giant Revolutionizes Customer Service",
-      industry: "Retail",
-      challenge: "Manual customer support causing delays and inconsistencies",
-      solution: "Implemented AI-powered chatbots and automated ticket routing",
-      outcomes: [
-        "90% reduction in response time",
-        "75% decrease in support costs",
-        "98% customer satisfaction rate"
-      ],
-      icon: <TrendingUp className="w-8 h-8 text-primary" />
-    },
-    {
-      title: "Healthcare Provider Optimizes Patient Care",
-      industry: "Healthcare",
-      challenge: "Inefficient scheduling and resource allocation",
-      solution: "Deployed predictive analytics and automated scheduling system",
-      outcomes: [
-        "30% increase in patient capacity",
-        "45% reduction in wait times",
-        "85% staff satisfaction improvement"
-      ],
-      icon: <LineChart className="w-8 h-8 text-primary" />
-    },
-    {
-      title: "Manufacturing Plant Achieves Smart Automation",
-      industry: "Manufacturing",
-      challenge: "Quality control inconsistencies and production delays",
-      solution: "Integrated IoT sensors with AI-powered quality monitoring",
-      outcomes: [
-        "50% defect reduction",
-        "35% increase in production speed",
-        "60% decrease in manual inspections"
-      ],
-      icon: <Zap className="w-8 h-8 text-primary" />
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-accent to-accent/95">
-      <Navbar />
-      <main className="container mx-auto px-4 pt-24 pb-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+      <div className="container mx-auto px-4 py-12">
+        <Button
+          variant="ghost"
+          className="mb-8 text-white hover:text-primary"
+          onClick={() => navigate("/")}
         >
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-            Transformative Case Studies
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Blog
+        </Button>
+
+        <article className="prose prose-lg prose-invert mx-auto">
+          <h1 className="text-4xl font-bold text-white mb-6">
+            Transformative Case Studies: AI-Enhanced Underwriting & Financial Analysis
           </h1>
-          <p className="text-gray-300 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
-            Explore real-world examples of how our AI solutions drive measurable business outcomes
-            and transform operations across industries.
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+            <Card className="bg-accent-foreground/5 backdrop-blur-sm p-6">
+              <Calculator className="h-8 w-8 text-primary mb-4" />
+              <h3 className="text-xl font-semibold text-white mb-2">
+                Advanced Risk Assessment
+              </h3>
+              <p className="text-gray-300">
+                Modern AI systems combine traditional underwriting rules with machine learning to provide more accurate risk assessments while maintaining regulatory compliance.
+              </p>
+            </Card>
+
+            <Card className="bg-accent-foreground/5 backdrop-blur-sm p-6">
+              <Brain className="h-8 w-8 text-primary mb-4" />
+              <h3 className="text-xl font-semibold text-white mb-2">
+                Intelligent Decision Support
+              </h3>
+              <p className="text-gray-300">
+                Fine-tuned AI models work alongside human experts, providing data-driven insights while maintaining human oversight for critical decisions.
+              </p>
+            </Card>
+          </div>
+
+          <h2 className="text-2xl font-semibold text-white mt-8 mb-4">
+            The Evolution of Financial Analysis
+          </h2>
+          <p className="text-gray-300">
+            Traditional underwriting processes are being revolutionized through the integration of AI and machine learning technologies. By combining established financial principles with cutting-edge AI capabilities, we're creating more robust and efficient systems for risk assessment and decision-making.
           </p>
-        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {caseStudies.map((study, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-            >
-              <Card className="h-full bg-accent-foreground/5 backdrop-blur-sm border-accent-foreground/10 hover:border-primary/50 transition-all duration-300">
-                <CardHeader>
-                  <div className="mb-4">{study.icon}</div>
-                  <Badge className="mb-3 bg-primary/20 text-primary hover:bg-primary/30">
-                    {study.industry}
-                  </Badge>
-                  <h3 className="text-xl font-semibold text-white mb-2">
-                    {study.title}
-                  </h3>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="text-sm font-semibold text-primary mb-1">Challenge</h4>
-                      <p className="text-gray-300">{study.challenge}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-primary mb-1">Solution</h4>
-                      <p className="text-gray-300">{study.solution}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-primary mb-2">Key Outcomes</h4>
-                      <ul className="space-y-2">
-                        {study.outcomes.map((outcome, i) => (
-                          <li key={i} className="text-gray-300 flex items-center">
-                            <ArrowRight className="w-4 h-4 text-primary mr-2" />
-                            {outcome}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-center"
-        >
-          <h3 className="text-2xl font-semibold text-white mb-6">
-            Ready to Transform Your Business?
+          <h3 className="text-xl font-semibold text-white mt-6 mb-3">
+            Multi-Layered Verification Systems
           </h3>
-          <Button
-            size="lg"
-            onClick={() => navigate("/contact")}
-            className="bg-primary hover:bg-primary/90 text-white"
-          >
-            Start Your Success Story
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
-        </motion.div>
-      </main>
+          <p className="text-gray-300">
+            Our approach implements multiple layers of verification:
+          </p>
+          <ul className="list-disc list-inside text-gray-300 mb-6">
+            <li>Traditional rule-based checks for regulatory compliance</li>
+            <li>Machine learning models for pattern recognition</li>
+            <li>Natural language processing for document analysis</li>
+            <li>Real-time market data integration</li>
+            <li>Automated risk scoring with human oversight</li>
+          </ul>
+
+          <div className="bg-accent-foreground/5 backdrop-blur-sm rounded-lg p-6 my-8">
+            <BarChart3 className="h-8 w-8 text-primary mb-4" />
+            <h3 className="text-xl font-semibold text-white mb-4">
+              Key Benefits
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300">
+              <div>
+                <h4 className="font-semibold mb-2">Efficiency Gains</h4>
+                <ul className="list-disc list-inside">
+                  <li>90% faster document processing</li>
+                  <li>75% reduction in manual review time</li>
+                  <li>50% decrease in decision-making time</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-2">Risk Management</h4>
+                <ul className="list-disc list-inside">
+                  <li>30% improvement in risk assessment accuracy</li>
+                  <li>40% reduction in false positives</li>
+                  <li>Real-time fraud detection capabilities</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <h3 className="text-xl font-semibold text-white mt-6 mb-3">
+            Security and Compliance
+          </h3>
+          <div className="flex items-start gap-4 mb-6">
+            <Shield className="h-6 w-6 text-primary mt-1" />
+            <p className="text-gray-300">
+              All AI systems are designed with security and compliance at their core, ensuring adherence to regulatory requirements while maintaining the highest standards of data protection and privacy.
+            </p>
+          </div>
+
+          <h2 className="text-2xl font-semibold text-white mt-8 mb-4">
+            Future Implications
+          </h2>
+          <p className="text-gray-300">
+            As we continue to refine these systems, we're seeing the emergence of truly intelligent financial analysis platforms that can adapt to market changes, learn from historical data, and provide increasingly accurate predictions while maintaining the necessary checks and balances for responsible financial decision-making.
+          </p>
+        </article>
+      </div>
     </div>
   );
 };
