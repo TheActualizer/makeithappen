@@ -134,6 +134,12 @@ const ProjectStartModal = ({
 
   const renderStep = () => {
     if (showCalendly) {
+      const meetingPrep = `Project Type: ${formData.projectType.join(', ')}\n\n` +
+        `Description: ${formData.description}\n\n` +
+        `Timeline: ${formData.timeline}\n\n` +
+        `Digital Workforce Scope: ${formData.workforce_simulation_scope || 'Not specified'}\n\n` +
+        `AI Requirements: ${formData.ai_agent_requirements?.join(', ') || 'Not specified'}`;
+
       return (
         <div className="space-y-4">
           <h3 className="text-lg font-medium">Schedule Your Consultation</h3>
@@ -148,7 +154,8 @@ const ProjectStartModal = ({
                 email: formData.email,
                 customAnswers: {
                   a1: formData.company || 'Not provided',
-                  a2: formData.phone || 'Not provided'
+                  a2: formData.phone || 'Not provided',
+                  a3: meetingPrep
                 }
               }}
             />
