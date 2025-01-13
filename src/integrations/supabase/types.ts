@@ -9,6 +9,130 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      blog_categories: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          slug: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          slug: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          slug?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      blog_comments: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          post_id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          post_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          post_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "blog_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      blog_posts: {
+        Row: {
+          author_id: string | null
+          category_id: string | null
+          content: string
+          created_at: string | null
+          excerpt: string | null
+          featured_image: string | null
+          id: string
+          published_at: string | null
+          reading_time: number | null
+          slug: string
+          status: Database["public"]["Enums"]["post_status"] | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+          views: number | null
+        }
+        Insert: {
+          author_id?: string | null
+          category_id?: string | null
+          content: string
+          created_at?: string | null
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: string
+          published_at?: string | null
+          reading_time?: number | null
+          slug: string
+          status?: Database["public"]["Enums"]["post_status"] | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+          views?: number | null
+        }
+        Update: {
+          author_id?: string | null
+          category_id?: string | null
+          content?: string
+          created_at?: string | null
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: string
+          published_at?: string | null
+          reading_time?: number | null
+          slug?: string
+          status?: Database["public"]["Enums"]["post_status"] | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+          views?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_posts_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "blog_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_submissions: {
         Row: {
           created_at: string | null
@@ -148,6 +272,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      post_status: "draft" | "published" | "archived"
       project_complexity: "simple" | "moderate" | "complex" | "enterprise"
       tech_stack_category:
         | "frontend"
