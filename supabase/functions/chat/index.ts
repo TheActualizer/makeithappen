@@ -20,48 +20,42 @@ serve(async (req) => {
       throw new Error('Message is required')
     }
 
-    let answer = ''
-
-    // Initialize DIFY API call
-    if (model === 'dify') {
-      const difyApiKey = Deno.env.get('DIFY_API_KEY')
-      console.log('Using DIFY API with conversation ID:', conversationId)
-      
-      const response = await fetch('https://api.dify.ai/v1/chat-messages', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${difyApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          inputs: {},
-          query: message,
-          response_mode: 'blocking',
-          conversation_id: conversationId,
-        }),
-      })
-
-      if (!response.ok) {
-        console.error('DIFY API error:', await response.text())
-        throw new Error('Failed to get response from DIFY')
-      }
-
-      const data = await response.json()
-      console.log('DIFY API response:', data)
-      answer = data.answer
-    }
-    // Handle other models if needed
-    else {
-      throw new Error(`Unsupported model: ${model}`)
+    const difyApiKey = Deno.env.get('DIFY_API_KEY')
+    if (!difyApiKey) {
+      throw new Error('DIFY_API_KEY is not configured')
     }
 
-    if (!answer) {
-      throw new Error('No answer received from AI service')
+    console.log('Using DIFY API with conversation ID:', conversationId)
+    
+    const response = await fetch('https://api.dify.ai/v1/chat-messages', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${difyApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        inputs: {},
+        query: message,
+        user: conversationId, // Use conversationId as user identifier
+        response_mode: 'blocking',
+      }),
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('DIFY API error response:', errorText)
+      throw new Error(`DIFY API error: ${response.status} ${errorText}`)
     }
 
-    console.log('Sending answer:', answer)
+    const data = await response.json()
+    console.log('DIFY API response:', data)
+
+    if (!data.answer) {
+      throw new Error('No answer received from DIFY API')
+    }
+
     return new Response(
-      JSON.stringify({ answer }),
+      JSON.stringify({ answer: data.answer }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       },
@@ -69,7 +63,10 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in chat function:', error)
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: error.message,
+        details: error.toString()
+      }),
       {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
