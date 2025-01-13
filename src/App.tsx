@@ -1,29 +1,36 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ChatInterface from "@/components/chat/ChatInterface";
+import Index from "@/pages/Index";
+import About from "@/pages/About";
+import Services from "@/pages/Services";
+import Contact from "@/pages/Contact";
 import Blog from "@/pages/Blog";
+import CaseStudies from "@/pages/CaseStudies";
+import Login from "@/pages/Login";
+import ResetPassword from "@/pages/ResetPassword";
+import Dashboard from "@/pages/Dashboard";
+import StartProject from "@/pages/StartProject";
 import AgenticSystems from "@/pages/blog/AgenticSystems";
-import VectorMemory from "@/pages/blog/VectorMemory";
-import TransformativeCaseStudies from "@/pages/blog/TransformativeCaseStudies";
 import AITrends from "@/pages/blog/AITrends";
-import CaseStudies from "@/pages/blog/CaseStudies";
-import HealthcareTech from "@/pages/blog/HealthcareTech";
-import { Toaster } from "react-hot-toast";
+
+import "./App.css";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Blog />} />
+        <Route path="/" element={<Index />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/blog" element={<Blog />} />
         <Route path="/blog/agentic-systems" element={<AgenticSystems />} />
-        <Route path="/blog/vector-memory" element={<VectorMemory />} />
-        <Route path="/blog/transformative-case-studies" element={<TransformativeCaseStudies />} />
         <Route path="/blog/ai-trends" element={<AITrends />} />
-        <Route path="/blog/case-studies" element={<CaseStudies />} />
-        <Route path="/blog/healthcare-tech" element={<HealthcareTech />} />
+        <Route path="/case-studies" element={<CaseStudies />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/start-project" element={<StartProject />} />
       </Routes>
-      <ChatInterface />
-      <Toaster />
     </Router>
   );
 }
