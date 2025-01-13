@@ -1,32 +1,27 @@
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "@/pages/Home";
-import Services from "@/pages/Services";
-import CaseStudies from "@/pages/CaseStudies";
+import ChatInterface from "@/components/chat/ChatInterface";
 import Blog from "@/pages/Blog";
-import About from "@/pages/About";
-import Contact from "@/pages/Contact";
-import Login from "@/pages/Login";
-import StartProject from "@/pages/StartProject";
 import AgenticSystems from "@/pages/blog/AgenticSystems";
-import AITrends from "@/pages/blog/AITrends";
+import VectorMemory from "@/pages/blog/VectorMemory";
 import TransformativeCaseStudies from "@/pages/blog/TransformativeCaseStudies";
+import AITrends from "@/pages/blog/AITrends";
+import CaseStudies from "@/pages/blog/CaseStudies";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/case-studies" element={<CaseStudies />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/start-project" element={<StartProject />} />
+        <Route path="/" element={<Blog />} />
         <Route path="/blog/agentic-systems" element={<AgenticSystems />} />
-        <Route path="/blog/ai-trends" element={<AITrends />} />
+        <Route path="/blog/vector-memory" element={<VectorMemory />} />
         <Route path="/blog/transformative-case-studies" element={<TransformativeCaseStudies />} />
+        <Route path="/blog/ai-trends" element={<AITrends />} />
+        <Route path="/blog/case-studies" element={<CaseStudies />} />
       </Routes>
+      <ChatInterface />
+      <Toaster />
     </Router>
   );
 }
