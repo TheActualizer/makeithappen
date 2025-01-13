@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { Brain, Building2, Stethoscope, Landmark, ArrowRight, Sparkles } from "lucide-react";
+import { Brain, Building2, Stethoscope, Landmark, ArrowRight, Sparkles, Globe, Users, Calculator, Megaphone, Scale, UserCog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -23,70 +23,110 @@ interface Service {
 const services: Service[] = [
   {
     id: 1,
-    title: "Healthcare Automation",
-    description: "Streamline medical workflows and enhance patient care with AI-powered automation",
-    icon: Stethoscope,
+    title: "Digital Workforce Automation",
+    description: "Transform your entire business operations with AI-powered digital workforce",
+    icon: Brain,
     benefits: [
-      "Reduce administrative overhead",
-      "Improve patient data accuracy",
-      "Enhance billing efficiency"
+      "Complete business process automation",
+      "AI agent orchestration",
+      "Policy & procedure digitization",
+      "Workforce simulation"
     ],
-    metrics: "Reduce manual processing time by 40%",
+    metrics: "Reduce operational costs by 60%",
     caseStudy: {
-      title: "Major Hospital Group Implementation",
-      description: "Implemented automated patient scheduling and billing system",
-      results: "Saved 200+ hours monthly in administrative tasks"
+      title: "Enterprise Digital Transformation",
+      description: "Implemented full-scale digital workforce automation",
+      results: "Automated 80% of manual processes"
     }
   },
   {
     id: 2,
-    title: "Financial Process Optimization",
-    description: "Automate complex financial workflows and improve accuracy",
-    icon: Landmark,
+    title: "Website & CRM Solutions",
+    description: "AI-powered website development and customer relationship management",
+    icon: Globe,
     benefits: [
-      "Automated reconciliation",
-      "Real-time reporting",
-      "Compliance automation"
+      "Intelligent website builder",
+      "Automated CRM setup",
+      "Customer journey automation",
+      "Smart content generation"
     ],
-    metrics: "Improve accuracy by 30%",
+    metrics: "Increase customer engagement by 45%",
     caseStudy: {
-      title: "Investment Firm Transformation",
-      description: "Automated trading reconciliation and reporting",
-      results: "Reduced processing time by 65%"
+      title: "E-commerce Transformation",
+      description: "Built AI-powered website with integrated CRM",
+      results: "200% increase in lead conversion"
     }
   },
   {
     id: 3,
-    title: "Real Estate Underwriting",
-    description: "Accelerate property assessment and risk analysis with AI",
-    icon: Building2,
+    title: "Accounting & Finance",
+    description: "Automated accounting systems and financial management",
+    icon: Calculator,
     benefits: [
-      "Faster property evaluation",
-      "Risk assessment automation",
-      "Market analysis integration"
+      "Automated bookkeeping",
+      "Real-time financial reporting",
+      "Invoice processing automation",
+      "Tax compliance automation"
     ],
-    metrics: "Speed up underwriting by 50%",
+    metrics: "95% reduction in manual accounting tasks",
     caseStudy: {
-      title: "Property Management Revolution",
-      description: "Implemented AI-driven property assessment",
-      results: "Increased portfolio evaluation speed by 3x"
+      title: "Financial Operations Revolution",
+      description: "Implemented AI-driven accounting system",
+      results: "Saved 120+ hours monthly in accounting tasks"
     }
   },
   {
     id: 4,
-    title: "Custom AI Solutions",
-    description: "Tailored artificial intelligence solutions for your unique challenges",
-    icon: Brain,
+    title: "Marketing Automation",
+    description: "End-to-end marketing system setup and automation",
+    icon: Megaphone,
     benefits: [
-      "Custom ML models",
-      "Natural language processing",
-      "Predictive analytics"
+      "AI content generation",
+      "Campaign automation",
+      "Analytics & reporting",
+      "Social media management"
     ],
-    metrics: "Achieve 90% automation in targeted processes",
+    metrics: "Increase marketing ROI by 80%",
     caseStudy: {
-      title: "AI-Powered Customer Service",
-      description: "Built custom NLP model for customer support",
-      results: "Handled 70% of queries automatically"
+      title: "Marketing Automation Success",
+      description: "Deployed comprehensive marketing system",
+      results: "3x increase in qualified leads"
+    }
+  },
+  {
+    id: 5,
+    title: "Legal Department Setup",
+    description: "AI-powered legal operations and compliance management",
+    icon: Scale,
+    benefits: [
+      "Contract automation",
+      "Legal document processing",
+      "Compliance monitoring",
+      "Case management automation"
+    ],
+    metrics: "70% faster legal document processing",
+    caseStudy: {
+      title: "Legal Tech Implementation",
+      description: "Automated legal operations workflow",
+      results: "Reduced legal review time by 65%"
+    }
+  },
+  {
+    id: 6,
+    title: "HR Department Setup",
+    description: "Complete HR system automation and management",
+    icon: UserCog,
+    benefits: [
+      "Recruitment automation",
+      "Employee onboarding",
+      "Performance management",
+      "HR analytics"
+    ],
+    metrics: "Reduce HR administrative work by 50%",
+    caseStudy: {
+      title: "HR Digital Transformation",
+      description: "Implemented AI-driven HR system",
+      results: "90% faster onboarding process"
     }
   }
 ];
@@ -168,15 +208,15 @@ export const ServicesShowcase = () => {
             <span className="text-sm text-gray-300">Our Services</span>
           </div>
           <h2 className="text-3xl font-bold tracking-tight text-white mb-6">
-            Comprehensive AI Solutions
+            Complete Business Automation Solutions
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            Explore our range of AI-powered solutions designed to transform your business operations
-            and drive sustainable growth.
+            Transform your entire business with our comprehensive AI-powered automation solutions,
+            from digital workforce to departmental setups.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredServices.map((service) => (
             <div key={service.id} className="space-y-4">
               <ServiceCard service={service} />
