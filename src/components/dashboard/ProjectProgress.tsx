@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
-import { Milestone, ChevronRight, CheckCircle2 } from "lucide-react";
+import { Milestone, ChevronRight, CheckCircle2, Clock, ArrowRight } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 interface ProjectProgressProps {
   projectId?: string;
@@ -20,7 +21,7 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
 
     const fetchProjectData = async () => {
       try {
-        // Fetch milestones
+        // Fetch milestones with next steps
         const { data: milestonesData, error: milestonesError } = await supabase
           .from("milestones")
           .select("*")
@@ -29,10 +30,10 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
 
         if (milestonesError) throw milestonesError;
 
-        // Fetch sprints
+        // Fetch sprints with tasks and next steps
         const { data: sprintsData, error: sprintsError } = await supabase
           .from("sprints")
-          .select("*, tasks(*)")
+          .select("*, tasks(*, dependencies)")
           .eq("project_id", projectId)
           .order("start_date", { ascending: true });
 
@@ -97,22 +98,31 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
         <CardContent>
           <div className="space-y-4">
             {milestones.map((milestone) => (
-              <div key={milestone.id} className="flex items-center gap-2">
-                {milestone.status === "completed" ? (
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
-                ) : (
-                  <ChevronRight className="h-4 w-4 text-blue-500" />
+              <div key={milestone.id} className="space-y-2">
+                <div className="flex items-center gap-2">
+                  {milestone.status === "completed" ? (
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  ) : (
+                    <ChevronRight className="h-4 w-4 text-blue-500" />
+                  )}
+                  <span className="flex-1 font-medium">{milestone.title}</span>
+                  <Badge
+                    variant={milestone.status === "completed" ? "success" : "default"}
+                  >
+                    {milestone.status}
+                  </Badge>
+                </div>
+                {milestone.next_steps && milestone.next_steps.length > 0 && (
+                  <div className="ml-6 space-y-1">
+                    <p className="text-sm font-medium text-muted-foreground">Next Steps:</p>
+                    {milestone.next_steps.map((step: string, index: number) => (
+                      <div key={index} className="flex items-center gap-2 text-sm">
+                        <ArrowRight className="h-3 w-3" />
+                        <span>{step}</span>
+                      </div>
+                    ))}
+                  </div>
                 )}
-                <span className="flex-1">{milestone.title}</span>
-                <span
-                  className={`text-sm ${
-                    milestone.status === "completed"
-                      ? "text-green-500"
-                      : "text-blue-500"
-                  }`}
-                >
-                  {milestone.status}
-                </span>
               </div>
             ))}
           </div>
@@ -125,21 +135,50 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
           <CardTitle className="text-xl font-semibold">Active Sprints</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-6">
             {sprints
               .filter((sprint) => sprint.status === "active")
               .map((sprint) => (
-                <div key={sprint.id} className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">{sprint.title}</span>
-                    <span className="text-sm text-muted-foreground">
-                      {calculateProgress(sprint.tasks)}%
-                    </span>
+                <div key={sprint.id} className="space-y-3">
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">{sprint.title}</span>
+                      <span className="text-sm text-muted-foreground">
+                        {calculateProgress(sprint.tasks)}%
+                      </span>
+                    </div>
+                    <Progress
+                      value={calculateProgress(sprint.tasks)}
+                      className="mt-2 h-2"
+                    />
                   </div>
-                  <Progress
-                    value={calculateProgress(sprint.tasks)}
-                    className="h-2"
-                  />
+                  
+                  {sprint.next_steps && sprint.next_steps.length > 0 && (
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium text-muted-foreground">Sprint Next Steps:</p>
+                      {sprint.next_steps.map((step: string, index: number) => (
+                        <div key={index} className="flex items-center gap-2 text-sm">
+                          <ArrowRight className="h-3 w-3" />
+                          <span>{step}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {sprint.tasks && sprint.tasks.length > 0 && (
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-muted-foreground">Key Tasks:</p>
+                      {sprint.tasks.slice(0, 3).map((task: any) => (
+                        <div key={task.id} className="flex items-center gap-2 text-sm">
+                          <Clock className="h-3 w-3" />
+                          <span className="flex-1">{task.title}</span>
+                          <Badge variant={task.priority === 'high' ? 'destructive' : 'outline'}>
+                            {task.priority}
+                          </Badge>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
           </div>

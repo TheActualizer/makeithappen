@@ -319,6 +319,7 @@ export type Database = {
           description: string | null
           due_date: string | null
           id: string
+          next_steps: string[] | null
           project_id: string | null
           status: Database["public"]["Enums"]["milestone_status"] | null
           title: string
@@ -330,6 +331,7 @@ export type Database = {
           description?: string | null
           due_date?: string | null
           id?: string
+          next_steps?: string[] | null
           project_id?: string | null
           status?: Database["public"]["Enums"]["milestone_status"] | null
           title: string
@@ -341,6 +343,7 @@ export type Database = {
           description?: string | null
           due_date?: string | null
           id?: string
+          next_steps?: string[] | null
           project_id?: string | null
           status?: Database["public"]["Enums"]["milestone_status"] | null
           title?: string
@@ -712,6 +715,7 @@ export type Database = {
           end_date: string | null
           id: string
           milestone_id: string | null
+          next_steps: string[] | null
           project_id: string | null
           start_date: string | null
           status: Database["public"]["Enums"]["sprint_status"] | null
@@ -725,6 +729,7 @@ export type Database = {
           end_date?: string | null
           id?: string
           milestone_id?: string | null
+          next_steps?: string[] | null
           project_id?: string | null
           start_date?: string | null
           status?: Database["public"]["Enums"]["sprint_status"] | null
@@ -738,6 +743,7 @@ export type Database = {
           end_date?: string | null
           id?: string
           milestone_id?: string | null
+          next_steps?: string[] | null
           project_id?: string | null
           start_date?: string | null
           status?: Database["public"]["Enums"]["sprint_status"] | null
@@ -766,9 +772,13 @@ export type Database = {
           assigned_to: string | null
           completed_at: string | null
           created_at: string | null
+          dependencies: string[] | null
           description: string | null
           due_date: string | null
+          estimated_hours: number | null
           id: string
+          next_steps: string[] | null
+          priority: string | null
           sprint_id: string | null
           status: Database["public"]["Enums"]["milestone_status"] | null
           title: string
@@ -778,9 +788,13 @@ export type Database = {
           assigned_to?: string | null
           completed_at?: string | null
           created_at?: string | null
+          dependencies?: string[] | null
           description?: string | null
           due_date?: string | null
+          estimated_hours?: number | null
           id?: string
+          next_steps?: string[] | null
+          priority?: string | null
           sprint_id?: string | null
           status?: Database["public"]["Enums"]["milestone_status"] | null
           title: string
@@ -790,9 +804,13 @@ export type Database = {
           assigned_to?: string | null
           completed_at?: string | null
           created_at?: string | null
+          dependencies?: string[] | null
           description?: string | null
           due_date?: string | null
+          estimated_hours?: number | null
           id?: string
+          next_steps?: string[] | null
+          priority?: string | null
           sprint_id?: string | null
           status?: Database["public"]["Enums"]["milestone_status"] | null
           title?: string
