@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
-import { BookOpen, TrendingUp, Clock, Eye } from "lucide-react";
+import { BookOpen, TrendingUp, Clock, Eye, ArrowRight } from "lucide-react";
 
 interface BlogCategory {
   id: string;
@@ -57,20 +57,14 @@ const Blog = () => {
     fetchData();
   }, []);
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
+  const featuredArticles = [
+    {
+      title: "Agentic Systems: Redefining Autonomy in Business",
+      description: "Discover how autonomous AI agents can revolutionize processes and disrupt entire industries.",
+      link: "/blog/agentic-systems",
+      icon: <TrendingUp className="w-8 h-8 text-primary" />
     }
-  };
-
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
-  };
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-accent to-accent/95">
@@ -90,95 +84,65 @@ const Blog = () => {
           </p>
         </motion.div>
 
-        {!loading && featuredPosts.length > 0 && (
-          <div className="mb-16">
-            <h2 className="text-2xl font-semibold text-white mb-8">Featured Articles</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredPosts.map((post) => (
-                <motion.div
-                  key={post.id}
-                  whileHover={{ scale: 1.02 }}
-                  className="h-full"
-                >
-                  <Card className="h-full bg-accent-foreground/5 border-accent-foreground/10 backdrop-blur-sm hover:shadow-lg transition-all duration-300">
-                    <div className="p-6 flex flex-col h-full">
-                      <h3 className="text-xl font-semibold text-white mb-3">
-                        {post.title}
-                      </h3>
-                      <p className="text-gray-300 mb-4 flex-grow">
-                        {post.excerpt}
-                      </p>
-                      <div className="flex items-center justify-between text-sm text-gray-400">
-                        <div className="flex items-center gap-4">
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-4 h-4" />
-                            {post.reading_time} min read
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Eye className="w-4 h-4" />
-                            {post.views} views
-                          </span>
-                        </div>
-                        <span>{new Date(post.published_at).toLocaleDateString()}</span>
-                      </div>
-                    </div>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {loading ? (
-            Array.from({ length: 6 }).map((_, index) => (
+        {/* Featured Articles Section */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-semibold text-white mb-8">Featured Articles</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredArticles.map((article, index) => (
               <motion.div
                 key={index}
-                variants={item}
-                className="h-[300px] animate-pulse bg-accent-foreground/10 rounded-lg"
-              />
-            ))
-          ) : (
-            categories.map((category) => (
-              <motion.div
-                key={category.id}
-                variants={item}
                 whileHover={{ scale: 1.02 }}
                 className="h-full"
               >
                 <Card 
-                  className="group relative overflow-hidden h-full hover:shadow-lg transition-all duration-300 bg-accent-foreground/5 backdrop-blur-sm border-accent-foreground/10"
+                  className="h-full bg-accent-foreground/5 backdrop-blur-sm border-accent-foreground/10 hover:border-primary/50 transition-all duration-300"
+                  onClick={() => navigate(article.link)}
                 >
                   <div className="p-6 flex flex-col h-full">
                     <div className="mb-4">
-                      <BookOpen className="w-8 h-8 text-primary mb-3" />
-                      <h3 className="text-2xl font-semibold text-white mb-2 group-hover:text-primary transition-colors">
-                        {category.name}
-                      </h3>
+                      {article.icon}
                     </div>
+                    <h3 className="text-xl font-semibold text-white mb-3">
+                      {article.title}
+                    </h3>
                     <p className="text-gray-300 mb-6 flex-grow">
-                      {category.description}
+                      {article.description}
                     </p>
                     <Button
                       variant="secondary"
-                      className="w-full group-hover:bg-primary group-hover:text-white transition-all duration-300"
-                      onClick={() => navigate(`/blog/category/${category.slug}`)}
+                      className="w-full group hover:bg-primary hover:text-white transition-all duration-300"
+                      onClick={() => navigate(article.link)}
                     >
-                      <TrendingUp className="w-4 h-4 mr-2" />
-                      Explore {category.name}
+                      Read Article
+                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                     </Button>
                   </div>
-                  <div className="absolute inset-0 border-2 border-transparent group-hover:border-primary/50 rounded-lg transition-all duration-300" />
                 </Card>
               </motion.div>
-            ))
-          )}
-        </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Categories Section */}
+        <section>
+          <h2 className="text-2xl font-semibold text-white mb-8">Categories</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {categories.map((category) => (
+              <Card key={category.id} className="bg-accent/40 backdrop-blur-sm border border-accent/20 hover:border-primary/50 transition-all duration-300">
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold text-white mb-2">{category.name}</h3>
+                  <p className="text-gray-300 mb-4">{category.description}</p>
+                  <Button
+                    variant="secondary"
+                    onClick={() => navigate(`/blog/category/${category.slug}`)}
+                  >
+                    Explore {category.name}
+                  </Button>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );
