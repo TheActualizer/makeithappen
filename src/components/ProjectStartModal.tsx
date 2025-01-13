@@ -15,7 +15,7 @@ const initialFormData: FormData = {
   email: "",
   phone: "",
   company: "",
-  projectType: "other",
+  projectType: [],  // Initialize as empty array
   description: "",
   timeline: "asap",
 };
@@ -55,7 +55,7 @@ const ProjectStartModal = ({
         email: formData.email,
         phone: formData.phone,
         company: formData.company,
-        project_type: formData.projectType,
+        project_type: formData.projectType,  // Now correctly passing array
         description: formData.description,
         timeline: formData.timeline,
         pain_points: formData.pain_points || [],

@@ -390,7 +390,7 @@ export type Database = {
           pricing_tier: string | null
           project_constraints: string[] | null
           project_timeline: Json | null
-          project_type: string
+          project_type: string[]
           stakeholders: Json | null
           success_criteria: string[] | null
           success_metrics: string[] | null
@@ -439,7 +439,7 @@ export type Database = {
           pricing_tier?: string | null
           project_constraints?: string[] | null
           project_timeline?: Json | null
-          project_type: string
+          project_type?: string[]
           stakeholders?: Json | null
           success_criteria?: string[] | null
           success_metrics?: string[] | null
@@ -488,7 +488,7 @@ export type Database = {
           pricing_tier?: string | null
           project_constraints?: string[] | null
           project_timeline?: Json | null
-          project_type?: string
+          project_type?: string[]
           stakeholders?: Json | null
           success_criteria?: string[] | null
           success_metrics?: string[] | null
