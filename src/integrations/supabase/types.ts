@@ -9,7 +9,107 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      project_tech_stack: {
+        Row: {
+          category: Database["public"]["Enums"]["tech_stack_category"]
+          experience_level: number | null
+          id: string
+          project_id: string | null
+          technology: string
+          willing_to_change: boolean | null
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["tech_stack_category"]
+          experience_level?: number | null
+          id?: string
+          project_id?: string | null
+          technology: string
+          willing_to_change?: boolean | null
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["tech_stack_category"]
+          experience_level?: number | null
+          id?: string
+          project_id?: string | null
+          technology?: string
+          willing_to_change?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_tech_stack_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          budget_range: unknown | null
+          company: string | null
+          complexity: Database["public"]["Enums"]["project_complexity"] | null
+          created_at: string | null
+          description: string
+          email: string
+          has_existing_codebase: boolean | null
+          id: string
+          integration_requirements: string[] | null
+          name: string
+          pain_points: string[] | null
+          phone: string | null
+          preferred_technologies: string[] | null
+          project_type: string
+          success_metrics: string[] | null
+          target_completion_date: string | null
+          team_size: number | null
+          timeline: string
+          user_id: string | null
+        }
+        Insert: {
+          budget_range?: unknown | null
+          company?: string | null
+          complexity?: Database["public"]["Enums"]["project_complexity"] | null
+          created_at?: string | null
+          description: string
+          email: string
+          has_existing_codebase?: boolean | null
+          id?: string
+          integration_requirements?: string[] | null
+          name: string
+          pain_points?: string[] | null
+          phone?: string | null
+          preferred_technologies?: string[] | null
+          project_type: string
+          success_metrics?: string[] | null
+          target_completion_date?: string | null
+          team_size?: number | null
+          timeline: string
+          user_id?: string | null
+        }
+        Update: {
+          budget_range?: unknown | null
+          company?: string | null
+          complexity?: Database["public"]["Enums"]["project_complexity"] | null
+          created_at?: string | null
+          description?: string
+          email?: string
+          has_existing_codebase?: boolean | null
+          id?: string
+          integration_requirements?: string[] | null
+          name?: string
+          pain_points?: string[] | null
+          phone?: string | null
+          preferred_technologies?: string[] | null
+          project_type?: string
+          success_metrics?: string[] | null
+          target_completion_date?: string | null
+          team_size?: number | null
+          timeline?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -18,7 +118,13 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      project_complexity: "simple" | "moderate" | "complex" | "enterprise"
+      tech_stack_category:
+        | "frontend"
+        | "backend"
+        | "database"
+        | "cloud"
+        | "other"
     }
     CompositeTypes: {
       [_ in never]: never

@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { Brain, Building2, Stethoscope, Landmark, ArrowRight, PlayCircle } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Brain, Building2, Stethoscope, Landmark, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface Service {
   id: number;
@@ -147,6 +148,7 @@ const CaseStudyDialog = ({ service }: { service: Service }) => {
 
 export const ServicesShowcase = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const filteredServices = selectedCategory 
     ? services.filter(service => service.title === selectedCategory)
@@ -174,20 +176,18 @@ export const ServicesShowcase = () => {
         </div>
 
         <div className="mt-16 text-center">
-          <Dialog>
-            <DialogTrigger className="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-primary rounded-md hover:bg-primary/90">
-              <PlayCircle className="mr-2 h-5 w-5" />
-              Watch Demo
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Product Demo</DialogTitle>
-                <DialogDescription>
-                  Contact us to schedule a personalized demo of our services.
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+          <Button 
+            variant="default" 
+            size="lg"
+            onClick={() => navigate("/start-project")}
+            className="group"
+          >
+            Start Your Project
+            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+          </Button>
+          <p className="mt-4 text-sm text-muted-foreground">
+            Ready to transform your business? Let's discuss your project in detail.
+          </p>
         </div>
       </div>
     </section>
