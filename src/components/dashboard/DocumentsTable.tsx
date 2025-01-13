@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Pencil, Trash2, Eye, X, Check } from "lucide-react";
+import { Pencil, Trash2, Eye, X, Check, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface DocumentRow {
@@ -41,6 +41,38 @@ export const DocumentsTable = ({ documents, isLoading, onView }: DocumentsTableP
   const [editingDocument, setEditingDocument] = useState<EditingDocument | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  const handleDownload = async (filePath: string) => {
+    try {
+      const { data } = await supabase.storage
+        .from('documents')
+        .getPublicUrl(filePath);
+
+      if (data?.publicUrl) {
+        // Create a temporary link element
+        const link = document.createElement('a');
+        link.href = data.publicUrl;
+        link.target = '_blank';
+        link.download = filePath.split('/').pop() || 'document';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        toast({
+          title: "Error",
+          description: "Could not retrieve document URL",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error downloading document:", error);
+      toast({
+        title: "Error",
+        description: "Failed to download document",
+        variant: "destructive",
+      });
+    }
+  };
 
   const deleteMutation = useMutation({
     mutationFn: async (documentId: string) => {
@@ -215,6 +247,13 @@ export const DocumentsTable = ({ documents, isLoading, onView }: DocumentsTableP
                       onClick={() => doc.file_path && onView(doc.file_path)}
                     >
                       <Eye className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => doc.file_path && handleDownload(doc.file_path)}
+                    >
+                      <Download className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="ghost"
