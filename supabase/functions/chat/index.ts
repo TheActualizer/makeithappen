@@ -1,6 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import "https://deno.land/x/xhr@0.1.0/mod.ts"
-import OpenAI from "https://esm.sh/openai@4.20.1"
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -21,8 +20,33 @@ serve(async (req) => {
 
     let answer = ''
 
-    // Initialize OpenAI
-    if (model.startsWith('gpt')) {
+    // Initialize DIFY API call
+    if (model === 'dify') {
+      const difyApiKey = Deno.env.get('DIFY_API_KEY')
+      
+      const response = await fetch('https://api.dify.ai/v1/chat-messages', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${difyApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          inputs: {},
+          query: message,
+          response_mode: 'blocking',
+          conversation_id: conversationId,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to get response from DIFY')
+      }
+
+      const data = await response.json()
+      answer = data.answer
+    }
+    // Handle OpenAI models
+    else if (model.startsWith('gpt')) {
       const openai = new OpenAI({
         apiKey: Deno.env.get('OPENAI_API_KEY')
       })
@@ -45,12 +69,10 @@ serve(async (req) => {
     }
     // Add Claude integration when available
     else if (model === 'claude') {
-      // Implement Claude API call here
       answer = "Claude integration coming soon!"
     }
     // Add Gemini integration when available
     else if (model === 'gemini') {
-      // Implement Gemini API call here
       answer = "Gemini integration coming soon!"
     }
 

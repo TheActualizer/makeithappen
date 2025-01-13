@@ -15,13 +15,13 @@ type Message = {
   created_at: string;
 };
 
-type AIModel = 'gpt-4o-mini' | 'gpt-4o' | 'claude' | 'gemini';
+type AIModel = 'gpt-4o-mini' | 'gpt-4o' | 'claude' | 'gemini' | 'dify';
 
 const ChatInterface = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [selectedModel, setSelectedModel] = useState<AIModel>('gpt-4o-mini');
+  const [selectedModel, setSelectedModel] = useState<AIModel>('dify');
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -70,7 +70,10 @@ const ChatInterface = () => {
     try {
       const { data, error } = await supabase
         .from('conversations')
-        .insert([{ title: 'New Chat' }])
+        .insert([{ 
+          title: 'New Chat',
+          provider: selectedModel === 'dify' ? 'dify' : 'openai'
+        }])
         .select()
         .single();
 

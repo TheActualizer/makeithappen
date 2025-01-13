@@ -2,7 +2,7 @@ import React from 'react';
 import { SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-type AIModel = 'gpt-4o-mini' | 'gpt-4o' | 'claude' | 'gemini';
+type AIModel = 'gpt-4o-mini' | 'gpt-4o' | 'claude' | 'gemini' | 'dify';
 
 interface ChatHeaderProps {
   selectedModel: AIModel;
@@ -19,6 +19,7 @@ const ChatHeader = ({ selectedModel, onModelChange }: ChatHeaderProps) => {
             <SelectValue placeholder="Select AI Model" />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="dify">DIFY</SelectItem>
             <SelectItem value="gpt-4o-mini">GPT-4 Mini</SelectItem>
             <SelectItem value="gpt-4o">GPT-4</SelectItem>
             <SelectItem value="claude">Claude</SelectItem>
