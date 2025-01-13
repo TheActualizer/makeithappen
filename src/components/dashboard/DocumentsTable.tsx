@@ -42,17 +42,17 @@ export const DocumentsTable = ({ documents, isLoading, onView }: DocumentsTableP
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  console.log("Current documents:", documents); // Debug log
+  console.log("Current documents:", documents);
 
   const handleDownload = async (filePath: string) => {
-    console.log("Attempting to download file:", filePath); // Debug log
+    console.log("Attempting to download file:", filePath);
     try {
       const { data, error } = await supabase.storage
         .from('documents')
         .download(filePath);
 
       if (error) {
-        console.error("Supabase download error:", error); // Debug log
+        console.error("Supabase download error:", error);
         throw error;
       }
 
@@ -78,7 +78,7 @@ export const DocumentsTable = ({ documents, isLoading, onView }: DocumentsTableP
 
   const deleteMutation = useMutation({
     mutationFn: async (documentId: string) => {
-      console.log("Attempting to delete document:", documentId); // Debug log
+      console.log("Attempting to delete document:", documentId);
       const document = documents?.find(d => d.id === documentId);
       if (!document?.file_path) throw new Error("Document not found");
 
@@ -87,7 +87,7 @@ export const DocumentsTable = ({ documents, isLoading, onView }: DocumentsTableP
         .remove([document.file_path]);
 
       if (storageError) {
-        console.error("Storage deletion error:", storageError); // Debug log
+        console.error("Storage deletion error:", storageError);
         throw storageError;
       }
 
@@ -97,7 +97,7 @@ export const DocumentsTable = ({ documents, isLoading, onView }: DocumentsTableP
         .eq('id', documentId);
 
       if (dbError) {
-        console.error("Database deletion error:", dbError); // Debug log
+        console.error("Database deletion error:", dbError);
         throw dbError;
       }
     },
