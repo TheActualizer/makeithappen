@@ -11,8 +11,12 @@ import { Sprint, Task, Milestone } from "../../types/project";
 import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
 
-export function ProjectProgress() {
-  const { projectId } = useParams();
+interface ProjectProgressProps {
+  projectId?: string;
+}
+
+export function ProjectProgress({ projectId }: ProjectProgressProps) {
+  const { projectId: paramProjectId } = useParams();
   const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [sprints, setSprints] = useState<Sprint[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
