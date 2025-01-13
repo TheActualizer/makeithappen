@@ -42,7 +42,7 @@ Additional Context:
       <p className="text-sm text-muted-foreground">
         Please select a time that works best for you to discuss your project in detail.
       </p>
-      <div className="h-[700px] bg-white/5 backdrop-blur-sm rounded-lg p-4">
+      <div className="h-[700px]">
         <CalendlyEmbed 
           url="https://calendly.com/belchonen18/30min" 
           prefill={{

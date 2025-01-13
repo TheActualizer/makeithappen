@@ -96,7 +96,7 @@ const ProjectStartModal = ({
 
       const { error } = await supabase
         .from('projects')
-        .insert(projectData);
+        .insert([projectData]);
 
       if (error) {
         console.error('Project submission error:', error);
@@ -104,12 +104,13 @@ const ProjectStartModal = ({
       }
 
       console.log('Project saved successfully');
-
+      
       toast({
         title: "Success!",
         description: "Your project details have been saved. Let's schedule a consultation!",
       });
-      
+
+      // Important: Set showCalendly to true AFTER successful submission
       setShowCalendly(true);
       
     } catch (error) {
