@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Bot, Brain, Stethoscope } from "lucide-react";
+import { ArrowRight, Bot, Brain, Stethoscope, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
@@ -11,22 +11,22 @@ const Blog = () => {
 
   const featuredArticles = [
     {
-      title: "Modernizing Healthcare with FHIR & AI",
-      description: "Explore how FHIR protocols and modern AI are transforming healthcare while maintaining HIPAA compliance.",
-      icon: <Stethoscope className="h-8 w-8 text-primary" />,
-      link: "/blog/healthcare-tech"
-    },
-    {
-      title: "Vector Databases & Memory",
-      description: "Explore how vector databases and advanced memory systems enhance AI precision and context.",
-      icon: <Brain className="h-8 w-8 text-primary" />,
-      link: "/blog/vector-memory"
+      title: "The Future of Content Creation",
+      description: "Discover how AI is revolutionizing content creation and distribution across social media and entertainment platforms.",
+      icon: <Video className="h-8 w-8 text-primary" />,
+      link: "/blog/ai-trends"
     },
     {
       title: "Transforming Financial Operations",
       description: "Discover how AI-powered accounting systems are revolutionizing financial operations through intelligent automation.",
       icon: <Bot className="h-8 w-8 text-primary" />,
       link: "/blog/transformative-accounting"
+    },
+    {
+      title: "Vector Databases & Memory",
+      description: "Explore how vector databases and advanced memory systems enhance AI precision and context.",
+      icon: <Brain className="h-8 w-8 text-primary" />,
+      link: "/blog/vector-memory"
     }
   ];
 
