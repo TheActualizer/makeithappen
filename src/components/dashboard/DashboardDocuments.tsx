@@ -19,6 +19,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 
 interface DashboardDocumentsProps {
@@ -198,20 +199,28 @@ export const DashboardDocuments = ({ isAdmin }: DashboardDocumentsProps) => {
   };
 
   const handleView = async (filePath: string) => {
-    const { data: { publicUrl }, error } = await supabase.storage
-      .from('documents')
-      .getPublicUrl(filePath);
+    try {
+      const { data } = await supabase.storage
+        .from('documents')
+        .getPublicUrl(filePath);
 
-    if (error) {
+      if (data?.publicUrl) {
+        setViewingDocument(data.publicUrl);
+      } else {
+        toast({
+          title: "Error",
+          description: "Could not retrieve document URL",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error getting document URL:", error);
       toast({
         title: "Error",
         description: "Failed to get document URL",
         variant: "destructive",
       });
-      return;
     }
-
-    setViewingDocument(publicUrl);
   };
 
   const handleDelete = (id: string) => {
@@ -394,16 +403,21 @@ export const DashboardDocuments = ({ isAdmin }: DashboardDocumentsProps) => {
       </Card>
 
       <Dialog open={!!viewingDocument} onOpenChange={() => setViewingDocument(null)}>
-        <DialogContent className="max-w-4xl">
+        <DialogContent className="max-w-4xl h-[90vh]">
           <DialogHeader>
             <DialogTitle>Document Preview</DialogTitle>
+            <DialogDescription>
+              You can scroll through the document below
+            </DialogDescription>
           </DialogHeader>
           {viewingDocument && (
-            <iframe
-              src={viewingDocument}
-              className="w-full h-[600px]"
-              title="Document Preview"
-            />
+            <div className="flex-1 overflow-hidden rounded-md">
+              <iframe
+                src={viewingDocument}
+                className="w-full h-[calc(90vh-120px)]"
+                title="Document Preview"
+              />
+            </div>
           )}
         </DialogContent>
       </Dialog>
