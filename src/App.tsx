@@ -1,33 +1,26 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ChatInterface from "@/components/chat/ChatInterface";
-import Blog from "@/pages/Blog";
-import AgenticSystems from "@/pages/blog/AgenticSystems";
-import VectorMemory from "@/pages/blog/VectorMemory";
-import TransformativeCaseStudies from "@/pages/blog/TransformativeCaseStudies";
-import AITrends from "@/pages/blog/AITrends";
-import CaseStudies from "@/pages/blog/CaseStudies";
-import HealthcareTech from "@/pages/blog/HealthcareTech";
-import GDPRCompliance from "@/pages/blog/GDPRCompliance";
-import { Toaster } from "react-hot-toast";
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Blog from "./pages/Blog";
+import Dashboard from "./pages/Dashboard";
+import Messages from "./pages/Messages";
+import Calendar from "./pages/Calendar";
+import Reports from "./pages/Reports";
+import StartProject from "./pages/StartProject";
+import TransformativeAccounting from "./pages/blog/TransformativeAccounting";
 
-function App() {
+const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Blog />} />
-        <Route path="/blog/agentic-systems" element={<AgenticSystems />} />
-        <Route path="/blog/vector-memory" element={<VectorMemory />} />
-        <Route path="/blog/transformative-case-studies" element={<TransformativeCaseStudies />} />
-        <Route path="/blog/ai-trends" element={<AITrends />} />
-        <Route path="/blog/case-studies" element={<CaseStudies />} />
-        <Route path="/blog/healthcare-tech" element={<HealthcareTech />} />
-        <Route path="/blog/gdpr-compliance" element={<GDPRCompliance />} />
-      </Routes>
-      <ChatInterface />
-      <Toaster />
-    </Router>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/messages" element={<Messages />} />
+      <Route path="/calendar" element={<Calendar />} />
+      <Route path="/reports" element={<Reports />} />
+      <Route path="/start-project" element={<StartProject />} />
+      <Route path="/blog/transformative-accounting" element={<TransformativeAccounting />} />
+    </Routes>
   );
-}
+};
 
 export default App;

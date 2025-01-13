@@ -23,10 +23,10 @@ const Blog = () => {
       link: "/blog/vector-memory"
     },
     {
-      title: "Agentic Systems",
-      description: "Discover how autonomous AI agents are revolutionizing business processes and decision-making.",
+      title: "Transforming Financial Operations",
+      description: "Discover how AI-powered accounting systems are revolutionizing financial operations through intelligent automation.",
       icon: <Bot className="h-8 w-8 text-primary" />,
-      link: "/blog/agentic-systems"
+      link: "/blog/transformative-accounting"
     }
   ];
 
