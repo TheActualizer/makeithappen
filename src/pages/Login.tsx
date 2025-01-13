@@ -31,9 +31,9 @@ const Login = () => {
       <div className="container mx-auto px-4 pt-24">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-white">Welcome to MakeITHappen</h1>
+            <h1 className="text-3xl font-bold text-white">Create Your Account</h1>
             <p className="text-gray-300 mt-2">
-              Sign in or create an account to get started
+              Join MakeITHappen and start building your projects
             </p>
           </div>
           <div className="bg-background rounded-lg p-8 shadow-xl border border-border/5">
@@ -65,11 +65,12 @@ const Login = () => {
                   button: 'bg-primary text-primary-foreground hover:bg-primary/90',
                   input: 'bg-background border border-input',
                   label: 'text-foreground',
+                  message: 'text-sm text-destructive',
                 },
               }}
               theme="dark"
-              providers={["google", "github"]}
-              view="sign_in"
+              providers={[]}
+              view="sign_up"
               showLinks={true}
             />
           </div>
