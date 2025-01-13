@@ -1,10 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-const CALENDLY_API_TOKEN = Deno.env.get("CALENDLY_API_TOKEN");
-const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -37,48 +33,6 @@ const handler = async (req: Request): Promise<Response> => {
     if (!RESEND_API_KEY) {
       throw new Error("RESEND_API_KEY is not configured");
     }
-
-    if (!CALENDLY_API_TOKEN) {
-      throw new Error("CALENDLY_API_TOKEN is not configured");
-    }
-
-    // Initialize Supabase client
-    const supabase = createClient(
-      SUPABASE_URL!,
-      SUPABASE_SERVICE_ROLE_KEY!
-    );
-
-    // Store appointment in database
-    const { error: dbError } = await supabase
-      .from('appointments')
-      .insert({
-        name: consultation.name,
-        email: consultation.email,
-        consultation_date: consultation.consultationDate,
-        consultation_time: consultation.consultationTime,
-        project_type: consultation.projectType,
-      });
-
-    if (dbError) {
-      console.error("Error storing appointment:", dbError);
-      throw dbError;
-    }
-
-    // Get Calendly event details
-    const eventId = consultation.eventUri.split('/').pop();
-    const calendlyResponse = await fetch(`https://api.calendly.com/scheduled_events/${eventId}`, {
-      headers: {
-        'Authorization': `Bearer ${CALENDLY_API_TOKEN}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!calendlyResponse.ok) {
-      throw new Error('Failed to fetch Calendly event details');
-    }
-
-    const eventDetails = await calendlyResponse.json();
-    console.log("Calendly event details:", eventDetails);
 
     // Email template for customer
     const customerEmailHtml = `
@@ -151,8 +105,11 @@ const handler = async (req: Request): Promise<Response> => {
       const error = await customerRes.text();
       console.error("Resend API error:", error);
       return new Response(
-        JSON.stringify({ success: true, message: "Appointment scheduled but email notification failed" }), 
-        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: "Failed to send emails" }), 
+        { 
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        }
       );
     }
 

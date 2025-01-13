@@ -22,7 +22,49 @@ export function ProjectProgress() {
   const [activeSprintId, setActiveSprintId] = useState<string | null>(null);
   const { toast } = useToast();
 
-  console.log("ProjectProgress component mounted, projectId:", projectId);
+  const calculateProgress = (items: any[], statusField: string = 'status') => {
+    if (!items || items.length === 0) return 0;
+    const completedItems = items.filter(item => 
+      item[statusField] === 'completed' || 
+      item[statusField] === 'done'
+    );
+    return Math.round((completedItems.length / items.length) * 100);
+  };
+
+  const handleDragEnd = async (result: any) => {
+    if (!result.destination || !activeSprintId) return;
+
+    const { draggableId, source, destination } = result;
+    const updatedTasks = [...tasks];
+    const taskIndex = updatedTasks.findIndex(t => t.id === draggableId);
+    
+    if (taskIndex === -1) return;
+
+    const task = updatedTasks[taskIndex];
+    task.status = destination.droppableId;
+    setTasks(updatedTasks);
+
+    try {
+      const { error } = await supabase
+        .from('tasks')
+        .update({ status: destination.droppableId })
+        .eq('id', draggableId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Task Updated",
+        description: "Task status has been updated successfully",
+      });
+    } catch (error) {
+      console.error('Error updating task:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update task status",
+      });
+    }
+  };
 
   const createAirtableBase = async () => {
     try {
