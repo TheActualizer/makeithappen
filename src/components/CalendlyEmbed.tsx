@@ -21,31 +21,53 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
       if (e.data.event === "calendly.event_scheduled") {
         const eventData = e.data.payload;
         console.log("Full Calendly event data:", eventData);
-        console.log("Location data:", eventData.event.location);
         
-        // Enhanced Zoom link extraction
-        let zoomLink = "Will be provided separately";
+        // Enhanced Zoom link extraction with detailed logging
+        let zoomLink = null;
         
-        if (eventData.event.location) {
-          // Check if location is a string containing zoom.us
-          if (typeof eventData.event.location === 'string' && eventData.event.location.includes('zoom.us')) {
-            zoomLink = eventData.event.location;
-          } 
-          // Check if location is an object with join_url
-          else if (typeof eventData.event.location === 'object' && eventData.event.location.join_url) {
-            zoomLink = eventData.event.location.join_url;
+        if (eventData.event && eventData.event.location) {
+          console.log("Location data type:", typeof eventData.event.location);
+          console.log("Location data:", eventData.event.location);
+          
+          const location = eventData.event.location;
+          
+          // Case 1: Direct Zoom URL
+          if (typeof location === 'string' && location.includes('zoom.us')) {
+            console.log("Found direct Zoom URL");
+            zoomLink = location;
           }
-          // Check if location is an object with a data property
-          else if (typeof eventData.event.location === 'object' && eventData.event.location.data) {
-            const locationData = eventData.event.location.data;
-            if (locationData.join_url) {
-              zoomLink = locationData.join_url;
+          // Case 2: Location object with join_url
+          else if (typeof location === 'object') {
+            if (location.join_url) {
+              console.log("Found join_url in location object");
+              zoomLink = location.join_url;
+            }
+            // Case 3: Nested data structure
+            else if (location.data) {
+              console.log("Found data object in location");
+              const data = location.data;
+              if (data.join_url) {
+                console.log("Found join_url in data object");
+                zoomLink = data.join_url;
+              }
+            }
+            // Case 4: Status and other fields
+            else if (location.status === 'confirmed' && location.settings) {
+              console.log("Found confirmed status with settings");
+              if (location.settings.global_join_url) {
+                zoomLink = location.settings.global_join_url;
+              }
             }
           }
         }
 
-        console.log("Extracted Zoom link:", zoomLink);
+        // Additional logging
+        console.log("Final extracted Zoom link:", zoomLink);
         
+        if (!zoomLink) {
+          console.warn("No Zoom link found in the event data");
+        }
+
         // Send webhook to our edge function
         fetch("/functions/send-consultation-email", {
           method: "POST",
@@ -59,7 +81,7 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
             consultationTime: new Date(eventData.event.start_time).toLocaleTimeString(),
             projectType: prefill?.customAnswers?.a1 || "Not specified",
             description: prefill?.customAnswers?.a3 || "No description provided",
-            zoomLink: zoomLink,
+            zoomLink: zoomLink || "Will be provided in the Calendly confirmation email",
             eventUri: eventData.uri
           }),
         }).then(response => {
