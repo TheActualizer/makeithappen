@@ -22,6 +22,13 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
         const eventData = e.data.payload;
         console.log("Calendly event scheduled:", eventData);
         
+        // Get the Zoom link from the location data
+        const zoomLink = eventData.event.location?.includes('zoom.us') 
+          ? eventData.event.location 
+          : eventData.event.location?.join_url || "Will be provided separately";
+
+        console.log("Zoom link extracted:", zoomLink);
+        
         // Send webhook to our edge function
         fetch("/functions/send-consultation-email", {
           method: "POST",
@@ -35,7 +42,7 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
             consultationTime: new Date(eventData.event.start_time).toLocaleTimeString(),
             projectType: prefill?.customAnswers?.a1 || "Not specified",
             description: prefill?.customAnswers?.a3 || "No description provided",
-            zoomLink: eventData.event.location?.join_url || "Will be provided separately",
+            zoomLink: zoomLink,
             eventUri: eventData.uri
           }),
         }).then(response => {
