@@ -1,27 +1,63 @@
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { FormData } from "./types";
-import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
-import { ChartBar, Clock, Code2, DollarSign, Users, Workflow } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { ChartBar, Code2, DollarSign, Workflow, Target, AlertCircle } from "lucide-react";
 
 interface ProjectDetailsStepProps {
   formData: FormData;
   setFormData: (data: FormData) => void;
 }
 
-const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) => {
-  const [complexity, setComplexity] = useState(50);
-  const [teamSize, setTeamSize] = useState(5);
-  const [budget, setBudget] = useState(50000);
+const painPoints = [
+  { id: "manual-processes", label: "Manual Processes" },
+  { id: "data-accuracy", label: "Data Accuracy Issues" },
+  { id: "integration", label: "Integration Challenges" },
+  { id: "scalability", label: "Scalability Concerns" },
+  { id: "security", label: "Security Compliance" },
+  { id: "user-adoption", label: "User Adoption" },
+  { id: "legacy-systems", label: "Legacy Systems" },
+  { id: "cost-efficiency", label: "Cost Efficiency" }
+];
 
-  const handleMetricsChange = () => {
-    setFormData({
-      ...formData,
-      complexity: complexity <= 30 ? "simple" : complexity <= 60 ? "moderate" : "complex",
-      teamSize: teamSize,
-      budgetRange: `[${budget - 10000}, ${budget + 10000})`,
+const complexityLevels = [
+  { value: "simple", label: "Simple - Straightforward implementation" },
+  { value: "moderate", label: "Moderate - Some complexity involved" },
+  { value: "complex", label: "Complex - Multiple integrations/features" }
+];
+
+const budgetRanges = [
+  { value: "25000-50000", label: "$25,000 - $50,000" },
+  { value: "50000-100000", label: "$50,000 - $100,000" },
+  { value: "100000-200000", label: "$100,000 - $200,000" },
+  { value: "200000+", label: "$200,000+" }
+];
+
+const teamSizes = [
+  { value: "1-5", label: "1-5 members" },
+  { value: "6-10", label: "6-10 members" },
+  { value: "11-20", label: "11-20 members" },
+  { value: "20+", label: "20+ members" }
+];
+
+const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) => {
+  const [selectedPainPoints, setSelectedPainPoints] = useState<string[]>([]);
+
+  const handlePainPointChange = (pointId: string) => {
+    setSelectedPainPoints(current => {
+      const updated = current.includes(pointId)
+        ? current.filter(id => id !== pointId)
+        : [...current, pointId];
+      
+      setFormData({
+        ...formData,
+        pain_points: updated
+      });
+      
+      return updated;
     });
   };
 
@@ -53,84 +89,86 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
         </Select>
       </div>
 
-      <Card className="p-4 space-y-4 bg-accent/5">
-        <div className="space-y-2">
+      <Card className="p-4 space-y-6 bg-accent/5">
+        <div className="space-y-3">
+          <label className="text-sm font-medium flex items-center gap-2">
+            <AlertCircle className="w-4 h-4" />
+            Current Pain Points
+          </label>
+          <div className="grid grid-cols-2 gap-4">
+            {painPoints.map((point) => (
+              <div key={point.id} className="flex items-center space-x-2">
+                <Checkbox
+                  id={point.id}
+                  checked={selectedPainPoints.includes(point.id)}
+                  onCheckedChange={() => handlePainPointChange(point.id)}
+                />
+                <label
+                  htmlFor={point.id}
+                  className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  {point.label}
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-3">
           <label className="text-sm font-medium flex items-center gap-2">
             <ChartBar className="w-4 h-4" />
             Project Complexity
           </label>
-          <Slider
-            value={[complexity]}
-            onValueChange={(value) => {
-              setComplexity(value[0]);
-              handleMetricsChange();
-            }}
-            max={100}
-            step={1}
-            className="py-4"
-          />
-          <div className="flex justify-between text-xs text-muted-foreground">
-            <span>Simple</span>
-            <span>Moderate</span>
-            <span>Complex</span>
+          <div className="flex flex-wrap gap-2">
+            {complexityLevels.map((level) => (
+              <Button
+                key={level.value}
+                variant={formData.complexity === level.value ? "default" : "outline"}
+                size="sm"
+                onClick={() => setFormData({ ...formData, complexity: level.value })}
+                className="flex-1"
+              >
+                {level.label}
+              </Button>
+            ))}
           </div>
         </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium flex items-center gap-2">
-            <Users className="w-4 h-4" />
-            Estimated Team Size
-          </label>
-          <Slider
-            value={[teamSize]}
-            onValueChange={(value) => {
-              setTeamSize(value[0]);
-              handleMetricsChange();
-            }}
-            max={20}
-            step={1}
-            className="py-4"
-          />
-          <div className="text-xs text-muted-foreground">
-            {teamSize} team member{teamSize !== 1 ? 's' : ''}
-          </div>
-        </div>
-
-        <div className="space-y-2">
+        <div className="space-y-3">
           <label className="text-sm font-medium flex items-center gap-2">
             <DollarSign className="w-4 h-4" />
             Budget Range
           </label>
-          <Slider
-            value={[budget]}
-            onValueChange={(value) => {
-              setBudget(value[0]);
-              handleMetricsChange();
-            }}
-            max={200000}
-            step={5000}
-            className="py-4"
-          />
-          <div className="text-xs text-muted-foreground">
-            ${(budget - 10000).toLocaleString()} - ${(budget + 10000).toLocaleString()}
+          <div className="grid grid-cols-2 gap-2">
+            {budgetRanges.map((range) => (
+              <Button
+                key={range.value}
+                variant={formData.budgetRange === range.value ? "default" : "outline"}
+                size="sm"
+                onClick={() => setFormData({ ...formData, budgetRange: range.value })}
+              >
+                {range.label}
+              </Button>
+            ))}
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-3">
           <label className="text-sm font-medium flex items-center gap-2">
-            <Clock className="w-4 h-4" />
-            Timeline Flexibility
+            <Target className="w-4 h-4" />
+            Team Size
           </label>
-          <Slider
-            defaultValue={[50]}
-            max={100}
-            step={1}
-            className="py-4"
-          />
-          <div className="flex justify-between text-xs text-muted-foreground">
-            <span>Urgent</span>
-            <span>Flexible</span>
-            <span>No Rush</span>
+          <div className="grid grid-cols-2 gap-2">
+            {teamSizes.map((size) => (
+              <Button
+                key={size.value}
+                variant={formData.teamSize === size.value ? "default" : "outline"}
+                size="sm"
+                onClick={() => setFormData({ ...formData, teamSize: size.value })}
+              >
+                {size.label}
+              </Button>
+            ))}
           </div>
         </div>
       </Card>
@@ -138,7 +176,7 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
       <div className="space-y-2">
         <label className="text-sm font-medium flex items-center gap-2">
           <Code2 className="w-4 h-4" />
-          Project Description *
+          Project Description
         </label>
         <Textarea
           value={formData.description}

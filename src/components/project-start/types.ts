@@ -13,6 +13,7 @@ export interface FormData {
   consultationDate?: Date;
   consultationTime?: string;
   complexity?: ProjectComplexity;
-  teamSize?: number;
+  teamSize?: string;
   budgetRange?: string;
+  pain_points?: string[];
 }
