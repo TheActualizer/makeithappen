@@ -8,6 +8,7 @@ import { FormData } from "./project-start/types";
 import BasicInfoStep from "./project-start/BasicInfoStep";
 import ProjectDetailsStep from "./project-start/ProjectDetailsStep";
 import TimelineStep from "./project-start/TimelineStep";
+import CalendlyEmbed from "./CalendlyEmbed";
 import { supabase } from "@/integrations/supabase/client";
 
 const initialFormData: FormData = {
@@ -33,6 +34,7 @@ const ProjectStartModal = ({
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showCalendly, setShowCalendly] = useState(false);
   const navigate = useNavigate();
 
   const handleNext = () => {
@@ -50,20 +52,18 @@ const ProjectStartModal = ({
   const formatBudgetRange = (range: string | undefined) => {
     if (!range) return null;
     
-    // Extract numbers from the range string
     const matches = range.match(/\d+/g);
     if (!matches) return null;
     
     let min = parseInt(matches[0]);
     let max = matches.length > 1 ? parseInt(matches[1]) : min;
     
-    // Handle special cases
     if (range === "under-10000") {
       min = 0;
       max = 10000;
     } else if (range === "200000+") {
       min = 200000;
-      max = 1000000; // Set a reasonable upper limit
+      max = 1000000;
     }
     
     return `[${min},${max}]`;
@@ -107,11 +107,10 @@ const ProjectStartModal = ({
 
       toast({
         title: "Success!",
-        description: "Your project details have been saved.",
+        description: "Your project details have been saved. Let's schedule a consultation!",
       });
       
-      onClose();
-      navigate("/");
+      setShowCalendly(true);
       
     } catch (error) {
       console.error('Submission error:', error);
@@ -125,20 +124,29 @@ const ProjectStartModal = ({
     }
   };
 
-  const handleBookDemo = () => {
-    const width = 550;
-    const height = 700;
-    const left = window.innerWidth / 2 - width / 2;
-    const top = window.innerHeight / 2 - height / 2;
-    
-    window.open(
-      'https://calendly.com/belchonen18/30min',
-      'Book a Demo',
-      `width=${width},height=${height},top=${top},left=${left},toolbar=0,location=0,menubar=0,directories=0,scrollbars=1`
-    );
+  const handleModalClose = () => {
+    setShowCalendly(false);
+    setStep(1);
+    setFormData(initialFormData);
+    onClose();
+    navigate("/");
   };
 
   const renderStep = () => {
+    if (showCalendly) {
+      return (
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium">Schedule Your Consultation</h3>
+          <p className="text-sm text-muted-foreground">
+            Thank you for submitting your project details. Let's schedule a time to discuss your requirements in detail.
+          </p>
+          <div className="h-[600px]">
+            <CalendlyEmbed url="https://calendly.com/belchonen18/30min" />
+          </div>
+        </div>
+      );
+    }
+
     switch (step) {
       case 1:
         return <BasicInfoStep formData={formData} setFormData={setFormData} />;
@@ -152,68 +160,66 @@ const ProjectStartModal = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleModalClose}>
       <DialogContent className="sm:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>Project Intake Form</DialogTitle>
+          <DialogTitle>
+            {showCalendly ? "Schedule a Consultation" : "Project Intake Form"}
+          </DialogTitle>
           <DialogDescription>
-            Help us understand your project requirements and objectives
+            {showCalendly 
+              ? "Choose a time that works best for you to discuss your project in detail."
+              : "Help us understand your project requirements and objectives"}
           </DialogDescription>
         </DialogHeader>
         <div className="relative">
-          <div className="absolute top-0 w-full">
-            <div className="flex justify-between mb-8">
-              {[1, 2, 3].map((stepNumber) => (
-                <div
-                  key={stepNumber}
-                  className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
-                    step >= stepNumber
-                      ? "border-primary bg-primary text-white"
-                      : "border-gray-300"
-                  }`}
-                >
-                  {step > stepNumber ? (
-                    <Check className="w-4 h-4" />
-                  ) : (
-                    <span>{stepNumber}</span>
-                  )}
-                </div>
-              ))}
+          {!showCalendly && (
+            <div className="absolute top-0 w-full">
+              <div className="flex justify-between mb-8">
+                {[1, 2, 3].map((stepNumber) => (
+                  <div
+                    key={stepNumber}
+                    className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
+                      step >= stepNumber
+                        ? "border-primary bg-primary text-white"
+                        : "border-gray-300"
+                    }`}
+                  >
+                    {step > stepNumber ? (
+                      <Check className="w-4 h-4" />
+                    ) : (
+                      <span>{stepNumber}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="mt-16">{renderStep()}</div>
-          <div className="flex justify-between mt-8">
-            <Button
-              variant="outline"
-              onClick={handleBack}
-              disabled={step === 1}
-            >
-              Back
-            </Button>
-            {step === 3 ? (
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  onClick={handleBookDemo}
-                  className="gap-2"
-                >
-                  <Calendar className="w-4 h-4" />
-                  Book a Demo
-                </Button>
+          )}
+          <div className={!showCalendly ? "mt-16" : ""}>{renderStep()}</div>
+          {!showCalendly && (
+            <div className="flex justify-between mt-8">
+              <Button
+                variant="outline"
+                onClick={handleBack}
+                disabled={step === 1}
+              >
+                Back
+              </Button>
+              {step === 3 ? (
                 <Button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Saving..." : "Submit Project"}
                 </Button>
-              </div>
-            ) : (
-              <Button onClick={handleNext} className="group">
-                Next
-                <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            )}
-          </div>
+              ) : (
+                <Button onClick={handleNext} className="group">
+                  Next
+                  <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
