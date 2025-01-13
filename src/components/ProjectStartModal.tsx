@@ -71,6 +71,7 @@ const ProjectStartModal = ({
     try {
       console.log("[handleSubmit] Form data to be submitted:", formData);
 
+      // Map form data to match the projects table schema
       const projectData = {
         name: formData.name,
         email: formData.email,
@@ -80,10 +81,13 @@ const ProjectStartModal = ({
         description: formData.description,
         timeline: formData.timeline,
         pain_points: formData.pain_points || [],
-        ai_agent_requirements: formData.ai_agent_requirements || []
+        ai_agent_requirements: formData.ai_agent_requirements || [],
+        workforce_simulation_scope: formData.workforce_simulation_scope || null,
+        team_size: formData.teamSize ? parseInt(formData.teamSize) : null,
+        budget_range: formData.budgetRange || null
       };
 
-      console.log("[handleSubmit] Formatted project data:", projectData);
+      console.log("[handleSubmit] Mapped project data:", projectData);
 
       const { error } = await supabase
         .from('projects')
