@@ -39,6 +39,8 @@ const ProjectStartModal = ({
   const [showCalendly, setShowCalendly] = useState(false);
   const navigate = useNavigate();
 
+  console.log("Current modal state:", { step, showCalendly, isSubmitting });
+
   const handleNext = () => {
     if (step < 4) {
       setStep(step + 1);
@@ -74,7 +76,7 @@ const ProjectStartModal = ({
   const handleSubmit = async () => {
     try {
       setIsSubmitting(true);
-      console.log("Submitting form data:", formData);
+      console.log("Starting form submission with data:", formData);
 
       const projectData = {
         name: formData.name,
@@ -110,8 +112,9 @@ const ProjectStartModal = ({
         description: "Your project details have been saved. Let's schedule a consultation!",
       });
 
-      // Important: Set showCalendly to true AFTER successful submission
+      console.log("Setting showCalendly to true");
       setShowCalendly(true);
+      console.log("showCalendly state after setting:", true);
       
     } catch (error) {
       console.error('Submission error:', error);
@@ -126,6 +129,7 @@ const ProjectStartModal = ({
   };
 
   const handleModalClose = () => {
+    console.log("Modal closing, resetting state");
     setShowCalendly(false);
     setStep(1);
     setFormData(initialFormData);
@@ -134,7 +138,10 @@ const ProjectStartModal = ({
   };
 
   const renderStep = () => {
+    console.log("Rendering step, showCalendly:", showCalendly);
+    
     if (showCalendly) {
+      console.log("Rendering ConsultationScheduler with formData:", formData);
       return <ConsultationScheduler formData={formData} />;
     }
 

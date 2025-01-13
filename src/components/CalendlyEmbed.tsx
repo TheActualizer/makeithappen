@@ -15,6 +15,10 @@ interface CalendlyEmbedProps {
 }
 
 const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
+  useEffect(() => {
+    console.log("CalendlyEmbed mounted with props:", { url, prefill });
+  }, [url, prefill]);
+
   return (
     <InlineWidget
       url={url}
@@ -22,6 +26,7 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
       styles={{
         height: '100%',
         width: '100%',
+        minHeight: '700px'
       }}
     />
   );

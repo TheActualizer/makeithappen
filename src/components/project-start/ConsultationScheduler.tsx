@@ -6,6 +6,8 @@ interface ConsultationSchedulerProps {
 }
 
 const ConsultationScheduler = ({ formData }: ConsultationSchedulerProps) => {
+  console.log("ConsultationScheduler rendered with formData:", formData);
+
   const formatArrayOrDefault = (arr?: string[] | null, defaultText: string = 'None specified') => 
     arr && arr.length > 0 ? arr.join(', ') : defaultText;
 
@@ -36,6 +38,12 @@ Technical Requirements:
 Additional Context:
 - Company: ${formData.company || 'Not provided'}
 - Pain Points: ${formatArrayOrDefault(formData.pain_points)}`;
+
+  console.log("Calendly prefill data:", {
+    name: formData.name,
+    email: formData.email,
+    meetingPrep
+  });
 
   return (
     <div className="space-y-4">
