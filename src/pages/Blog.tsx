@@ -19,7 +19,55 @@ const Blog = () => {
       category: "AI Technology",
       readTime: "6 min read",
     },
-    // Add more blog entries here as needed
+    {
+      title: "Next-Generation Web Scraping",
+      description: "Discover how intelligent research and data collection systems are transforming how organizations gather and process information.",
+      link: "/blog/intelligent-scraping",
+      category: "AI Technology",
+      readTime: "7 min read",
+    },
+    {
+      title: "Transformative CRM Systems",
+      description: "Learn how AI-powered CRM systems are revolutionizing customer relationship management with intelligent automation.",
+      link: "/blog/transformative-crm",
+      category: "Business Technology",
+      readTime: "6 min read",
+    },
+    {
+      title: "Healthcare Technology & FHIR",
+      description: "Explore how modern healthcare systems leverage FHIR protocols and AI for better patient care.",
+      link: "/blog/healthcare-tech",
+      category: "Healthcare",
+      readTime: "5 min read",
+    },
+    {
+      title: "GDPR Compliance & Open Source AI",
+      description: "Understanding how to maintain GDPR compliance while leveraging open source AI solutions.",
+      link: "/blog/gdpr-compliance",
+      category: "Compliance",
+      readTime: "6 min read",
+    },
+    {
+      title: "AI Trends in Content Creation",
+      description: "Discover how AI is transforming content creation and social media management.",
+      link: "/blog/ai-trends",
+      category: "Content",
+      readTime: "5 min read",
+    },
+    {
+      title: "Case Studies in AI Transformation",
+      description: "Real-world examples of successful AI implementation across industries.",
+      link: "/blog/case-studies",
+      category: "Case Studies",
+      readTime: "8 min read",
+    },
+    {
+      title: "Transformative Accounting Systems",
+      description: "How AI is revolutionizing financial operations and accounting processes.",
+      link: "/blog/transformative-accounting",
+      category: "Finance",
+      readTime: "6 min read",
+    }
   ];
 
   return (
