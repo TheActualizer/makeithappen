@@ -105,7 +105,13 @@ export const Messages = () => {
       const { data, error } = await supabase
         .from('messages')
         .select(`
-          *,
+          id,
+          content,
+          sender_id,
+          created_at,
+          conversation_id,
+          type,
+          is_admin_message,
           profiles:sender_id (
             first_name,
             last_name,
@@ -144,9 +150,12 @@ export const Messages = () => {
       return;
     }
 
+    const messageContent = newMessage.trim();
     setIsLoading(true);
+    setNewMessage(''); // Clear input immediately for better UX
+
     console.log('Attempting to send message:', {
-      content: newMessage,
+      content: messageContent,
       conversationId: selectedConversation
     });
 
@@ -161,7 +170,7 @@ export const Messages = () => {
         .insert([
           {
             conversation_id: selectedConversation,
-            content: newMessage,
+            content: messageContent,
             sender_id: user.id,
             type: 'text',
             is_admin_message: isAdmin
@@ -170,16 +179,16 @@ export const Messages = () => {
 
       if (messageError) {
         console.error('Error inserting message:', messageError);
+        setNewMessage(messageContent); // Restore message if sending failed
         throw messageError;
       }
 
       console.log('Message inserted successfully');
-      setNewMessage('');
 
       // Notify admin about the new message
       const { error: notifyError } = await supabase.functions.invoke('notify-admin', {
         body: {
-          message: newMessage,
+          message: messageContent,
           userId: user.id,
           conversationId: selectedConversation,
         },
@@ -198,8 +207,7 @@ export const Messages = () => {
         title: "Error",
         description: "Failed to send message",
       });
-      // Keep the message in the input if sending failed
-      setNewMessage(newMessage);
+      setNewMessage(messageContent); // Restore message if sending failed
     } finally {
       setIsLoading(false);
     }
