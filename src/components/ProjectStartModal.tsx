@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useNavigate } from "react-router-dom";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Check, ChevronRight } from "lucide-react";
@@ -31,6 +32,7 @@ const ProjectStartModal = ({
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const handleNext = () => {
     if (step === 1 && (!formData.name || !formData.email)) {
@@ -89,6 +91,7 @@ const ProjectStartModal = ({
       });
 
       if (emailError) {
+        console.error('Email error:', emailError);
         throw new Error('Failed to schedule consultation');
       }
 
@@ -96,7 +99,14 @@ const ProjectStartModal = ({
         title: "Success!",
         description: `Your consultation has been scheduled for ${formData.consultationDate?.toLocaleDateString()} at ${formData.consultationTime}. Check your email for confirmation.`,
       });
+      
+      // Close modal and navigate to dashboard if user is authenticated
+      const { data: { session } } = await supabase.auth.getSession();
       onClose();
+      
+      if (session?.user) {
+        navigate("/dashboard");
+      }
     } catch (error) {
       console.error('Submission error:', error);
       toast({
@@ -129,6 +139,9 @@ const ProjectStartModal = ({
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Start Your Project</DialogTitle>
+          <DialogDescription>
+            Fill out the form below to schedule your consultation.
+          </DialogDescription>
         </DialogHeader>
         <div className="relative">
           <div className="absolute top-0 w-full">
