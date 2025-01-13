@@ -26,6 +26,8 @@ interface Sprint {
   title: string;
   status: string;
   tasks: Task[];
+  start_date?: string;
+  end_date?: string;
 }
 
 const KANBAN_COLUMNS = [

@@ -14,7 +14,7 @@ interface Project {
   project_type: string[];
   description: string;
   timeline: string;
-  budget_range: string | null; // Changed from unknown to string | null
+  budget_range: string | null;
   team_size: number | null;
   complexity: "simple" | "moderate" | "complex" | "enterprise" | null;
   workforce_simulation_scope: string | null;
