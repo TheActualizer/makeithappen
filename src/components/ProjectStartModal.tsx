@@ -62,8 +62,13 @@ const ProjectStartModal = ({
 
   const handleSubmit = async () => {
     console.log("[handleSubmit] Starting submission process");
+    if (isSubmitting) {
+      console.log("[handleSubmit] Already submitting, skipping");
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
-      setIsSubmitting(true);
       console.log("[handleSubmit] Form data to be submitted:", formData);
 
       const projectData = {
