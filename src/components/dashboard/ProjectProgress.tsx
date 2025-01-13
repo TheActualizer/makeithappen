@@ -6,6 +6,7 @@ import { Milestone, ChevronRight, CheckCircle2, Clock, ArrowRight, LayoutGrid } 
 import { useToast } from "@/components/ui/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ProjectProgressProps {
   projectId?: string;
@@ -17,6 +18,14 @@ interface Task {
   status: string;
   priority: string;
   assignedTo?: string;
+  sprint_id?: string;
+}
+
+interface Sprint {
+  id: string;
+  title: string;
+  status: string;
+  tasks: Task[];
 }
 
 const KANBAN_COLUMNS = [
@@ -29,10 +38,11 @@ const KANBAN_COLUMNS = [
 
 export function ProjectProgress({ projectId }: ProjectProgressProps) {
   const [milestones, setMilestones] = useState<any[]>([]);
-  const [sprints, setSprints] = useState<any[]>([]);
+  const [sprints, setSprints] = useState<Sprint[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
-  const [view, setView] = useState<'timeline' | 'kanban'>('timeline');
+  const [view, setView] = useState<'timeline' | 'kanban'>('kanban');
+  const [activeSprintId, setActiveSprintId] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -65,6 +75,11 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
         setMilestones(milestonesData.data || []);
         setSprints(sprintsData.data || []);
         setTasks(tasksData.data || []);
+        
+        // Set the first sprint as active by default
+        if (sprintsData.data && sprintsData.data.length > 0) {
+          setActiveSprintId(sprintsData.data[0].id);
+        }
       } catch (error) {
         console.error("Error fetching project data:", error);
         toast({
@@ -116,7 +131,7 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
     }
   };
 
-  const renderKanbanBoard = () => (
+  const renderKanbanBoard = (sprintId: string) => (
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {KANBAN_COLUMNS.map(column => (
@@ -132,7 +147,7 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
                   className="flex-1 min-h-[200px] bg-accent/50 rounded-b-lg p-2 space-y-2"
                 >
                   {tasks
-                    .filter(task => task.status === column.id)
+                    .filter(task => task.sprint_id === sprintId && task.status === column.id)
                     .map((task, index) => (
                       <Draggable key={task.id} draggableId={task.id} index={index}>
                         {(provided) => (
@@ -192,7 +207,31 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
       </div>
 
       {view === 'kanban' ? (
-        renderKanbanBoard()
+        <Card>
+          <CardHeader>
+            <CardTitle>Sprint Tasks</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue={activeSprintId || undefined} className="w-full">
+              <TabsList className="w-full justify-start">
+                {sprints.map((sprint) => (
+                  <TabsTrigger
+                    key={sprint.id}
+                    value={sprint.id}
+                    onClick={() => setActiveSprintId(sprint.id)}
+                  >
+                    {sprint.title}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+              {sprints.map((sprint) => (
+                <TabsContent key={sprint.id} value={sprint.id}>
+                  {renderKanbanBoard(sprint.id)}
+                </TabsContent>
+              ))}
+            </Tabs>
+          </CardContent>
+        </Card>
       ) : (
         <div className="grid gap-4">
           {/* Existing timeline view */}

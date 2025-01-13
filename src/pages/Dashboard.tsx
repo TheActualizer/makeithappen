@@ -134,24 +134,6 @@ const Dashboard = () => {
             <DashboardDocuments isAdmin={isAdmin} />
           </section>
 
-          {/* Project Progress Section */}
-          <section>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold flex items-center gap-2">
-                <Activity className="h-5 w-5" />
-                Project Progress
-              </h2>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleExpandSection('progress')}
-              >
-                <ExternalLink className="h-4 w-4" />
-              </Button>
-            </div>
-            <ProjectProgress projectId={activeProjectId} />
-          </section>
-
           {/* Project Scope Section */}
           <section>
             <div className="flex justify-between items-center mb-4">
@@ -168,6 +150,24 @@ const Dashboard = () => {
               </Button>
             </div>
             <ProjectScope />
+          </section>
+
+          {/* Project Progress Section */}
+          <section>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-semibold flex items-center gap-2">
+                <Activity className="h-5 w-5" />
+                Project Progress
+              </h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleExpandSection('progress')}
+              >
+                <ExternalLink className="h-4 w-4" />
+              </Button>
+            </div>
+            <ProjectProgress projectId={activeProjectId} />
           </section>
 
           {/* Calendar Section */}
