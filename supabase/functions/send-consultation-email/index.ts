@@ -1,9 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -35,30 +32,6 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (!RESEND_API_KEY) {
       throw new Error("RESEND_API_KEY is not configured");
-    }
-
-    // Store appointment in database
-    if (SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY) {
-      const supabase = createClient(
-        SUPABASE_URL,
-        SUPABASE_SERVICE_ROLE_KEY
-      );
-
-      const { error: dbError } = await supabase
-        .from('appointments')
-        .insert({
-          name: consultation.name,
-          email: consultation.email,
-          consultation_date: consultation.consultationDate,
-          consultation_time: consultation.consultationTime,
-          project_type: consultation.projectType,
-          status: 'scheduled'
-        });
-
-      if (dbError) {
-        console.error("Database error:", dbError);
-        throw new Error(`Failed to store appointment: ${dbError.message}`);
-      }
     }
 
     // Email template for customer

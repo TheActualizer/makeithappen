@@ -37,6 +37,10 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
             description: prefill?.customAnswers?.a3 || "No description provided",
             zoomLink: eventData.event.location?.join_url || "Will be provided separately"
           }),
+        }).then(response => {
+          console.log("Email notification response:", response);
+        }).catch(error => {
+          console.error("Error sending email notification:", error);
         });
       }
     };
