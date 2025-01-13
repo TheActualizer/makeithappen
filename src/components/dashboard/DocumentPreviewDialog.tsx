@@ -12,6 +12,8 @@ interface DocumentPreviewDialogProps {
 }
 
 export const DocumentPreviewDialog = ({ url, onClose }: DocumentPreviewDialogProps) => {
+  console.log("Preview URL:", url); // Debug log
+  
   return (
     <Dialog open={!!url} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl h-[90vh]">
