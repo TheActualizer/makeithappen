@@ -4,6 +4,7 @@ import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { supabase } from "@/integrations/supabase/client";
 import { ConversationList } from './messages/ConversationList';
 import { MessageArea } from './messages/MessageArea';
+import { MonitoringPanel } from './monitoring/MonitoringPanel';
 
 interface Message {
   id: string;
@@ -194,19 +195,22 @@ export const Messages = () => {
   };
 
   return (
-    <div className="flex h-[calc(100vh-12rem)] gap-4">
-      <ConversationList
-        conversations={conversations}
-        selectedConversation={selectedConversation}
-        onSelectConversation={selectConversation}
-      />
-      <MessageArea
-        messages={messages}
-        newMessage={newMessage}
-        setNewMessage={setNewMessage}
-        onSendMessage={sendMessage}
-        isLoading={isLoading}
-      />
+    <div className="space-y-6">
+      {isAdmin && <MonitoringPanel />}
+      <div className="flex h-[calc(100vh-12rem)] gap-4">
+        <ConversationList
+          conversations={conversations}
+          selectedConversation={selectedConversation}
+          onSelectConversation={selectConversation}
+        />
+        <MessageArea
+          messages={messages}
+          newMessage={newMessage}
+          setNewMessage={setNewMessage}
+          onSendMessage={sendMessage}
+          isLoading={isLoading}
+        />
+      </div>
     </div>
   );
 };
