@@ -68,7 +68,6 @@ const ProjectStartModal = ({
       setIsSubmitting(true);
       console.log("Submitting form data:", formData);
 
-      // Save project data
       const { error: projectError } = await supabase
         .from('projects')
         .insert([{
@@ -91,10 +90,13 @@ const ProjectStartModal = ({
         description: "Your project details have been saved.",
       });
       
-      onClose();
-      
       // Check if user is authenticated for dashboard navigation
       const { data: { session } } = await supabase.auth.getSession();
+      
+      // Close the modal first
+      onClose();
+      
+      // Then navigate if user is authenticated
       if (session?.user) {
         navigate("/dashboard");
       }
