@@ -7,6 +7,7 @@ import { ChevronRight } from "lucide-react";
 import { FormData } from "./project-start/types";
 import BasicInfoStep from "./project-start/BasicInfoStep";
 import ProjectDetailsStep from "./project-start/ProjectDetailsStep";
+import AIRequirementsStep from "./project-start/AIRequirementsStep";
 import TimelineStep from "./project-start/TimelineStep";
 import ProgressSteps from "./project-start/ProgressSteps";
 import ConsultationScheduler from "./project-start/ConsultationScheduler";
@@ -39,7 +40,7 @@ const ProjectStartModal = ({
   const navigate = useNavigate();
 
   const handleNext = () => {
-    if (step < 3) {
+    if (step < 4) {
       setStep(step + 1);
     }
   };
@@ -142,6 +143,8 @@ const ProjectStartModal = ({
       case 2:
         return <ProjectDetailsStep formData={formData} setFormData={setFormData} />;
       case 3:
+        return <AIRequirementsStep formData={formData} setFormData={setFormData} />;
+      case 4:
         return <TimelineStep formData={formData} setFormData={setFormData} />;
       default:
         return null;
@@ -173,7 +176,7 @@ const ProjectStartModal = ({
               >
                 Back
               </Button>
-              {step === 3 ? (
+              {step === 4 ? (
                 <Button
                   onClick={handleSubmit}
                   disabled={isSubmitting}

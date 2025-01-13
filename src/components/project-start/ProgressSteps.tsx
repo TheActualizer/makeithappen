@@ -8,7 +8,7 @@ const ProgressSteps = ({ currentStep }: ProgressStepsProps) => {
   return (
     <div className="absolute top-0 w-full">
       <div className="flex justify-between mb-8">
-        {[1, 2, 3].map((stepNumber) => (
+        {[1, 2, 3, 4].map((stepNumber) => (
           <div
             key={stepNumber}
             className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
