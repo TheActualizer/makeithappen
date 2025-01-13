@@ -88,6 +88,36 @@ const About = () => {
         </div>
       </motion.section>
 
+      {/* Video Section */}
+      <motion.section 
+        className="py-16 px-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+      >
+        <div className="max-w-4xl mx-auto">
+          <motion.h2 
+            className="text-3xl md:text-4xl font-bold mb-8 text-center"
+            {...fadeIn}
+          >
+            Our Approach
+          </motion.h2>
+          <motion.div 
+            className="aspect-w-16 aspect-h-9 rounded-xl overflow-hidden"
+            {...fadeIn}
+            transition={{ delay: 0.7 }}
+          >
+            <iframe
+              src="https://www.youtube.com/embed/eXlqLTSWMv4"
+              title="MakeITHappen Approach"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full rounded-xl"
+            ></iframe>
+          </motion.div>
+        </div>
+      </motion.section>
+
       {/* Founder's Story */}
       <motion.section 
         className="py-16 px-4"
