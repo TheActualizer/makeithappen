@@ -1,68 +1,71 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Blog = () => {
-  const posts = [
+  const blogs = [
     {
-      title: "Next-Generation Web Scraping: Intelligent Research & Data Collection",
-      description: "Explore how AI-powered web scraping is revolutionizing digital research and data collection with intelligent navigation and automated workflows.",
-      link: "/blog/intelligent-scraping",
-      date: "2024",
-      image: "/placeholder.svg"
+      title: "Intelligent Chatbots: The Future of Customer Interaction",
+      description: "Discover how AI-powered chatbots are revolutionizing customer service and business operations through intelligent conversation and seamless system integration.",
+      link: "/blog/intelligent-chatbots",
+      category: "AI Technology",
+      readTime: "5 min read",
     },
     {
-      title: "Transforming Financial Operations: AI-Powered Accounting Systems",
-      description: "Discover how AI is revolutionizing accounting with intelligent document processing and automated workflows.",
-      link: "/blog/transformative-accounting",
-      date: "2024",
-      image: "/placeholder.svg"
+      title: "Agentic Systems: Redefining Autonomy in Business",
+      description: "Explore how autonomous AI agents can revolutionize processes and disrupt entire industries.",
+      link: "/blog/agentic-systems",
+      category: "AI Technology",
+      readTime: "6 min read",
     },
-    {
-      title: "The Future of Content Creation: AI-Powered Social Media",
-      description: "Learn how AI is transforming content creation and social media marketing with automated, personalized content generation.",
-      link: "/blog/transformative-content",
-      date: "2024",
-      image: "/placeholder.svg"
-    },
-    {
-      title: "Reimagining CRM: AI-Powered Customer Relationship Management",
-      description: "Explore how AI is revolutionizing CRM systems with intelligent automation and predictive analytics.",
-      link: "/blog/transformative-crm",
-      date: "2024",
-      image: "/placeholder.svg"
-    }
+    // Add more blog entries here as needed
   ];
 
   return (
-    <div className="container mx-auto px-4 py-16">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8">Blog</h1>
-        <div className="grid gap-8">
-          {posts.map((post, index) => (
-            <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
-              <div className="flex flex-col md:flex-row gap-6">
-                <div className="md:w-1/3">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-48 object-cover rounded-lg"
-                  />
-                </div>
-                <div className="md:w-2/3">
-                  <div className="text-sm text-gray-500 mb-2">{post.date}</div>
-                  <h2 className="text-2xl font-semibold mb-4">{post.title}</h2>
-                  <p className="text-gray-600 mb-4">{post.description}</p>
-                  <Link to={post.link}>
-                    <Button variant="ghost" className="group">
-                      Read More
-                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </Card>
+    <div className="min-h-screen bg-gradient-to-br from-accent via-accent/95 to-primary/20 py-24">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+            Our Blog
+          </h1>
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            Insights and updates from our team on AI technology, automation, and digital transformation.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {blogs.map((blog, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <Link to={blog.link}>
+                <Card className="h-full bg-accent/40 backdrop-blur-sm border-accent/20 p-6 hover:bg-accent/50 transition-colors">
+                  <div className="flex flex-col h-full">
+                    <div className="flex justify-between items-start mb-4">
+                      <span className="text-sm text-primary bg-primary/10 px-3 py-1 rounded-full">
+                        {blog.category}
+                      </span>
+                      <span className="text-sm text-gray-400">{blog.readTime}</span>
+                    </div>
+                    <h2 className="text-xl font-semibold text-white mb-3">
+                      {blog.title}
+                    </h2>
+                    <p className="text-gray-300 flex-grow">
+                      {blog.description}
+                    </p>
+                  </div>
+                </Card>
+              </Link>
+            </motion.div>
           ))}
         </div>
       </div>
