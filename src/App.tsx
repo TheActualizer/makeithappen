@@ -17,8 +17,22 @@ import ProfileSettings from "./pages/settings/ProfileSettings";
 import ResetPassword from "./pages/ResetPassword";
 import { FinancialMetrics } from "./components/dashboard/FinancialMetrics";
 import { DashboardHeader } from "./components/dashboard/DashboardHeader";
+import { DashboardCalendar } from "./components/dashboard/DashboardCalendar";
+import { DashboardDocuments } from "./components/dashboard/DashboardDocuments";
+import { ProjectProgress } from "./components/dashboard/ProjectProgress";
+import { ProjectScope } from "./components/dashboard/ProjectScope";
+import { DashboardActivity } from "./components/dashboard/DashboardActivity";
 
 const queryClient = new QueryClient();
+
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => (
+  <div className="min-h-screen bg-background">
+    <DashboardHeader />
+    <div className="container mx-auto py-8">
+      {children}
+    </div>
+  </div>
+);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -33,27 +47,64 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/start-project" element={<StartProject />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/dashboard/projects" element={<div>Projects (Coming Soon)</div>} />
-            <Route path="/dashboard/calendar" element={<div>Calendar (Coming Soon)</div>} />
-            <Route path="/dashboard/messages" element={<div>Messages (Coming Soon)</div>} />
-            <Route path="/dashboard/documents" element={<div>Documents (Coming Soon)</div>} />
-            <Route path="/dashboard/financials" element={
-              <div className="min-h-screen bg-background">
-                <DashboardHeader />
-                <div className="container mx-auto py-8">
-                  <h1 className="text-3xl font-bold mb-8">Financial Metrics</h1>
-                  <FinancialMetrics />
-                </div>
-              </div>
+            <Route path="/dashboard/projects" element={
+              <DashboardLayout>
+                <h1 className="text-3xl font-bold mb-8">Projects</h1>
+                <DashboardActivity isAdmin={false} />
+              </DashboardLayout>
             } />
-            <Route path="/dashboard/progress" element={<div>Project Progress (Coming Soon)</div>} />
-            <Route path="/dashboard/scope" element={<div>Project Scope (Coming Soon)</div>} />
+            <Route path="/dashboard/calendar" element={
+              <DashboardLayout>
+                <h1 className="text-3xl font-bold mb-8">Calendar</h1>
+                <DashboardCalendar />
+              </DashboardLayout>
+            } />
+            <Route path="/dashboard/messages" element={
+              <DashboardLayout>
+                <h1 className="text-3xl font-bold mb-8">Messages</h1>
+                <div className="text-muted-foreground">Messaging feature coming soon...</div>
+              </DashboardLayout>
+            } />
+            <Route path="/dashboard/documents" element={
+              <DashboardLayout>
+                <h1 className="text-3xl font-bold mb-8">Documents</h1>
+                <DashboardDocuments isAdmin={false} />
+              </DashboardLayout>
+            } />
+            <Route path="/dashboard/financials" element={
+              <DashboardLayout>
+                <h1 className="text-3xl font-bold mb-8">Financial Metrics</h1>
+                <FinancialMetrics />
+              </DashboardLayout>
+            } />
+            <Route path="/dashboard/progress" element={
+              <DashboardLayout>
+                <h1 className="text-3xl font-bold mb-8">Project Progress</h1>
+                <ProjectProgress />
+              </DashboardLayout>
+            } />
+            <Route path="/dashboard/scope" element={
+              <DashboardLayout>
+                <h1 className="text-3xl font-bold mb-8">Project Scope</h1>
+                <ProjectScope />
+              </DashboardLayout>
+            } />
             <Route path="/blog" element={<Blog />} />
             <Route path="/login" element={<Login />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/settings/profile" element={<ProfileSettings />} />
-            <Route path="/settings/preferences" element={<div>Preferences (Coming Soon)</div>} />
-            <Route path="/settings/notifications" element={<div>Notifications (Coming Soon)</div>} />
+            <Route path="/settings/preferences" element={
+              <DashboardLayout>
+                <h1 className="text-3xl font-bold mb-8">Preferences</h1>
+                <div className="text-muted-foreground">Preferences settings coming soon...</div>
+              </DashboardLayout>
+            } />
+            <Route path="/settings/notifications" element={
+              <DashboardLayout>
+                <h1 className="text-3xl font-bold mb-8">Notifications</h1>
+                <div className="text-muted-foreground">Notification settings coming soon...</div>
+              </DashboardLayout>
+            } />
           </Routes>
           <Toaster />
           <Sonner />
