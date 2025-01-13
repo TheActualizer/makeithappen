@@ -66,14 +66,18 @@ const ProjectStartModal = ({
         ai_agent_requirements: formData.ai_agent_requirements || []
       };
 
-      const { error: projectError } = await supabase
+      const { data, error } = await supabase
         .from('projects')
-        .insert(projectData);
+        .insert(projectData)
+        .select('id')
+        .single();
 
-      if (projectError) {
-        console.error('Project submission error:', projectError);
-        throw new Error('Failed to save project');
+      if (error) {
+        console.error('Project submission error:', error);
+        throw new Error(error.message);
       }
+
+      console.log('Project saved successfully:', data);
 
       toast({
         title: "Success!",
@@ -91,7 +95,7 @@ const ProjectStartModal = ({
       console.error('Submission error:', error);
       toast({
         title: "Error",
-        description: "Failed to save project details. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to save project details. Please try again.",
         variant: "destructive",
       });
     } finally {
