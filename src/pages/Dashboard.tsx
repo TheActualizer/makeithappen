@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   BarChart, Users, Calendar, MessageSquare, FileText,
   Activity, PlusCircle, Briefcase, ExternalLink, DollarSign,
+  ChevronDown,
 } from "lucide-react";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { DashboardDocuments } from "@/components/dashboard/DashboardDocuments";
@@ -18,6 +19,11 @@ import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { Button } from "@/components/ui/button";
 import ProjectStartModal from "@/components/ProjectStartModal";
 import { useNavigate } from "react-router-dom";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -79,6 +85,24 @@ const Dashboard = () => {
     navigate(`/dashboard/${section}`);
   };
 
+  const renderSectionHeader = (title: string, icon: React.ReactNode, onExpand?: () => void) => (
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-2xl font-semibold flex items-center gap-2">
+        {icon}
+        {title}
+      </h2>
+      {onExpand && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onExpand}
+        >
+          <ExternalLink className="h-4 w-4" />
+        </Button>
+      )}
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-background">
       <DashboardHeader />
@@ -106,125 +130,116 @@ const Dashboard = () => {
 
         <div className="grid gap-6">
           {/* Stats Section */}
-          <section>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold flex items-center gap-2">
-                <BarChart className="h-5 w-5" />
-                Overview
-              </h2>
-            </div>
-            <DashboardStats isAdmin={isAdmin} />
-          </section>
+          <Collapsible>
+            <CollapsibleTrigger className="w-full">
+              <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
+                {renderSectionHeader("Overview", <BarChart className="h-5 w-5" />)}
+                <ChevronDown className="h-4 w-4" />
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="pt-4">
+              <DashboardStats isAdmin={isAdmin} />
+            </CollapsibleContent>
+          </Collapsible>
 
           {/* Documents Section */}
-          <section>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold flex items-center gap-2">
-                <FileText className="h-5 w-5" />
-                {isAdmin ? "All Documents" : "My Documents"}
-              </h2>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleExpandSection('documents')}
-              >
-                <ExternalLink className="h-4 w-4" />
-              </Button>
-            </div>
-            <DashboardDocuments isAdmin={isAdmin} />
-          </section>
+          <Collapsible>
+            <CollapsibleTrigger className="w-full">
+              <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
+                {renderSectionHeader(
+                  isAdmin ? "All Documents" : "My Documents",
+                  <FileText className="h-5 w-5" />
+                )}
+                <ChevronDown className="h-4 w-4" />
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="pt-4">
+              <DashboardDocuments isAdmin={isAdmin} />
+            </CollapsibleContent>
+          </Collapsible>
 
           {/* Project Scope Section */}
-          <section>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold flex items-center gap-2">
-                <Briefcase className="h-5 w-5" />
-                Project Scope
-              </h2>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleExpandSection('scope')}
-              >
-                <ExternalLink className="h-4 w-4" />
-              </Button>
-            </div>
-            <ProjectScope />
-          </section>
+          <Collapsible>
+            <CollapsibleTrigger className="w-full">
+              <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
+                {renderSectionHeader("Project Scope", <Briefcase className="h-5 w-5" />)}
+                <ChevronDown className="h-4 w-4" />
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="pt-4">
+              <ProjectScope />
+            </CollapsibleContent>
+          </Collapsible>
 
           {/* Project Progress Section */}
-          <section>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold flex items-center gap-2">
-                <Activity className="h-5 w-5" />
-                Project Progress
-              </h2>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleExpandSection('progress')}
-              >
-                <ExternalLink className="h-4 w-4" />
-              </Button>
-            </div>
-            <ProjectProgress projectId={activeProjectId} />
-          </section>
+          <Collapsible>
+            <CollapsibleTrigger className="w-full">
+              <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
+                {renderSectionHeader("Project Progress", <Activity className="h-5 w-5" />)}
+                <ChevronDown className="h-4 w-4" />
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="pt-4">
+              <ProjectProgress projectId={activeProjectId} />
+            </CollapsibleContent>
+          </Collapsible>
 
           {/* Calendar Section */}
-          <section>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold flex items-center gap-2">
-                <Calendar className="h-5 w-5" />
-                Calendar
-              </h2>
-            </div>
-            <DashboardCalendar />
-          </section>
+          <Collapsible>
+            <CollapsibleTrigger className="w-full">
+              <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
+                {renderSectionHeader("Calendar", <Calendar className="h-5 w-5" />)}
+                <ChevronDown className="h-4 w-4" />
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="pt-4">
+              <DashboardCalendar />
+            </CollapsibleContent>
+          </Collapsible>
 
           {/* Activity Section */}
-          <section>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold flex items-center gap-2">
-                <MessageSquare className="h-5 w-5" />
-                Recent Activity
-              </h2>
-            </div>
-            <DashboardActivity isAdmin={isAdmin} />
-          </section>
+          <Collapsible>
+            <CollapsibleTrigger className="w-full">
+              <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
+                {renderSectionHeader("Recent Activity", <MessageSquare className="h-5 w-5" />)}
+                <ChevronDown className="h-4 w-4" />
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="pt-4">
+              <DashboardActivity isAdmin={isAdmin} />
+            </CollapsibleContent>
+          </Collapsible>
 
-          {/* Financial Metrics Section - Moved to bottom */}
-          <section>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold flex items-center gap-2">
-                <DollarSign className="h-5 w-5" />
-                Financial Metrics
-              </h2>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleExpandSection('financials')}
-              >
-                <ExternalLink className="h-4 w-4" />
-              </Button>
-            </div>
-            <FinancialMetrics projectId={activeProjectId} />
-          </section>
+          {/* Financial Metrics Section */}
+          <Collapsible>
+            <CollapsibleTrigger className="w-full">
+              <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
+                {renderSectionHeader("Financial Metrics", <DollarSign className="h-5 w-5" />)}
+                <ChevronDown className="h-4 w-4" />
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="pt-4">
+              <FinancialMetrics projectId={activeProjectId} />
+            </CollapsibleContent>
+          </Collapsible>
 
           {/* Admin Users Section */}
           {isAdmin && (
-            <section>
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-semibold flex items-center gap-2">
-                  <Users className="h-5 w-5" />
-                  User Management
-                </h2>
-              </div>
-              <Card className="p-6">
-                <p className="text-muted-foreground">
-                  Admin user management features coming soon...
-                </p>
-              </Card>
-            </section>
+            <Collapsible>
+              <CollapsibleTrigger className="w-full">
+                <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
+                  {renderSectionHeader("User Management", <Users className="h-5 w-5" />)}
+                  <ChevronDown className="h-4 w-4" />
+                </div>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="pt-4">
+                <Card className="p-6">
+                  <p className="text-muted-foreground">
+                    Admin user management features coming soon...
+                  </p>
+                </Card>
+              </CollapsibleContent>
+            </Collapsible>
           )}
         </div>
       </div>
