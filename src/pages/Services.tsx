@@ -1,7 +1,7 @@
 import { ServicesShowcase } from "@/components/ServicesShowcase";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Bot, Building2, Users } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Services = () => {
@@ -39,33 +39,6 @@ const Services = () => {
               >
                 Contact Sales
               </Button>
-            </div>
-          </div>
-
-          {/* Stats */}
-          <div className="max-w-6xl mx-auto mt-16">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-accent/40 backdrop-blur-sm border border-accent/20 rounded-lg p-6 text-center">
-                <div className="inline-flex p-3 rounded-lg bg-accent/30 mb-4">
-                  <Building2 className="w-6 h-6 text-secondary" />
-                </div>
-                <h3 className="text-3xl font-bold text-white mb-2">500+</h3>
-                <p className="text-gray-300">Businesses Automated</p>
-              </div>
-              <div className="bg-accent/40 backdrop-blur-sm border border-accent/20 rounded-lg p-6 text-center">
-                <div className="inline-flex p-3 rounded-lg bg-accent/30 mb-4">
-                  <Bot className="w-6 h-6 text-secondary" />
-                </div>
-                <h3 className="text-3xl font-bold text-white mb-2">1M+</h3>
-                <p className="text-gray-300">AI Agents Deployed</p>
-              </div>
-              <div className="bg-accent/40 backdrop-blur-sm border border-accent/20 rounded-lg p-6 text-center">
-                <div className="inline-flex p-3 rounded-lg bg-accent/30 mb-4">
-                  <Users className="w-6 h-6 text-secondary" />
-                </div>
-                <h3 className="text-3xl font-bold text-white mb-2">10K+</h3>
-                <p className="text-gray-300">Hours Saved Monthly</p>
-              </div>
             </div>
           </div>
         </section>
