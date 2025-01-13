@@ -11,6 +11,7 @@ import {
   FileText,
   Activity,
   Settings,
+  PlusCircle,
 } from "lucide-react";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { DashboardForms } from "@/components/dashboard/DashboardForms";
@@ -19,12 +20,15 @@ import { DashboardActivity } from "@/components/dashboard/DashboardActivity";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { ProjectProgress } from "@/components/dashboard/ProjectProgress";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
+import { Button } from "@/components/ui/button";
+import ProjectStartModal from "@/components/ProjectStartModal";
 
 const Dashboard = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("overview");
   const { isAdmin, isLoading: isLoadingAdmin } = useIsAdmin();
   const [activeProjectId, setActiveProjectId] = useState<string | undefined>();
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
 
   // Fetch the user's first project ID
   useEffect(() => {
@@ -86,11 +90,20 @@ const Dashboard = () => {
           <h1 className="text-4xl font-bold">
             {isAdmin ? "Admin Dashboard" : "Dashboard"}
           </h1>
-          {isAdmin && (
-            <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
-              Admin
-            </span>
-          )}
+          <div className="flex items-center gap-4">
+            <Button
+              onClick={() => setIsProjectModalOpen(true)}
+              className="flex items-center gap-2"
+            >
+              <PlusCircle className="h-4 w-4" />
+              New Project
+            </Button>
+            {isAdmin && (
+              <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                Admin
+              </span>
+            )}
+          </div>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -155,6 +168,11 @@ const Dashboard = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      <ProjectStartModal 
+        isOpen={isProjectModalOpen}
+        onClose={() => setIsProjectModalOpen(false)}
+      />
     </div>
   );
 };
