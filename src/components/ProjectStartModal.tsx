@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Check, ChevronRight, Calendar } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { FormData } from "./project-start/types";
 import BasicInfoStep from "./project-start/BasicInfoStep";
 import ProjectDetailsStep from "./project-start/ProjectDetailsStep";
 import TimelineStep from "./project-start/TimelineStep";
-import CalendlyEmbed from "./CalendlyEmbed";
+import ProgressSteps from "./project-start/ProgressSteps";
+import ConsultationScheduler from "./project-start/ConsultationScheduler";
 import { supabase } from "@/integrations/supabase/client";
 
 const initialFormData: FormData = {
@@ -134,58 +135,7 @@ const ProjectStartModal = ({
 
   const renderStep = () => {
     if (showCalendly) {
-      const formatArrayOrDefault = (arr?: string[] | null, defaultText: string = 'None specified') => 
-        arr && arr.length > 0 ? arr.join(', ') : defaultText;
-
-      const getBudgetRangeText = (range?: string) => {
-        if (!range) return 'Not specified';
-        const matches = range.match(/\d+/g);
-        if (!matches) return range;
-        return range === "under-10000" ? "Under $10,000" :
-               range === "200000+" ? "$200,000+" :
-               `$${matches[0]},000 - $${matches[1]},000`;
-      };
-
-      const meetingPrep = `Project Overview:
-Type of Services: ${formatArrayOrDefault(formData.projectType)}
-
-Project Description:
-${formData.description || 'Not provided'}
-
-Timeline & Budget:
-- Preferred Timeline: ${formData.timeline}
-- Budget Range: ${getBudgetRangeText(formData.budgetRange)}
-- Team Size: ${formData.teamSize || 'Not specified'}
-
-Technical Requirements:
-- Digital Workforce Scope: ${formData.workforce_simulation_scope || 'Not specified'}
-- AI Agent Requirements: ${formatArrayOrDefault(formData.ai_agent_requirements)}
-
-Additional Context:
-- Company: ${formData.company || 'Not provided'}
-- Pain Points: ${formatArrayOrDefault(formData.pain_points)}`;
-
-      return (
-        <div className="space-y-4">
-          <p className="text-sm text-muted-foreground">
-            Please select a time that works best for you to discuss your project in detail.
-          </p>
-          <div className="h-[600px]">
-            <CalendlyEmbed 
-              url="https://calendly.com/belchonen18/30min" 
-              prefill={{
-                name: formData.name,
-                email: formData.email,
-                customAnswers: {
-                  a1: formData.company || 'Not provided',
-                  a2: formData.phone || 'Not provided',
-                  a3: meetingPrep
-                }
-              }}
-            />
-          </div>
-        </div>
-      );
+      return <ConsultationScheduler formData={formData} />;
     }
 
     switch (step) {
@@ -214,28 +164,7 @@ Additional Context:
           </DialogDescription>
         </DialogHeader>
         <div className="relative">
-          {!showCalendly && (
-            <div className="absolute top-0 w-full">
-              <div className="flex justify-between mb-8">
-                {[1, 2, 3].map((stepNumber) => (
-                  <div
-                    key={stepNumber}
-                    className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
-                      step >= stepNumber
-                        ? "border-primary bg-primary text-white"
-                        : "border-gray-300"
-                    }`}
-                  >
-                    {step > stepNumber ? (
-                      <Check className="w-4 h-4" />
-                    ) : (
-                      <span>{stepNumber}</span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          {!showCalendly && <ProgressSteps currentStep={step} />}
           <div className={!showCalendly ? "mt-16" : ""}>{renderStep()}</div>
           {!showCalendly && (
             <div className="flex justify-between mt-8">
