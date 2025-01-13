@@ -9,6 +9,45 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      appointments: {
+        Row: {
+          consultation_date: string
+          consultation_time: string
+          created_at: string | null
+          email: string
+          id: string
+          name: string
+          project_type: string | null
+          status: Database["public"]["Enums"]["appointment_status"] | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          consultation_date: string
+          consultation_time: string
+          created_at?: string | null
+          email: string
+          id?: string
+          name: string
+          project_type?: string | null
+          status?: Database["public"]["Enums"]["appointment_status"] | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          consultation_date?: string
+          consultation_time?: string
+          created_at?: string | null
+          email?: string
+          id?: string
+          name?: string
+          project_type?: string | null
+          status?: Database["public"]["Enums"]["appointment_status"] | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       blog_categories: {
         Row: {
           created_at: string | null
@@ -314,6 +353,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      appointment_status: "scheduled" | "completed" | "cancelled"
       post_status: "draft" | "published" | "archived"
       project_complexity: "simple" | "moderate" | "complex" | "enterprise"
       tech_stack_category:

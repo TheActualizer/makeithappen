@@ -8,6 +8,7 @@ import BasicInfoStep from "./project-start/BasicInfoStep";
 import ProjectDetailsStep from "./project-start/ProjectDetailsStep";
 import TimelineStep from "./project-start/TimelineStep";
 import ScheduleStep from "./project-start/ScheduleStep";
+import { supabase } from "@/integrations/supabase/client";
 
 const initialFormData: FormData = {
   name: "",
@@ -29,6 +30,7 @@ const ProjectStartModal = ({
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleNext = () => {
     if (step === 1 && (!formData.name || !formData.email)) {
@@ -69,13 +71,42 @@ const ProjectStartModal = ({
     }
   };
 
-  const handleSubmit = () => {
-    console.log("Form submitted:", formData);
-    toast({
-      title: "Success!",
-      description: `Your project details have been submitted. Your consultation is scheduled for ${formData.consultationDate?.toLocaleDateString()} at ${formData.consultationTime}`,
-    });
-    onClose();
+  const handleSubmit = async () => {
+    try {
+      setIsSubmitting(true);
+      console.log("Submitting form data:", formData);
+
+      // Send consultation email
+      const { error: emailError } = await supabase.functions.invoke('send-consultation-email', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          consultationDate: formData.consultationDate?.toISOString().split('T')[0],
+          consultationTime: formData.consultationTime,
+          projectType: formData.projectType,
+          description: formData.description,
+        },
+      });
+
+      if (emailError) {
+        throw new Error('Failed to schedule consultation');
+      }
+
+      toast({
+        title: "Success!",
+        description: `Your consultation has been scheduled for ${formData.consultationDate?.toLocaleDateString()} at ${formData.consultationTime}. Check your email for confirmation.`,
+      });
+      onClose();
+    } catch (error) {
+      console.error('Submission error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to schedule consultation. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const renderStep = () => {
@@ -132,9 +163,10 @@ const ProjectStartModal = ({
             <Button
               onClick={step === 4 ? handleSubmit : handleNext}
               className="group"
+              disabled={isSubmitting}
             >
               {step === 4 ? (
-                "Submit"
+                isSubmitting ? "Scheduling..." : "Schedule Consultation"
               ) : (
                 <>
                   Next
