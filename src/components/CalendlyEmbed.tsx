@@ -26,7 +26,7 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
   }, [url, prefill]);
 
   return (
-    <div ref={componentRef} className="min-h-[700px]">
+    <div ref={componentRef} className="min-h-[700px] w-full">
       <InlineWidget
         url={url}
         prefill={prefill}

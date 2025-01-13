@@ -37,10 +37,10 @@ const ProjectStartModal = ({
   };
 
   const renderStep = () => {
-    console.log("[renderStep] Rendering step with showCalendly:", showCalendly);
+    console.log("[renderStep] Rendering step:", { step, showCalendly });
     
     if (showCalendly) {
-      console.log("[renderStep] Attempting to render ConsultationScheduler");
+      console.log("[renderStep] Rendering ConsultationScheduler");
       return <ConsultationScheduler formData={formData} />;
     }
 

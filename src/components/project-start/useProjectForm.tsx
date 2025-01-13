@@ -23,28 +23,30 @@ export const useProjectForm = () => {
   const { toast } = useToast();
 
   const handleNext = () => {
+    console.log("[handleNext] Moving to next step from:", step);
     if (step < 4) {
       setStep(step + 1);
     }
   };
 
   const handleBack = () => {
+    console.log("[handleBack] Moving to previous step from:", step);
     if (step > 1) {
       setStep(step - 1);
     }
   };
 
   const handleSubmit = async () => {
-    console.log("[handleSubmit] Starting submission process");
+    console.log("[handleSubmit] Starting submission with data:", formData);
+    
     if (isSubmitting) {
       console.log("[handleSubmit] Already submitting, skipping");
       return;
     }
 
     setIsSubmitting(true);
+    
     try {
-      console.log("[handleSubmit] Form data to be submitted:", formData);
-
       const projectData = {
         name: formData.name,
         email: formData.email,
@@ -65,6 +67,7 @@ export const useProjectForm = () => {
       const { error } = await supabase
         .from('projects')
         .insert([projectData])
+        .select()
         .single();
 
       if (error) {
@@ -95,6 +98,7 @@ export const useProjectForm = () => {
   };
 
   const resetForm = () => {
+    console.log("[resetForm] Resetting form state");
     setShowCalendly(false);
     setStep(1);
     setFormData(initialFormData);

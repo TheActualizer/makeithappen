@@ -8,7 +8,7 @@ interface ConsultationSchedulerProps {
 
 const ConsultationScheduler = ({ formData }: ConsultationSchedulerProps) => {
   useEffect(() => {
-    console.log("[ConsultationScheduler] Component mounted with formData:", formData);
+    console.log("[ConsultationScheduler] Mounted with formData:", formData);
   }, [formData]);
 
   const formatArrayOrDefault = (arr?: string[] | null, defaultText: string = 'None specified') => 
@@ -50,7 +50,7 @@ Additional Context:
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-muted-foreground">
+      <p className="text-sm text-muted-foreground mb-4">
         Please select a time that works best for you to discuss your project in detail.
       </p>
       <CalendlyEmbed 
