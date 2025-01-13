@@ -273,6 +273,50 @@ export type Database = {
           },
         ]
       }
+      milestones: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          project_id: string | null
+          status: Database["public"]["Enums"]["milestone_status"] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          project_id?: string | null
+          status?: Database["public"]["Enums"]["milestone_status"] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          project_id?: string | null
+          status?: Database["public"]["Enums"]["milestone_status"] | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "milestones_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -500,6 +544,117 @@ export type Database = {
         }
         Relationships: []
       }
+      sprints: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          description: string | null
+          end_date: string | null
+          id: string
+          milestone_id: string | null
+          project_id: string | null
+          start_date: string | null
+          status: Database["public"]["Enums"]["sprint_status"] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          milestone_id?: string | null
+          project_id?: string | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["sprint_status"] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          milestone_id?: string | null
+          project_id?: string | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["sprint_status"] | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sprints_milestone_id_fkey"
+            columns: ["milestone_id"]
+            isOneToOne: false
+            referencedRelation: "milestones"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sprints_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tasks: {
+        Row: {
+          assigned_to: string | null
+          completed_at: string | null
+          created_at: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          sprint_id: string | null
+          status: Database["public"]["Enums"]["milestone_status"] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          sprint_id?: string | null
+          status?: Database["public"]["Enums"]["milestone_status"] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          sprint_id?: string | null
+          status?: Database["public"]["Enums"]["milestone_status"] | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_sprint_id_fkey"
+            columns: ["sprint_id"]
+            isOneToOne: false
+            referencedRelation: "sprints"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -531,8 +686,10 @@ export type Database = {
         | "procedure_automation"
         | "agent_orchestration"
       message_type: "text" | "system" | "ai"
+      milestone_status: "not_started" | "in_progress" | "completed" | "blocked"
       post_status: "draft" | "published" | "archived"
       project_complexity: "simple" | "moderate" | "complex" | "enterprise"
+      sprint_status: "planned" | "active" | "completed" | "archived"
       tech_stack_category:
         | "frontend"
         | "backend"

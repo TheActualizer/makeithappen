@@ -17,12 +17,36 @@ import { DashboardForms } from "@/components/dashboard/DashboardForms";
 import { DashboardCalendar } from "@/components/dashboard/DashboardCalendar";
 import { DashboardActivity } from "@/components/dashboard/DashboardActivity";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { ProjectProgress } from "@/components/dashboard/ProjectProgress";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 const Dashboard = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("overview");
   const { isAdmin, isLoading: isLoadingAdmin } = useIsAdmin();
+  const [activeProjectId, setActiveProjectId] = useState<string | undefined>();
+
+  // Fetch the user's first project ID
+  useEffect(() => {
+    const fetchFirstProject = async () => {
+      const { data: projects, error } = await supabase
+        .from("projects")
+        .select("id")
+        .limit(1)
+        .single();
+
+      if (error) {
+        console.error("Error fetching project:", error);
+        return;
+      }
+
+      if (projects) {
+        setActiveProjectId(projects.id);
+      }
+    };
+
+    fetchFirstProject();
+  }, []);
 
   // Subscribe to real-time updates
   useEffect(() => {
@@ -70,10 +94,14 @@ const Dashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-5 mb-8">
+          <TabsList className="grid w-full grid-cols-6 mb-8">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart className="h-4 w-4" />
               Overview
+            </TabsTrigger>
+            <TabsTrigger value="progress" className="flex items-center gap-2">
+              <Activity className="h-4 w-4" />
+              Progress
             </TabsTrigger>
             <TabsTrigger value="forms" className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
@@ -90,13 +118,17 @@ const Dashboard = () => {
               </TabsTrigger>
             )}
             <TabsTrigger value="activity" className="flex items-center gap-2">
-              <Activity className="h-4 w-4" />
+              <MessageSquare className="h-4 w-4" />
               Activity
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview">
             <DashboardStats isAdmin={isAdmin} />
+          </TabsContent>
+
+          <TabsContent value="progress">
+            <ProjectProgress projectId={activeProjectId} />
           </TabsContent>
 
           <TabsContent value="forms">
