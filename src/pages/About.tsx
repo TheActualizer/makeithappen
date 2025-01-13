@@ -1,10 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight, Brain, Rocket, Shield } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import ProjectStartModal from "@/components/ProjectStartModal";
 
 const About = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -156,12 +159,21 @@ const About = () => {
           <p className="text-xl text-gray-400 mb-8">
             Let's collaborate to shape the future of your industry
           </p>
-          <Button size="lg" className="group">
+          <Button 
+            size="lg" 
+            className="group"
+            onClick={() => setIsModalOpen(true)}
+          >
             Start Your Project
             <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
           </Button>
         </div>
       </motion.section>
+
+      <ProjectStartModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </div>
   );
 };
