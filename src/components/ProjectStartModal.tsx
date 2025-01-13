@@ -192,7 +192,7 @@ const ProjectStartModal = ({
                   onClick={handleSubmit}
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Saving..." : "Save & Close"}
+                  {isSubmitting ? "Saving..." : "Save"}
                 </Button>
               </div>
             ) : (
