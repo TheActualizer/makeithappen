@@ -134,6 +134,9 @@ const ChatInterface = () => {
     console.log('Sending message:', { content: messageContent, conversationId });
 
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      const userId = user?.id;
+
       const { error: messageError } = await supabase
         .from('messages')
         .insert([
@@ -141,12 +144,28 @@ const ChatInterface = () => {
             conversation_id: conversationId,
             content: messageContent,
             type: 'text',
+            sender_id: userId
           },
         ]);
 
       if (messageError) {
         console.error('Error inserting user message:', messageError);
         throw messageError;
+      }
+
+      // Notify admin about the new message
+      if (userId) {
+        const { error: notifyError } = await supabase.functions.invoke('notify-admin', {
+          body: {
+            message: messageContent,
+            userId,
+            conversationId,
+          },
+        });
+
+        if (notifyError) {
+          console.error('Error notifying admin:', notifyError);
+        }
       }
 
       console.log('User message saved, calling AI service...');
