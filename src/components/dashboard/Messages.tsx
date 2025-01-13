@@ -15,10 +15,10 @@ interface Message {
   created_at: string;
   conversation_id: string;
   profiles?: {
-    first_name: string;
-    last_name: string;
-    email: string;
-  };
+    first_name: string | null;
+    last_name: string | null;
+    email: string | null;
+  } | null;
 }
 
 interface Conversation {
@@ -194,7 +194,7 @@ export const Messages = () => {
                 </div>
                 <div className="flex flex-col">
                   <p className="text-sm font-medium">
-                    {message.profiles?.first_name
+                    {message.profiles?.first_name && message.profiles?.last_name
                       ? `${message.profiles.first_name} ${message.profiles.last_name}`
                       : 'Unknown User'}
                   </p>
