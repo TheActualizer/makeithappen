@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import { ServicesShowcase } from "@/components/ServicesShowcase";
-import CalendarDemo from "@/components/CalendarDemo";
+import CalendlyEmbed from "@/components/CalendlyEmbed";
 import ChatInterface from "@/components/chat/ChatInterface";
 
 const Index = () => {
@@ -23,14 +23,14 @@ const Index = () => {
           <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="my-20 text-center">
               <h2 className="text-3xl font-bold tracking-tight text-white mb-6">
-                Ready to Transform Your Business?
+                Schedule a Consultation
               </h2>
               <p className="text-lg text-gray-300 mb-12 max-w-2xl mx-auto">
-                Schedule a consultation and let's discuss how we can leverage AI to revolutionize your operations.
+                Book a time that works best for you, and let's discuss how we can help transform your business with AI solutions.
               </p>
             </div>
-            <div className="bg-accent/40 backdrop-blur-sm rounded-2xl p-8 shadow-xl mb-20 border border-accent/20">
-              <CalendarDemo />
+            <div className="mb-20">
+              <CalendlyEmbed url="YOUR_CALENDLY_URL_HERE" />
             </div>
           </div>
         </div>
