@@ -167,9 +167,8 @@ Additional Context:
 
       return (
         <div className="space-y-4">
-          <h3 className="text-lg font-medium">Schedule Your Consultation</h3>
           <p className="text-sm text-muted-foreground">
-            Thank you for submitting your project details. Let's schedule a time to discuss your requirements in detail.
+            Please select a time that works best for you to discuss your project in detail.
           </p>
           <div className="h-[600px]">
             <CalendlyEmbed 
@@ -210,7 +209,7 @@ Additional Context:
           </DialogTitle>
           <DialogDescription>
             {showCalendly 
-              ? "Choose a time that works best for you to discuss your project in detail."
+              ? "Choose a time that works best for you."
               : "Help us understand your project requirements and objectives"}
           </DialogDescription>
         </DialogHeader>
