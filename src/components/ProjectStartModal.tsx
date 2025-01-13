@@ -34,7 +34,6 @@ const ProjectStartModal = ({
   const navigate = useNavigate();
 
   const handleNext = () => {
-    // Remove validation checks since no fields are required
     if (step < 3) {
       setStep(step + 1);
     }
@@ -51,21 +50,25 @@ const ProjectStartModal = ({
       setIsSubmitting(true);
       console.log("Submitting form data:", formData);
 
+      const projectData = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        company: formData.company,
+        project_type: formData.projectType,
+        description: formData.description,
+        timeline: formData.timeline,
+        pain_points: formData.pain_points || [],
+        complexity: formData.complexity,
+        team_size: formData.teamSize ? parseInt(formData.teamSize) : null,
+        budget_range: formData.budgetRange,
+        workforce_simulation_scope: formData.workforce_simulation_scope,
+        ai_agent_requirements: formData.ai_agent_requirements || []
+      };
+
       const { error: projectError } = await supabase
         .from('projects')
-        .insert([{
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          company: formData.company,
-          project_type: formData.projectType,
-          description: formData.description,
-          timeline: formData.timeline,
-          pain_points: formData.pain_points,
-          complexity: formData.complexity,
-          team_size: formData.teamSize,
-          budget_range: formData.budgetRange,
-        }]);
+        .insert(projectData);
 
       if (projectError) {
         console.error('Project submission error:', projectError);
@@ -77,13 +80,10 @@ const ProjectStartModal = ({
         description: "Your project details have been saved.",
       });
       
-      // Check if user is authenticated for dashboard navigation
       const { data: { session } } = await supabase.auth.getSession();
       
-      // Close the modal first
       onClose();
       
-      // Then navigate if user is authenticated
       if (session?.user) {
         navigate("/dashboard");
       }
