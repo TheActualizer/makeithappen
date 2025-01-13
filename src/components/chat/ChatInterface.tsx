@@ -161,7 +161,7 @@ const ChatInterface = () => {
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
         <Button
-          className="fixed top-4 right-4 h-12 w-12 rounded-full shadow-lg z-50"
+          className="fixed bottom-4 right-4 h-12 w-12 rounded-full shadow-lg"
           size="icon"
         >
           <MessageCircle className="h-6 w-6" />
