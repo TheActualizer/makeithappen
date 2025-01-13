@@ -45,6 +45,12 @@ const ProjectStartModal = ({
     }
   };
 
+  const formatBudgetRange = (range: string | undefined) => {
+    if (!range) return null;
+    const [min, max] = range.split('-').map(Number);
+    return `[${min},${max}]`;
+  };
+
   const handleSubmit = async () => {
     try {
       setIsSubmitting(true);
@@ -61,10 +67,12 @@ const ProjectStartModal = ({
         pain_points: formData.pain_points || [],
         complexity: formData.complexity,
         team_size: formData.teamSize ? parseInt(formData.teamSize) : null,
-        budget_range: formData.budgetRange,
+        budget_range: formatBudgetRange(formData.budgetRange),
         workforce_simulation_scope: formData.workforce_simulation_scope,
         ai_agent_requirements: formData.ai_agent_requirements || []
       };
+
+      console.log("Formatted project data:", projectData);
 
       const { data, error } = await supabase
         .from('projects')
