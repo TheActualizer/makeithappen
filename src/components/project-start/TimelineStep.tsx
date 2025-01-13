@@ -8,36 +8,41 @@ interface TimelineStepProps {
 const TimelineStep = ({ formData, setFormData }: TimelineStepProps) => {
   const formatBudgetRange = (range: string | undefined) => {
     if (!range) return "Not specified";
-    const [min, max] = range.split('-').map(num => 
-      Number(num).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
-    );
-    return `${min} - ${max}`;
+    switch (range) {
+      case "under-10000":
+        return "Under $10,000";
+      case "10000-25000":
+        return "$10,000 - $25,000";
+      case "25000-50000":
+        return "$25,000 - $50,000";
+      case "50000-100000":
+        return "$50,000 - $100,000";
+      case "100000-200000":
+        return "$100,000 - $200,000";
+      case "200000+":
+        return "$200,000+";
+      default:
+        return "Not specified";
+    }
+  };
+
+  const formatTimeline = (timeline: string) => {
+    switch (timeline) {
+      case "asap":
+        return "As Soon As Possible";
+      case "1-3-months":
+        return "1-3 Months";
+      case "3-6-months":
+        return "3-6 Months";
+      case "6-plus-months":
+        return "6+ Months";
+      default:
+        return timeline;
+    }
   };
 
   return (
     <div className="space-y-4">
-      <div className="space-y-2">
-        <label htmlFor="timeline" className="text-sm font-medium">
-          Preferred Timeline
-        </label>
-        <select
-          id="timeline"
-          className="w-full rounded-md border border-input bg-background px-3 py-2"
-          value={formData.timeline}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              timeline: e.target.value as FormData["timeline"],
-            })
-          }
-        >
-          <option value="asap">As Soon As Possible</option>
-          <option value="1-3-months">1-3 Months</option>
-          <option value="3-6-months">3-6 Months</option>
-          <option value="6-plus-months">6+ Months</option>
-        </select>
-      </div>
-
       <div className="mt-6 p-6 bg-accent/20 rounded-lg space-y-6">
         <h4 className="font-medium text-lg">Project Summary</h4>
         
@@ -89,7 +94,7 @@ const TimelineStep = ({ formData, setFormData }: TimelineStepProps) => {
               </div>
               <div>
                 <dt className="font-medium">Project Timeline:</dt>
-                <dd className="capitalize">{formData.timeline.replace(/-/g, ' ') || "Not specified"}</dd>
+                <dd>{formatTimeline(formData.timeline)}</dd>
               </div>
             </dl>
           </section>

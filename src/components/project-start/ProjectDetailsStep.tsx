@@ -18,7 +18,8 @@ import {
   Megaphone,
   Scale,
   UserCog,
-  Workflow
+  Workflow,
+  Calendar
 } from "lucide-react";
 
 const serviceTypes = [
@@ -46,6 +47,13 @@ const teamSizes = [
   { value: "6-10", label: "6-10 members" },
   { value: "11-20", label: "11-20 members" },
   { value: "20+", label: "20+ members" }
+];
+
+const timelineOptions = [
+  { value: "asap", label: "As Soon As Possible" },
+  { value: "1-3-months", label: "1-3 Months" },
+  { value: "3-6-months", label: "3-6 Months" },
+  { value: "6-plus-months", label: "6+ Months" }
 ];
 
 interface ProjectDetailsStepProps {
@@ -135,6 +143,27 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
                   onClick={() => setFormData({ ...formData, teamSize: size.value })}
                 >
                   {size.label}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          <Separator />
+
+          <div className="space-y-4">
+            <label className="text-sm font-medium flex items-center gap-2">
+              <Calendar className="w-4 h-4" />
+              Preferred Timeline
+            </label>
+            <div className="grid grid-cols-2 gap-3">
+              {timelineOptions.map((option) => (
+                <Button
+                  key={option.value}
+                  variant={formData.timeline === option.value ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setFormData({ ...formData, timeline: option.value })}
+                >
+                  {option.label}
                 </Button>
               ))}
             </div>
