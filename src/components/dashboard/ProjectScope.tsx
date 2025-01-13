@@ -21,6 +21,10 @@ interface Project {
   status?: 'active' | 'completed' | 'on_hold' | 'planning';
   priority?: 'high' | 'medium' | 'low';
   last_updated?: string;
+  actual_cost?: number;
+  estimated_cost?: number;
+  budget_spent?: number;
+  budget_remaining?: number;
 }
 
 export const ProjectScope = () => {

@@ -107,7 +107,7 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
                   )}
                   <span className="flex-1 font-medium">{milestone.title}</span>
                   <Badge
-                    variant={milestone.status === "completed" ? "success" : "default"}
+                    variant={milestone.status === "completed" ? "secondary" : "default"}
                   >
                     {milestone.status}
                   </Badge>
