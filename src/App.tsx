@@ -7,6 +7,7 @@ import TransformativeAccounting from "./pages/blog/TransformativeAccounting";
 import TransformativeCaseStudies from "./pages/blog/TransformativeCaseStudies";
 import GDPRCompliance from "./pages/blog/GDPRCompliance";
 import AITrends from "./pages/blog/AITrends";
+import TransformativeCRM from "./pages/blog/TransformativeCRM";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
       <Route path="/blog/transformative-case-studies" element={<TransformativeCaseStudies />} />
       <Route path="/blog/gdpr-compliance" element={<GDPRCompliance />} />
       <Route path="/blog/ai-trends" element={<AITrends />} />
+      <Route path="/blog/transformative-crm" element={<TransformativeCRM />} />
     </Routes>
   );
 };
