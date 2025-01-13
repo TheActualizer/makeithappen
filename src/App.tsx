@@ -14,6 +14,7 @@ import Login from "./pages/Login";
 import Services from "./pages/Services";
 import CaseStudies from "./pages/CaseStudies";
 import ProfileSettings from "./pages/settings/ProfileSettings";
+import ResetPassword from "./pages/ResetPassword";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/settings/profile" element={<ProfileSettings />} />
             <Route path="/settings/preferences" element={<div>Preferences (Coming Soon)</div>} />
             <Route path="/settings/notifications" element={<div>Notifications (Coming Soon)</div>} />
