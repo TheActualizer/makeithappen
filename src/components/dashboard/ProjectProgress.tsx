@@ -4,10 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { LayoutGrid } from "lucide-react";
+import { LayoutGrid, RefreshCw } from "lucide-react";
 import { KanbanBoard } from "./project-progress/KanbanBoard";
 import { TimelineView } from "./project-progress/TimelineView";
 import { Sprint, Task, Milestone } from "../../types/project";
+import { Button } from "@/components/ui/button";
 
 interface ProjectProgressProps {
   projectId?: string;
@@ -18,56 +19,88 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
   const [sprints, setSprints] = useState<Sprint[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
   const [view, setView] = useState<'timeline' | 'kanban'>('kanban');
   const [activeSprintId, setActiveSprintId] = useState<string | null>(null);
   const { toast } = useToast();
 
-  useEffect(() => {
+  const syncWithAirtable = async () => {
+    if (!projectId) return;
+    
+    setSyncing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('airtable-sync', {
+        body: { projectId, operation: 'sync' }
+      });
+
+      if (error) throw error;
+
+      console.log('Airtable sync response:', data);
+      toast({
+        title: "Sync Complete",
+        description: "Project progress has been synced with Airtable",
+      });
+
+      // Refresh local data after sync
+      await fetchProjectData();
+    } catch (error) {
+      console.error('Error syncing with Airtable:', error);
+      toast({
+        title: "Sync Failed",
+        description: "Failed to sync with Airtable. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  const fetchProjectData = async () => {
     if (!projectId) return;
 
-    const fetchProjectData = async () => {
-      try {
-        const [milestonesData, sprintsData, tasksData] = await Promise.all([
-          supabase
-            .from("milestones")
-            .select("*")
-            .eq("project_id", projectId)
-            .order("created_at", { ascending: true }),
-          supabase
-            .from("sprints")
-            .select("*, tasks(*)")
-            .eq("project_id", projectId)
-            .order("start_date", { ascending: true }),
-          supabase
-            .from("tasks")
-            .select("*")
-            .eq("sprint_id", projectId)
-            .order("created_at", { ascending: true })
-        ]);
+    try {
+      const [milestonesData, sprintsData, tasksData] = await Promise.all([
+        supabase
+          .from("milestones")
+          .select("*")
+          .eq("project_id", projectId)
+          .order("created_at", { ascending: true }),
+        supabase
+          .from("sprints")
+          .select("*, tasks(*)")
+          .eq("project_id", projectId)
+          .order("start_date", { ascending: true }),
+        supabase
+          .from("tasks")
+          .select("*")
+          .eq("sprint_id", projectId)
+          .order("created_at", { ascending: true })
+      ]);
 
-        if (milestonesData.error) throw milestonesData.error;
-        if (sprintsData.error) throw sprintsData.error;
-        if (tasksData.error) throw tasksData.error;
+      if (milestonesData.error) throw milestonesData.error;
+      if (sprintsData.error) throw sprintsData.error;
+      if (tasksData.error) throw tasksData.error;
 
-        setMilestones(milestonesData.data || []);
-        setSprints(sprintsData.data || []);
-        setTasks(tasksData.data || []);
-        
-        if (sprintsData.data && sprintsData.data.length > 0) {
-          setActiveSprintId(sprintsData.data[0].id);
-        }
-      } catch (error) {
-        console.error("Error fetching project data:", error);
-        toast({
-          title: "Error",
-          description: "Failed to load project progress data",
-          variant: "destructive",
-        });
-      } finally {
-        setLoading(false);
+      setMilestones(milestonesData.data || []);
+      setSprints(sprintsData.data || []);
+      setTasks(tasksData.data || []);
+      
+      if (sprintsData.data && sprintsData.data.length > 0) {
+        setActiveSprintId(sprintsData.data[0].id);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching project data:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load project progress data",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchProjectData();
   }, [projectId, toast]);
 
@@ -85,6 +118,19 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
         .eq('id', draggableId);
 
       if (error) throw error;
+
+      // Update Airtable after successful Supabase update
+      await supabase.functions.invoke('airtable-sync', {
+        body: {
+          operation: 'update',
+          data: {
+            recordId: draggableId,
+            fields: {
+              Status: destination.droppableId
+            }
+          }
+        }
+      });
 
       setTasks(tasks.map(task => 
         task.id === draggableId 
@@ -120,22 +166,34 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-end space-x-2 mb-4">
-        <Badge 
-          variant={view === 'timeline' ? 'default' : 'outline'}
-          className="cursor-pointer"
-          onClick={() => setView('timeline')}
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex space-x-2">
+          <Badge 
+            variant={view === 'timeline' ? 'default' : 'outline'}
+            className="cursor-pointer"
+            onClick={() => setView('timeline')}
+          >
+            Timeline
+          </Badge>
+          <Badge 
+            variant={view === 'kanban' ? 'default' : 'outline'}
+            className="cursor-pointer"
+            onClick={() => setView('kanban')}
+          >
+            <LayoutGrid className="w-4 h-4 mr-1" />
+            Kanban
+          </Badge>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={syncWithAirtable}
+          disabled={syncing}
+          className="flex items-center gap-2"
         >
-          Timeline
-        </Badge>
-        <Badge 
-          variant={view === 'kanban' ? 'default' : 'outline'}
-          className="cursor-pointer"
-          onClick={() => setView('kanban')}
-        >
-          <LayoutGrid className="w-4 h-4 mr-1" />
-          Kanban
-        </Badge>
+          <RefreshCw className={`h-4 w-4 ${syncing ? 'animate-spin' : ''}`} />
+          {syncing ? 'Syncing...' : 'Sync with Airtable'}
+        </Button>
       </div>
 
       {view === 'kanban' ? (
