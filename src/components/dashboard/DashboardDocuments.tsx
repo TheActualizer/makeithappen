@@ -13,9 +13,33 @@ import {
 } from "@/components/ui/table";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
+import { Pencil, Trash2, Eye, X, Check } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface DashboardDocumentsProps {
   isAdmin?: boolean;
+}
+
+interface DocumentRow {
+  id: string;
+  title: string;
+  description: string | null;
+  notes: string | null;
+  file_path: string | null;
+  file_type: string | null;
+  created_at: string;
+}
+
+interface EditingDocument {
+  id: string;
+  title: string;
+  description: string;
+  notes: string;
 }
 
 export const DashboardDocuments = ({ isAdmin }: DashboardDocumentsProps) => {
@@ -23,6 +47,8 @@ export const DashboardDocuments = ({ isAdmin }: DashboardDocumentsProps) => {
   const [description, setDescription] = useState("");
   const [notes, setNotes] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [viewingDocument, setViewingDocument] = useState<string | null>(null);
+  const [editingDocument, setEditingDocument] = useState<EditingDocument | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -42,7 +68,7 @@ export const DashboardDocuments = ({ isAdmin }: DashboardDocumentsProps) => {
 
       const { data, error } = await query;
       if (error) throw error;
-      return data;
+      return data as DocumentRow[];
     },
   });
 
@@ -53,7 +79,6 @@ export const DashboardDocuments = ({ isAdmin }: DashboardDocumentsProps) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
-      // Upload file to Supabase Storage
       const fileExt = file.name.split('.').pop();
       const fileName = `${crypto.randomUUID()}.${fileExt}`;
       const filePath = `${user.id}/${fileName}`;
@@ -64,7 +89,6 @@ export const DashboardDocuments = ({ isAdmin }: DashboardDocumentsProps) => {
 
       if (uploadError) throw uploadError;
 
-      // Create document record in the database
       const { error: dbError } = await supabase
         .from('documents')
         .insert({
@@ -100,9 +124,115 @@ export const DashboardDocuments = ({ isAdmin }: DashboardDocumentsProps) => {
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: async (documentId: string) => {
+      const document = documents?.find(d => d.id === documentId);
+      if (!document?.file_path) throw new Error("Document not found");
+
+      // Delete the file from storage
+      const { error: storageError } = await supabase.storage
+        .from('documents')
+        .remove([document.file_path]);
+
+      if (storageError) throw storageError;
+
+      // Delete the database record
+      const { error: dbError } = await supabase
+        .from('documents')
+        .delete()
+        .eq('id', documentId);
+
+      if (dbError) throw dbError;
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Document deleted successfully",
+      });
+      queryClient.invalidateQueries({ queryKey: ["dashboard-documents"] });
+    },
+    onError: (error) => {
+      console.error("Delete error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete document",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async (document: EditingDocument) => {
+      const { error } = await supabase
+        .from('documents')
+        .update({
+          title: document.title,
+          description: document.description,
+          notes: document.notes,
+        })
+        .eq('id', document.id);
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Document updated successfully",
+      });
+      setEditingDocument(null);
+      queryClient.invalidateQueries({ queryKey: ["dashboard-documents"] });
+    },
+    onError: (error) => {
+      console.error("Update error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update document",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     uploadMutation.mutate();
+  };
+
+  const handleView = async (filePath: string) => {
+    const { data: { publicUrl }, error } = await supabase.storage
+      .from('documents')
+      .getPublicUrl(filePath);
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to get document URL",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setViewingDocument(publicUrl);
+  };
+
+  const handleDelete = (id: string) => {
+    if (window.confirm("Are you sure you want to delete this document?")) {
+      deleteMutation.mutate(id);
+    }
+  };
+
+  const handleEdit = (document: DocumentRow) => {
+    setEditingDocument({
+      id: document.id,
+      title: document.title,
+      description: document.description || "",
+      notes: document.notes || "",
+    });
+  };
+
+  const handleSaveEdit = () => {
+    if (editingDocument) {
+      updateMutation.mutate(editingDocument);
+    }
   };
 
   return (
@@ -160,24 +290,101 @@ export const DashboardDocuments = ({ isAdmin }: DashboardDocumentsProps) => {
               <TableHead>Notes</TableHead>
               <TableHead>File Type</TableHead>
               <TableHead>Date</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center">
+                <TableCell colSpan={6} className="text-center">
                   Loading...
                 </TableCell>
               </TableRow>
             ) : (
               documents?.map((doc) => (
                 <TableRow key={doc.id}>
-                  <TableCell>{doc.title}</TableCell>
-                  <TableCell>{doc.description}</TableCell>
-                  <TableCell>{doc.notes}</TableCell>
+                  <TableCell>
+                    {editingDocument?.id === doc.id ? (
+                      <Input
+                        value={editingDocument.title}
+                        onChange={(e) => setEditingDocument({
+                          ...editingDocument,
+                          title: e.target.value,
+                        })}
+                      />
+                    ) : doc.title}
+                  </TableCell>
+                  <TableCell>
+                    {editingDocument?.id === doc.id ? (
+                      <Input
+                        value={editingDocument.description}
+                        onChange={(e) => setEditingDocument({
+                          ...editingDocument,
+                          description: e.target.value,
+                        })}
+                      />
+                    ) : doc.description}
+                  </TableCell>
+                  <TableCell>
+                    {editingDocument?.id === doc.id ? (
+                      <Input
+                        value={editingDocument.notes}
+                        onChange={(e) => setEditingDocument({
+                          ...editingDocument,
+                          notes: e.target.value,
+                        })}
+                      />
+                    ) : doc.notes}
+                  </TableCell>
                   <TableCell>{doc.file_type}</TableCell>
                   <TableCell>
                     {new Date(doc.created_at).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell className="space-x-2">
+                    {editingDocument?.id === doc.id ? (
+                      <>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={handleSaveEdit}
+                          disabled={updateMutation.isPending}
+                        >
+                          <Check className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setEditingDocument(null)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => doc.file_path && handleView(doc.file_path)}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleEdit(doc)}
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleDelete(doc.id)}
+                          disabled={deleteMutation.isPending}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </>
+                    )}
                   </TableCell>
                 </TableRow>
               ))
@@ -185,6 +392,21 @@ export const DashboardDocuments = ({ isAdmin }: DashboardDocumentsProps) => {
           </TableBody>
         </Table>
       </Card>
+
+      <Dialog open={!!viewingDocument} onOpenChange={() => setViewingDocument(null)}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>Document Preview</DialogTitle>
+          </DialogHeader>
+          {viewingDocument && (
+            <iframe
+              src={viewingDocument}
+              className="w-full h-[600px]"
+              title="Document Preview"
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
