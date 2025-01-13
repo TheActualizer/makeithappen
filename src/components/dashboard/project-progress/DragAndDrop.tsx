@@ -1,3 +1,4 @@
+import { supabase } from "@/integrations/supabase/client";
 import { Task } from "@/types/project";
 
 export const handleDragEnd = async (result: any, tasks: Task[]) => {
@@ -7,7 +8,6 @@ export const handleDragEnd = async (result: any, tasks: Task[]) => {
   const taskId = result.draggableId;
   const newStatus = destination.droppableId;
 
-  // Update task status in the database
   try {
     const { error } = await supabase
       .from('tasks')
@@ -16,7 +16,6 @@ export const handleDragEnd = async (result: any, tasks: Task[]) => {
 
     if (error) throw error;
 
-    // Update local state
     const updatedTasks = tasks.map(task => 
       task.id === taskId ? { ...task, status: newStatus } : task
     );

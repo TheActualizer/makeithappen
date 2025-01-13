@@ -1,6 +1,6 @@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Card } from "@/components/ui/card";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, BarChart, FileText, Activity, Calendar, MessageSquare, DollarSign, Users } from "lucide-react";
 import { DashboardStats } from "./DashboardStats";
 import { DashboardDocuments } from "./DashboardDocuments";
 import { ProjectScope } from "./ProjectScope";
@@ -9,7 +9,6 @@ import { DashboardCalendar } from "./DashboardCalendar";
 import { DashboardActivity } from "./DashboardActivity";
 import { FinancialMetrics } from "./FinancialMetrics";
 import { renderSectionHeader } from "./utils/renderSectionHeader";
-import { BarChart, FileText, Activity } from "lucide-react";
 
 interface DashboardSectionsProps {
   isAdmin: boolean;
@@ -125,3 +124,4 @@ export const DashboardSections = ({
     </div>
   );
 };
+
