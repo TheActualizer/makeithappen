@@ -1,19 +1,13 @@
 import { Card } from "@/components/ui/card";
-import { Calendar } from "@/components/ui/calendar";
-import { useState } from "react";
+import CalendlyEmbed from "../CalendlyEmbed";
 
 export const DashboardCalendar = () => {
-  const [date, setDate] = useState<Date | undefined>(new Date());
-
   return (
     <Card className="p-6">
-      <h2 className="text-2xl font-semibold mb-4">Calendar Overview</h2>
-      <div className="flex justify-center">
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={setDate}
-          className="rounded-md border"
+      <h2 className="text-2xl font-semibold mb-4">Schedule a Meeting</h2>
+      <div className="h-[600px]">
+        <CalendlyEmbed 
+          url="https://calendly.com/belchonen18/30min"
         />
       </div>
     </Card>
