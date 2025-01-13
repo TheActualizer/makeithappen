@@ -15,6 +15,7 @@ import Services from "./pages/Services";
 import CaseStudies from "./pages/CaseStudies";
 import ProfileSettings from "./pages/settings/ProfileSettings";
 import ResetPassword from "./pages/ResetPassword";
+import { FinancialMetrics } from "./components/dashboard/FinancialMetrics";
 
 const queryClient = new QueryClient();
 
@@ -35,7 +36,14 @@ const App = () => (
             <Route path="/dashboard/calendar" element={<div>Calendar (Coming Soon)</div>} />
             <Route path="/dashboard/messages" element={<div>Messages (Coming Soon)</div>} />
             <Route path="/dashboard/documents" element={<div>Documents (Coming Soon)</div>} />
-            <Route path="/dashboard/financials" element={<div>Financial Metrics (Coming Soon)</div>} />
+            <Route path="/dashboard/financials" element={
+              <div className="min-h-screen bg-background">
+                <div className="container mx-auto py-8">
+                  <h1 className="text-3xl font-bold mb-8">Financial Metrics</h1>
+                  <FinancialMetrics />
+                </div>
+              </div>
+            } />
             <Route path="/dashboard/progress" element={<div>Project Progress (Coming Soon)</div>} />
             <Route path="/dashboard/scope" element={<div>Project Scope (Coming Soon)</div>} />
             <Route path="/blog" element={<Blog />} />
