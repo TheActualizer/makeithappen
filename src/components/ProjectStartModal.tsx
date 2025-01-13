@@ -134,11 +134,36 @@ const ProjectStartModal = ({
 
   const renderStep = () => {
     if (showCalendly) {
-      const meetingPrep = `Project Type: ${formData.projectType.join(', ')}\n\n` +
-        `Description: ${formData.description}\n\n` +
-        `Timeline: ${formData.timeline}\n\n` +
-        `Digital Workforce Scope: ${formData.workforce_simulation_scope || 'Not specified'}\n\n` +
-        `AI Requirements: ${formData.ai_agent_requirements?.join(', ') || 'Not specified'}`;
+      const formatArrayOrDefault = (arr?: string[] | null, defaultText: string = 'None specified') => 
+        arr && arr.length > 0 ? arr.join(', ') : defaultText;
+
+      const getBudgetRangeText = (range?: string) => {
+        if (!range) return 'Not specified';
+        const matches = range.match(/\d+/g);
+        if (!matches) return range;
+        return range === "under-10000" ? "Under $10,000" :
+               range === "200000+" ? "$200,000+" :
+               `$${matches[0]},000 - $${matches[1]},000`;
+      };
+
+      const meetingPrep = `Project Overview:
+Type of Services: ${formatArrayOrDefault(formData.projectType)}
+
+Project Description:
+${formData.description || 'Not provided'}
+
+Timeline & Budget:
+- Preferred Timeline: ${formData.timeline}
+- Budget Range: ${getBudgetRangeText(formData.budgetRange)}
+- Team Size: ${formData.teamSize || 'Not specified'}
+
+Technical Requirements:
+- Digital Workforce Scope: ${formData.workforce_simulation_scope || 'Not specified'}
+- AI Agent Requirements: ${formatArrayOrDefault(formData.ai_agent_requirements)}
+
+Additional Context:
+- Company: ${formData.company || 'Not provided'}
+- Pain Points: ${formatArrayOrDefault(formData.pain_points)}`;
 
       return (
         <div className="space-y-4">
