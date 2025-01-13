@@ -150,7 +150,7 @@ const ProjectStartModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleModalClose}>
-      <DialogContent className="sm:max-w-[800px]">
+      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {showCalendly ? "Schedule a Consultation" : "Project Intake Form"}
@@ -165,7 +165,7 @@ const ProjectStartModal = ({
           {!showCalendly && <ProgressSteps currentStep={step} />}
           <div className={!showCalendly ? "mt-16" : ""}>{renderStep()}</div>
           {!showCalendly && (
-            <div className="flex justify-between mt-8">
+            <div className="flex justify-between mt-8 sticky bottom-0 bg-background py-4">
               <Button
                 variant="outline"
                 onClick={handleBack}
