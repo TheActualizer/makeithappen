@@ -9,12 +9,10 @@ import { KanbanBoard } from "./project-progress/KanbanBoard";
 import { TimelineView } from "./project-progress/TimelineView";
 import { Sprint, Task, Milestone } from "../../types/project";
 import { Button } from "@/components/ui/button";
+import { useParams } from "react-router-dom";
 
-interface ProjectProgressProps {
-  projectId?: string;
-}
-
-export function ProjectProgress({ projectId }: ProjectProgressProps) {
+export function ProjectProgress() {
+  const { projectId } = useParams();
   const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [sprints, setSprints] = useState<Sprint[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -24,7 +22,8 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
   const [activeSprintId, setActiveSprintId] = useState<string | null>(null);
   const { toast } = useToast();
 
-  // Move Airtable functions to the top for better visibility
+  console.log("ProjectProgress component mounted, projectId:", projectId);
+
   const createAirtableBase = async () => {
     try {
       const { data, error } = await supabase.functions.invoke('airtable-sync', {
@@ -80,8 +79,13 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
   };
 
   const fetchProjectData = async () => {
-    if (!projectId) return;
+    if (!projectId) {
+      console.log("No projectId available, skipping data fetch");
+      setLoading(false);
+      return;
+    }
 
+    console.log("Fetching project data for projectId:", projectId);
     try {
       const [milestonesData, sprintsData, tasksData] = await Promise.all([
         supabase
@@ -97,13 +101,15 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
         supabase
           .from("tasks")
           .select("*")
-          .eq("sprint_id", projectId)
+          .eq("project_id", projectId)
           .order("created_at", { ascending: true })
       ]);
 
       if (milestonesData.error) throw milestonesData.error;
       if (sprintsData.error) throw sprintsData.error;
       if (tasksData.error) throw tasksData.error;
+
+      console.log("Fetched data:", { milestonesData, sprintsData, tasksData });
 
       setMilestones(milestonesData.data || []);
       setSprints(sprintsData.data || []);
@@ -125,64 +131,9 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
   };
 
   useEffect(() => {
+    console.log("ProjectProgress useEffect triggered");
     fetchProjectData();
   }, [projectId]);
-
-  const handleDragEnd = async (result: any) => {
-    if (!result.destination) return;
-
-    const { source, destination, draggableId } = result;
-    
-    if (source.droppableId === destination.droppableId) return;
-
-    try {
-      const { error } = await supabase
-        .from('tasks')
-        .update({ status: destination.droppableId })
-        .eq('id', draggableId);
-
-      if (error) throw error;
-
-      // Update Airtable after successful Supabase update
-      await supabase.functions.invoke('airtable-sync', {
-        body: {
-          operation: 'update',
-          data: {
-            recordId: draggableId,
-            fields: {
-              Status: destination.droppableId
-            }
-          }
-        }
-      });
-
-      setTasks(tasks.map(task => 
-        task.id === draggableId 
-          ? { ...task, status: destination.droppableId }
-          : task
-      ));
-
-      toast({
-        title: "Task Updated",
-        description: "Task status has been updated successfully",
-      });
-    } catch (error) {
-      console.error('Error updating task:', error);
-      toast({
-        title: "Error",
-        description: "Failed to update task status",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const calculateProgress = (items: any[], statusField: string = "status") => {
-    if (!items.length) return 0;
-    const completed = items.filter(
-      (item) => item[statusField] === "completed"
-    ).length;
-    return Math.round((completed / items.length) * 100);
-  };
 
   if (loading) {
     return (
@@ -197,36 +148,41 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
   return (
     <div className="space-y-6 p-4">
       {/* Prominent Airtable Integration Section */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 shadow-sm">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            <h2 className="text-xl font-semibold text-blue-900">Airtable Integration</h2>
-            <p className="text-sm text-blue-700 mt-1">
-              Connect and sync your project data with Airtable
-            </p>
+      <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 shadow-sm">
+        <CardHeader>
+          <CardTitle className="text-xl text-blue-900">Project Progress</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-semibold text-blue-900">Airtable Integration</h2>
+              <p className="text-sm text-blue-700 mt-1">
+                Connect and sync your project data with Airtable
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button
+                size="lg"
+                onClick={createAirtableBase}
+                className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 min-w-[200px]"
+              >
+                <Plus className="h-5 w-5" />
+                Create Airtable Base
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={syncWithAirtable}
+                disabled={syncing}
+                className="border-blue-300 text-blue-700 hover:bg-blue-50 flex items-center gap-2 min-w-[200px]"
+              >
+                <RefreshCw className={`h-5 w-5 ${syncing ? 'animate-spin' : ''}`} />
+                {syncing ? 'Syncing...' : 'Sync with Airtable'}
+              </Button>
+            </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button
-              size="lg"
-              onClick={createAirtableBase}
-              className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
-            >
-              <Plus className="h-5 w-5" />
-              Create Airtable Base
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={syncWithAirtable}
-              disabled={syncing}
-              className="border-blue-300 text-blue-700 hover:bg-blue-50 flex items-center gap-2"
-            >
-              <RefreshCw className={`h-5 w-5 ${syncing ? 'animate-spin' : ''}`} />
-              {syncing ? 'Syncing...' : 'Sync with Airtable'}
-            </Button>
-          </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       {/* View Toggle Section */}
       <div className="flex justify-between items-center">
