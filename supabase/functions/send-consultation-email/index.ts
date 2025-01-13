@@ -19,20 +19,25 @@ interface ConsultationRequest {
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  console.log("Handling consultation email request");
+  console.log("========== CONSULTATION EMAIL FUNCTION START ==========");
+  console.log("Request method:", req.method);
+  console.log("Request headers:", Object.fromEntries(req.headers.entries()));
 
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
+    console.log("Handling CORS preflight request");
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const consultation: ConsultationRequest = await req.json();
-    console.log("Received consultation data:", consultation);
-
     if (!RESEND_API_KEY) {
+      console.error("RESEND_API_KEY is not configured");
       throw new Error("RESEND_API_KEY is not configured");
     }
+
+    console.log("\n========== PARSING REQUEST BODY ==========");
+    const consultation: ConsultationRequest = await req.json();
+    console.log("Parsed consultation data:", consultation);
 
     // Email template for customer
     const customerEmailHtml = `
@@ -71,6 +76,9 @@ const handler = async (req: Request): Promise<Response> => {
       <p><strong>Description:</strong> ${consultation.description}</p>
     `;
 
+    console.log("\n========== SENDING CUSTOMER EMAIL ==========");
+    console.log("Customer email template:", customerEmailHtml);
+    
     // Send email to customer
     const customerRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -86,6 +94,14 @@ const handler = async (req: Request): Promise<Response> => {
       }),
     });
 
+    console.log("Customer email response status:", customerRes.status);
+    console.log("Customer email response headers:", Object.fromEntries(customerRes.headers.entries()));
+    const customerEmailData = await customerRes.json();
+    console.log("Customer email response data:", customerEmailData);
+
+    console.log("\n========== SENDING ADMIN EMAIL ==========");
+    console.log("Admin email template:", adminEmailHtml);
+    
     // Send copy to admin
     const adminRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -101,32 +117,47 @@ const handler = async (req: Request): Promise<Response> => {
       }),
     });
 
+    console.log("Admin email response status:", adminRes.status);
+    console.log("Admin email response headers:", Object.fromEntries(adminRes.headers.entries()));
+    const adminEmailData = await adminRes.json();
+    console.log("Admin email response data:", adminEmailData);
+
     if (!customerRes.ok || !adminRes.ok) {
       const error = await customerRes.text();
       console.error("Resend API error:", error);
-      return new Response(
-        JSON.stringify({ error: "Failed to send emails" }), 
-        { 
-          status: 500,
-          headers: { ...corsHeaders, "Content-Type": "application/json" } 
-        }
-      );
+      throw new Error(`Failed to send emails: ${error}`);
     }
 
-    console.log("Emails sent successfully");
+    console.log("\n========== EMAIL SENDING COMPLETED ==========");
+    console.log("Both emails sent successfully");
+
     return new Response(
-      JSON.stringify({ success: true }), 
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({ success: true, message: "Emails sent successfully" }), 
+      { 
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" } 
+      }
     );
   } catch (error: any) {
-    console.error("Error in send-consultation-email function:", error);
+    console.error("\n========== ERROR IN CONSULTATION EMAIL FUNCTION ==========");
+    console.error("Error details:", {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+    });
+    
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: error.message,
+        details: error.stack,
+      }),
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       }
     );
+  } finally {
+    console.log("========== CONSULTATION EMAIL FUNCTION END ==========\n");
   }
 };
 

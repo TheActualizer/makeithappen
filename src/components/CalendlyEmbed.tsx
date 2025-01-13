@@ -22,7 +22,8 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
         const eventData = e.data.payload;
         
         // Comprehensive logging of the entire event data structure
-        console.log("========== CALENDLY EVENT DATA ==========");
+        console.log("\n========== CALENDLY EVENT SCHEDULING START ==========");
+        console.log("Raw event data:", e);
         console.log("Full event payload:", JSON.stringify(eventData, null, 2));
         console.log("Event type:", e.data.event);
         console.log("Event URI:", eventData.uri);
@@ -30,19 +31,24 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
         // Detailed logging of event details
         console.log("\n========== EVENT DETAILS ==========");
         console.log("Event:", {
-          type: eventData.event.type,
-          start_time: eventData.event.start_time,
-          end_time: eventData.event.end_time,
-          status: eventData.event.status,
+          type: eventData.event?.type,
+          start_time: eventData.event?.start_time,
+          end_time: eventData.event?.end_time,
+          status: eventData.event?.status,
+          calendar: eventData.event?.calendar,
+          scheduling_method: eventData.event?.scheduling_method,
         });
         
         // Invitee information logging
         console.log("\n========== INVITEE DETAILS ==========");
         console.log("Invitee:", {
-          name: eventData.invitee.name,
-          email: eventData.invitee.email,
-          timezone: eventData.invitee.timezone,
-          uuid: eventData.invitee.uuid,
+          name: eventData.invitee?.name,
+          email: eventData.invitee?.email,
+          timezone: eventData.invitee?.timezone,
+          uuid: eventData.invitee?.uuid,
+          text_reminder_number: eventData.invitee?.text_reminder_number,
+          cancel_url: eventData.invitee?.cancel_url,
+          reschedule_url: eventData.invitee?.reschedule_url,
         });
         
         // Detailed location/Zoom link extraction logging
@@ -53,6 +59,7 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
           const location = eventData.event.location;
           console.log("Raw location data:", location);
           console.log("Location data type:", typeof location);
+          console.log("Location stringified:", JSON.stringify(location, null, 2));
           
           if (typeof location === 'string') {
             console.log("Location is a string:", location);
@@ -94,6 +101,20 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
             if (location.data?.id) {
               console.log("Zoom Meeting ID found:", location.data.id);
             }
+            
+            // Log all nested properties
+            console.log("All nested location properties:");
+            const logNestedProperties = (obj: any, prefix = '') => {
+              for (const key in obj) {
+                if (typeof obj[key] === 'object' && obj[key] !== null) {
+                  console.log(`${prefix}${key}: [Object]`);
+                  logNestedProperties(obj[key], `${prefix}  `);
+                } else {
+                  console.log(`${prefix}${key}: ${obj[key]}`);
+                }
+              }
+            };
+            logNestedProperties(location);
           }
         } else {
           console.warn("No location data found in event");
@@ -109,35 +130,59 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
         // Additional event metadata logging
         console.log("\n========== ADDITIONAL METADATA ==========");
         console.log("Tracking:", eventData.tracking);
-        console.log("Custom questions:", prefill?.customAnswers);
+        console.log("Questions and Answers:", {
+          customAnswers: prefill?.customAnswers,
+          eventQuestions: eventData.questions_and_answers,
+        });
+        
+        // Prepare email notification data
+        const emailData = {
+          name: eventData.invitee.name,
+          email: eventData.invitee.email,
+          consultationDate: new Date(eventData.event.start_time).toLocaleDateString(),
+          consultationTime: new Date(eventData.event.start_time).toLocaleTimeString(),
+          projectType: prefill?.customAnswers?.a1 || "Not specified",
+          description: prefill?.customAnswers?.a3 || "No description provided",
+          zoomLink: zoomLink || "Will be provided in the Calendly confirmation email",
+          eventUri: eventData.uri
+        };
         
         // Send webhook to our edge function
         console.log("\n========== SENDING EMAIL NOTIFICATION ==========");
+        console.log("Email notification data being sent:", emailData);
+        
         fetch("/functions/send-consultation-email", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            name: eventData.invitee.name,
-            email: eventData.invitee.email,
-            consultationDate: new Date(eventData.event.start_time).toLocaleDateString(),
-            consultationTime: new Date(eventData.event.start_time).toLocaleTimeString(),
-            projectType: prefill?.customAnswers?.a1 || "Not specified",
-            description: prefill?.customAnswers?.a3 || "No description provided",
-            zoomLink: zoomLink || "Will be provided in the Calendly confirmation email",
-            eventUri: eventData.uri
-          }),
-        }).then(response => {
-          console.log("Email notification response:", response);
-          response.json().then(data => {
-            console.log("Email notification response data:", data);
-          }).catch(error => {
+          body: JSON.stringify(emailData),
+        }).then(async response => {
+          console.log("Email notification response status:", response.status);
+          console.log("Email notification response headers:", Object.fromEntries(response.headers.entries()));
+          
+          try {
+            const responseData = await response.json();
+            console.log("Email notification response data:", responseData);
+            
+            if (!response.ok) {
+              console.error("Email notification failed:", responseData);
+            } else {
+              console.log("Email notification sent successfully:", responseData);
+            }
+          } catch (error) {
             console.error("Error parsing email notification response:", error);
-          });
+          }
         }).catch(error => {
           console.error("Error sending email notification:", error);
+          console.error("Error details:", {
+            name: error.name,
+            message: error.message,
+            stack: error.stack,
+          });
         });
+        
+        console.log("========== CALENDLY EVENT SCHEDULING END ==========\n");
       }
     };
 
