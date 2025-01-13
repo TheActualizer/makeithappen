@@ -1,121 +1,153 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { ArrowRight, Bot, Brain, Stethoscope, Video } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
+import Navbar from "@/components/Navbar";
 
 const Blog = () => {
-  const blogs = [
+  const navigate = useNavigate();
+
+  const featuredArticles = [
     {
-      title: "Intelligent Chatbots: The Future of Customer Interaction",
-      description: "Discover how AI-powered chatbots are revolutionizing customer service and business operations through intelligent conversation and seamless system integration.",
-      link: "/blog/intelligent-chatbots",
-      category: "AI Technology",
-      readTime: "5 min read",
+      title: "The Future of Content Creation",
+      description: "Discover how AI is revolutionizing content creation and distribution across social media and entertainment platforms.",
+      icon: <Video className="h-8 w-8 text-primary" />,
+      link: "/blog/ai-trends"
     },
     {
-      title: "Agentic Systems: Redefining Autonomy in Business",
-      description: "Explore how autonomous AI agents can revolutionize processes and disrupt entire industries.",
-      link: "/blog/agentic-systems",
-      category: "AI Technology",
-      readTime: "6 min read",
+      title: "Transforming Financial Operations",
+      description: "Discover how AI-powered accounting systems are revolutionizing financial operations through intelligent automation.",
+      icon: <Bot className="h-8 w-8 text-primary" />,
+      link: "/blog/transformative-accounting"
     },
     {
-      title: "Next-Generation Web Scraping",
-      description: "Discover how intelligent research and data collection systems are transforming how organizations gather and process information.",
-      link: "/blog/intelligent-scraping",
-      category: "AI Technology",
-      readTime: "7 min read",
-    },
-    {
-      title: "Transformative CRM Systems",
-      description: "Learn how AI-powered CRM systems are revolutionizing customer relationship management with intelligent automation.",
-      link: "/blog/transformative-crm",
-      category: "Business Technology",
-      readTime: "6 min read",
-    },
-    {
-      title: "Healthcare Technology & FHIR",
-      description: "Explore how modern healthcare systems leverage FHIR protocols and AI for better patient care.",
-      link: "/blog/healthcare-tech",
-      category: "Healthcare",
-      readTime: "5 min read",
-    },
-    {
-      title: "GDPR Compliance & Open Source AI",
-      description: "Understanding how to maintain GDPR compliance while leveraging open source AI solutions.",
-      link: "/blog/gdpr-compliance",
-      category: "Compliance",
-      readTime: "6 min read",
-    },
-    {
-      title: "AI Trends in Content Creation",
-      description: "Discover how AI is transforming content creation and social media management.",
-      link: "/blog/ai-trends",
-      category: "Content",
-      readTime: "5 min read",
-    },
-    {
-      title: "Case Studies in AI Transformation",
-      description: "Real-world examples of successful AI implementation across industries.",
-      link: "/blog/case-studies",
-      category: "Case Studies",
-      readTime: "8 min read",
-    },
-    {
-      title: "Transformative Accounting Systems",
-      description: "How AI is revolutionizing financial operations and accounting processes.",
-      link: "/blog/transformative-accounting",
-      category: "Finance",
-      readTime: "6 min read",
+      title: "Vector Databases & Memory",
+      description: "Explore how vector databases and advanced memory systems enhance AI precision and context.",
+      icon: <Brain className="h-8 w-8 text-primary" />,
+      link: "/blog/vector-memory"
     }
   ];
 
+  const categories = [
+    {
+      id: 1,
+      name: "AI Technology",
+      description: "Latest developments in artificial intelligence and machine learning",
+      slug: "ai-technology"
+    },
+    {
+      id: 2,
+      name: "Business Impact",
+      description: "How AI is transforming businesses and industries",
+      slug: "business-impact"
+    },
+    {
+      id: 3,
+      name: "Implementation",
+      description: "Practical guides and best practices for AI implementation",
+      slug: "implementation"
+    }
+  ];
+
+  const handleArticleClick = (link: string) => {
+    console.log('Navigating to:', link);
+    navigate(link);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-accent via-accent/95 to-primary/20 py-24">
-      <div className="container mx-auto px-4">
-        <motion.div
+    <div className="min-h-screen bg-gradient-to-b from-accent to-accent/95">
+      <Navbar />
+      <div className="container mx-auto px-4 pt-24 pb-12">
+        {/* Hero Section */}
+        <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-12"
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
         >
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-            Our Blog
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+            Latest Insights
           </h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Insights and updates from our team on AI technology, automation, and digital transformation.
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            Explore our latest articles on AI technology, implementation strategies, and success stories.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogs.map((blog, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <Link to={blog.link}>
-                <Card className="h-full bg-accent/40 backdrop-blur-sm border-accent/20 p-6 hover:bg-accent/50 transition-colors">
-                  <div className="flex flex-col h-full">
-                    <div className="flex justify-between items-start mb-4">
-                      <span className="text-sm text-primary bg-primary/10 px-3 py-1 rounded-full">
-                        {blog.category}
-                      </span>
-                      <span className="text-sm text-gray-400">{blog.readTime}</span>
+        {/* Featured Articles */}
+        <motion.section 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="mb-16"
+        >
+          <h2 className="text-2xl font-semibold text-white mb-8">Featured Articles</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredArticles.map((article, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.02 }}
+                className="h-full cursor-pointer"
+                onClick={() => handleArticleClick(article.link)}
+              >
+                <Card 
+                  className="h-full bg-accent-foreground/5 backdrop-blur-sm border-accent-foreground/10 hover:border-primary/50 transition-all duration-300"
+                >
+                  <div className="p-6 flex flex-col h-full">
+                    <div className="mb-4">
+                      {article.icon}
                     </div>
-                    <h2 className="text-xl font-semibold text-white mb-3">
-                      {blog.title}
-                    </h2>
-                    <p className="text-gray-300 flex-grow">
-                      {blog.description}
+                    <h3 className="text-xl font-semibold text-white mb-3">
+                      {article.title}
+                    </h3>
+                    <p className="text-gray-300 mb-6 flex-grow">
+                      {article.description}
                     </p>
+                    <Button
+                      variant="secondary"
+                      className="w-full group hover:bg-primary hover:text-white transition-all duration-300"
+                    >
+                      Read Article
+                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </Button>
                   </div>
                 </Card>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* Categories */}
+        <section>
+          <h2 className="text-2xl font-semibold text-white mb-8">Categories</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {categories.map((category) => (
+              <motion.div
+                key={category.id}
+                whileHover={{ scale: 1.02 }}
+                className="cursor-pointer"
+              >
+                <Card 
+                  className="bg-accent/40 backdrop-blur-sm border border-accent/20 hover:border-primary/50 transition-all duration-300"
+                  onClick={() => navigate(`/blog/category/${category.slug}`)}
+                >
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold text-white mb-2">{category.name}</h3>
+                    <p className="text-gray-300 mb-4">{category.description}</p>
+                    <Button
+                      variant="secondary"
+                      className="w-full group hover:bg-primary hover:text-white transition-all duration-300"
+                    >
+                      Explore {category.name}
+                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </div>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );

@@ -10,12 +10,6 @@ import { supabase } from "@/integrations/supabase/client";
 interface Conversation {
   id: string;
   title: string;
-  created_at: string;
-  created_by: string;
-  is_archived: boolean;
-  provider: "openai" | "dify" | "anthropic" | "google";
-  provider_conversation_id: string;
-  updated_at: string;
 }
 
 export const Messages = () => {
@@ -68,8 +62,9 @@ export const Messages = () => {
       {isAdmin && <MonitoringPanel />}
       <div className="flex h-[calc(100vh-12rem)] gap-4">
         <ConversationList
-          selectedConversationId={selectedConversation?.id || ''}
-          onSelect={handleSelectConversation}
+          conversations={conversationsData || []}
+          selectedConversation={selectedConversation}
+          onSelectConversation={handleSelectConversation}
         />
         <MessageArea
           messages={messagesData || []}
