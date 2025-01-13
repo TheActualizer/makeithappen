@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { LayoutGrid, RefreshCw } from "lucide-react";
+import { LayoutGrid, RefreshCw, Plus } from "lucide-react";
 import { KanbanBoard } from "./project-progress/KanbanBoard";
 import { TimelineView } from "./project-progress/TimelineView";
 import { Sprint, Task, Milestone } from "../../types/project";
@@ -46,12 +46,35 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
     } catch (error) {
       console.error('Error syncing with Airtable:', error);
       toast({
+        variant: "destructive",
         title: "Sync Failed",
         description: "Failed to sync with Airtable. Please try again.",
-        variant: "destructive",
       });
     } finally {
       setSyncing(false);
+    }
+  };
+
+  const createAirtableBase = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('airtable-sync', {
+        body: { operation: 'create_base' }
+      });
+
+      if (error) throw error;
+
+      console.log('Airtable base creation response:', data);
+      toast({
+        title: "Success",
+        description: "Airtable base has been created. You can now sync your project data.",
+      });
+    } catch (error) {
+      console.error('Error creating Airtable base:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to create Airtable base. Please try again.",
+      });
     }
   };
 
@@ -102,7 +125,7 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
 
   useEffect(() => {
     fetchProjectData();
-  }, [projectId, toast]);
+  }, [projectId]);
 
   const handleDragEnd = async (result: any) => {
     if (!result.destination) return;
@@ -160,38 +183,39 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
     return Math.round((completed / items.length) * 100);
   };
 
-  const createAirtableBase = async () => {
-    try {
-      const { data, error } = await supabase.functions.invoke('airtable-sync', {
-        body: { operation: 'create_base' }
-      });
-
-      if (error) throw error;
-
-      console.log('Airtable base creation response:', data);
-      toast({
-        title: "Airtable Base Created",
-        description: "Project progress tracking base has been created in Airtable",
-      });
-
-      // After base is created, sync the data
-      await syncWithAirtable();
-    } catch (error) {
-      console.error('Error creating Airtable base:', error);
-      toast({
-        title: "Error",
-        description: "Failed to create Airtable base. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
-
   if (loading) {
     return <div>Loading project progress...</div>;
   }
 
   return (
     <div className="space-y-6">
+      {/* Airtable Integration Section */}
+      <Card className="bg-muted/50">
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            <span>Airtable Integration</span>
+            <div className="flex gap-2">
+              <Button
+                onClick={createAirtableBase}
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Create Airtable Base
+              </Button>
+              <Button
+                variant="outline"
+                onClick={syncWithAirtable}
+                disabled={syncing}
+                className="flex items-center gap-2"
+              >
+                <RefreshCw className={`h-4 w-4 ${syncing ? 'animate-spin' : ''}`} />
+                {syncing ? 'Syncing...' : 'Sync with Airtable'}
+              </Button>
+            </div>
+          </CardTitle>
+        </CardHeader>
+      </Card>
+
       <div className="flex justify-between items-center mb-4">
         <div className="flex space-x-2">
           <Badge 
@@ -209,26 +233,6 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
             <LayoutGrid className="w-4 h-4 mr-1" />
             Kanban
           </Badge>
-        </div>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={createAirtableBase}
-            className="flex items-center gap-2"
-          >
-            Create Airtable Base
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={syncWithAirtable}
-            disabled={syncing}
-            className="flex items-center gap-2"
-          >
-            <RefreshCw className={`h-4 w-4 ${syncing ? 'animate-spin' : ''}`} />
-            {syncing ? 'Syncing...' : 'Sync with Airtable'}
-          </Button>
         </div>
       </div>
 
