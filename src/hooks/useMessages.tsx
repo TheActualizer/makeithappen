@@ -100,8 +100,19 @@ export const useMessages = () => {
         throw error;
       }
 
-      console.log('Messages fetched:', data);
-      setMessages(data || []);
+      // Ensure the data matches our Message type
+      const typedMessages: Message[] = (data || []).map(msg => ({
+        id: msg.id,
+        content: msg.content,
+        sender_id: msg.sender_id,
+        created_at: msg.created_at,
+        conversation_id: msg.conversation_id,
+        type: msg.type || 'text', // Provide default value
+        profiles: msg.profiles || null
+      }));
+
+      console.log('Messages fetched:', typedMessages);
+      setMessages(typedMessages);
     } catch (error) {
       console.error('Error in fetchMessages:', error);
       toast({

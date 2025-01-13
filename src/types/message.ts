@@ -11,7 +11,7 @@ export interface Message {
   sender_id: string | null;
   created_at: string;
   conversation_id?: string;
-  type?: 'text' | 'system' | 'ai';
+  type: 'text' | 'system' | 'ai';  // Made type required
   profiles?: Profile | null;
 }
 
