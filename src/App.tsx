@@ -19,12 +19,10 @@ import ResetPassword from "./pages/ResetPassword";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
+  <QueryClientProvider client={queryClient}>
+    <BrowserRouter>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+        <React.StrictMode>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/services" element={<Services />} />
@@ -40,10 +38,12 @@ const App = () => (
             <Route path="/settings/preferences" element={<div>Preferences (Coming Soon)</div>} />
             <Route path="/settings/notifications" element={<div>Notifications (Coming Soon)</div>} />
           </Routes>
-        </BrowserRouter>
+          <Toaster />
+          <Sonner />
+        </React.StrictMode>
       </TooltipProvider>
-    </QueryClientProvider>
-  </React.StrictMode>
+    </BrowserRouter>
+  </QueryClientProvider>
 );
 
 export default App;
