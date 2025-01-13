@@ -112,9 +112,9 @@ const ChatInterface = () => {
     e.preventDefault();
     if (!newMessage.trim() || !conversationId || isLoading) return;
 
-    setIsLoading(true);
     const messageContent = newMessage;
-    setNewMessage('');
+    setNewMessage(''); // Clear the input immediately
+    setIsLoading(true);
 
     try {
       console.log('Sending message:', messageContent);
@@ -142,17 +142,23 @@ const ChatInterface = () => {
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to get AI response');
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
 
-      const { answer } = await response.json();
-      console.log('Received AI response:', answer);
+      const data = await response.json();
+      console.log('Received AI response:', data);
+
+      if (!data.answer) {
+        throw new Error('No answer received from AI');
+      }
 
       const { error: aiMessageError } = await supabase
         .from('messages')
         .insert([
           {
             conversation_id: conversationId,
-            content: answer,
+            content: data.answer,
             type: 'ai',
           },
         ]);
@@ -163,10 +169,9 @@ const ChatInterface = () => {
       console.error('Error in sendMessage:', error);
       toast({
         title: "Error",
-        description: "Failed to send message. Please try again.",
+        description: "Failed to get AI response. Please try again.",
         variant: "destructive",
       });
-      setNewMessage(messageContent); // Restore the message if it failed to send
     } finally {
       setIsLoading(false);
     }
