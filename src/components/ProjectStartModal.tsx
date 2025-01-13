@@ -50,12 +50,20 @@ const ProjectStartModal = ({
       setIsSubmitting(true);
       console.log("Submitting form data:", formData);
 
+      // First check if user is authenticated
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session?.user) {
+        throw new Error("You must be logged in to submit a project");
+      }
+
       const projectData = {
+        user_id: session.user.id, // Set the user_id to match the authenticated user
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
         company: formData.company,
-        project_type: formData.projectType,  // Now correctly passing array
+        project_type: formData.projectType,
         description: formData.description,
         timeline: formData.timeline,
         pain_points: formData.pain_points || [],
@@ -83,8 +91,6 @@ const ProjectStartModal = ({
         title: "Success!",
         description: "Your project details have been saved.",
       });
-      
-      const { data: { session } } = await supabase.auth.getSession();
       
       onClose();
       
