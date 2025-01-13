@@ -1,109 +1,125 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { DashboardStats } from "@/components/dashboard/DashboardStats";
-import { DashboardActivity } from "@/components/dashboard/DashboardActivity";
-import { DashboardSections } from "@/components/dashboard/DashboardSections";
-import { useToast } from "@/components/ui/use-toast";
+import ProjectProgress from "@/components/dashboard/ProjectProgress";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { LineChart, BarChart, Calendar, MessageSquare } from "lucide-react";
+import useMessages from "@/hooks/useMessages";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
-  const [loading, setLoading] = useState(true);
-  const [project, setProject] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const { data: messages, isLoading } = useMessages("default-conversation");
 
-  useEffect(() => {
-    checkUser();
-    fetchProject();
-  }, []);
-
-  const checkUser = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate('/login');
-      }
-    } catch (error) {
-      console.error('Error checking auth status:', error);
-      toast({
-        variant: "destructive",
-        title: "Authentication Error",
-        description: "Please try logging in again."
-      });
-      navigate('/login');
-    }
-  };
-
-  const fetchProject = async () => {
-    try {
-      console.log('Fetching project data...');
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session?.user) {
-        console.log('No authenticated user found');
-        return;
-      }
-
-      const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', session.user.id)
-        .single();
-
-      if (profileError) {
-        throw profileError;
-      }
-
-      const { data: project, error: projectError } = await supabase
-        .from('projects')
-        .select('*')
-        .eq('user_id', session.user.id)
-        .single();
-
-      if (projectError && projectError.code !== 'PGRST116') {
-        throw projectError;
-      }
-
-      console.log('Project data:', project);
-      setProject(project);
-    } catch (error) {
-      console.error('Error fetching project:', error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to load project data. Please try again later."
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
+  const stats = [
+    {
+      title: "Active Projects",
+      value: "12",
+      change: "+2",
+      icon: <LineChart className="w-6 h-6 text-primary" />,
+    },
+    {
+      title: "Tasks Completed",
+      value: "48",
+      change: "+5",
+      icon: <BarChart className="w-6 h-6 text-secondary" />,
+    },
+    {
+      title: "Upcoming Meetings",
+      value: "3",
+      change: "0",
+      icon: <Calendar className="w-6 h-6 text-primary" />,
+    },
+    {
+      title: "Unread Messages",
+      value: "7",
+      change: "+3",
+      icon: <MessageSquare className="w-6 h-6 text-secondary" />,
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
-      <DashboardHeader />
-      <main className="container mx-auto px-4 py-8">
-        <div className="grid gap-8">
-          <DashboardStats project={project} />
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card className="p-6">
-              <DashboardActivity />
+      <div className="container mx-auto px-4 py-8">
+        <ProjectProgress />
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+          {stats.map((stat, index) => (
+            <Card key={index} className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="bg-accent/50 p-3 rounded-lg">
+                  {stat.icon}
+                </div>
+                <span className={`text-sm ${
+                  stat.change.startsWith('+') ? 'text-green-500' : 
+                  stat.change.startsWith('-') ? 'text-red-500' : 
+                  'text-gray-500'
+                }`}>
+                  {stat.change}
+                </span>
+              </div>
+              <h3 className="text-lg font-semibold">{stat.title}</h3>
+              <p className="text-3xl font-bold mt-2">{stat.value}</p>
             </Card>
-            <Card className="p-6">
-              <DashboardSections project={project} />
-            </Card>
-          </div>
+          ))}
         </div>
-      </main>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+          <Card className="p-6">
+            <h2 className="text-2xl font-semibold mb-4">Recent Activity</h2>
+            {isLoading ? (
+              <p>Loading messages...</p>
+            ) : (
+              <div className="space-y-4">
+                {messages?.slice(0, 5).map((message: any) => (
+                  <div key={message.id} className="flex items-start space-x-4">
+                    <div className="flex-1">
+                      <p className="text-sm text-gray-500">
+                        {new Date(message.created_at).toLocaleDateString()}
+                      </p>
+                      <p className="mt-1">{message.content}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Card>
+
+          <Card className="p-6">
+            <h2 className="text-2xl font-semibold mb-4">Quick Actions</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => navigate("/start-project")}
+              >
+                New Project
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => navigate("/messages")}
+              >
+                Messages
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => navigate("/calendar")}
+              >
+                Schedule
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => navigate("/reports")}
+              >
+                Reports
+              </Button>
+            </div>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 };

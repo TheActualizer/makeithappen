@@ -1,48 +1,30 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter } from "react-router-dom";
-import { Toaster } from "@/components/ui/toaster";
-import { Routes, Route } from "react-router-dom";
-import Dashboard from "@/pages/Dashboard";
-import Login from "@/pages/Login";
-import Register from "@/pages/Register";
-import ForgotPassword from "@/pages/ForgotPassword";
-import ResetPassword from "@/pages/ResetPassword";
-import Settings from "@/pages/Settings";
-import Projects from "@/pages/Projects";
-import Documents from "@/pages/Documents";
-import Calendar from "@/pages/Calendar";
-import Messages from "@/pages/Messages";
-import Progress from "@/pages/Progress";
-import Scope from "@/pages/Scope";
-import Financials from "@/pages/Financials";
-import "./App.css";
-
-// Create a client
-const queryClient = new QueryClient();
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ChatInterface from "@/components/chat/ChatInterface";
+import Blog from "@/pages/Blog";
+import AgenticSystems from "@/pages/blog/AgenticSystems";
+import VectorMemory from "@/pages/blog/VectorMemory";
+import TransformativeCaseStudies from "@/pages/blog/TransformativeCaseStudies";
+import AITrends from "@/pages/blog/AITrends";
+import CaseStudies from "@/pages/blog/CaseStudies";
+import HealthcareTech from "@/pages/blog/HealthcareTech";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/settings/*" element={<Settings />} />
-          <Route path="/dashboard/projects" element={<Projects />} />
-          <Route path="/dashboard/documents" element={<Documents />} />
-          <Route path="/dashboard/calendar" element={<Calendar />} />
-          <Route path="/dashboard/messages" element={<Messages />} />
-          <Route path="/dashboard/progress" element={<Progress />} />
-          <Route path="/dashboard/scope" element={<Scope />} />
-          <Route path="/dashboard/financials" element={<Financials />} />
-        </Routes>
-        <Toaster />
-      </BrowserRouter>
-    </QueryClientProvider>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Blog />} />
+        <Route path="/blog/agentic-systems" element={<AgenticSystems />} />
+        <Route path="/blog/vector-memory" element={<VectorMemory />} />
+        <Route path="/blog/transformative-case-studies" element={<TransformativeCaseStudies />} />
+        <Route path="/blog/ai-trends" element={<AITrends />} />
+        <Route path="/blog/case-studies" element={<CaseStudies />} />
+        <Route path="/blog/healthcare-tech" element={<HealthcareTech />} />
+      </Routes>
+      <ChatInterface />
+      <Toaster />
+    </Router>
   );
 }
 

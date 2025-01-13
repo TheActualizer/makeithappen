@@ -1,12 +1,16 @@
 import { useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
 import { FormData, Timeline } from "./types";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
+  Building2,
   BriefcaseIcon,
+  BarChart3,
   DollarSign,
   Users,
+  Bot,
   Calendar
 } from "lucide-react";
 
@@ -50,6 +54,9 @@ interface ProjectDetailsStepProps {
 }
 
 const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) => {
+  const [selectedPainPoints, setSelectedPainPoints] = useState<string[]>(formData.pain_points || []);
+  const [selectedAgents, setSelectedAgents] = useState<string[]>(formData.ai_agent_requirements || []);
+
   const handleServiceTypeChange = (serviceValue: string) => {
     const currentServices = formData.projectType || [];
     const updatedServices = currentServices.includes(serviceValue)
@@ -152,6 +159,39 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
                 </Button>
               ))}
             </div>
+          </div>
+        </Card>
+      </div>
+
+      <div className="space-y-4">
+        <h2 className="text-lg font-semibold flex items-center gap-2">
+          <Bot className="w-5 h-5" />
+          AI & Automation Requirements
+        </h2>
+        
+        <Card className="p-6 space-y-6">
+          <div className="space-y-4">
+            <label className="text-sm font-medium">Digital Workforce Scope</label>
+            <Textarea
+              value={formData.workforce_simulation_scope || ''}
+              onChange={(e) =>
+                setFormData({ ...formData, workforce_simulation_scope: e.target.value })
+              }
+              placeholder="Describe your digital workforce needs and objectives..."
+              className="min-h-[100px]"
+            />
+          </div>
+
+          <div className="space-y-4">
+            <label className="text-sm font-medium">Project Description</label>
+            <Textarea
+              value={formData.description}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
+              placeholder="Please provide details about your project requirements and goals..."
+              className="min-h-[100px]"
+            />
           </div>
         </Card>
       </div>

@@ -1,108 +1,98 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
-import Navbar from "@/components/Navbar";
+import React from "react";
 import { motion } from "framer-motion";
-import { BookOpen, TrendingUp, Clock, Eye, ArrowRight } from "lucide-react";
-
-interface BlogCategory {
-  id: string;
-  name: string;
-  slug: string;
-  description: string;
-}
-
-interface BlogPost {
-  id: string;
-  title: string;
-  excerpt: string;
-  reading_time: number;
-  views: number;
-  published_at: string;
-}
+import { ArrowRight, Bot, Brain, Stethoscope } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
+import Navbar from "@/components/Navbar";
 
 const Blog = () => {
-  const [categories, setCategories] = useState<BlogCategory[]>([]);
-  const [featuredPosts, setFeaturedPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [categoriesResponse, postsResponse] = await Promise.all([
-          supabase.from('blog_categories').select('*').order('name'),
-          supabase
-            .from('blog_posts')
-            .select('*')
-            .eq('status', 'published')
-            .order('views', { ascending: false })
-            .limit(3)
-        ]);
-        
-        if (categoriesResponse.error) throw categoriesResponse.error;
-        if (postsResponse.error) throw postsResponse.error;
-        
-        setCategories(categoriesResponse.data || []);
-        setFeaturedPosts(postsResponse.data || []);
-      } catch (error) {
-        console.error('Error fetching blog data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const featuredArticles = [
     {
-      title: "Agentic Systems: Redefining Autonomy in Business",
-      description: "Discover how autonomous AI agents can revolutionize processes and disrupt entire industries.",
-      link: "/blog/agentic-systems",
-      icon: <TrendingUp className="w-8 h-8 text-primary" />
+      title: "Modernizing Healthcare with FHIR & AI",
+      description: "Explore how FHIR protocols and modern AI are transforming healthcare while maintaining HIPAA compliance.",
+      icon: <Stethoscope className="h-8 w-8 text-primary" />,
+      link: "/blog/healthcare-tech"
     },
     {
-      title: "AI Trends Shaping the Future",
-      description: "Stay ahead of the curve with insights into emerging AI breakthroughs that will redefine competitive landscapes.",
-      link: "/blog/ai-trends",
-      icon: <BookOpen className="w-8 h-8 text-primary" />
+      title: "Vector Databases & Memory",
+      description: "Explore how vector databases and advanced memory systems enhance AI precision and context.",
+      icon: <Brain className="h-8 w-8 text-primary" />,
+      link: "/blog/vector-memory"
+    },
+    {
+      title: "Agentic Systems",
+      description: "Discover how autonomous AI agents are revolutionizing business processes and decision-making.",
+      icon: <Bot className="h-8 w-8 text-primary" />,
+      link: "/blog/agentic-systems"
     }
   ];
+
+  const categories = [
+    {
+      id: 1,
+      name: "AI Technology",
+      description: "Latest developments in artificial intelligence and machine learning",
+      slug: "ai-technology"
+    },
+    {
+      id: 2,
+      name: "Business Impact",
+      description: "How AI is transforming businesses and industries",
+      slug: "business-impact"
+    },
+    {
+      id: 3,
+      name: "Implementation",
+      description: "Practical guides and best practices for AI implementation",
+      slug: "implementation"
+    }
+  ];
+
+  const handleArticleClick = (link: string) => {
+    console.log('Navigating to:', link);
+    navigate(link);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-accent to-accent/95">
       <Navbar />
       <div className="container mx-auto px-4 pt-24 pb-12">
+        {/* Hero Section */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-            Explore Our Tech Universe
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+            Latest Insights
           </h1>
-          <p className="text-gray-300 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
-            Dive into cutting-edge insights, expert tutorials, and revolutionary ideas shaping the future of technology.
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            Explore our latest articles on AI technology, implementation strategies, and success stories.
           </p>
         </motion.div>
 
-        {/* Featured Articles Section */}
-        <section className="mb-16">
+        {/* Featured Articles */}
+        <motion.section 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="mb-16"
+        >
           <h2 className="text-2xl font-semibold text-white mb-8">Featured Articles</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredArticles.map((article, index) => (
               <motion.div
                 key={index}
                 whileHover={{ scale: 1.02 }}
-                className="h-full"
+                className="h-full cursor-pointer"
+                onClick={() => handleArticleClick(article.link)}
               >
                 <Card 
                   className="h-full bg-accent-foreground/5 backdrop-blur-sm border-accent-foreground/10 hover:border-primary/50 transition-all duration-300"
-                  onClick={() => navigate(article.link)}
                 >
                   <div className="p-6 flex flex-col h-full">
                     <div className="mb-4">
@@ -117,7 +107,6 @@ const Blog = () => {
                     <Button
                       variant="secondary"
                       className="w-full group hover:bg-primary hover:text-white transition-all duration-300"
-                      onClick={() => navigate(article.link)}
                     >
                       Read Article
                       <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -127,25 +116,35 @@ const Blog = () => {
               </motion.div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
-        {/* Categories Section */}
+        {/* Categories */}
         <section>
           <h2 className="text-2xl font-semibold text-white mb-8">Categories</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categories.map((category) => (
-              <Card key={category.id} className="bg-accent/40 backdrop-blur-sm border border-accent/20 hover:border-primary/50 transition-all duration-300">
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-white mb-2">{category.name}</h3>
-                  <p className="text-gray-300 mb-4">{category.description}</p>
-                  <Button
-                    variant="secondary"
-                    onClick={() => navigate(`/blog/category/${category.slug}`)}
-                  >
-                    Explore {category.name}
-                  </Button>
-                </div>
-              </Card>
+              <motion.div
+                key={category.id}
+                whileHover={{ scale: 1.02 }}
+                className="cursor-pointer"
+              >
+                <Card 
+                  className="bg-accent/40 backdrop-blur-sm border border-accent/20 hover:border-primary/50 transition-all duration-300"
+                  onClick={() => navigate(`/blog/category/${category.slug}`)}
+                >
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold text-white mb-2">{category.name}</h3>
+                    <p className="text-gray-300 mb-4">{category.description}</p>
+                    <Button
+                      variant="secondary"
+                      className="w-full group hover:bg-primary hover:text-white transition-all duration-300"
+                    >
+                      Explore {category.name}
+                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </div>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </section>

@@ -1,16 +1,11 @@
 import CalendlyEmbed from "../CalendlyEmbed";
 import { FormData } from "./types";
-import { useEffect } from "react";
 
 interface ConsultationSchedulerProps {
   formData: FormData;
 }
 
 const ConsultationScheduler = ({ formData }: ConsultationSchedulerProps) => {
-  useEffect(() => {
-    console.log("[ConsultationScheduler] Mounted with formData:", formData);
-  }, [formData]);
-
   const formatArrayOrDefault = (arr?: string[] | null, defaultText: string = 'None specified') => 
     arr && arr.length > 0 ? arr.join(', ') : defaultText;
 
@@ -30,7 +25,7 @@ Project Description:
 ${formData.description || 'Not provided'}
 
 Timeline & Budget:
-- Preferred Timeline: ${formData.timeline || 'Not specified'}
+- Preferred Timeline: ${formData.timeline}
 - Budget Range: ${getBudgetRangeText(formData.budgetRange)}
 - Team Size: ${formData.teamSize || 'Not specified'}
 
@@ -42,18 +37,12 @@ Additional Context:
 - Company: ${formData.company || 'Not provided'}
 - Pain Points: ${formatArrayOrDefault(formData.pain_points)}`;
 
-  console.log("[ConsultationScheduler] Prepared Calendly data:", {
-    name: formData.name,
-    email: formData.email,
-    meetingPrep
-  });
-
   return (
     <div className="space-y-4">
-      <p className="text-sm text-muted-foreground mb-4">
+      <p className="text-sm text-muted-foreground">
         Please select a time that works best for you to discuss your project in detail.
       </p>
-      <div className="rounded-lg overflow-hidden border">
+      <div className="h-[600px]">
         <CalendlyEmbed 
           url="https://calendly.com/belchonen18/30min" 
           prefill={{

@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import { ServicesShowcase } from "@/components/ServicesShowcase";
+import CalendlyEmbed from "@/components/CalendlyEmbed";
 import ChatInterface from "@/components/chat/ChatInterface";
 
 const Index = () => {
@@ -19,6 +20,19 @@ const Index = () => {
         <div className="relative">
           <Hero />
           <ServicesShowcase />
+          <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="my-20 text-center">
+              <h2 className="text-3xl font-bold tracking-tight text-white mb-6">
+                Schedule a Consultation
+              </h2>
+              <p className="text-lg text-gray-300 mb-12 max-w-2xl mx-auto">
+                Book a time that works best for you, and let's discuss how we can help transform your business with AI solutions.
+              </p>
+            </div>
+            <div className="mb-20">
+              <CalendlyEmbed url="https://calendly.com/belchonen18/30min" />
+            </div>
+          </div>
         </div>
       </main>
       <ChatInterface />
