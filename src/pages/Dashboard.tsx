@@ -1,144 +1,109 @@
 import { useEffect, useState } from "react";
-import { Card } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import {
-  BarChart, Users, Calendar, MessageSquare, FileText,
-  Activity, PlusCircle, Briefcase, ExternalLink, DollarSign,
-  ChevronDown,
-} from "lucide-react";
-import { DashboardStats } from "@/components/dashboard/DashboardStats";
-import { DashboardDocuments } from "@/components/dashboard/DashboardDocuments";
-import { DashboardCalendar } from "@/components/dashboard/DashboardCalendar";
-import { DashboardActivity } from "@/components/dashboard/DashboardActivity";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
-import { ProjectProgress } from "@/components/dashboard/ProjectProgress";
-import { ProjectScope } from "@/components/dashboard/ProjectScope";
-import { FinancialMetrics } from "@/components/dashboard/FinancialMetrics";
-import { useIsAdmin } from "@/hooks/useIsAdmin";
-import { Button } from "@/components/ui/button";
-import ProjectStartModal from "@/components/ProjectStartModal";
 import { useNavigate } from "react-router-dom";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { supabase } from "@/integrations/supabase/client";
+import { Card } from "@/components/ui/card";
+import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import DashboardStats from "@/components/dashboard/DashboardStats";
+import DashboardActivity from "@/components/dashboard/DashboardActivity";
+import { DashboardSections } from "@/components/dashboard/DashboardSections";
+import { useToast } from "@/components/ui/use-toast";
 
 const Dashboard = () => {
-  const { toast } = useToast();
-  const { isAdmin, isLoading: isLoadingAdmin } = useIsAdmin();
-  const [activeProjectId, setActiveProjectId] = useState<string | undefined>();
-  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(true);
+  const [project, setProject] = useState(null);
 
   useEffect(() => {
-    const fetchFirstProject = async () => {
-      const { data: projects, error } = await supabase
-        .from("projects")
-        .select("id")
-        .limit(1)
-        .single();
+    checkUser();
+    fetchProject();
+  }, []);
 
-      if (error) {
-        console.error("Error fetching project:", error);
+  const checkUser = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error('Error checking auth status:', error);
+      toast({
+        variant: "destructive",
+        title: "Authentication Error",
+        description: "Please try logging in again."
+      });
+      navigate('/login');
+    }
+  };
+
+  const fetchProject = async () => {
+    try {
+      console.log('Fetching project data...');
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session?.user) {
+        console.log('No authenticated user found');
         return;
       }
 
-      if (projects) {
-        setActiveProjectId(projects.id);
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', session.user.id)
+        .single();
+
+      if (profileError) {
+        throw profileError;
       }
-    };
 
-    fetchFirstProject();
-  }, []);
+      const { data: project, error: projectError } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .single();
 
-  useEffect(() => {
-    const channel = supabase
-      .channel("dashboard-changes")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-        },
-        (payload) => {
-          console.log("Real-time update:", payload);
-          toast({
-            title: "New Activity",
-            description: "Dashboard data has been updated.",
-          });
-        }
-      )
-      .subscribe();
+      if (projectError && projectError.code !== 'PGRST116') {
+        throw projectError;
+      }
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [toast]);
-
-  if (isLoadingAdmin) {
-    return <div className="min-h-screen bg-background"><DashboardHeader />Loading...</div>;
-  }
-
-  const handleExpandSection = (section: string) => {
-    navigate(`/dashboard/${section}`);
+      console.log('Project data:', project);
+      setProject(project);
+    } catch (error) {
+      console.error('Error fetching project:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to load project data. Please try again later."
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const renderSectionHeader = (title: string, icon: React.ReactNode, onExpand?: () => void) => (
-    <div className="flex justify-between items-center mb-4">
-      <h2 className="text-2xl font-semibold flex items-center gap-2">
-        {icon}
-        {title}
-      </h2>
-      {onExpand && (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onExpand}
-        >
-          <ExternalLink className="h-4 w-4" />
-        </Button>
-      )}
-    </div>
-  );
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
       <DashboardHeader />
-      
-      <div className="container mx-auto py-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">
-            {isAdmin ? "Admin Dashboard" : "Dashboard"}
-          </h1>
-          <div className="flex items-center gap-4">
-            <Button
-              onClick={() => setIsProjectModalOpen(true)}
-              className="flex items-center gap-2"
-            >
-              <PlusCircle className="h-4 w-4" />
-              New Project
-            </Button>
-            {isAdmin && (
-              <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                Admin
-              </span>
-            )}
+      <main className="container mx-auto px-4 py-8">
+        <div className="grid gap-8">
+          <DashboardStats project={project} />
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="p-6">
+              <DashboardActivity />
+            </Card>
+            <Card className="p-6">
+              <DashboardSections project={project} />
+            </Card>
           </div>
         </div>
-
-        <DashboardSections 
-          isAdmin={isAdmin} 
-          activeProjectId={activeProjectId} 
-          handleExpandSection={handleExpandSection}
-        />
-      </div>
-
-      <ProjectStartModal 
-        isOpen={isProjectModalOpen}
-        onClose={() => setIsProjectModalOpen(false)}
-      />
+      </main>
     </div>
   );
 };

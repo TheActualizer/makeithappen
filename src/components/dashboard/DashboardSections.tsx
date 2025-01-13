@@ -1,127 +1,82 @@
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Card } from "@/components/ui/card";
-import { ChevronDown, BarChart, FileText, Activity, Calendar, MessageSquare, DollarSign, Users } from "lucide-react";
-import { DashboardStats } from "./DashboardStats";
-import { DashboardDocuments } from "./DashboardDocuments";
-import { ProjectScope } from "./ProjectScope";
-import { ProjectProgress } from "./ProjectProgress";
-import { DashboardCalendar } from "./DashboardCalendar";
-import { DashboardActivity } from "./DashboardActivity";
-import { FinancialMetrics } from "./FinancialMetrics";
-import { renderSectionHeader } from "./utils/renderSectionHeader";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import {
+  BarChart3,
+  Calendar,
+  FileText,
+  MessageSquare,
+  Target,
+  Wallet
+} from "lucide-react";
 
 interface DashboardSectionsProps {
-  isAdmin: boolean;
-  activeProjectId?: string;
-  handleExpandSection: (section: string) => void;
+  project: any; // You can replace 'any' with your project type
 }
 
-export const DashboardSections = ({ 
-  isAdmin, 
-  activeProjectId,
-  handleExpandSection 
-}: DashboardSectionsProps) => {
+export const DashboardSections = ({ project }: DashboardSectionsProps) => {
+  const sections = [
+    {
+      title: "Progress",
+      description: "Track project milestones and completion",
+      icon: BarChart3,
+      href: "/dashboard/progress",
+    },
+    {
+      title: "Documents",
+      description: "Access project files and documentation",
+      icon: FileText,
+      href: "/dashboard/documents",
+    },
+    {
+      title: "Calendar",
+      description: "View project timeline and meetings",
+      icon: Calendar,
+      href: "/dashboard/calendar",
+    },
+    {
+      title: "Messages",
+      description: "Communication and updates",
+      icon: MessageSquare,
+      href: "/dashboard/messages",
+    },
+    {
+      title: "Scope",
+      description: "Project requirements and deliverables",
+      icon: Target,
+      href: "/dashboard/scope",
+    },
+    {
+      title: "Financials",
+      description: "Budget tracking and payments",
+      icon: Wallet,
+      href: "/dashboard/financials",
+    },
+  ];
+
   return (
-    <div className="grid gap-6">
-      <Collapsible>
-        <CollapsibleTrigger className="w-full">
-          <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
-            {renderSectionHeader("Overview", <BarChart className="h-5 w-5" />)}
-            <ChevronDown className="h-4 w-4" />
-          </div>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="pt-4">
-          <DashboardStats isAdmin={isAdmin} />
-        </CollapsibleContent>
-      </Collapsible>
-
-      {/* Documents Section */}
-      <Collapsible>
-        <CollapsibleTrigger className="w-full">
-          <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
-            {renderSectionHeader(
-              isAdmin ? "All Documents" : "My Documents",
-              <FileText className="h-5 w-5" />
-            )}
-            <ChevronDown className="h-4 w-4" />
-          </div>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="pt-4">
-          <DashboardDocuments isAdmin={isAdmin} />
-        </CollapsibleContent>
-      </Collapsible>
-
-      {/* Project Progress Section */}
-      <Collapsible>
-        <CollapsibleTrigger className="w-full">
-          <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
-            {renderSectionHeader("Project Progress", <Activity className="h-5 w-5" />)}
-            <ChevronDown className="h-4 w-4" />
-          </div>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="pt-4">
-          <ProjectProgress projectId={activeProjectId} />
-        </CollapsibleContent>
-      </Collapsible>
-
-      {/* Calendar Section */}
-      <Collapsible>
-        <CollapsibleTrigger className="w-full">
-          <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
-            {renderSectionHeader("Calendar", <Calendar className="h-5 w-5" />)}
-            <ChevronDown className="h-4 w-4" />
-          </div>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="pt-4">
-          <DashboardCalendar />
-        </CollapsibleContent>
-      </Collapsible>
-
-      {/* Activity Section */}
-      <Collapsible>
-        <CollapsibleTrigger className="w-full">
-          <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
-            {renderSectionHeader("Recent Activity", <MessageSquare className="h-5 w-5" />)}
-            <ChevronDown className="h-4 w-4" />
-          </div>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="pt-4">
-          <DashboardActivity isAdmin={isAdmin} />
-        </CollapsibleContent>
-      </Collapsible>
-
-      {/* Financial Metrics Section */}
-      <Collapsible>
-        <CollapsibleTrigger className="w-full">
-          <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
-            {renderSectionHeader("Financial Metrics", <DollarSign className="h-5 w-5" />)}
-            <ChevronDown className="h-4 w-4" />
-          </div>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="pt-4">
-          <FinancialMetrics projectId={activeProjectId} />
-        </CollapsibleContent>
-      </Collapsible>
-
-      {/* Admin Users Section */}
-      {isAdmin && (
-        <Collapsible>
-          <CollapsibleTrigger className="w-full">
-            <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
-              {renderSectionHeader("User Management", <Users className="h-5 w-5" />)}
-              <ChevronDown className="h-4 w-4" />
-            </div>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="pt-4">
-            <Card className="p-6">
-              <p className="text-muted-foreground">
-                Admin user management features coming soon...
-              </p>
-            </Card>
-          </CollapsibleContent>
-        </Collapsible>
-      )}
+    <div className="grid gap-4">
+      <h2 className="text-2xl font-semibold">Quick Access</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {sections.map((section) => {
+          const Icon = section.icon;
+          return (
+            <Link key={section.title} to={section.href}>
+              <Button
+                variant="outline"
+                className="w-full h-auto p-4 flex flex-col items-center gap-2 hover:bg-accent/5"
+              >
+                <Icon className="h-6 w-6 text-primary" />
+                <div className="text-left w-full">
+                  <h3 className="font-medium">{section.title}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {section.description}
+                  </p>
+                </div>
+              </Button>
+            </Link>
+          );
+        })}
+      </div>
     </div>
   );
 };
-
