@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
-import DashboardHeader from "@/components/dashboard/DashboardHeader";
-import DashboardStats from "@/components/dashboard/DashboardStats";
-import DashboardActivity from "@/components/dashboard/DashboardActivity";
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { DashboardStats } from "@/components/dashboard/DashboardStats";
+import { DashboardActivity } from "@/components/dashboard/DashboardActivity";
 import { DashboardSections } from "@/components/dashboard/DashboardSections";
 import { useToast } from "@/components/ui/use-toast";
 

@@ -135,6 +135,40 @@ export function ProjectProgress() {
     fetchProjectData();
   }, [projectId]);
 
+  const handleDragEnd = async (result: any) => {
+    if (!result.destination) return;
+
+    const { source, destination, draggableId } = result;
+    const newStatus = destination.droppableId;
+
+    try {
+      const { error } = await supabase
+        .from('tasks')
+        .update({ status: newStatus })
+        .eq('id', draggableId);
+
+      if (error) throw error;
+
+      // Refresh tasks after update
+      await fetchProjectData();
+    } catch (error) {
+      console.error('Error updating task status:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update task status"
+      });
+    }
+  };
+
+  const calculateProgress = (items: any[]) => {
+    if (!items || items.length === 0) return 0;
+    const completed = items.filter(item => 
+      item.status === 'completed' || item.status === 'done'
+    ).length;
+    return Math.round((completed / items.length) * 100);
+  };
+
   if (loading) {
     return (
       <div className="p-8">
