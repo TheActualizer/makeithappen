@@ -33,14 +33,15 @@ export const ConversationList = ({
           {conversations.map((conversation) => (
             <div
               key={conversation.id}
+              onClick={() => onSelectConversation(conversation.id)}
               className={cn(
                 "p-3 rounded-lg cursor-pointer transition-all duration-200",
                 "hover:bg-accent/50 hover:shadow-sm",
                 selectedConversation === conversation.id 
-                  ? 'bg-accent shadow-sm' 
-                  : 'hover:translate-x-1'
+                  ? 'bg-accent shadow-sm scale-[1.02]' 
+                  : 'hover:translate-x-1 hover:scale-[1.01]',
+                "animate-fade-in"
               )}
-              onClick={() => onSelectConversation(conversation.id)}
             >
               <h4 className="font-medium truncate">
                 {conversation.title || 'Untitled Conversation'}

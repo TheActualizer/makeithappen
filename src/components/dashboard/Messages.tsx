@@ -10,10 +10,13 @@ interface Message {
   content: string;
   sender_id: string | null;
   created_at: string;
+  conversation_id?: string;
+  type?: 'text' | 'system' | 'ai';
   profiles?: {
     first_name: string | null;
     last_name: string | null;
     email: string | null;
+    avatar_url: string | null;
   } | null;
 }
 
@@ -28,6 +31,7 @@ export const Messages = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const { isAdmin } = useIsAdmin();
   const { toast } = useToast();
 
@@ -103,7 +107,8 @@ export const Messages = () => {
           profiles:sender_id (
             first_name,
             last_name,
-            email
+            email,
+            avatar_url
           )
         `)
         .eq('conversation_id', conversationId)
@@ -128,14 +133,16 @@ export const Messages = () => {
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim() || !selectedConversation) {
+    if (!newMessage.trim() || !selectedConversation || isLoading) {
       console.log('Message send prevented:', { 
         hasContent: !!newMessage.trim(), 
-        hasSelectedConversation: !!selectedConversation 
+        hasSelectedConversation: !!selectedConversation,
+        isLoading 
       });
       return;
     }
 
+    setIsLoading(true);
     console.log('Sending message:', { 
       content: newMessage, 
       conversationId: selectedConversation 
@@ -173,6 +180,8 @@ export const Messages = () => {
         title: "Error",
         description: "Failed to send message",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -194,6 +203,7 @@ export const Messages = () => {
         newMessage={newMessage}
         setNewMessage={setNewMessage}
         onSendMessage={sendMessage}
+        isLoading={isLoading}
       />
     </div>
   );
