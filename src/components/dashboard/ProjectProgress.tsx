@@ -160,6 +160,32 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
     return Math.round((completed / items.length) * 100);
   };
 
+  const createAirtableBase = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('airtable-sync', {
+        body: { operation: 'create_base' }
+      });
+
+      if (error) throw error;
+
+      console.log('Airtable base creation response:', data);
+      toast({
+        title: "Airtable Base Created",
+        description: "Project progress tracking base has been created in Airtable",
+      });
+
+      // After base is created, sync the data
+      await syncWithAirtable();
+    } catch (error) {
+      console.error('Error creating Airtable base:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create Airtable base. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   if (loading) {
     return <div>Loading project progress...</div>;
   }
@@ -184,16 +210,26 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
             Kanban
           </Badge>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={syncWithAirtable}
-          disabled={syncing}
-          className="flex items-center gap-2"
-        >
-          <RefreshCw className={`h-4 w-4 ${syncing ? 'animate-spin' : ''}`} />
-          {syncing ? 'Syncing...' : 'Sync with Airtable'}
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={createAirtableBase}
+            className="flex items-center gap-2"
+          >
+            Create Airtable Base
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={syncWithAirtable}
+            disabled={syncing}
+            className="flex items-center gap-2"
+          >
+            <RefreshCw className={`h-4 w-4 ${syncing ? 'animate-spin' : ''}`} />
+            {syncing ? 'Syncing...' : 'Sync with Airtable'}
+          </Button>
+        </div>
       </div>
 
       {view === 'kanban' ? (

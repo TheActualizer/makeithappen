@@ -15,15 +15,16 @@ serve(async (req) => {
   }
 
   try {
-    const { operation, data } = await req.json();
-    console.log('Received request:', { operation, data });
+    const { operation } = await req.json();
+    console.log('Received request:', { operation });
 
     if (!AIRTABLE_API_KEY) {
       throw new Error('Airtable API key not configured');
     }
 
     if (operation === 'create_base') {
-      const response = await fetch(`https://api.airtable.com/v0/meta/bases`, {
+      console.log('Creating Airtable base...');
+      const response = await fetch('https://api.airtable.com/v0/meta/bases', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
@@ -111,7 +112,11 @@ serve(async (req) => {
       });
 
       const result = await response.json();
-      console.log('Airtable base created:', result);
+      console.log('Airtable base creation response:', result);
+
+      if (!response.ok) {
+        throw new Error(`Failed to create Airtable base: ${JSON.stringify(result)}`);
+      }
 
       return new Response(JSON.stringify(result), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -243,11 +248,6 @@ serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-
-    return new Response(JSON.stringify({ error: 'Invalid operation' }), {
-      status: 400,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
 
   } catch (error) {
     console.error('Error:', error);
