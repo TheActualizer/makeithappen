@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, LogOut } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,27 +17,17 @@ const Navbar = () => {
   const handleNavigation = (href: string) => {
     setIsOpen(false);
     if (href.startsWith('/#')) {
+      // If we're already on the homepage, just scroll to the section
       if (window.location.pathname === '/') {
         const element = document.querySelector(href.substring(1));
         element?.scrollIntoView({ behavior: 'smooth' });
       } else {
+        // If we're on another page, navigate to home first
         navigate(href);
       }
     } else if (href.startsWith('#')) {
       const element = document.querySelector(href);
       element?.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      toast.success("Logged out successfully");
-      navigate("/login");
-    } catch (error) {
-      console.error("Error logging out:", error);
-      toast.error("Error logging out. Please try again.");
     }
   };
 
@@ -71,22 +59,12 @@ const Navbar = () => {
               </button>
             )
           ))}
-          <div className="flex items-center space-x-4">
-            <Button 
-              variant="secondary"
-              onClick={() => navigate('/start-project')}
-            >
-              Get Started
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleLogout}
-              className="text-white hover:text-white/80"
-            >
-              <LogOut className="h-5 w-5" />
-            </Button>
-          </div>
+          <Button 
+            variant="secondary"
+            onClick={() => navigate('/start-project')}
+          >
+            Get Started
+          </Button>
         </div>
 
         {/* Mobile Navigation */}
@@ -135,17 +113,6 @@ const Navbar = () => {
               }}
             >
               Get Started
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full text-white hover:text-white/80"
-              onClick={() => {
-                handleLogout();
-                setIsOpen(false);
-              }}
-            >
-              <LogOut className="h-5 w-5 mr-2" />
-              Logout
             </Button>
           </div>
         </div>
