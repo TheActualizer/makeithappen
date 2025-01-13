@@ -127,11 +127,11 @@ const ProjectStartModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>Start Your Project</DialogTitle>
+          <DialogTitle>Project Intake Form</DialogTitle>
           <DialogDescription>
-            Fill out the form below to get started with your project.
+            Help us understand your project requirements and objectives
           </DialogDescription>
         </DialogHeader>
         <div className="relative">
@@ -178,7 +178,7 @@ const ProjectStartModal = ({
                   onClick={handleSubmit}
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Saving..." : "Save"}
+                  {isSubmitting ? "Saving..." : "Submit Project"}
                 </Button>
               </div>
             ) : (
