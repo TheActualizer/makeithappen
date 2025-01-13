@@ -167,6 +167,7 @@ const ChatInterface = () => {
           <MessageCircle className="h-6 w-6" />
         </Button>
       </SheetTrigger>
+      
       <SheetContent className="w-[400px] sm:w-[540px] h-full flex flex-col p-0">
         <SheetHeader className="px-6 py-4 border-b">
           <SheetTitle className="flex items-center justify-between">
