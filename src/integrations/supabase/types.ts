@@ -208,6 +208,8 @@ export type Database = {
           created_by: string | null
           id: string
           is_archived: boolean | null
+          provider: Database["public"]["Enums"]["ai_provider"] | null
+          provider_conversation_id: string | null
           title: string | null
           updated_at: string | null
         }
@@ -216,6 +218,8 @@ export type Database = {
           created_by?: string | null
           id?: string
           is_archived?: boolean | null
+          provider?: Database["public"]["Enums"]["ai_provider"] | null
+          provider_conversation_id?: string | null
           title?: string | null
           updated_at?: string | null
         }
@@ -224,6 +228,8 @@ export type Database = {
           created_by?: string | null
           id?: string
           is_archived?: boolean | null
+          provider?: Database["public"]["Enums"]["ai_provider"] | null
+          provider_conversation_id?: string | null
           title?: string | null
           updated_at?: string | null
         }
@@ -463,6 +469,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      ai_provider: "openai" | "dify" | "anthropic" | "google"
       appointment_status: "scheduled" | "completed" | "cancelled"
       message_type: "text" | "system" | "ai"
       post_status: "draft" | "published" | "archived"
