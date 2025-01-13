@@ -202,6 +202,71 @@ export type Database = {
         }
         Relationships: []
       }
+      conversations: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          id: string
+          is_archived: boolean | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_archived?: boolean | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_archived?: boolean | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          content: string
+          conversation_id: string | null
+          created_at: string | null
+          id: string
+          sender_id: string | null
+          type: Database["public"]["Enums"]["message_type"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          content: string
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string
+          sender_id?: string | null
+          type?: Database["public"]["Enums"]["message_type"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string
+          sender_id?: string | null
+          type?: Database["public"]["Enums"]["message_type"] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -399,6 +464,7 @@ export type Database = {
     }
     Enums: {
       appointment_status: "scheduled" | "completed" | "cancelled"
+      message_type: "text" | "system" | "ai"
       post_status: "draft" | "published" | "archived"
       project_complexity: "simple" | "moderate" | "complex" | "enterprise"
       tech_stack_category:

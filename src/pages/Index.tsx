@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import { ServicesShowcase } from "@/components/ServicesShowcase";
 import CalendarDemo from "@/components/CalendarDemo";
+import ChatInterface from "@/components/chat/ChatInterface";
 
 const Index = () => {
   return (
@@ -34,6 +35,7 @@ const Index = () => {
           </div>
         </div>
       </main>
+      <ChatInterface />
     </div>
   );
 };
