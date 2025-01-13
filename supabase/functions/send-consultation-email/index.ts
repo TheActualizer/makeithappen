@@ -32,10 +32,14 @@ const handler = async (req: Request): Promise<Response> => {
     const consultation: ConsultationRequest = await req.json();
     console.log("Received consultation data:", consultation);
 
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error("Missing Supabase configuration");
+    }
+
     // Store appointment in database
     const supabase = createClient(
-      SUPABASE_URL!,
-      SUPABASE_SERVICE_ROLE_KEY!
+      SUPABASE_URL,
+      SUPABASE_SERVICE_ROLE_KEY
     );
 
     const { error: dbError } = await supabase
@@ -46,14 +50,23 @@ const handler = async (req: Request): Promise<Response> => {
         consultation_date: consultation.consultationDate,
         consultation_time: consultation.consultationTime,
         project_type: consultation.projectType,
+        status: 'scheduled'
       });
 
     if (dbError) {
       console.error("Database error:", dbError);
-      throw new Error("Failed to store appointment");
+      throw new Error(`Failed to store appointment: ${dbError.message}`);
     }
 
     // Send confirmation email
+    if (!RESEND_API_KEY) {
+      console.warn("RESEND_API_KEY not configured, skipping email send");
+      return new Response(
+        JSON.stringify({ success: true, message: "Appointment scheduled (email notification skipped)" }), 
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const emailHtml = `
       <h2>Consultation Confirmation</h2>
       <p>Hello ${consultation.name},</p>
@@ -81,15 +94,23 @@ const handler = async (req: Request): Promise<Response> => {
     if (!res.ok) {
       const error = await res.text();
       console.error("Resend API error:", error);
-      throw new Error("Failed to send email");
+      // Don't throw here since appointment was created successfully
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          message: "Appointment scheduled (email notification failed)" 
+        }), 
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const data = await res.json();
     console.log("Email sent successfully:", data);
 
-    return new Response(JSON.stringify({ success: true }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ success: true }), 
+      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
   } catch (error: any) {
     console.error("Error in send-consultation-email function:", error);
     return new Response(
