@@ -73,7 +73,7 @@ const Blog = () => {
     {
       title: "Transformative Case Studies",
       description: "Explore real-world examples of how our AI solutions drive measurable business outcomes.",
-      link: "/blog/case-studies",
+      link: "/blog/transformative-case-studies",
       icon: <LineChart className="w-8 h-8 text-primary" />
     }
   ];
