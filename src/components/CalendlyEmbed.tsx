@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { InlineWidget } from "react-calendly";
 
 interface PrefillData {
@@ -15,20 +15,28 @@ interface CalendlyEmbedProps {
 }
 
 const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
+  const componentRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    console.log("CalendlyEmbed mounted with props:", { url, prefill });
+    console.log("[CalendlyEmbed] Component mounted with props:", { url, prefill });
+    console.log("[CalendlyEmbed] Container dimensions:", {
+      height: componentRef.current?.clientHeight,
+      width: componentRef.current?.clientWidth
+    });
   }, [url, prefill]);
 
   return (
-    <InlineWidget
-      url={url}
-      prefill={prefill}
-      styles={{
-        height: '100%',
-        width: '100%',
-        minHeight: '700px'
-      }}
-    />
+    <div ref={componentRef} className="h-[700px]">
+      <InlineWidget
+        url={url}
+        prefill={prefill}
+        styles={{
+          height: '100%',
+          width: '100%',
+          minHeight: '700px'
+        }}
+      />
+    </div>
   );
 };
 

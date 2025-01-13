@@ -1,12 +1,15 @@
 import CalendlyEmbed from "../CalendlyEmbed";
 import { FormData } from "./types";
+import { useEffect } from "react";
 
 interface ConsultationSchedulerProps {
   formData: FormData;
 }
 
 const ConsultationScheduler = ({ formData }: ConsultationSchedulerProps) => {
-  console.log("ConsultationScheduler rendered with formData:", formData);
+  useEffect(() => {
+    console.log("[ConsultationScheduler] Component mounted with formData:", formData);
+  }, [formData]);
 
   const formatArrayOrDefault = (arr?: string[] | null, defaultText: string = 'None specified') => 
     arr && arr.length > 0 ? arr.join(', ') : defaultText;
@@ -39,7 +42,7 @@ Additional Context:
 - Company: ${formData.company || 'Not provided'}
 - Pain Points: ${formatArrayOrDefault(formData.pain_points)}`;
 
-  console.log("Calendly prefill data:", {
+  console.log("[ConsultationScheduler] Prepared Calendly data:", {
     name: formData.name,
     email: formData.email,
     meetingPrep

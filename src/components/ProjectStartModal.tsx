@@ -39,7 +39,12 @@ const ProjectStartModal = ({
   const [showCalendly, setShowCalendly] = useState(false);
   const navigate = useNavigate();
 
-  console.log("Current modal state:", { step, showCalendly, isSubmitting });
+  console.log("[ProjectStartModal] Render with state:", { 
+    step, 
+    showCalendly, 
+    isSubmitting,
+    formData 
+  });
 
   const handleNext = () => {
     if (step < 4) {
@@ -74,9 +79,10 @@ const ProjectStartModal = ({
   };
 
   const handleSubmit = async () => {
+    console.log("[handleSubmit] Starting submission process");
     try {
       setIsSubmitting(true);
-      console.log("Starting form submission with data:", formData);
+      console.log("[handleSubmit] Form data to be submitted:", formData);
 
       const projectData = {
         name: formData.name,
@@ -94,30 +100,36 @@ const ProjectStartModal = ({
         ai_agent_requirements: formData.ai_agent_requirements || []
       };
 
-      console.log("Formatted project data:", projectData);
+      console.log("[handleSubmit] Formatted project data:", projectData);
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('projects')
-        .insert([projectData]);
+        .insert([projectData])
+        .select()
+        .single();
 
       if (error) {
-        console.error('Project submission error:', error);
+        console.error('[handleSubmit] Project submission error:', error);
         throw new Error(error.message);
       }
 
-      console.log('Project saved successfully');
+      console.log('[handleSubmit] Project saved successfully:', data);
       
       toast({
         title: "Success!",
         description: "Your project details have been saved. Let's schedule a consultation!",
       });
 
-      console.log("Setting showCalendly to true");
+      console.log("[handleSubmit] Setting showCalendly to true");
       setShowCalendly(true);
-      console.log("showCalendly state after setting:", true);
+      
+      // Add a small delay to ensure state update is processed
+      setTimeout(() => {
+        console.log("[handleSubmit] Delayed check - showCalendly state:", showCalendly);
+      }, 100);
       
     } catch (error) {
-      console.error('Submission error:', error);
+      console.error('[handleSubmit] Submission error:', error);
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to save project details. Please try again.",
@@ -129,7 +141,7 @@ const ProjectStartModal = ({
   };
 
   const handleModalClose = () => {
-    console.log("Modal closing, resetting state");
+    console.log("[handleModalClose] Closing modal and resetting state");
     setShowCalendly(false);
     setStep(1);
     setFormData(initialFormData);
@@ -138,10 +150,10 @@ const ProjectStartModal = ({
   };
 
   const renderStep = () => {
-    console.log("Rendering step, showCalendly:", showCalendly);
+    console.log("[renderStep] Rendering step with showCalendly:", showCalendly);
     
     if (showCalendly) {
-      console.log("Rendering ConsultationScheduler with formData:", formData);
+      console.log("[renderStep] Attempting to render ConsultationScheduler");
       return <ConsultationScheduler formData={formData} />;
     }
 
