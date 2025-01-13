@@ -4,14 +4,43 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
+import { useToast } from "@/hooks/use-toast";
+import { AuthError } from "@supabase/supabase-js";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const getErrorMessage = (error: AuthError) => {
+    switch (error.message) {
+      case "Invalid login credentials":
+        return "The email or password you entered is incorrect. Please try again.";
+      case "Email not confirmed":
+        return "Please check your email and confirm your account before signing in.";
+      case "User not found":
+        return "We couldn't find an account with these credentials. Need to create one?";
+      case "Email link is invalid or has expired":
+        return "The login link has expired. Please request a new one.";
+      default:
+        return "Something went wrong. Please try again later.";
+    }
+  };
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN" && session) {
         navigate("/dashboard");
+      }
+      if (event === "USER_UPDATED" || event === "SIGNED_OUT") {
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error_description');
+        if (error) {
+          toast({
+            title: "Authentication Error",
+            description: getErrorMessage({ message: error } as AuthError),
+            variant: "destructive",
+          });
+        }
       }
     });
 
@@ -23,7 +52,7 @@ const Login = () => {
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate]);
+  }, [navigate, toast]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-accent to-accent/90">
