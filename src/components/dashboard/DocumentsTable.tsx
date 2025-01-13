@@ -44,25 +44,24 @@ export const DocumentsTable = ({ documents, isLoading, onView }: DocumentsTableP
 
   const handleDownload = async (filePath: string) => {
     try {
-      const { data } = await supabase.storage
+      const { data, error } = await supabase.storage
         .from('documents')
-        .getPublicUrl(filePath);
+        .download(filePath);
 
-      if (data?.publicUrl) {
-        // Create a temporary link element
+      if (error) {
+        throw error;
+      }
+
+      if (data) {
+        // Create a download URL from the blob
+        const url = URL.createObjectURL(data);
         const link = document.createElement('a');
-        link.href = data.publicUrl;
-        link.target = '_blank';
+        link.href = url;
         link.download = filePath.split('/').pop() || 'document';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-      } else {
-        toast({
-          title: "Error",
-          description: "Could not retrieve document URL",
-          variant: "destructive",
-        });
+        URL.revokeObjectURL(url);
       }
     } catch (error) {
       console.error("Error downloading document:", error);
