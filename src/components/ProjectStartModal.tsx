@@ -3,12 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Check, ChevronRight } from "lucide-react";
+import { Check, ChevronRight, Calendar } from "lucide-react";
 import { FormData } from "./project-start/types";
 import BasicInfoStep from "./project-start/BasicInfoStep";
 import ProjectDetailsStep from "./project-start/ProjectDetailsStep";
 import TimelineStep from "./project-start/TimelineStep";
-import ScheduleStep from "./project-start/ScheduleStep";
 import { supabase } from "@/integrations/supabase/client";
 
 const initialFormData: FormData = {
@@ -53,16 +52,7 @@ const ProjectStartModal = ({
       return;
     }
 
-    if (step === 4 && (!formData.consultationDate || !formData.consultationTime)) {
-      toast({
-        title: "Required Fields",
-        description: "Please select a consultation date and time",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (step < 4) {
+    if (step < 3) {
       setStep(step + 1);
     }
   };
@@ -78,32 +68,33 @@ const ProjectStartModal = ({
       setIsSubmitting(true);
       console.log("Submitting form data:", formData);
 
-      // Send consultation email
-      const { error: emailError } = await supabase.functions.invoke('send-consultation-email', {
-        body: {
+      // Save project data
+      const { error: projectError } = await supabase
+        .from('projects')
+        .insert([{
           name: formData.name,
           email: formData.email,
-          consultationDate: formData.consultationDate?.toISOString().split('T')[0],
-          consultationTime: formData.consultationTime,
-          projectType: formData.projectType,
+          phone: formData.phone,
+          company: formData.company,
+          project_type: formData.projectType,
           description: formData.description,
-        },
-      });
+          timeline: formData.timeline,
+        }]);
 
-      if (emailError) {
-        console.error('Email error:', emailError);
-        throw new Error('Failed to schedule consultation');
+      if (projectError) {
+        console.error('Project submission error:', projectError);
+        throw new Error('Failed to save project');
       }
 
       toast({
         title: "Success!",
-        description: `Your consultation has been scheduled for ${formData.consultationDate?.toLocaleDateString()} at ${formData.consultationTime}. Check your email for confirmation.`,
+        description: "Your project details have been saved.",
       });
       
-      // Close modal and navigate to dashboard if user is authenticated
-      const { data: { session } } = await supabase.auth.getSession();
       onClose();
       
+      // Check if user is authenticated for dashboard navigation
+      const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
         navigate("/dashboard");
       }
@@ -111,12 +102,16 @@ const ProjectStartModal = ({
       console.error('Submission error:', error);
       toast({
         title: "Error",
-        description: "Failed to schedule consultation. Please try again.",
+        description: "Failed to save project details. Please try again.",
         variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleBookDemo = () => {
+    window.open('https://calendly.com/belchonen18/30min', '_blank');
   };
 
   const renderStep = () => {
@@ -127,8 +122,6 @@ const ProjectStartModal = ({
         return <ProjectDetailsStep formData={formData} setFormData={setFormData} />;
       case 3:
         return <TimelineStep formData={formData} setFormData={setFormData} />;
-      case 4:
-        return <ScheduleStep formData={formData} setFormData={setFormData} />;
       default:
         return null;
     }
@@ -140,13 +133,13 @@ const ProjectStartModal = ({
         <DialogHeader>
           <DialogTitle>Start Your Project</DialogTitle>
           <DialogDescription>
-            Fill out the form below to schedule your consultation.
+            Fill out the form below to get started with your project.
           </DialogDescription>
         </DialogHeader>
         <div className="relative">
           <div className="absolute top-0 w-full">
             <div className="flex justify-between mb-8">
-              {[1, 2, 3, 4].map((stepNumber) => (
+              {[1, 2, 3].map((stepNumber) => (
                 <div
                   key={stepNumber}
                   className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
@@ -173,20 +166,29 @@ const ProjectStartModal = ({
             >
               Back
             </Button>
-            <Button
-              onClick={step === 4 ? handleSubmit : handleNext}
-              className="group"
-              disabled={isSubmitting}
-            >
-              {step === 4 ? (
-                isSubmitting ? "Scheduling..." : "Schedule Consultation"
-              ) : (
-                <>
-                  Next
-                  <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </>
-              )}
-            </Button>
+            {step === 3 ? (
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={handleBookDemo}
+                  className="gap-2"
+                >
+                  <Calendar className="w-4 h-4" />
+                  Book a Demo
+                </Button>
+                <Button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Saving..." : "Save & Return"}
+                </Button>
+              </div>
+            ) : (
+              <Button onClick={handleNext} className="group">
+                Next
+                <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            )}
           </div>
         </div>
       </DialogContent>
