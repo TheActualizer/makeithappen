@@ -1,60 +1,44 @@
 import React from 'react';
 import { useIsAdmin } from "@/hooks/useIsAdmin";
-import { useQuery } from "@tanstack/react-query";
+import { useMessages } from "@/hooks/useMessages";
 import { useMessageSender } from "@/hooks/useMessageSender";
 import { ConversationList } from './messages/ConversationList';
 import { MessageArea } from './messages/MessageArea';
 import { MonitoringPanel } from './monitoring/MonitoringPanel';
-import { supabase } from "@/integrations/supabase/client";
-
-interface Conversation {
-  id: string;
-  title: string;
-}
 
 export const Messages = () => {
   const { isAdmin } = useIsAdmin();
-  const [selectedConversation, setSelectedConversation] = React.useState<Conversation | null>(null);
-
-  const { data: conversationsData } = useQuery({
-    queryKey: ['conversations'],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from('conversations')
-        .select('*')
-        .order('created_at', { ascending: false });
-      return data || [];
-    },
-  });
-
-  const { data: messagesData, refetch: fetchMessages } = useQuery({
-    queryKey: ['messages', selectedConversation?.id],
-    queryFn: async () => {
-      if (!selectedConversation?.id) return [];
-      const { data } = await supabase
-        .from('messages')
-        .select('*')
-        .eq('conversation_id', selectedConversation.id)
-        .order('created_at', { ascending: true });
-      return data || [];
-    },
-    enabled: !!selectedConversation?.id,
-  });
+  const {
+    data: { 
+      conversations,
+      messages,
+      selectedConversation,
+      setSelectedConversation,
+      fetchMessages 
+    } = {
+      conversations: [],
+      messages: [],
+      selectedConversation: null,
+      setSelectedConversation: () => {},
+      fetchMessages: () => {}
+    }
+  } = useMessages();
 
   const {
     newMessage,
     setNewMessage,
     isLoading,
     sendMessage
-  } = useMessageSender(selectedConversation?.id || '', () => {
+  } = useMessageSender(selectedConversation, () => {
     if (selectedConversation) {
-      fetchMessages();
+      fetchMessages(selectedConversation);
     }
   });
 
-  const handleSelectConversation = (conversationId: string) => {
-    const conversation = conversationsData?.find(c => c.id === conversationId);
-    setSelectedConversation(conversation || null);
+  const selectConversation = (conversationId: string) => {
+    console.log('Selecting conversation:', conversationId);
+    setSelectedConversation(conversationId);
+    fetchMessages(conversationId);
   };
 
   return (
@@ -62,12 +46,12 @@ export const Messages = () => {
       {isAdmin && <MonitoringPanel />}
       <div className="flex h-[calc(100vh-12rem)] gap-4">
         <ConversationList
-          conversations={conversationsData || []}
+          conversations={conversations}
           selectedConversation={selectedConversation}
-          onSelectConversation={handleSelectConversation}
+          onSelectConversation={selectConversation}
         />
         <MessageArea
-          messages={messagesData || []}
+          messages={messages}
           newMessage={newMessage}
           setNewMessage={setNewMessage}
           onSendMessage={sendMessage}
