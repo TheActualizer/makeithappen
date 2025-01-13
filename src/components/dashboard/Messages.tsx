@@ -144,8 +144,11 @@ export const Messages = () => {
     }
 
     setIsLoading(true);
+    const messageContent = newMessage;
+    setNewMessage(''); // Clear input immediately for better UX
+
     console.log('Sending message:', { 
-      content: newMessage, 
+      content: messageContent, 
       conversationId: selectedConversation 
     });
 
@@ -162,7 +165,7 @@ export const Messages = () => {
         .insert([
           {
             conversation_id: selectedConversation,
-            content: newMessage,
+            content: messageContent,
             sender_id: user.id,
             is_admin_message: isAdmin
           },
@@ -176,7 +179,7 @@ export const Messages = () => {
       // Notify admin via edge function
       const { error: notifyError } = await supabase.functions.invoke('notify-admin', {
         body: {
-          message: newMessage,
+          message: messageContent,
           userId: user.id,
           conversationId: selectedConversation,
         },
@@ -188,7 +191,6 @@ export const Messages = () => {
       }
 
       console.log('Message sent successfully');
-      setNewMessage("");
     } catch (error) {
       console.error('Error in sendMessage:', error);
       toast({
@@ -196,6 +198,7 @@ export const Messages = () => {
         title: "Error",
         description: "Failed to send message",
       });
+      setNewMessage(messageContent); // Restore message content on error
     } finally {
       setIsLoading(false);
     }
