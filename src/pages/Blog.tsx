@@ -63,6 +63,12 @@ const Blog = () => {
       description: "Discover how autonomous AI agents can revolutionize processes and disrupt entire industries.",
       link: "/blog/agentic-systems",
       icon: <TrendingUp className="w-8 h-8 text-primary" />
+    },
+    {
+      title: "AI Trends Shaping the Future",
+      description: "Stay ahead of the curve with insights into emerging AI breakthroughs that will redefine competitive landscapes.",
+      link: "/blog/ai-trends",
+      icon: <BookOpen className="w-8 h-8 text-primary" />
     }
   ];
 
