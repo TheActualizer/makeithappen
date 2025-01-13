@@ -352,7 +352,9 @@ export type Database = {
       }
       projects: {
         Row: {
+          automation_categories: string[] | null
           automation_opportunities: string[] | null
+          automation_requirements: Json | null
           budget_breakdown: Json | null
           budget_range: unknown | null
           business_objectives: string[] | null
@@ -376,6 +378,7 @@ export type Database = {
           pain_points: string[] | null
           phone: string | null
           preferred_technologies: string[] | null
+          pricing_tier: string | null
           project_constraints: string[] | null
           project_timeline: Json | null
           project_type: string
@@ -388,7 +391,9 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          automation_categories?: string[] | null
           automation_opportunities?: string[] | null
+          automation_requirements?: Json | null
           budget_breakdown?: Json | null
           budget_range?: unknown | null
           business_objectives?: string[] | null
@@ -412,6 +417,7 @@ export type Database = {
           pain_points?: string[] | null
           phone?: string | null
           preferred_technologies?: string[] | null
+          pricing_tier?: string | null
           project_constraints?: string[] | null
           project_timeline?: Json | null
           project_type: string
@@ -424,7 +430,9 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          automation_categories?: string[] | null
           automation_opportunities?: string[] | null
+          automation_requirements?: Json | null
           budget_breakdown?: Json | null
           budget_range?: unknown | null
           business_objectives?: string[] | null
@@ -448,6 +456,7 @@ export type Database = {
           pain_points?: string[] | null
           phone?: string | null
           preferred_technologies?: string[] | null
+          pricing_tier?: string | null
           project_constraints?: string[] | null
           project_timeline?: Json | null
           project_type?: string
@@ -471,6 +480,19 @@ export type Database = {
     Enums: {
       ai_provider: "openai" | "dify" | "anthropic" | "google"
       appointment_status: "scheduled" | "completed" | "cancelled"
+      automation_category:
+        | "billing_payroll"
+        | "internal_operations"
+        | "email_automation"
+        | "marketing"
+        | "content_generation"
+        | "seo"
+        | "chatbot"
+        | "workflow_automation"
+        | "mathematical_calculations"
+        | "analytics_reporting"
+        | "trend_analysis"
+        | "data_manipulation"
       message_type: "text" | "system" | "ai"
       post_status: "draft" | "published" | "archived"
       project_complexity: "simple" | "moderate" | "complex" | "enterprise"
