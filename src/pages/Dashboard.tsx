@@ -16,6 +16,7 @@ import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { DashboardForms } from "@/components/dashboard/DashboardForms";
 import { DashboardCalendar } from "@/components/dashboard/DashboardCalendar";
 import { DashboardActivity } from "@/components/dashboard/DashboardActivity";
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 const Dashboard = () => {
@@ -49,75 +50,79 @@ const Dashboard = () => {
   }, [toast]);
 
   if (isLoadingAdmin) {
-    return <div className="container mx-auto py-8">Loading...</div>;
+    return <div className="min-h-screen bg-background"><DashboardHeader />Loading...</div>;
   }
 
   return (
-    <div className="container mx-auto py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold">
-          {isAdmin ? "Admin Dashboard" : "Dashboard"}
-        </h1>
-        {isAdmin && (
-          <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
-            Admin
-          </span>
-        )}
-      </div>
-
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-5 mb-8">
-          <TabsTrigger value="overview" className="flex items-center gap-2">
-            <BarChart className="h-4 w-4" />
-            Overview
-          </TabsTrigger>
-          <TabsTrigger value="forms" className="flex items-center gap-2">
-            <FileText className="h-4 w-4" />
-            {isAdmin ? "All Forms" : "My Forms"}
-          </TabsTrigger>
-          <TabsTrigger value="calendar" className="flex items-center gap-2">
-            <Calendar className="h-4 w-4" />
-            Calendar
-          </TabsTrigger>
+    <div className="min-h-screen bg-background">
+      <DashboardHeader />
+      
+      <div className="container mx-auto py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-bold">
+            {isAdmin ? "Admin Dashboard" : "Dashboard"}
+          </h1>
           {isAdmin && (
-            <TabsTrigger value="users" className="flex items-center gap-2">
-              <Users className="h-4 w-4" />
-              Users
-            </TabsTrigger>
+            <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+              Admin
+            </span>
           )}
-          <TabsTrigger value="activity" className="flex items-center gap-2">
-            <Activity className="h-4 w-4" />
-            Activity
-          </TabsTrigger>
-        </TabsList>
+        </div>
 
-        <TabsContent value="overview">
-          <DashboardStats isAdmin={isAdmin} />
-        </TabsContent>
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="grid w-full grid-cols-5 mb-8">
+            <TabsTrigger value="overview" className="flex items-center gap-2">
+              <BarChart className="h-4 w-4" />
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="forms" className="flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              {isAdmin ? "All Forms" : "My Forms"}
+            </TabsTrigger>
+            <TabsTrigger value="calendar" className="flex items-center gap-2">
+              <Calendar className="h-4 w-4" />
+              Calendar
+            </TabsTrigger>
+            {isAdmin && (
+              <TabsTrigger value="users" className="flex items-center gap-2">
+                <Users className="h-4 w-4" />
+                Users
+              </TabsTrigger>
+            )}
+            <TabsTrigger value="activity" className="flex items-center gap-2">
+              <Activity className="h-4 w-4" />
+              Activity
+            </TabsTrigger>
+          </TabsList>
 
-        <TabsContent value="forms">
-          <DashboardForms isAdmin={isAdmin} />
-        </TabsContent>
-
-        <TabsContent value="calendar">
-          <DashboardCalendar />
-        </TabsContent>
-
-        {isAdmin && (
-          <TabsContent value="users">
-            <Card className="p-6">
-              <h2 className="text-2xl font-semibold mb-4">User Management</h2>
-              <p className="text-muted-foreground">
-                Admin user management features coming soon...
-              </p>
-            </Card>
+          <TabsContent value="overview">
+            <DashboardStats isAdmin={isAdmin} />
           </TabsContent>
-        )}
 
-        <TabsContent value="activity">
-          <DashboardActivity isAdmin={isAdmin} />
-        </TabsContent>
-      </Tabs>
+          <TabsContent value="forms">
+            <DashboardForms isAdmin={isAdmin} />
+          </TabsContent>
+
+          <TabsContent value="calendar">
+            <DashboardCalendar />
+          </TabsContent>
+
+          {isAdmin && (
+            <TabsContent value="users">
+              <Card className="p-6">
+                <h2 className="text-2xl font-semibold mb-4">User Management</h2>
+                <p className="text-muted-foreground">
+                  Admin user management features coming soon...
+                </p>
+              </Card>
+            </TabsContent>
+          )}
+
+          <TabsContent value="activity">
+            <DashboardActivity isAdmin={isAdmin} />
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 };
