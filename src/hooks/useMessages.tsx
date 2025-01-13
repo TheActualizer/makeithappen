@@ -85,7 +85,7 @@ export const useMessages = () => {
           created_at,
           conversation_id,
           type,
-          profiles:sender_id (
+          profiles (
             first_name,
             last_name,
             email,
@@ -100,15 +100,20 @@ export const useMessages = () => {
         throw error;
       }
 
-      // Ensure the data matches our Message type
+      // Transform the data to match the Message type
       const typedMessages: Message[] = (data || []).map(msg => ({
         id: msg.id,
         content: msg.content,
         sender_id: msg.sender_id,
         created_at: msg.created_at,
         conversation_id: msg.conversation_id,
-        type: msg.type || 'text', // Provide default value
-        profiles: msg.profiles || null
+        type: msg.type || 'text',
+        profiles: msg.profiles || {
+          first_name: null,
+          last_name: null,
+          email: null,
+          avatar_url: null
+        }
       }));
 
       console.log('Messages fetched:', typedMessages);
