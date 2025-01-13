@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
-import { BookOpen, TrendingUp, Clock, Eye, ArrowRight } from "lucide-react";
+import { BookOpen, TrendingUp, Clock, Eye, ArrowRight, LineChart } from "lucide-react";
 
 interface BlogCategory {
   id: string;
@@ -69,6 +69,12 @@ const Blog = () => {
       description: "Stay ahead of the curve with insights into emerging AI breakthroughs that will redefine competitive landscapes.",
       link: "/blog/ai-trends",
       icon: <BookOpen className="w-8 h-8 text-primary" />
+    },
+    {
+      title: "Transformative Case Studies",
+      description: "Explore real-world examples of how our AI solutions drive measurable business outcomes.",
+      link: "/blog/case-studies",
+      icon: <LineChart className="w-8 h-8 text-primary" />
     }
   ];
 
