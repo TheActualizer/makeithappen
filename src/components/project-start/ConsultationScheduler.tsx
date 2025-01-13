@@ -30,7 +30,7 @@ Project Description:
 ${formData.description || 'Not provided'}
 
 Timeline & Budget:
-- Preferred Timeline: ${formData.timeline}
+- Preferred Timeline: ${formData.timeline || 'Not specified'}
 - Budget Range: ${getBudgetRangeText(formData.budgetRange)}
 - Team Size: ${formData.teamSize || 'Not specified'}
 
@@ -53,20 +53,18 @@ Additional Context:
       <p className="text-sm text-muted-foreground">
         Please select a time that works best for you to discuss your project in detail.
       </p>
-      <div className="min-h-[700px]">
-        <CalendlyEmbed 
-          url="https://calendly.com/belchonen18/30min" 
-          prefill={{
-            name: formData.name,
-            email: formData.email,
-            customAnswers: {
-              a1: formData.company || 'Not provided',
-              a2: formData.phone || 'Not provided',
-              a3: meetingPrep
-            }
-          }}
-        />
-      </div>
+      <CalendlyEmbed 
+        url="https://calendly.com/belchonen18/30min" 
+        prefill={{
+          name: formData.name,
+          email: formData.email,
+          customAnswers: {
+            a1: formData.company || 'Not provided',
+            a2: formData.phone || 'Not provided',
+            a3: meetingPrep
+          }
+        }}
+      />
     </div>
   );
 };
