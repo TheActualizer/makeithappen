@@ -31,6 +31,13 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/start-project" element={<StartProject />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard/projects" element={<div>Projects (Coming Soon)</div>} />
+            <Route path="/dashboard/calendar" element={<div>Calendar (Coming Soon)</div>} />
+            <Route path="/dashboard/messages" element={<div>Messages (Coming Soon)</div>} />
+            <Route path="/dashboard/documents" element={<div>Documents (Coming Soon)</div>} />
+            <Route path="/dashboard/financials" element={<div>Financial Metrics (Coming Soon)</div>} />
+            <Route path="/dashboard/progress" element={<div>Project Progress (Coming Soon)</div>} />
+            <Route path="/dashboard/scope" element={<div>Project Scope (Coming Soon)</div>} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/login" element={<Login />} />
             <Route path="/reset-password" element={<ResetPassword />} />

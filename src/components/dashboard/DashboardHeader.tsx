@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Settings, LogOut, Home, Menu } from "lucide-react";
+import { Settings, LogOut, Home, Menu, ChevronDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import {
@@ -9,6 +9,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -38,12 +39,21 @@ export const DashboardHeader = () => {
     }
   };
 
-  const navigationItems = [
-    { name: "Dashboard", href: "/dashboard" },
+  const sections = [
+    { name: "Overview", href: "/dashboard" },
     { name: "Projects", href: "/dashboard/projects" },
     { name: "Calendar", href: "/dashboard/calendar" },
     { name: "Messages", href: "/dashboard/messages" },
-    { name: "Settings", href: "/settings/profile" },
+    { name: "Documents", href: "/dashboard/documents" },
+    { name: "Financial Metrics", href: "/dashboard/financials" },
+    { name: "Project Progress", href: "/dashboard/progress" },
+    { name: "Project Scope", href: "/dashboard/scope" },
+  ];
+
+  const settingsItems = [
+    { name: "Profile Settings", href: "/settings/profile" },
+    { name: "Preferences", href: "/settings/preferences" },
+    { name: "Notifications", href: "/settings/notifications" },
   ];
 
   return (
@@ -65,23 +75,41 @@ export const DashboardHeader = () => {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left">
+            <SheetContent side="left" className="w-[300px] sm:w-[400px]">
               <SheetHeader>
                 <SheetTitle>Navigation</SheetTitle>
               </SheetHeader>
-              <div className="flex flex-col space-y-2 mt-4">
-                {navigationItems.map((item) => (
-                  <Button
-                    key={item.name}
-                    variant="ghost"
-                    className="justify-start"
-                    onClick={() => {
-                      navigate(item.href);
-                    }}
-                  >
-                    {item.name}
-                  </Button>
-                ))}
+              <div className="flex flex-col space-y-4 mt-4">
+                <div className="space-y-2">
+                  <h2 className="text-sm font-medium">Sections</h2>
+                  {sections.map((section) => (
+                    <Button
+                      key={section.name}
+                      variant="ghost"
+                      className="w-full justify-start"
+                      onClick={() => {
+                        navigate(section.href);
+                      }}
+                    >
+                      {section.name}
+                    </Button>
+                  ))}
+                </div>
+                <div className="space-y-2">
+                  <h2 className="text-sm font-medium">Settings</h2>
+                  {settingsItems.map((item) => (
+                    <Button
+                      key={item.name}
+                      variant="ghost"
+                      className="w-full justify-start"
+                      onClick={() => {
+                        navigate(item.href);
+                      }}
+                    >
+                      {item.name}
+                    </Button>
+                  ))}
+                </div>
               </div>
             </SheetContent>
           </Sheet>
@@ -90,19 +118,42 @@ export const DashboardHeader = () => {
         </div>
         
         <div className="hidden md:flex items-center space-x-4">
-          {navigationItems.map((item) => (
+          {sections.slice(0, 4).map((section) => (
             <Button
-              key={item.name}
+              key={section.name}
               variant="ghost"
               className="text-white hover:bg-accent-foreground/10"
-              onClick={() => navigate(item.href)}
+              onClick={() => navigate(section.href)}
             >
-              {item.name}
+              {section.name}
             </Button>
           ))}
         </div>
         
         <div className="flex items-center space-x-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="text-white hover:bg-accent-foreground/10">
+                Sections
+                <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>Dashboard Sections</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                {sections.map((section) => (
+                  <DropdownMenuItem
+                    key={section.name}
+                    onClick={() => navigate(section.href)}
+                  >
+                    {section.name}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="text-white hover:bg-accent-foreground/10">
@@ -112,15 +163,14 @@ export const DashboardHeader = () => {
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel>Settings</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => navigate("/settings/profile")}>
-                Profile Settings
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate("/settings/preferences")}>
-                Preferences
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate("/settings/notifications")}>
-                Notifications
-              </DropdownMenuItem>
+              {settingsItems.map((item) => (
+                <DropdownMenuItem
+                  key={item.name}
+                  onClick={() => navigate(item.href)}
+                >
+                  {item.name}
+                </DropdownMenuItem>
+              ))}
             </DropdownMenuContent>
           </DropdownMenu>
 
