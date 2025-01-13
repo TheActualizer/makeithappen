@@ -281,20 +281,35 @@ export type Database = {
       }
       projects: {
         Row: {
+          automation_opportunities: string[] | null
+          budget_breakdown: Json | null
           budget_range: unknown | null
+          business_objectives: string[] | null
           company: string | null
           complexity: Database["public"]["Enums"]["project_complexity"] | null
+          compliance_requirements: string[] | null
           created_at: string | null
+          current_challenges: string[] | null
+          current_tech_stack: Json | null
+          data_sources: string[] | null
+          decision_makers: string[] | null
           description: string
           email: string
+          expected_roi: string | null
           has_existing_codebase: boolean | null
           id: string
+          industry_vertical: string | null
+          integration_points: string[] | null
           integration_requirements: string[] | null
           name: string
           pain_points: string[] | null
           phone: string | null
           preferred_technologies: string[] | null
+          project_constraints: string[] | null
+          project_timeline: Json | null
           project_type: string
+          stakeholders: Json | null
+          success_criteria: string[] | null
           success_metrics: string[] | null
           target_completion_date: string | null
           team_size: number | null
@@ -302,20 +317,35 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          automation_opportunities?: string[] | null
+          budget_breakdown?: Json | null
           budget_range?: unknown | null
+          business_objectives?: string[] | null
           company?: string | null
           complexity?: Database["public"]["Enums"]["project_complexity"] | null
+          compliance_requirements?: string[] | null
           created_at?: string | null
+          current_challenges?: string[] | null
+          current_tech_stack?: Json | null
+          data_sources?: string[] | null
+          decision_makers?: string[] | null
           description: string
           email: string
+          expected_roi?: string | null
           has_existing_codebase?: boolean | null
           id?: string
+          industry_vertical?: string | null
+          integration_points?: string[] | null
           integration_requirements?: string[] | null
           name: string
           pain_points?: string[] | null
           phone?: string | null
           preferred_technologies?: string[] | null
+          project_constraints?: string[] | null
+          project_timeline?: Json | null
           project_type: string
+          stakeholders?: Json | null
+          success_criteria?: string[] | null
           success_metrics?: string[] | null
           target_completion_date?: string | null
           team_size?: number | null
@@ -323,20 +353,35 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          automation_opportunities?: string[] | null
+          budget_breakdown?: Json | null
           budget_range?: unknown | null
+          business_objectives?: string[] | null
           company?: string | null
           complexity?: Database["public"]["Enums"]["project_complexity"] | null
+          compliance_requirements?: string[] | null
           created_at?: string | null
+          current_challenges?: string[] | null
+          current_tech_stack?: Json | null
+          data_sources?: string[] | null
+          decision_makers?: string[] | null
           description?: string
           email?: string
+          expected_roi?: string | null
           has_existing_codebase?: boolean | null
           id?: string
+          industry_vertical?: string | null
+          integration_points?: string[] | null
           integration_requirements?: string[] | null
           name?: string
           pain_points?: string[] | null
           phone?: string | null
           preferred_technologies?: string[] | null
+          project_constraints?: string[] | null
+          project_timeline?: Json | null
           project_type?: string
+          stakeholders?: Json | null
+          success_criteria?: string[] | null
           success_metrics?: string[] | null
           target_completion_date?: string | null
           team_size?: number | null

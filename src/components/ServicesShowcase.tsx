@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { Brain, Building2, Stethoscope, Landmark, ArrowRight } from "lucide-react";
+import { Brain, Building2, Stethoscope, Landmark, ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -97,21 +97,23 @@ const ServiceCard = ({ service }: { service: Service }) => {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
-        <Card className="relative overflow-hidden transition-all duration-300 hover:shadow-lg cursor-pointer">
+        <Card className="relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 cursor-pointer border-accent/20 bg-accent/40 backdrop-blur-sm group">
           <CardHeader>
-            <Icon className="w-8 h-8 text-primary mb-2" />
-            <CardTitle>{service.title}</CardTitle>
-            <CardDescription>{service.description}</CardDescription>
+            <div className="mb-4 inline-flex p-3 rounded-lg bg-accent/30 group-hover:bg-accent/40 transition-colors">
+              <Icon className="w-6 h-6 text-secondary" />
+            </div>
+            <CardTitle className="group-hover:text-secondary transition-colors">{service.title}</CardTitle>
+            <CardDescription className="text-gray-400">{service.description}</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-sm font-medium text-primary">{service.metrics}</p>
+            <p className="text-sm font-medium text-secondary/80">{service.metrics}</p>
           </CardContent>
         </Card>
       </HoverCardTrigger>
-      <HoverCardContent className="w-80">
+      <HoverCardContent className="w-80 bg-accent/95 backdrop-blur-sm border-accent/20">
         <div className="space-y-2">
-          <h4 className="text-sm font-semibold">Key Benefits:</h4>
-          <ul className="text-sm list-disc pl-4">
+          <h4 className="text-sm font-semibold text-secondary">Key Benefits:</h4>
+          <ul className="text-sm list-disc pl-4 space-y-1 text-gray-300">
             {service.benefits.map((benefit, index) => (
               <li key={index}>{benefit}</li>
             ))}
@@ -126,18 +128,21 @@ const CaseStudyDialog = ({ service }: { service: Service }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="inline-flex items-center text-sm text-primary hover:underline">
+        <button className="inline-flex items-center text-sm text-secondary hover:text-secondary/80 transition-colors">
           View Case Study <ArrowRight className="ml-1 w-4 h-4" />
         </button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="bg-accent/95 backdrop-blur-sm border-accent/20">
         <DialogHeader>
-          <DialogTitle>{service.caseStudy.title}</DialogTitle>
+          <DialogTitle className="text-secondary flex items-center gap-2">
+            <Sparkles className="w-4 h-4" />
+            {service.caseStudy.title}
+          </DialogTitle>
           <DialogDescription>
             {service.caseStudy.description}
-            <div className="mt-4 p-4 bg-accent rounded-lg">
-              <p className="font-semibold text-primary">Results:</p>
-              <p className="mt-2">{service.caseStudy.results}</p>
+            <div className="mt-4 p-4 bg-accent/40 rounded-lg border border-accent/20">
+              <p className="font-semibold text-secondary">Results:</p>
+              <p className="mt-2 text-gray-300">{service.caseStudy.results}</p>
             </div>
           </DialogDescription>
         </DialogHeader>
@@ -155,12 +160,19 @@ export const ServicesShowcase = () => {
     : services;
 
   return (
-    <section className="py-16 px-4 md:px-6 lg:px-8 bg-background" id="services">
+    <section className="py-24 px-4 md:px-6 lg:px-8 bg-background relative" id="services">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold tracking-tight mb-4">Our Services</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Explore our comprehensive range of AI-powered solutions designed to transform your business operations
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-6">
+            <Sparkles className="w-4 h-4 text-secondary" />
+            <span className="text-sm text-gray-300">Our Services</span>
+          </div>
+          <h2 className="text-3xl font-bold tracking-tight text-white mb-6">
+            Comprehensive AI Solutions
+          </h2>
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            Explore our range of AI-powered solutions designed to transform your business operations
+            and drive sustainable growth.
           </p>
         </div>
 
@@ -180,12 +192,12 @@ export const ServicesShowcase = () => {
             variant="default" 
             size="lg"
             onClick={() => navigate("/start-project")}
-            className="group"
+            className="group bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300"
           >
             Start Your Project
             <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Button>
-          <p className="mt-4 text-sm text-muted-foreground">
+          <p className="mt-4 text-sm text-gray-400">
             Ready to transform your business? Let's discuss your project in detail.
           </p>
         </div>
