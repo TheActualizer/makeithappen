@@ -77,7 +77,8 @@ const handler = async (req: Request): Promise<Response> => {
       <p>We look forward to speaking with you!</p>
     `;
 
-    const res = await fetch("https://api.resend.com/emails", {
+    // Send email to customer
+    const customerRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -91,8 +92,35 @@ const handler = async (req: Request): Promise<Response> => {
       }),
     });
 
-    if (!res.ok) {
-      const error = await res.text();
+    // Send copy to admin
+    const adminEmailHtml = `
+      <h2>New Consultation Request</h2>
+      <h3>Client Information:</h3>
+      <p><strong>Name:</strong> ${consultation.name}</p>
+      <p><strong>Email:</strong> ${consultation.email}</p>
+      <p><strong>Date:</strong> ${consultation.consultationDate}</p>
+      <p><strong>Time:</strong> ${consultation.consultationTime}</p>
+      <h3>Project Details:</h3>
+      <p><strong>Type:</strong> ${consultation.projectType}</p>
+      <p><strong>Description:</strong> ${consultation.description}</p>
+    `;
+
+    const adminRes = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+      },
+      body: JSON.stringify({
+        from: "Lovable <onboarding@resend.dev>",
+        to: ["belchonen18@gmail.com"],
+        subject: `New Consultation Request from ${consultation.name}`,
+        html: adminEmailHtml,
+      }),
+    });
+
+    if (!customerRes.ok || !adminRes.ok) {
+      const error = await customerRes.text();
       console.error("Resend API error:", error);
       // Don't throw here since appointment was created successfully
       return new Response(
@@ -104,8 +132,8 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    const data = await res.json();
-    console.log("Email sent successfully:", data);
+    const data = await customerRes.json();
+    console.log("Emails sent successfully:", data);
 
     return new Response(
       JSON.stringify({ success: true }), 
