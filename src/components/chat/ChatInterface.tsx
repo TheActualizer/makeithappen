@@ -132,21 +132,15 @@ const ChatInterface = () => {
       if (messageError) throw messageError;
 
       console.log('Calling chat API...');
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('chat', {
+        body: {
           message: messageContent,
           model: selectedModel,
           conversationId,
-        }),
+        },
       });
 
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-
-      const data = await response.json();
+      if (error) throw error;
       console.log('Received AI response:', data);
 
       if (!data.answer) {
