@@ -30,7 +30,7 @@ const Index = () => {
               </p>
             </div>
             <div className="mb-20">
-              <CalendlyEmbed url="YOUR_CALENDLY_URL_HERE" />
+              <CalendlyEmbed url="https://calendly.com/belchonen18/30min" />
             </div>
           </div>
         </div>
