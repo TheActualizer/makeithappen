@@ -1,5 +1,6 @@
 export type ProjectType = "healthcare" | "finance" | "real-estate" | "other";
 export type Timeline = "asap" | "1-3-months" | "3-6-months" | "6-plus-months";
+export type ProjectComplexity = "simple" | "moderate" | "complex";
 
 export interface FormData {
   name: string;
@@ -11,4 +12,7 @@ export interface FormData {
   timeline: Timeline;
   consultationDate?: Date;
   consultationTime?: string;
+  complexity?: ProjectComplexity;
+  teamSize?: number;
+  budgetRange?: string;
 }
