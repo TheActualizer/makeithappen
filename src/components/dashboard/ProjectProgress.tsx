@@ -2,18 +2,37 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
-import { Milestone, ChevronRight, CheckCircle2, Clock, ArrowRight } from "lucide-react";
+import { Milestone, ChevronRight, CheckCircle2, Clock, ArrowRight, LayoutGrid } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Badge } from "@/components/ui/badge";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 interface ProjectProgressProps {
   projectId?: string;
 }
 
+interface Task {
+  id: string;
+  title: string;
+  status: string;
+  priority: string;
+  assignedTo?: string;
+}
+
+const KANBAN_COLUMNS = [
+  { id: 'backlog', title: 'Backlog', color: 'bg-gray-500' },
+  { id: 'todo', title: 'To Do', color: 'bg-blue-500' },
+  { id: 'in_progress', title: 'In Progress', color: 'bg-yellow-500' },
+  { id: 'review', title: 'Review', color: 'bg-purple-500' },
+  { id: 'done', title: 'Done', color: 'bg-green-500' }
+];
+
 export function ProjectProgress({ projectId }: ProjectProgressProps) {
   const [milestones, setMilestones] = useState<any[]>([]);
   const [sprints, setSprints] = useState<any[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
+  const [view, setView] = useState<'timeline' | 'kanban'>('timeline');
   const { toast } = useToast();
 
   useEffect(() => {
@@ -21,26 +40,31 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
 
     const fetchProjectData = async () => {
       try {
-        // Fetch milestones with next steps
-        const { data: milestonesData, error: milestonesError } = await supabase
-          .from("milestones")
-          .select("*")
-          .eq("project_id", projectId)
-          .order("created_at", { ascending: true });
+        const [milestonesData, sprintsData, tasksData] = await Promise.all([
+          supabase
+            .from("milestones")
+            .select("*")
+            .eq("project_id", projectId)
+            .order("created_at", { ascending: true }),
+          supabase
+            .from("sprints")
+            .select("*, tasks(*)")
+            .eq("project_id", projectId)
+            .order("start_date", { ascending: true }),
+          supabase
+            .from("tasks")
+            .select("*")
+            .eq("sprint_id", projectId)
+            .order("created_at", { ascending: true })
+        ]);
 
-        if (milestonesError) throw milestonesError;
+        if (milestonesData.error) throw milestonesData.error;
+        if (sprintsData.error) throw sprintsData.error;
+        if (tasksData.error) throw tasksData.error;
 
-        // Fetch sprints with tasks and next steps
-        const { data: sprintsData, error: sprintsError } = await supabase
-          .from("sprints")
-          .select("*, tasks(*, dependencies)")
-          .eq("project_id", projectId)
-          .order("start_date", { ascending: true });
-
-        if (sprintsError) throw sprintsError;
-
-        setMilestones(milestonesData || []);
-        setSprints(sprintsData || []);
+        setMilestones(milestonesData.data || []);
+        setSprints(sprintsData.data || []);
+        setTasks(tasksData.data || []);
       } catch (error) {
         console.error("Error fetching project data:", error);
         toast({
@@ -56,36 +80,136 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
     fetchProjectData();
   }, [projectId, toast]);
 
-  const calculateProgress = (items: any[], statusField: string = "status") => {
-    if (!items.length) return 0;
-    const completed = items.filter(
-      (item) => item[statusField] === "completed"
-    ).length;
-    return Math.round((completed / items.length) * 100);
+  const handleDragEnd = async (result: any) => {
+    if (!result.destination) return;
+
+    const { source, destination, draggableId } = result;
+    
+    if (source.droppableId === destination.droppableId) return;
+
+    try {
+      const { error } = await supabase
+        .from('tasks')
+        .update({ status: destination.droppableId })
+        .eq('id', draggableId);
+
+      if (error) throw error;
+
+      // Update local state
+      setTasks(tasks.map(task => 
+        task.id === draggableId 
+          ? { ...task, status: destination.droppableId }
+          : task
+      ));
+
+      toast({
+        title: "Task Updated",
+        description: "Task status has been updated successfully",
+      });
+    } catch (error) {
+      console.error('Error updating task:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update task status",
+        variant: "destructive",
+      });
+    }
   };
+
+  const renderKanbanBoard = () => (
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        {KANBAN_COLUMNS.map(column => (
+          <div key={column.id} className="flex flex-col h-full">
+            <div className={`p-2 rounded-t-lg ${column.color} text-white font-medium`}>
+              {column.title}
+            </div>
+            <Droppable droppableId={column.id}>
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className="flex-1 min-h-[200px] bg-accent/50 rounded-b-lg p-2 space-y-2"
+                >
+                  {tasks
+                    .filter(task => task.status === column.id)
+                    .map((task, index) => (
+                      <Draggable key={task.id} draggableId={task.id} index={index}>
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className="bg-background p-3 rounded-lg shadow-sm"
+                          >
+                            <h4 className="font-medium text-sm">{task.title}</h4>
+                            <div className="flex items-center gap-2 mt-2">
+                              <Badge variant={task.priority === 'high' ? 'destructive' : 'outline'}>
+                                {task.priority}
+                              </Badge>
+                              {task.assignedTo && (
+                                <span className="text-xs text-muted-foreground">
+                                  {task.assignedTo}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </div>
+        ))}
+      </div>
+    </DragDropContext>
+  );
 
   if (loading) {
     return <div>Loading project progress...</div>;
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {/* Overall Progress Card */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold">Overall Progress</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="mt-2">
-            <Progress value={calculateProgress(milestones)} className="h-2" />
-            <p className="mt-2 text-sm text-muted-foreground">
-              {calculateProgress(milestones)}% Complete
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+    <div className="space-y-6">
+      <div className="flex justify-end space-x-2 mb-4">
+        <Badge 
+          variant={view === 'timeline' ? 'default' : 'outline'}
+          className="cursor-pointer"
+          onClick={() => setView('timeline')}
+        >
+          Timeline
+        </Badge>
+        <Badge 
+          variant={view === 'kanban' ? 'default' : 'outline'}
+          className="cursor-pointer"
+          onClick={() => setView('kanban')}
+        >
+          <LayoutGrid className="w-4 h-4 mr-1" />
+          Kanban
+        </Badge>
+      </div>
 
-      {/* Milestones Card */}
+      {view === 'kanban' ? (
+        renderKanbanBoard()
+      ) : (
+        <div className="grid gap-4">
+          {/* Existing timeline view */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl font-semibold">Overall Progress</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="mt-2">
+                <Progress value={calculateProgress(milestones)} className="h-2" />
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {calculateProgress(milestones)}% Complete
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
       <Card>
         <CardHeader>
           <CardTitle className="text-xl font-semibold">
@@ -184,6 +308,16 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
           </div>
         </CardContent>
       </Card>
+        </div>
+      )}
     </div>
   );
+}
+
+function calculateProgress(items: any[], statusField: string = "status") {
+  if (!items.length) return 0;
+  const completed = items.filter(
+    (item) => item[statusField] === "completed"
+  ).length;
+  return Math.round((completed / items.length) * 100);
 }

@@ -3,16 +3,8 @@ import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import {
-  BarChart,
-  Users,
-  Calendar,
-  MessageSquare,
-  FileText,
-  Activity,
-  PlusCircle,
-  Briefcase,
-  ExternalLink,
-  DollarSign,
+  BarChart, Users, Calendar, MessageSquare, FileText,
+  Activity, PlusCircle, Briefcase, ExternalLink, DollarSign,
 } from "lucide-react";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { DashboardDocuments } from "@/components/dashboard/DashboardDocuments";
@@ -124,6 +116,24 @@ const Dashboard = () => {
             <DashboardStats isAdmin={isAdmin} />
           </section>
 
+          {/* Documents Section */}
+          <section>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-semibold flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                {isAdmin ? "All Documents" : "My Documents"}
+              </h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleExpandSection('documents')}
+              >
+                <ExternalLink className="h-4 w-4" />
+              </Button>
+            </div>
+            <DashboardDocuments isAdmin={isAdmin} />
+          </section>
+
           {/* Project Progress Section */}
           <section>
             <div className="flex justify-between items-center mb-4">
@@ -158,24 +168,6 @@ const Dashboard = () => {
               </Button>
             </div>
             <ProjectScope />
-          </section>
-
-          {/* Documents Section */}
-          <section>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold flex items-center gap-2">
-                <FileText className="h-5 w-5" />
-                {isAdmin ? "All Documents" : "My Documents"}
-              </h2>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleExpandSection('documents')}
-              >
-                <ExternalLink className="h-4 w-4" />
-              </Button>
-            </div>
-            <DashboardDocuments isAdmin={isAdmin} />
           </section>
 
           {/* Calendar Section */}
