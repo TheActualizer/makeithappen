@@ -352,21 +352,28 @@ export type Database = {
       }
       projects: {
         Row: {
+          ai_agent_requirements: string[] | null
           automation_categories: string[] | null
           automation_opportunities: string[] | null
           automation_requirements: Json | null
           budget_breakdown: Json | null
           budget_range: unknown | null
           business_objectives: string[] | null
+          business_procedures: Json | null
+          business_processes: string[] | null
           company: string | null
           complexity: Database["public"]["Enums"]["project_complexity"] | null
           compliance_requirements: string[] | null
           created_at: string | null
           current_challenges: string[] | null
+          current_manual_processes: string[] | null
           current_tech_stack: Json | null
           data_sources: string[] | null
           decision_makers: string[] | null
           description: string
+          desired_automation_outcomes: string[] | null
+          digital_transformation_goals: string[] | null
+          digital_workforce_requirements: Json | null
           email: string
           expected_roi: string | null
           has_existing_codebase: boolean | null
@@ -374,7 +381,9 @@ export type Database = {
           industry_vertical: string | null
           integration_points: string[] | null
           integration_requirements: string[] | null
+          key_automation_metrics: string[] | null
           name: string
+          operational_policies: Json | null
           pain_points: string[] | null
           phone: string | null
           preferred_technologies: string[] | null
@@ -389,23 +398,31 @@ export type Database = {
           team_size: number | null
           timeline: string
           user_id: string | null
+          workforce_simulation_scope: string | null
         }
         Insert: {
+          ai_agent_requirements?: string[] | null
           automation_categories?: string[] | null
           automation_opportunities?: string[] | null
           automation_requirements?: Json | null
           budget_breakdown?: Json | null
           budget_range?: unknown | null
           business_objectives?: string[] | null
+          business_procedures?: Json | null
+          business_processes?: string[] | null
           company?: string | null
           complexity?: Database["public"]["Enums"]["project_complexity"] | null
           compliance_requirements?: string[] | null
           created_at?: string | null
           current_challenges?: string[] | null
+          current_manual_processes?: string[] | null
           current_tech_stack?: Json | null
           data_sources?: string[] | null
           decision_makers?: string[] | null
           description: string
+          desired_automation_outcomes?: string[] | null
+          digital_transformation_goals?: string[] | null
+          digital_workforce_requirements?: Json | null
           email: string
           expected_roi?: string | null
           has_existing_codebase?: boolean | null
@@ -413,7 +430,9 @@ export type Database = {
           industry_vertical?: string | null
           integration_points?: string[] | null
           integration_requirements?: string[] | null
+          key_automation_metrics?: string[] | null
           name: string
+          operational_policies?: Json | null
           pain_points?: string[] | null
           phone?: string | null
           preferred_technologies?: string[] | null
@@ -428,23 +447,31 @@ export type Database = {
           team_size?: number | null
           timeline: string
           user_id?: string | null
+          workforce_simulation_scope?: string | null
         }
         Update: {
+          ai_agent_requirements?: string[] | null
           automation_categories?: string[] | null
           automation_opportunities?: string[] | null
           automation_requirements?: Json | null
           budget_breakdown?: Json | null
           budget_range?: unknown | null
           business_objectives?: string[] | null
+          business_procedures?: Json | null
+          business_processes?: string[] | null
           company?: string | null
           complexity?: Database["public"]["Enums"]["project_complexity"] | null
           compliance_requirements?: string[] | null
           created_at?: string | null
           current_challenges?: string[] | null
+          current_manual_processes?: string[] | null
           current_tech_stack?: Json | null
           data_sources?: string[] | null
           decision_makers?: string[] | null
           description?: string
+          desired_automation_outcomes?: string[] | null
+          digital_transformation_goals?: string[] | null
+          digital_workforce_requirements?: Json | null
           email?: string
           expected_roi?: string | null
           has_existing_codebase?: boolean | null
@@ -452,7 +479,9 @@ export type Database = {
           industry_vertical?: string | null
           integration_points?: string[] | null
           integration_requirements?: string[] | null
+          key_automation_metrics?: string[] | null
           name?: string
+          operational_policies?: Json | null
           pain_points?: string[] | null
           phone?: string | null
           preferred_technologies?: string[] | null
@@ -467,6 +496,7 @@ export type Database = {
           team_size?: number | null
           timeline?: string
           user_id?: string | null
+          workforce_simulation_scope?: string | null
         }
         Relationships: []
       }
@@ -493,6 +523,13 @@ export type Database = {
         | "analytics_reporting"
         | "trend_analysis"
         | "data_manipulation"
+        | "digital_workforce"
+        | "business_simulation"
+        | "automated_accounting"
+        | "legal_automation"
+        | "policy_automation"
+        | "procedure_automation"
+        | "agent_orchestration"
       message_type: "text" | "system" | "ai"
       post_status: "draft" | "published" | "archived"
       project_complexity: "simple" | "moderate" | "complex" | "enterprise"

@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { ChartBar, Code2, DollarSign, Workflow, Target, AlertCircle } from "lucide-react";
+import { ChartBar, Code2, DollarSign, Workflow, Target, AlertCircle, Bot, Building2 } from "lucide-react";
 
 interface ProjectDetailsStepProps {
   formData: FormData;
@@ -20,7 +20,9 @@ const painPoints = [
   { id: "security", label: "Security Compliance" },
   { id: "user-adoption", label: "User Adoption" },
   { id: "legacy-systems", label: "Legacy Systems" },
-  { id: "cost-efficiency", label: "Cost Efficiency" }
+  { id: "cost-efficiency", label: "Cost Efficiency" },
+  { id: "workforce-automation", label: "Workforce Automation" },
+  { id: "ai-integration", label: "AI Integration" }
 ];
 
 const complexityLevels = [
@@ -30,6 +32,7 @@ const complexityLevels = [
 ];
 
 const budgetRanges = [
+  { value: "10000-25000", label: "$10,000 - $25,000" },
   { value: "25000-50000", label: "$25,000 - $50,000" },
   { value: "50000-100000", label: "$50,000 - $100,000" },
   { value: "100000-200000", label: "$100,000 - $200,000" },
@@ -43,8 +46,18 @@ const teamSizes = [
   { value: "20+", label: "20+ members" }
 ];
 
+const agentRequirements = [
+  { id: "process-automation", label: "Process Automation Agents" },
+  { id: "customer-service", label: "Customer Service Agents" },
+  { id: "data-analysis", label: "Data Analysis Agents" },
+  { id: "decision-making", label: "Decision Making Agents" },
+  { id: "document-processing", label: "Document Processing Agents" },
+  { id: "workflow-orchestration", label: "Workflow Orchestration Agents" }
+];
+
 const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) => {
   const [selectedPainPoints, setSelectedPainPoints] = useState<string[]>(formData.pain_points || []);
+  const [selectedAgents, setSelectedAgents] = useState<string[]>(formData.ai_agent_requirements || []);
 
   const handlePainPointChange = (pointId: string) => {
     setSelectedPainPoints(current => {
@@ -55,6 +68,21 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
       setFormData({
         ...formData,
         pain_points: updated
+      });
+      
+      return updated;
+    });
+  };
+
+  const handleAgentRequirementChange = (agentId: string) => {
+    setSelectedAgents(current => {
+      const updated = current.includes(agentId)
+        ? current.filter(id => id !== agentId)
+        : [...current, agentId];
+      
+      setFormData({
+        ...formData,
+        ai_agent_requirements: updated
       });
       
       return updated;
@@ -84,12 +112,37 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
             <SelectItem value="healthcare">Healthcare Technology</SelectItem>
             <SelectItem value="finance">Financial Services</SelectItem>
             <SelectItem value="real-estate">Real Estate Solutions</SelectItem>
+            <SelectItem value="digital-workforce">Digital Workforce Transformation</SelectItem>
             <SelectItem value="other">Other Industry</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       <Card className="p-4 space-y-6 bg-accent/5">
+        <div className="space-y-3">
+          <label className="text-sm font-medium flex items-center gap-2">
+            <Bot className="w-4 h-4" />
+            AI Agent Requirements
+          </label>
+          <div className="grid grid-cols-2 gap-4">
+            {agentRequirements.map((agent) => (
+              <div key={agent.id} className="flex items-center space-x-2">
+                <Checkbox
+                  id={agent.id}
+                  checked={selectedAgents.includes(agent.id)}
+                  onCheckedChange={() => handleAgentRequirementChange(agent.id)}
+                />
+                <label
+                  htmlFor={agent.id}
+                  className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  {agent.label}
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="space-y-3">
           <label className="text-sm font-medium flex items-center gap-2">
             <AlertCircle className="w-4 h-4" />
@@ -112,6 +165,21 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
               </div>
             ))}
           </div>
+        </div>
+
+        <div className="space-y-3">
+          <label className="text-sm font-medium flex items-center gap-2">
+            <Building2 className="w-4 h-4" />
+            Digital Workforce Scope
+          </label>
+          <Textarea
+            value={formData.workforce_simulation_scope || ''}
+            onChange={(e) =>
+              setFormData({ ...formData, workforce_simulation_scope: e.target.value })
+            }
+            placeholder="Describe the scope of digital workforce transformation you're looking to achieve..."
+            className="min-h-[80px] bg-accent/5"
+          />
         </div>
 
         <div className="space-y-3">
