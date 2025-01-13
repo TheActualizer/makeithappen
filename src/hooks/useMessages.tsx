@@ -85,7 +85,7 @@ export const useMessages = () => {
           created_at,
           conversation_id,
           type,
-          profiles (
+          profiles!messages_sender_id_fkey (
             first_name,
             last_name,
             email,
@@ -100,7 +100,6 @@ export const useMessages = () => {
         throw error;
       }
 
-      // Transform the data to match the Message type
       const typedMessages: Message[] = (data || []).map(msg => ({
         id: msg.id,
         content: msg.content,
