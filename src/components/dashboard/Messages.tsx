@@ -32,7 +32,7 @@ export const Messages = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    fetchConversations();
+    console.log('Setting up real-time subscription for messages');
     const channel = supabase
       .channel('messages-changes')
       .on(
@@ -43,6 +43,7 @@ export const Messages = () => {
           table: 'messages',
         },
         (payload) => {
+          console.log('New message received:', payload);
           const newMessage = payload.new as Message;
           if (newMessage.conversation_id === selectedConversation) {
             setMessages(prev => [...prev, newMessage]);
@@ -52,25 +53,38 @@ export const Messages = () => {
       .subscribe();
 
     return () => {
+      console.log('Cleaning up messages subscription');
       supabase.removeChannel(channel);
     };
   }, [selectedConversation]);
 
+  useEffect(() => {
+    fetchConversations();
+  }, []);
+
   const fetchConversations = async () => {
+    console.log('Fetching conversations...');
     try {
       const { data, error } = await supabase
         .from('conversations')
         .select('id, title, created_at')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching conversations:', error);
+        throw error;
+      }
+
+      console.log('Conversations fetched:', data);
       setConversations(data || []);
+      
       if (data && data.length > 0 && !selectedConversation) {
+        console.log('Setting initial conversation:', data[0].id);
         setSelectedConversation(data[0].id);
         fetchMessages(data[0].id);
       }
     } catch (error) {
-      console.error('Error fetching conversations:', error);
+      console.error('Error in fetchConversations:', error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -80,6 +94,7 @@ export const Messages = () => {
   };
 
   const fetchMessages = async (conversationId: string) => {
+    console.log('Fetching messages for conversation:', conversationId);
     try {
       const { data, error } = await supabase
         .from('messages')
@@ -94,10 +109,15 @@ export const Messages = () => {
         .eq('conversation_id', conversationId)
         .order('created_at', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching messages:', error);
+        throw error;
+      }
+
+      console.log('Messages fetched:', data);
       setMessages(data || []);
     } catch (error) {
-      console.error('Error fetching messages:', error);
+      console.error('Error in fetchMessages:', error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -108,11 +128,25 @@ export const Messages = () => {
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim() || !selectedConversation) return;
+    if (!newMessage.trim() || !selectedConversation) {
+      console.log('Message send prevented:', { 
+        hasContent: !!newMessage.trim(), 
+        hasSelectedConversation: !!selectedConversation 
+      });
+      return;
+    }
+
+    console.log('Sending message:', { 
+      content: newMessage, 
+      conversationId: selectedConversation 
+    });
 
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
+      if (!user) {
+        console.error('No authenticated user found');
+        throw new Error('Not authenticated');
+      }
 
       const { error } = await supabase
         .from('messages')
@@ -125,10 +159,15 @@ export const Messages = () => {
           },
         ]);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error sending message:', error);
+        throw error;
+      }
+
+      console.log('Message sent successfully');
       setNewMessage("");
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('Error in sendMessage:', error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -138,6 +177,7 @@ export const Messages = () => {
   };
 
   const selectConversation = (conversationId: string) => {
+    console.log('Selecting conversation:', conversationId);
     setSelectedConversation(conversationId);
     fetchMessages(conversationId);
   };

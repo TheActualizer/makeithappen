@@ -14,18 +14,20 @@ serve(async (req) => {
 
   try {
     const { message, model, conversationId } = await req.json()
-    console.log('Received request:', { message, model, conversationId })
+    console.log('Chat function called with:', { message, model, conversationId })
 
     if (!message) {
+      console.error('No message provided');
       throw new Error('Message is required')
     }
 
     const difyApiKey = Deno.env.get('DIFY_API_KEY')
     if (!difyApiKey) {
+      console.error('DIFY_API_KEY not configured');
       throw new Error('DIFY_API_KEY is not configured')
     }
 
-    console.log('Using DIFY API with conversation ID:', conversationId)
+    console.log('Calling DIFY API...');
     
     const response = await fetch('https://api.dify.ai/v1/chat-messages', {
       method: 'POST',
@@ -36,21 +38,22 @@ serve(async (req) => {
       body: JSON.stringify({
         inputs: {},
         query: message,
-        user: conversationId, // Use conversationId as user identifier
+        user: conversationId,
         response_mode: 'blocking',
       }),
     })
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('DIFY API error response:', errorText)
+      console.error('DIFY API error:', { status: response.status, body: errorText });
       throw new Error(`DIFY API error: ${response.status} ${errorText}`)
     }
 
     const data = await response.json()
-    console.log('DIFY API response:', data)
+    console.log('DIFY API response:', data);
 
     if (!data.answer) {
+      console.error('No answer in DIFY response');
       throw new Error('No answer received from DIFY API')
     }
 
@@ -61,7 +64,7 @@ serve(async (req) => {
       },
     )
   } catch (error) {
-    console.error('Error in chat function:', error)
+    console.error('Error in chat function:', error);
     return new Response(
       JSON.stringify({ 
         error: error.message,

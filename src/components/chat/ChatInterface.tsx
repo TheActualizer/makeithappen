@@ -37,12 +37,14 @@ const ChatInterface = () => {
 
   useEffect(() => {
     if (isOpen && !conversationId) {
+      console.log('Chat interface opened, creating new conversation...');
       createNewConversation();
     }
   }, [isOpen]);
 
   useEffect(() => {
     if (conversationId) {
+      console.log(`Setting up real-time subscription for conversation ${conversationId}`);
       const channel = supabase
         .channel('chat-updates')
         .on(
@@ -54,6 +56,7 @@ const ChatInterface = () => {
             filter: `conversation_id=eq.${conversationId}`,
           },
           (payload) => {
+            console.log('New message received:', payload);
             const newMessage = payload.new as Message;
             setMessages((prev) => [...prev, newMessage]);
           }
@@ -61,6 +64,7 @@ const ChatInterface = () => {
         .subscribe();
 
       return () => {
+        console.log('Cleaning up real-time subscription');
         supabase.removeChannel(channel);
       };
     }
@@ -68,7 +72,7 @@ const ChatInterface = () => {
 
   const createNewConversation = async () => {
     try {
-      console.log('Creating new conversation...');
+      console.log('Creating new conversation with provider:', selectedModel);
       
       const { data, error } = await supabase
         .from('conversations')
@@ -84,7 +88,7 @@ const ChatInterface = () => {
         throw error;
       }
       
-      console.log('Conversation created:', data);
+      console.log('Conversation created successfully:', data);
       setConversationId(data.id);
 
       const { error: messageError } = await supabase
@@ -97,7 +101,12 @@ const ChatInterface = () => {
           },
         ]);
 
-      if (messageError) throw messageError;
+      if (messageError) {
+        console.error('Error creating initial message:', messageError);
+        throw messageError;
+      }
+
+      console.log('Initial system message created successfully');
     } catch (error) {
       console.error('Error in createNewConversation:', error);
       toast({
@@ -110,15 +119,21 @@ const ChatInterface = () => {
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim() || !conversationId || isLoading) return;
+    if (!newMessage.trim() || !conversationId || isLoading) {
+      console.log('Message send prevented:', { 
+        hasContent: !!newMessage.trim(), 
+        hasConversationId: !!conversationId, 
+        isLoading 
+      });
+      return;
+    }
 
     const messageContent = newMessage;
-    setNewMessage(''); // Clear the input immediately
+    setNewMessage('');
     setIsLoading(true);
+    console.log('Sending message:', { content: messageContent, conversationId });
 
     try {
-      console.log('Sending message:', messageContent);
-      
       const { error: messageError } = await supabase
         .from('messages')
         .insert([
@@ -129,9 +144,12 @@ const ChatInterface = () => {
           },
         ]);
 
-      if (messageError) throw messageError;
+      if (messageError) {
+        console.error('Error inserting user message:', messageError);
+        throw messageError;
+      }
 
-      console.log('Calling chat API...');
+      console.log('User message saved, calling AI service...');
       const { data, error } = await supabase.functions.invoke('chat', {
         body: {
           message: messageContent,
@@ -140,7 +158,11 @@ const ChatInterface = () => {
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error from chat function:', error);
+        throw error;
+      }
+
       console.log('Received AI response:', data);
 
       if (!data.answer) {
@@ -157,8 +179,12 @@ const ChatInterface = () => {
           },
         ]);
 
-      if (aiMessageError) throw aiMessageError;
+      if (aiMessageError) {
+        console.error('Error saving AI response:', aiMessageError);
+        throw aiMessageError;
+      }
 
+      console.log('AI response saved successfully');
     } catch (error) {
       console.error('Error in sendMessage:', error);
       toast({
@@ -172,6 +198,7 @@ const ChatInterface = () => {
   };
 
   const handleOpen = (open: boolean) => {
+    console.log('Chat interface visibility changed:', open);
     setIsOpen(open);
     if (open && !conversationId) {
       createNewConversation();
