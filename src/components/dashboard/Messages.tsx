@@ -207,6 +207,9 @@ export const Messages = () => {
       }
 
       console.log('Message sent and admin notified successfully');
+      
+      // Fetch messages again to ensure we have the latest state
+      await fetchMessages(selectedConversation);
     } catch (error) {
       console.error('Error in sendMessage:', error);
       toast({
@@ -214,7 +217,6 @@ export const Messages = () => {
         title: "Error",
         description: "Failed to send message",
       });
-      setNewMessage(messageContent); // Restore message if sending failed
     } finally {
       setIsLoading(false);
     }
