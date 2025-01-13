@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -39,12 +39,14 @@ const ProjectStartModal = ({
   const [showCalendly, setShowCalendly] = useState(false);
   const navigate = useNavigate();
 
-  console.log("[ProjectStartModal] Render with state:", { 
-    step, 
-    showCalendly, 
-    isSubmitting,
-    formData 
-  });
+  useEffect(() => {
+    console.log("[ProjectStartModal] State updated:", { 
+      step, 
+      showCalendly, 
+      isSubmitting,
+      formData 
+    });
+  }, [step, showCalendly, isSubmitting, formData]);
 
   const handleNext = () => {
     if (step < 4) {
@@ -102,31 +104,25 @@ const ProjectStartModal = ({
 
       console.log("[handleSubmit] Formatted project data:", projectData);
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('projects')
-        .insert([projectData])
-        .select()
-        .single();
+        .insert([projectData]);
 
       if (error) {
         console.error('[handleSubmit] Project submission error:', error);
         throw new Error(error.message);
       }
 
-      console.log('[handleSubmit] Project saved successfully:', data);
+      console.log('[handleSubmit] Project saved successfully');
       
       toast({
         title: "Success!",
         description: "Your project details have been saved. Let's schedule a consultation!",
       });
 
-      console.log("[handleSubmit] Setting showCalendly to true");
+      // Important: Set showCalendly to true AFTER successful submission
       setShowCalendly(true);
-      
-      // Add a small delay to ensure state update is processed
-      setTimeout(() => {
-        console.log("[handleSubmit] Delayed check - showCalendly state:", showCalendly);
-      }, 100);
+      console.log("[handleSubmit] showCalendly set to true");
       
     } catch (error) {
       console.error('[handleSubmit] Submission error:', error);

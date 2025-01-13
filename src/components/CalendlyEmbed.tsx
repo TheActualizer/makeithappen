@@ -26,14 +26,13 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
   }, [url, prefill]);
 
   return (
-    <div ref={componentRef} className="h-[700px]">
+    <div ref={componentRef} className="min-h-[700px]">
       <InlineWidget
         url={url}
         prefill={prefill}
         styles={{
-          height: '100%',
-          width: '100%',
-          minHeight: '700px'
+          height: '700px',
+          width: '100%'
         }}
       />
     </div>
