@@ -17,15 +17,23 @@ export const ResetPassword = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if we have a valid session for password reset
     const checkSession = async () => {
       console.log("Checking session for password reset");
       const { data: { session }, error } = await supabase.auth.getSession();
       console.log("Session data:", session);
       console.log("Session error:", error);
       
-      if (error || !session) {
+      if (error) {
         console.error("Session error:", error);
+        setError("Invalid or expired password reset link. Please request a new one.");
+        return;
+      }
+
+      // Check if we have a recovery token in the URL
+      const fragment = new URLSearchParams(window.location.hash.substring(1));
+      const type = fragment.get('type');
+      
+      if (!session && type !== 'recovery') {
         setError("Invalid or expired password reset link. Please request a new one.");
         return;
       }
