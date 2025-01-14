@@ -17,15 +17,15 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-accent via-accent/95 to-primary/20">
       <Navbar />
       
-      <main className="relative mx-auto">
-        {/* Compact layout with side-by-side sections on larger screens */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-20 px-4 lg:px-8 max-w-[2000px] mx-auto">
-          {/* Left column */}
-          <div className="space-y-8">
+      <main className="container">
+        {/* Two-column layout on larger screens */}
+        <div className="grid lg:grid-cols-2 gap-8 pt-20">
+          {/* Left column - Hero section stays visible */}
+          <div className="lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)]">
             <Hero />
           </div>
           
-          {/* Right column */}
+          {/* Right column - Scrollable content */}
           <div className="space-y-8">
             <ServicesShowcase />
           </div>

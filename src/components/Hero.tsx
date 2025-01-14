@@ -7,14 +7,14 @@ const Hero = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className="relative flex flex-col justify-center min-h-[70vh] lg:min-h-[85vh] lg:sticky lg:top-24">
-      <div className="space-y-6 max-w-2xl">
+    <div className="flex flex-col justify-center h-full py-8 lg:py-0">
+      <div className="space-y-6">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 animate-fade-in">
           <Sparkles className="w-4 h-4 text-secondary animate-pulse" />
           <span className="text-sm text-gray-300">From Simple Websites to Enterprise SaaS Solutions</span>
         </div>
         
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+        <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight max-w-xl">
           Building{" "}
           <span className="relative">
             <span className="absolute -inset-1 blur-xl bg-gradient-to-r from-secondary via-primary to-secondary opacity-30"></span>
@@ -25,7 +25,7 @@ const Hero = () => {
           Digital Solutions
         </h1>
         
-        <p className="text-lg text-gray-300 leading-relaxed max-w-xl backdrop-blur-sm">
+        <p className="text-lg text-gray-300 leading-relaxed">
           Transform your vision into reality with our comprehensive development solutions. 
           From responsive websites to sophisticated enterprise SaaS platforms powered by AI.
         </p>

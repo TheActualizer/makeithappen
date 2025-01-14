@@ -31,6 +31,7 @@
     --spacing-unit: 8px;
     --container-padding: clamp(1rem, 5vw, 2rem);
     --content-width: min(65ch, 100% - var(--container-padding) * 2);
+    --section-spacing: clamp(2rem, 8vh, 6rem);
   }
 
   * {
@@ -48,39 +49,29 @@
     overflow-x: hidden;
   }
 
+  /* Typography Scale */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold tracking-normal leading-tight;
+    @apply font-semibold tracking-normal;
     letter-spacing: -0.02em;
   }
 
-  h1 {
-    @apply text-4xl md:text-5xl mb-6;
+  h1 { @apply text-4xl md:text-5xl mb-6 leading-tight; }
+  h2 { @apply text-3xl md:text-4xl mb-5 leading-tight; }
+  h3 { @apply text-2xl md:text-3xl mb-4 leading-tight; }
+  
+  p { @apply mb-4 leading-relaxed tracking-wide max-w-[65ch]; }
+  
+  /* Content Spacing */
+  section { @apply py-12 md:py-16 lg:py-20; }
+  
+  /* Container System */
+  .container {
+    @apply px-4 mx-auto max-w-[1400px] w-full;
   }
 
-  h2 {
-    @apply text-3xl md:text-4xl mb-5;
-  }
-
-  h3 {
-    @apply text-2xl md:text-3xl mb-4;
-  }
-
-  p {
-    @apply mb-4 leading-relaxed tracking-wide;
-  }
-
-  /* Increase spacing between paragraphs */
-  p + p {
-    @apply mt-6;
-  }
-
-  /* Smooth transition for all interactive elements */
-  a, button, input, select, textarea {
-    @apply transition-all duration-200;
-  }
-
-  /* Ensure content doesn't shift during page transitions */
-  #root {
-    @apply relative min-h-screen;
+  /* Grid System */
+  .grid-auto-fit {
+    @apply grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
   }
 }
