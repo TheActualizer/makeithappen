@@ -34,15 +34,25 @@ const Contact = () => {
       transition: {
         duration: 4,
         repeat: Infinity,
-        repeatType: "reverse",
+        repeatType: "mirror",
         ease: "easeInOut",
       },
     },
   };
 
+  // Generate random stars
+  const stars = Array.from({ length: 50 }, (_, i) => ({
+    id: i,
+    size: Math.random() * 2 + 1,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    duration: Math.random() * 3 + 2,
+    delay: Math.random() * 2,
+  }));
+
   return (
     <motion.div 
-      className="min-h-screen bg-accent"
+      className="min-h-screen bg-accent overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -55,6 +65,32 @@ const Contact = () => {
         animate="visible"
       >
         <div className="max-w-2xl mx-auto relative">
+          {/* Stars background */}
+          <div className="absolute inset-0 -z-10">
+            {stars.map((star) => (
+              <motion.div
+                key={star.id}
+                className="absolute rounded-full bg-white"
+                style={{
+                  width: star.size,
+                  height: star.size,
+                  left: `${star.x}%`,
+                  top: `${star.y}%`,
+                }}
+                animate={{
+                  opacity: [0.2, 1, 0.2],
+                  scale: [1, 1.5, 1],
+                }}
+                transition={{
+                  duration: star.duration,
+                  repeat: Infinity,
+                  delay: star.delay,
+                  ease: "easeInOut",
+                }}
+              />
+            ))}
+          </div>
+
           {/* Decorative elements */}
           <motion.div
             className="absolute -left-20 -top-20 w-40 h-40 bg-primary/10 rounded-full blur-3xl"
@@ -72,7 +108,7 @@ const Contact = () => {
 
           <div className="text-center mb-12 relative">
             <motion.h1 
-              className="text-4xl font-bold text-white mb-4"
+              className="text-4xl font-bold text-white mb-4 relative z-10"
               variants={itemVariants}
             >
               Let's Innovate Together
