@@ -1,115 +1,112 @@
-import { Brain, Calculator, Scale, Truck, Search, Database, Bot, Network, Shield, Workflow, Mail, Calendar, Users, FileText, BarChart, MessageSquare } from "lucide-react";
-
-export const features = [
-  {
-    id: "client-onboarding",
-    title: "Smart Onboarding",
-    description: "Automated project intake & scheduling",
-    icon: Users,
-    features: ["Project Request Forms", "AI Meeting Notes", "Auto Follow-ups"],
-    metrics: "15min Setup ↓",
-    tags: ["Forms", "AI", "Automation"]
-  },
-  {
-    id: "meetings",
-    title: "Meeting Assistant",
-    description: "AI-powered meeting management",
-    icon: Calendar,
-    features: ["Zoom Integration", "AI Summary Notes", "Action Items"],
-    metrics: "24/7 Booking",
-    tags: ["Zoom", "AI", "Notes"]
-  },
-  {
-    id: "communication",
-    title: "Client Portal",
-    description: "Centralized client communication",
-    icon: MessageSquare,
-    features: ["Project Discussion", "File Sharing", "Updates"],
-    metrics: "2min Response ↓",
-    tags: ["Chat", "Files"]
-  },
-  {
-    id: "documents",
-    title: "Document Hub",
-    description: "Secure document management",
-    icon: FileText,
-    features: ["File Storage", "Version Control", "Sharing"],
-    metrics: "100% Paperless",
-    tags: ["Storage", "Security"]
-  },
-  {
-    id: "dashboard",
-    title: "Client Dashboard",
-    description: "Real-time project insights",
-    icon: BarChart,
-    features: ["Progress Tracking", "Analytics", "Reports"],
-    metrics: "Live Updates",
-    tags: ["Analytics", "Reports"]
-  },
-  {
-    id: "integrations",
-    title: "Data Integration",
-    description: "Seamless database connectivity",
-    icon: Database,
-    features: ["API Access", "Data Sync", "Automation"],
-    metrics: "10+ Integrations",
-    tags: ["API", "Database"]
-  }
-];
+import { Brain, Calculator, Scale, Truck, Search, Database } from "lucide-react";
 
 export const services = [
   {
     id: 1,
-    title: "Client Onboarding",
-    description: "Automated project intake & scheduling",
-    icon: Users,
-    features: ["Smart Forms", "Meeting Scheduler", "Auto Follow-ups"],
-    metrics: "15min Setup ↓",
-    tags: ["Automation", "AI", "CRM"]
+    title: "Finance & Markets Automation",
+    description: "Revolutionary AI systems for financial markets and accounting",
+    icon: Calculator,
+    benefits: [
+      "Real-time market analysis",
+      "Automated accounting workflows",
+      "Risk assessment automation",
+      "Regulatory compliance"
+    ],
+    metrics: "85% reduction in processing time",
+    caseStudy: {
+      title: "Financial Markets Transformation",
+      description: "Implemented agentic trading system with real-time analysis",
+      results: "300% increase in trading efficiency"
+    }
   },
   {
     id: 2,
-    title: "Project Management",
-    description: "Real-time tracking & collaboration",
-    icon: Workflow,
-    features: ["Task Automation", "Progress Tracking", "Team Sync"],
-    metrics: "40% Time Saved",
-    tags: ["Dashboard", "Analytics"]
+    title: "Legal Department Automation",
+    description: "HIPAA & GDPR compliant legal automation systems",
+    icon: Scale,
+    benefits: [
+      "Automated contract review",
+      "Compliance monitoring",
+      "Case management",
+      "Legal research automation"
+    ],
+    metrics: "75% faster document processing",
+    caseStudy: {
+      title: "Legal Tech Revolution",
+      description: "Deployed AI-powered legal operations system",
+      results: "90% reduction in review time"
+    }
   },
   {
     id: 3,
-    title: "Document Hub",
-    description: "Secure file sharing & storage",
-    icon: FileText,
-    features: ["Auto-Organize", "Version Control", "Quick Share"],
-    metrics: "100% Paperless",
-    tags: ["Storage", "Security"]
+    title: "Logistics & Manufacturing",
+    description: "End-to-end supply chain and manufacturing optimization",
+    icon: Truck,
+    benefits: [
+      "Supply chain optimization",
+      "Predictive maintenance",
+      "Inventory management",
+      "Quality control automation"
+    ],
+    metrics: "60% improvement in efficiency",
+    caseStudy: {
+      title: "Manufacturing Excellence",
+      description: "Implemented smart factory automation",
+      results: "45% cost reduction"
+    }
   },
   {
     id: 4,
-    title: "Meeting Assistant",
-    description: "AI-powered meeting management",
-    icon: Calendar,
-    features: ["Smart Scheduling", "Auto Notes", "Action Items"],
-    metrics: "24/7 Booking",
-    tags: ["AI", "Zoom"]
+    title: "Research & Development",
+    description: "Sakana AI methodologies for rapid prototyping",
+    icon: Search,
+    benefits: [
+      "Lightspeed prototyping",
+      "Research automation",
+      "Data analysis",
+      "Innovation acceleration"
+    ],
+    metrics: "10x faster research cycles",
+    caseStudy: {
+      title: "R&D Transformation",
+      description: "Applied Sakana AI methodologies",
+      results: "5x increase in innovation rate"
+    }
   },
   {
     id: 5,
-    title: "Communication Hub",
-    description: "Multi-channel client engagement",
-    icon: MessageSquare,
-    features: ["Email Automation", "Chat Support", "Updates"],
-    metrics: "2min Response ↓",
-    tags: ["Email", "Chat"]
+    title: "Data Architecture & Processing",
+    description: "Advanced data systems with AWS & Bedrock integration",
+    icon: Database,
+    benefits: [
+      "Data enrichment",
+      "Vector processing",
+      "AWS integration",
+      "Real-time analytics"
+    ],
+    metrics: "99.9% data accuracy achieved",
+    caseStudy: {
+      title: "Data Infrastructure",
+      description: "Built scalable vector database system",
+      results: "1M+ operations per second"
+    }
   },
   {
     id: 6,
-    title: "Analytics Suite",
-    description: "Real-time business insights",
-    icon: Chart,
-    features: ["Performance", "Trends", "Forecasts"],
-    metrics: "Live Metrics",
-    tags: ["Data", "Reports"]
+    title: "Agentic Systems Development",
+    description: "Custom agent frameworks and memory systems",
+    icon: Brain,
+    benefits: [
+      "Agent orchestration",
+      "Memory systems",
+      "Decision frameworks",
+      "Workflow automation"
+    ],
+    metrics: "95% autonomous operation rate",
+    caseStudy: {
+      title: "Agentic Framework",
+      description: "Developed custom agent network",
+      results: "24/7 autonomous operations"
+    }
   }
 ];

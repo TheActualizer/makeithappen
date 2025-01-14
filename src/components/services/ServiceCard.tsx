@@ -1,16 +1,19 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { LucideIcon } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { motion } from "framer-motion";
 
 interface Service {
   id: number;
   title: string;
   description: string;
   icon: LucideIcon;
-  features: string[];
+  benefits: string[];
   metrics: string;
-  tags: string[];
+  caseStudy: {
+    title: string;
+    description: string;
+    results: string;
+  };
 }
 
 interface ServiceCardProps {
@@ -21,62 +24,33 @@ export const ServiceCard = ({ service }: ServiceCardProps) => {
   const Icon = service.icon;
   
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <Card className="group h-full overflow-hidden transition-all duration-300 hover:shadow-lg border-accent/20 bg-gradient-to-br from-accent/40 to-background backdrop-blur-sm">
-        <CardContent className="p-6 h-full flex flex-col">
-          <div className="flex items-start gap-4">
-            <div className="rounded-lg bg-accent/30 p-3 group-hover:bg-accent/40 transition-colors">
-              <Icon className="w-6 h-6 text-primary" />
+    <HoverCard>
+      <HoverCardTrigger asChild>
+        <Card className="relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 cursor-pointer border-accent/20 bg-accent/40 backdrop-blur-sm group">
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              <div className="inline-flex p-3 rounded-lg bg-accent/30 group-hover:bg-accent/40 transition-colors">
+                <Icon className="w-6 h-6 text-secondary" />
+              </div>
             </div>
-            
-            <div className="space-y-1 flex-1">
-              <h3 className="font-semibold text-lg text-foreground group-hover:text-primary transition-colors">
-                {service.title}
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                {service.description}
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-4 flex flex-wrap gap-1">
-            {service.tags.map((tag) => (
-              <Badge 
-                key={tag} 
-                variant="secondary" 
-                className="bg-accent/30 hover:bg-accent/40"
-              >
-                {tag}
-              </Badge>
+            <CardTitle className="group-hover:text-secondary transition-colors">{service.title}</CardTitle>
+            <CardDescription className="text-gray-400">{service.description}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm font-medium text-secondary/80">{service.metrics}</p>
+          </CardContent>
+        </Card>
+      </HoverCardTrigger>
+      <HoverCardContent className="w-80 bg-accent/95 backdrop-blur-sm border-accent/20">
+        <div className="space-y-2">
+          <h4 className="text-sm font-semibold text-secondary">Key Benefits:</h4>
+          <ul className="text-sm list-disc pl-4 space-y-1 text-gray-300">
+            {service.benefits.map((benefit, index) => (
+              <li key={index}>{benefit}</li>
             ))}
-          </div>
-
-          <div className="mt-4 flex-1 grid grid-cols-1 gap-2">
-            {service.features.map((feature, index) => (
-              <motion.div 
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="flex items-center gap-2 text-sm text-muted-foreground"
-              >
-                <div className="w-1 h-1 rounded-full bg-primary" />
-                {feature}
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="mt-4 pt-4 border-t border-accent/20">
-            <p className="text-sm font-medium text-primary">
-              {service.metrics}
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    </motion.div>
+          </ul>
+        </div>
+      </HoverCardContent>
+    </HoverCard>
   );
 };
