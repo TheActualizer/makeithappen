@@ -121,7 +121,7 @@ const Login = () => {
                 }}
                 theme="dark"
                 providers={[]}
-                redirectTo={`${window.location.origin}/reset-password`}
+                redirectTo={`${window.location.origin}/dashboard`}
               />
             </div>
           </Card>

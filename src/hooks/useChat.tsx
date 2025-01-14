@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Message } from '@/types/message';
+import { Message, AIModel } from '@/types/message';
 
 export const useChat = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [selectedModel, setSelectedModel] = useState('gpt-3.5-turbo');
+  const [selectedModel, setSelectedModel] = useState<AIModel>('dify');
   const [isLoading, setIsLoading] = useState(false);
 
   const sendMessage = async () => {
@@ -13,6 +13,7 @@ export const useChat = () => {
 
     setIsLoading(true);
     try {
+      console.log('Sending message with model:', selectedModel);
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
@@ -25,6 +26,8 @@ export const useChat = () => {
       });
 
       const data = await response.json();
+      console.log('Message response:', data);
+      
       setMessages((prevMessages) => [
         ...prevMessages,
         { id: data.id, content: newMessage, type: 'text', sender_id: null, created_at: new Date().toISOString() },
