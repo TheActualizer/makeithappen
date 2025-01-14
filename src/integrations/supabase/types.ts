@@ -48,6 +48,97 @@ export type Database = {
         }
         Relationships: []
       }
+      automation_logs: {
+        Row: {
+          attempt_number: number | null
+          contact_submission_id: string | null
+          created_at: string | null
+          error_context: Json | null
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          stage: string
+          status: string
+        }
+        Insert: {
+          attempt_number?: number | null
+          contact_submission_id?: string | null
+          created_at?: string | null
+          error_context?: Json | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          stage: string
+          status: string
+        }
+        Update: {
+          attempt_number?: number | null
+          contact_submission_id?: string | null
+          created_at?: string | null
+          error_context?: Json | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          stage?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automation_logs_contact_submission_id_fkey"
+            columns: ["contact_submission_id"]
+            isOneToOne: false
+            referencedRelation: "contact_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      automation_retry_queue: {
+        Row: {
+          contact_submission_id: string | null
+          created_at: string | null
+          id: string
+          last_error: string | null
+          max_retries: number | null
+          next_retry_at: string | null
+          payload: Json
+          retry_count: number | null
+          stage: string
+          updated_at: string | null
+        }
+        Insert: {
+          contact_submission_id?: string | null
+          created_at?: string | null
+          id?: string
+          last_error?: string | null
+          max_retries?: number | null
+          next_retry_at?: string | null
+          payload: Json
+          retry_count?: number | null
+          stage: string
+          updated_at?: string | null
+        }
+        Update: {
+          contact_submission_id?: string | null
+          created_at?: string | null
+          id?: string
+          last_error?: string | null
+          max_retries?: number | null
+          next_retry_at?: string | null
+          payload?: Json
+          retry_count?: number | null
+          stage?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automation_retry_queue_contact_submission_id_fkey"
+            columns: ["contact_submission_id"]
+            isOneToOne: false
+            referencedRelation: "contact_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blog_categories: {
         Row: {
           created_at: string | null
@@ -238,30 +329,39 @@ export type Database = {
       }
       contact_submissions: {
         Row: {
+          automation_status: string | null
           created_at: string | null
           email: string
           id: string
+          last_error: string | null
           message: string
           name: string
           phone: string | null
+          processed_at: string | null
           project_type: string
         }
         Insert: {
+          automation_status?: string | null
           created_at?: string | null
           email: string
           id?: string
+          last_error?: string | null
           message: string
           name: string
           phone?: string | null
+          processed_at?: string | null
           project_type: string
         }
         Update: {
+          automation_status?: string | null
           created_at?: string | null
           email?: string
           id?: string
+          last_error?: string | null
           message?: string
           name?: string
           phone?: string | null
+          processed_at?: string | null
           project_type?: string
         }
         Relationships: []
@@ -1040,7 +1140,16 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      automation_health_metrics: {
+        Row: {
+          attempt_count: number | null
+          error_count: number | null
+          stage: string | null
+          status: string | null
+          time_bucket: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never

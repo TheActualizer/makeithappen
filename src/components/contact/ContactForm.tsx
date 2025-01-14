@@ -92,16 +92,8 @@ export const ContactForm = () => {
     setIsSubmitting(true);
     
     try {
-      // First, validate the form data
-      const validationError = formSchema.safeParse(values);
-      if (!validationError.success) {
-        throw new Error("Form validation failed");
-      }
-
-      console.log("ContactForm: Form validation passed, proceeding with submission");
-
-      // Submit to Supabase
-      console.log("ContactForm: Attempting to save submission to Supabase...");
+      // First, save the contact submission
+      console.log("ContactForm: Saving contact submission to database...");
       const { error: submissionError, data: submissionData } = await supabase
         .from("contact_submissions")
         .insert({
@@ -115,27 +107,90 @@ export const ContactForm = () => {
         .single();
 
       if (submissionError) {
-        console.error("ContactForm: Supabase submission error:", submissionError);
+        console.error("ContactForm: Database submission error:", submissionError);
         throw submissionError;
       }
 
-      console.log("ContactForm: Contact submission saved successfully", submissionData);
+      // Log the initial automation attempt
+      console.log("ContactForm: Logging initial automation attempt...");
+      await supabase
+        .from("automation_logs")
+        .insert({
+          contact_submission_id: submissionData.id,
+          stage: "initial_submission",
+          status: "success",
+          metadata: {
+            form_data: values
+          }
+        });
 
       // Trigger CRM automation with better error handling
       console.log("ContactForm: Triggering CRM automation...");
       const { error: automationError, data: automationData } = await supabase.functions.invoke('crm-email-automation', {
         body: {
           ...values,
-          id: submissionData.id // Pass the submission ID to the automation
+          id: submissionData.id
         }
       });
 
       if (automationError) {
         console.error("ContactForm: CRM automation error:", automationError);
-        // Don't throw here, we still want to show success for the submission
-        toast.error("Contact saved but notification failed to send. Our team will still be in touch shortly.");
+        
+        // Log the automation failure
+        await supabase
+          .from("automation_logs")
+          .insert({
+            contact_submission_id: submissionData.id,
+            stage: "crm_automation",
+            status: "error",
+            error_message: automationError.message,
+            error_context: { error: automationError }
+          });
+
+        // Add to retry queue
+        await supabase
+          .from("automation_retry_queue")
+          .insert({
+            contact_submission_id: submissionData.id,
+            stage: "crm_automation",
+            payload: {
+              ...values,
+              id: submissionData.id
+            }
+          });
+
+        // Update submission status
+        await supabase
+          .from("contact_submissions")
+          .update({
+            automation_status: "failed",
+            last_error: automationError.message
+          })
+          .eq("id", submissionData.id);
+
+        toast.error("Message saved but notification failed to send. Our team will still be in touch shortly.");
       } else {
         console.log("ContactForm: CRM automation completed successfully", automationData);
+        
+        // Log successful automation
+        await supabase
+          .from("automation_logs")
+          .insert({
+            contact_submission_id: submissionData.id,
+            stage: "crm_automation",
+            status: "success",
+            metadata: { automation_response: automationData }
+          });
+
+        // Update submission status
+        await supabase
+          .from("contact_submissions")
+          .update({
+            automation_status: "completed",
+            processed_at: new Date().toISOString()
+          })
+          .eq("id", submissionData.id);
+
         toast.success("Message sent successfully!");
       }
 
