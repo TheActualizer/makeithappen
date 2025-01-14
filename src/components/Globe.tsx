@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Sphere } from '@react-three/drei';
 import * as THREE from 'three';
 
 const Globe = () => {
@@ -17,12 +16,13 @@ const Globe = () => {
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} />
       <mesh ref={meshRef}>
-        <sphereGeometry args={[1, 32, 32]} />
-        <meshStandardMaterial 
-          color="#1e40af"
-          metalness={0.5}
-          roughness={0.7}
-        />
+        <planeGeometry args={[2, 2]} />
+        <meshBasicMaterial>
+          <primitive
+            attach="map"
+            object={new THREE.TextureLoader().load('/photo-1470071459604-3b5ec3a7fe05')}
+          />
+        </meshBasicMaterial>
       </mesh>
     </group>
   );
