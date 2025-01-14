@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import { Textarea } from "@/components/ui/textarea";
-import { uploadChatAttachment } from '@/utils/fileUpload';
 import { useToast } from "@/components/ui/use-toast";
 import { Link2, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,60 +9,51 @@ import { v4 as uuidv4 } from 'uuid';
 const ChatInput = () => {
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
-  const [conversationId] = useState(() => {
-    const id = uuidv4();
-    console.log('Generated new conversation ID:', id);
-    return id;
-  });
+  const [conversationId] = useState(() => uuidv4());
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Send message button clicked', {
-      message: newMessage,
-      messageLength: newMessage.length,
-      isLoading,
-      timestamp: new Date().toISOString()
-    });
-
+    
     if (!newMessage.trim() || isLoading) {
       console.log('Message send prevented:', {
         hasContent: !!newMessage.trim(),
-        isLoading,
-        reason: !newMessage.trim() ? 'empty message' : 'loading state'
+        isLoading
       });
       return;
     }
 
     setIsLoading(true);
+    
     try {
-      console.log('Attempting to send message to Dify:', {
-        message: newMessage,
-        conversationId,
-        timestamp: new Date().toISOString()
+      console.log('Sending message:', {
+        content: newMessage,
+        conversationId
       });
 
+      const userMessage = {
+        id: uuidv4(),
+        content: newMessage,
+        type: 'text' as const,
+        sender_id: null,
+        created_at: new Date().toISOString()
+      };
+
+      // Add user message to chat
       const response = await sendMessageToDify(newMessage, conversationId);
       
-      console.log('Message sent successfully:', {
-        response,
-        timestamp: new Date().toISOString()
-      });
+      console.log('Dify response:', response);
 
+      // Clear input after successful send
       setNewMessage('');
+      
       toast({
         title: "Message sent",
         description: "Your message has been processed by the AI.",
       });
+
     } catch (error) {
-      console.error('Error in handleSendMessage:', {
-        error,
-        messageAttempted: newMessage,
-        conversationId,
-        timestamp: new Date().toISOString()
-      });
-      
+      console.error('Error sending message:', error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -77,40 +67,7 @@ const ChatInput = () => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      console.log('Enter key pressed - triggering message send');
       handleSendMessage(e);
-    }
-  };
-
-  const handleAttachmentClick = () => {
-    console.log('Attachment button clicked');
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    console.log('File selected for upload:', {
-      name: file.name,
-      type: file.type,
-      size: file.size
-    });
-
-    try {
-      const attachment = await uploadChatAttachment(file);
-      console.log('File uploaded successfully:', attachment);
-      toast({
-        title: "File uploaded",
-        description: `${file.name} has been attached to your message.`,
-      });
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      toast({
-        variant: "destructive",
-        title: "Upload failed",
-        description: "Failed to upload attachment. Please try again.",
-      });
     }
   };
 
@@ -126,19 +83,11 @@ const ChatInput = () => {
         placeholder="Ask me anything..."
         className="min-h-[60px] w-full pr-20 bg-white/5 border-white/10 focus:ring-purple-400/30 resize-none rounded-lg placeholder-purple-200/40 text-purple-100"
       />
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        className="hidden"
-        accept="image/*,.pdf,.doc,.docx,.txt"
-      />
       <div className="absolute right-2 bottom-2 flex items-center gap-2">
         <Button 
           variant="ghost" 
           size="icon" 
           className="w-8 h-8 hover:bg-white/10 text-purple-200/80 transition-colors duration-300"
-          onClick={handleAttachmentClick}
         >
           <Link2 className="w-4 h-4" />
         </Button>

@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ChatMessage from './ChatMessage';
-import { useMessages } from '@/hooks/useMessages';
+import type { Message } from '@/types/message';
 
 const ChatMessages = () => {
-  const { messages } = useMessages();
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  useEffect(() => {
+    console.log('Current messages in ChatMessages:', messages);
+  }, [messages]);
+
+  // Function to add new message that can be called from ChatInput
+  const addMessage = (message: Message) => {
+    console.log('Adding new message:', message);
+    setMessages(prev => [...prev, message]);
+  };
 
   return (
     <div className="space-y-6">
