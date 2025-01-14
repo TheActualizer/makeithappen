@@ -16,16 +16,11 @@ const Hero = () => {
 
   return (
     <div className="relative min-h-[90vh] flex items-center justify-center pt-8 overflow-hidden">
-      {/* Enhanced animated background elements */}
+      {/* Enhanced animated background */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-accent to-secondary/20" />
-        
-        {/* Animated geometric shapes */}
         <div className="absolute top-1/4 -right-20 w-[500px] h-[500px] bg-primary/20 rounded-[20%] blur-3xl animate-pulse transform rotate-45" />
         <div className="absolute -bottom-32 -left-40 w-[600px] h-[600px] bg-secondary/20 rounded-[30%] blur-3xl animate-pulse delay-700 transform -rotate-12" />
-        <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-accent/10 rounded-[25%] blur-3xl animate-pulse delay-1000 transform rotate-90" />
-        
-        {/* Isometric grid overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(45deg,#4f4f4f2e_1px,transparent_1px)] bg-[size:50px_50px] bg-opacity-20 transform rotate-45" />
       </div>
 
@@ -57,6 +52,18 @@ const Hero = () => {
                 <span className="text-[#D946EF] font-bold mx-2 animate-pulse">20x Speed</span>
               </p>
             </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
+              <div className="p-6 rounded-xl bg-accent/20 backdrop-blur-sm border border-accent/10 hover:border-accent/30 transition-all">
+                <h3 className="text-lg font-semibold text-[#F97316] mb-2">Website & Business Operations</h3>
+                <p className="text-sm text-gray-300">Custom websites with CRM integration, marketing automation, and AI-powered client management</p>
+              </div>
+              
+              <div className="p-6 rounded-xl bg-accent/20 backdrop-blur-sm border border-accent/10 hover:border-accent/30 transition-all">
+                <h3 className="text-lg font-semibold text-[#0EA5E9] mb-2">Advanced Features</h3>
+                <p className="text-sm text-gray-300">AI meeting summaries, automated follow-ups, client portals, and intelligent dashboards</p>
+              </div>
+            </div>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-8">
               <Button
@@ -67,49 +74,7 @@ const Hero = () => {
                 Start Building
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
-              
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={() => document.getElementById("services")?.scrollIntoView({ behavior: 'smooth' })}
-                className="border-gray-500 hover:border-white transition-colors min-w-[200px] backdrop-blur-sm"
-              >
-                Explore Solutions
-              </Button>
             </div>
-
-            <Accordion type="single" collapsible className="w-full max-w-2xl mx-auto mt-8">
-              <AccordionItem value="capabilities" className="border-accent/20">
-                <AccordionTrigger className="text-gray-300 hover:text-white">
-                  <span className="flex items-center gap-2">
-                    <ChevronDown className="h-4 w-4" />
-                    Advanced Capabilities
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent className="text-left">
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-gray-400">
-                    <div className="p-3 rounded-lg bg-[#1A1F2C]/30 backdrop-blur-sm border border-[#8B5CF6]/20 hover:border-[#8B5CF6]/50 transition-all">
-                      • Agent Swarms
-                    </div>
-                    <div className="p-3 rounded-lg bg-[#1A1F2C]/30 backdrop-blur-sm border border-[#D946EF]/20 hover:border-[#D946EF]/50 transition-all">
-                      • Hyperspeed Dev
-                    </div>
-                    <div className="p-3 rounded-lg bg-[#1A1F2C]/30 backdrop-blur-sm border border-[#F97316]/20 hover:border-[#F97316]/50 transition-all">
-                      • Neural Systems
-                    </div>
-                    <div className="p-3 rounded-lg bg-[#1A1F2C]/30 backdrop-blur-sm border border-[#0EA5E9]/20 hover:border-[#0EA5E9]/50 transition-all">
-                      • Quantum Logic
-                    </div>
-                    <div className="p-3 rounded-lg bg-[#1A1F2C]/30 backdrop-blur-sm border border-[#8B5CF6]/20 hover:border-[#8B5CF6]/50 transition-all">
-                      • AI Architecture
-                    </div>
-                    <div className="p-3 rounded-lg bg-[#1A1F2C]/30 backdrop-blur-sm border border-[#D946EF]/20 hover:border-[#D946EF]/50 transition-all">
-                      • Future Tech
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
           </div>
         </div>
       </div>
