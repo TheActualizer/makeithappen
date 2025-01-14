@@ -85,7 +85,7 @@ const Hero = () => {
           <div className="space-y-8">
             <motion.div 
               variants={itemVariants}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-6"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-6 shadow-lg hover:shadow-xl transition-shadow"
             >
               <Sparkles className="w-4 h-4 text-secondary animate-pulse" />
               <span className="text-sm text-gray-300">From Simple Websites to Enterprise SaaS Solutions</span>
@@ -93,7 +93,7 @@ const Hero = () => {
             
             <motion.h1 
               variants={itemVariants}
-              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
+              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl"
             >
               Building{" "}
               <span className="relative">
@@ -112,18 +112,18 @@ const Hero = () => {
                   AI-Powered
                 </span>
               </span>{" "}
-              Digital Solutions
+              Solutions
             </motion.h1>
             
             <motion.p 
               variants={itemVariants}
-              className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto backdrop-blur-sm"
+              className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto backdrop-blur-sm p-6 rounded-xl bg-accent/5 shadow-xl border border-accent/10"
             >
               <motion.span 
-                className="inline-block font-semibold text-secondary"
+                className="inline-block font-semibold text-transparent bg-clip-text bg-gradient-to-r from-secondary via-primary to-secondary"
                 animate={{
                   scale: [1, 1.1, 1],
-                  color: ['#06B6D4', '#6D28D9', '#06B6D4'],
+                  filter: ["brightness(1)", "brightness(1.2)", "brightness(1)"],
                 }}
                 transition={{
                   duration: 4,
@@ -142,7 +142,7 @@ const Hero = () => {
             >
               <Button
                 size="lg"
-                className="group relative overflow-hidden bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 transform hover:scale-105 min-w-[200px]"
+                className="group relative overflow-hidden bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 transform hover:scale-105 min-w-[200px] shadow-lg hover:shadow-xl"
                 onClick={() => navigate('/start-project')}
               >
                 Start Building
@@ -153,7 +153,7 @@ const Hero = () => {
                 variant="outline"
                 size="lg"
                 onClick={() => document.getElementById("services")?.scrollIntoView({ behavior: 'smooth' })}
-                className="border-gray-500 hover:border-white transition-colors min-w-[200px] backdrop-blur-sm"
+                className="border-gray-500 hover:border-white transition-colors min-w-[200px] backdrop-blur-sm shadow-lg hover:shadow-xl"
               >
                 Explore Solutions
               </Button>
@@ -184,25 +184,26 @@ const Hero = () => {
                 ].map((service, index) => (
                   <motion.div
                     key={service.title}
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{ scale: 1.05, y: -5 }}
                     whileTap={{ scale: 0.95 }}
-                    className="p-4 rounded-lg bg-accent/10 backdrop-blur-sm border border-accent/20 hover:bg-accent/20 transition-colors"
+                    className="p-6 rounded-xl bg-accent/10 backdrop-blur-sm border border-accent/20 hover:bg-accent/20 transition-all duration-300 shadow-lg hover:shadow-xl relative overflow-hidden"
                   >
-                    <h3 className="text-lg font-semibold text-white mb-2">{service.title}</h3>
-                    <p className="text-sm text-gray-300">{service.description}</p>
+                    <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent" />
+                    <h3 className="text-lg font-semibold text-white mb-2 relative z-10">{service.title}</h3>
+                    <p className="text-sm text-gray-300 relative z-10">{service.description}</p>
                   </motion.div>
                 ))}
               </div>
 
               <Accordion type="single" collapsible className="w-full backdrop-blur-sm">
-                <AccordionItem value="capabilities" className="border-accent/20">
-                  <AccordionTrigger className="text-gray-300 hover:text-white">
+                <AccordionItem value="capabilities" className="border-accent/20 rounded-xl shadow-lg hover:shadow-xl transition-shadow bg-accent/5">
+                  <AccordionTrigger className="text-gray-300 hover:text-white px-6">
                     <span className="flex items-center gap-2">
                       <ChevronDown className="h-4 w-4" />
                       View All Capabilities
                     </span>
                   </AccordionTrigger>
-                  <AccordionContent>
+                  <AccordionContent className="px-6 pb-4">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-gray-400">
                       {[
                         "Custom Websites & CRM",
@@ -216,9 +217,9 @@ const Hero = () => {
                       ].map((capability, index) => (
                         <motion.div
                           key={capability}
-                          whileHover={{ scale: 1.05 }}
+                          whileHover={{ scale: 1.05, y: -2 }}
                           whileTap={{ scale: 0.95 }}
-                          className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors"
+                          className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-all duration-300 shadow-md hover:shadow-lg border border-accent/10"
                         >
                           • {capability}
                         </motion.div>
