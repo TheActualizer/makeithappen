@@ -75,14 +75,12 @@ export const ContactForm = () => {
 
       // Step 2: Trigger CRM automation
       console.log("Triggering CRM automation with data:", { ...values, id: submission.id });
-      const { data: automationData, error: automationError } = await supabase.functions.invoke(
+      const { error: automationError } = await supabase.functions.invoke(
         "crm-email-automation",
         {
           body: JSON.stringify({ ...values, id: submission.id }),
         }
       );
-
-      console.log("CRM automation response:", automationData);
 
       if (automationError) {
         console.error("Error in CRM automation:", automationError);
