@@ -76,7 +76,7 @@ export const ContactForm = () => {
       const { data: automationData, error: automationError } = await supabase.functions.invoke(
         "crm-email-automation",
         {
-          body: { ...values, id: submission.id },
+          body: JSON.stringify({ ...values, id: submission.id }),
         }
       );
 
