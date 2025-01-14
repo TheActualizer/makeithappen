@@ -1,20 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-
-export interface Message {
-  id: string;
-  content: string;
-  sender_id: string | null;
-  created_at: string;
-  conversation_id?: string;
-  type: 'text' | 'system' | 'ai';
-  profiles?: {
-    first_name: string | null;
-    last_name: string | null;
-    email: string | null;
-    avatar_url: string | null;
-  } | null;
-}
+import type { Message } from "@/types/message";
 
 interface UseMessagesReturn {
   conversations: any[];
@@ -66,7 +52,6 @@ export const useMessages = (): UseMessagesReturn => {
           conversation_id,
           type,
           is_admin_message,
-          updated_at,
           profiles (
             first_name,
             last_name,
@@ -83,15 +68,21 @@ export const useMessages = (): UseMessagesReturn => {
       }
 
       console.log('Messages fetched:', data);
-      // Ensure the data matches the Message interface
+      
+      // Transform the data to match the Message interface
       const typedMessages: Message[] = data?.map(msg => ({
         id: msg.id,
         content: msg.content,
         sender_id: msg.sender_id,
         created_at: msg.created_at,
         conversation_id: msg.conversation_id,
-        type: msg.type,
-        profiles: msg.profiles
+        type: msg.type || 'text', // Ensure type is always defined
+        profiles: msg.profiles ? {
+          first_name: msg.profiles.first_name,
+          last_name: msg.profiles.last_name,
+          email: msg.profiles.email,
+          avatar_url: msg.profiles.avatar_url
+        } : null
       })) || [];
 
       setMessages(typedMessages);
