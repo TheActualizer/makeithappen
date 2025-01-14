@@ -17,9 +17,8 @@ const Services = () => {
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
               Complete Business Automation Solutions
             </h1>
-            <p className="text-lg text-gray-300 max-w-2xl mx-auto mb-8">
-              Transform your business with our comprehensive suite of AI-powered automation solutions.
-              From digital workforce to departmental setups, we've got you covered.
+            <p className="text-lg text-gray-300 max-w-xl mx-auto mb-8 animate-fade-in">
+              Transforming businesses through AI-powered automation.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Button
