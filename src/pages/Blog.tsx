@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
@@ -43,6 +44,21 @@ const getCategoryIcon = (slug: string) => {
     'manufacturing': <BookOpen className="w-8 h-8 text-primary" />
   };
   return icons[slug as keyof typeof icons] || <BookOpen className="w-8 h-8 text-primary" />;
+};
+
+const categoryDetails: Record<string, string> = {
+  'financial-automation': 'Explore how AI and automation are revolutionizing financial processes, from automated bookkeeping to intelligent fraud detection and algorithmic trading systems.',
+  'real-estate-logistics': 'Discover innovative solutions for property management, smart building automation, and real estate transaction optimization using cutting-edge technology.',
+  'legal-tech': 'Learn about the intersection of law and technology, including smart contracts, automated compliance systems, and AI-powered legal research tools.',
+  'agentic-systems': 'Deep dive into autonomous AI agents that can perform complex tasks, make decisions, and collaborate with other agents to solve problems.',
+  'agent-tooling': 'Explore the tools and frameworks used to build, deploy, and manage AI agents, including development environments and monitoring systems.',
+  'vector-systems': 'Understanding vector databases, embeddings, and similarity search systems that power modern AI applications and knowledge retrieval.',
+  'data-engineering': 'Master the art of building robust data pipelines, ETL processes, and data infrastructure for AI-powered applications.',
+  'workflow-automation': 'Learn how to automate business processes, create efficient workflows, and integrate various tools and services seamlessly.',
+  'healthcare-compliance': 'Navigate the complex world of healthcare regulations and learn how technology can ensure compliance while improving patient care.',
+  'open-source-ai': 'Explore the latest in open-source AI tools, models, and frameworks that are democratizing artificial intelligence.',
+  'rapid-prototyping': 'Discover methodologies and tools for quickly building and testing AI-powered applications and solutions.',
+  'manufacturing': 'Learn how AI and automation are transforming manufacturing processes, quality control, and supply chain management.'
 };
 
 const Blog = () => {
@@ -167,26 +183,38 @@ const Blog = () => {
             {categories.map((category) => (
               <motion.div
                 key={category.id}
-                whileHover={{ scale: 1.02 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
               >
-                <Card 
-                  className="bg-accent/40 backdrop-blur-sm border border-accent/20 hover:border-primary/50 transition-all duration-300 cursor-pointer h-full"
-                  onClick={() => navigate(`/blog/category/${category.slug}`)}
-                >
-                  <div className="p-8">
-                    <div className="mb-4">
-                      {getCategoryIcon(category.slug)}
-                    </div>
-                    <h3 className="text-xl font-semibold text-white mb-3">{category.name}</h3>
-                    <p className="text-gray-300 mb-6">{category.description}</p>
-                    <Button
-                      variant="secondary"
-                      className="w-full group hover:bg-primary hover:text-white transition-all duration-300"
-                    >
-                      Explore {category.name}
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </div>
+                <Card className="bg-accent/40 backdrop-blur-sm border border-accent/20 hover:border-primary/50 transition-all duration-300">
+                  <Accordion type="single" collapsible>
+                    <AccordionItem value={category.slug} className="border-none">
+                      <AccordionTrigger className="p-6 hover:no-underline">
+                        <div className="flex flex-col items-center text-center w-full">
+                          <div className="mb-4">
+                            {getCategoryIcon(category.slug)}
+                          </div>
+                          <h3 className="text-xl font-semibold text-white">{category.name}</h3>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="px-6 pb-6">
+                        <div className="space-y-4">
+                          <p className="text-gray-300">
+                            {categoryDetails[category.slug] || category.description}
+                          </p>
+                          <Button
+                            variant="secondary"
+                            className="w-full group hover:bg-primary hover:text-white transition-all duration-300"
+                            onClick={() => navigate(`/blog/category/${category.slug}`)}
+                          >
+                            Explore {category.name}
+                            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                          </Button>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 </Card>
               </motion.div>
             ))}
