@@ -1,3 +1,6 @@
+export type Timeline = "asap" | "1-3-months" | "3-6-months" | "6-plus-months";
+export type ProjectComplexity = "simple" | "moderate" | "complex";
+
 export interface FormData {
   name: string;
   email: string;
@@ -5,14 +8,16 @@ export interface FormData {
   company: string | null;
   projectType: string[];
   description: string;
-  timeline: string;
-  pain_points: string[];
-  complexity?: "simple" | "moderate" | "complex" | "enterprise";
-  teamSize?: string;
+  timeline: Timeline;
+  complexity?: ProjectComplexity;
+  teamSize?: string | null;
   budgetRange?: string;
+  pain_points?: string[];
+  workforce_simulation_scope?: string | null;
+  ai_agent_requirements?: string[];
   has_existing_codebase?: boolean;
   industry_vertical?: string;
-  current_tech_stack?: any;
+  current_tech_stack?: Record<string, any>;
   integration_requirements?: string[];
   preferred_technologies?: string[];
   data_sources?: string[];
@@ -29,7 +34,5 @@ export interface FormData {
   business_processes?: string[];
   target_completion_date?: Date;
   project_constraints?: string[];
-  project_timeline?: any;
-  ai_agent_requirements?: string[];
-  workforce_simulation_scope?: string;
+  project_timeline?: Record<string, any>;
 }
