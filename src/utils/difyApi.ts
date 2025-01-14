@@ -9,7 +9,7 @@ interface DifyLogData {
 }
 
 export async function sendMessageToDify(message: string, conversationId?: string) {
-  console.log('Sending message to Dify:', { message, conversationId });
+  console.log('Starting Dify API call:', { message, conversationId });
   const startTime = Date.now();
   let logData: DifyLogData = {
     conversationId,
@@ -19,13 +19,20 @@ export async function sendMessageToDify(message: string, conversationId?: string
   
   try {
     // Get the API key
+    console.log('Fetching Dify API key...');
     const { data: { data: { DIFY_API_KEY } } } = await supabase
       .functions.invoke('get-secret', {
         body: { name: 'DIFY_API_KEY' }
       });
 
+    if (!DIFY_API_KEY) {
+      console.error('No Dify API key found');
+      throw new Error('DIFY_API_KEY not configured');
+    }
+
     // Log outbound message
-    const { data: messageLog } = await supabase
+    console.log('Logging outbound message...');
+    const { data: messageLog, error: logError } = await supabase
       .from('dify_message_logs')
       .insert({
         conversation_id: conversationId,
@@ -36,9 +43,16 @@ export async function sendMessageToDify(message: string, conversationId?: string
       .select()
       .single();
 
+    if (logError) {
+      console.error('Error logging outbound message:', logError);
+      throw logError;
+    }
+
     logData = { ...logData, messageId: messageLog?.id };
+    console.log('Message logged successfully:', messageLog);
 
     // Call Dify API
+    console.log('Calling Dify API...');
     const response = await fetch('https://api.dify.ai/v1/chat-messages', {
       method: 'POST',
       headers: {
@@ -55,6 +69,7 @@ export async function sendMessageToDify(message: string, conversationId?: string
     });
 
     if (!response.ok) {
+      console.error('Dify API error:', response.status, response.statusText);
       throw new Error(`Dify API error: ${response.status}`);
     }
 
@@ -62,9 +77,10 @@ export async function sendMessageToDify(message: string, conversationId?: string
     console.log('Dify API response:', data);
 
     const processingTime = Date.now() - startTime;
+    console.log('Processing time:', processingTime, 'ms');
 
     // Update message log with success
-    await supabase
+    const { error: updateError } = await supabase
       .from('dify_message_logs')
       .update({
         status: 'processed',
@@ -74,13 +90,17 @@ export async function sendMessageToDify(message: string, conversationId?: string
       })
       .eq('id', messageLog?.id);
 
+    if (updateError) {
+      console.error('Error updating message log:', updateError);
+    }
+
     return data.answer;
   } catch (error) {
-    console.error('Error calling Dify API:', error);
+    console.error('Error in Dify API call:', error);
 
     // Log error details
     if (logData.messageId) {
-      await supabase
+      const { error: logUpdateError } = await supabase
         .from('dify_message_logs')
         .update({
           status: 'failed',
@@ -89,7 +109,11 @@ export async function sendMessageToDify(message: string, conversationId?: string
         })
         .eq('id', logData.messageId);
 
-      await supabase
+      if (logUpdateError) {
+        console.error('Error updating message log with error:', logUpdateError);
+      }
+
+      const { error: errorLogError } = await supabase
         .from('dify_error_logs')
         .insert({
           message_log_id: logData.messageId,
@@ -100,6 +124,10 @@ export async function sendMessageToDify(message: string, conversationId?: string
             request: logData.requestPayload,
           },
         });
+
+      if (errorLogError) {
+        console.error('Error creating error log:', errorLogError);
+      }
     }
 
     throw error;
