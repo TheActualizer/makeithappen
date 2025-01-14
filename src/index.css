@@ -26,87 +26,61 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
     --radius: 0.5rem;
+    
+    /* Layout System */
+    --spacing-unit: 8px;
+    --container-padding: clamp(1rem, 5vw, 2rem);
+    --content-width: min(65ch, 100% - var(--container-padding) * 2);
   }
 
   * {
     @apply border-border;
   }
 
-  html {
-    font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-  }
-
   body {
-    @apply bg-gradient-to-b from-accent to-accent/90 text-foreground font-sans leading-relaxed min-h-screen;
+    @apply bg-background text-foreground font-sans text-base leading-relaxed tracking-wide;
     font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
   }
 
-  /* Improved typography scale */
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
   h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold tracking-tight;
+    @apply font-semibold tracking-normal leading-tight;
     letter-spacing: -0.02em;
-    line-height: 1.2;
   }
 
   h1 {
-    @apply text-3xl md:text-4xl lg:text-5xl mb-4;
-    max-width: 16ch;
+    @apply text-4xl md:text-5xl mb-6;
   }
 
   h2 {
-    @apply text-2xl md:text-3xl lg:text-4xl mb-3;
-    max-width: 24ch;
+    @apply text-3xl md:text-4xl mb-5;
   }
 
   h3 {
-    @apply text-xl md:text-2xl lg:text-3xl mb-3;
-    max-width: 30ch;
+    @apply text-2xl md:text-3xl mb-4;
   }
 
   p {
-    @apply text-base md:text-lg text-gray-300 leading-7 mb-4;
-    max-width: 65ch;
+    @apply mb-4 leading-relaxed tracking-wide;
   }
 
-  /* Container improvements */
-  .container {
-    @apply px-4 md:px-6 mx-auto;
-    max-width: min(100% - 2rem, 1280px);
+  /* Increase spacing between paragraphs */
+  p + p {
+    @apply mt-6;
   }
 
-  /* Section spacing */
-  .section {
-    @apply py-8 md:py-12;
+  /* Smooth transition for all interactive elements */
+  a, button, input, select, textarea {
+    @apply transition-all duration-200;
   }
 
-  /* Content width constraints */
-  .content-narrow {
-    @apply max-w-[65ch] mx-auto;
-  }
-
-  .content-wide {
-    @apply max-w-[80ch] mx-auto;
-  }
-
-  /* Button improvements */
-  .button-gradient {
-    @apply bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 
-           text-white font-medium px-6 py-2.5 rounded-lg transition-all duration-300 
-           hover:shadow-lg hover:shadow-primary/20;
-  }
-
-  /* Card improvements */
-  .card {
-    @apply bg-background/40 backdrop-blur-md border border-border/10 
-           rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300;
-  }
-
-  /* Background utilities */
-  .bg-grid {
-    background-size: 40px 40px;
-    background-image: 
-      linear-gradient(to right, rgba(255,255,255,.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255,255,255,.05) 1px, transparent 1px);
+  /* Ensure content doesn't shift during page transitions */
+  #root {
+    @apply relative min-h-screen;
   }
 }
