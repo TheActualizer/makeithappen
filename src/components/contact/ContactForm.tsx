@@ -30,7 +30,12 @@ const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   phone: z.string().optional(),
   projectType: z.enum(["healthcare", "financial", "realestate", "other"]),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  message: z.string()
+    .min(10, "Message must be at least 10 characters")
+    .refine(
+      (val) => val.trim() !== '' && !val.split('').every(char => char === ','),
+      "Message cannot be empty or contain only commas"
+    ),
 });
 
 export const ContactForm = () => {
@@ -85,7 +90,7 @@ export const ContactForm = () => {
     
     try {
       console.log("ContactForm: Attempting to save submission to Supabase...");
-      const { data, error: submissionError } = await supabase
+      const { error: submissionError } = await supabase
         .from("contact_submissions")
         .insert({
           name: values.name,
@@ -93,21 +98,19 @@ export const ContactForm = () => {
           phone: values.phone || null,
           project_type: values.projectType,
           message: values.message,
-        })
-        .select()
-        .single();
+        });
 
       if (submissionError) {
         console.error("ContactForm: Supabase submission error:", submissionError);
         throw submissionError;
       }
 
-      console.log("ContactForm: Contact submission saved successfully", data);
+      console.log("ContactForm: Contact submission saved successfully");
 
       // Trigger CRM automation
       console.log("ContactForm: Triggering CRM automation...");
       const { error: automationError } = await supabase.functions.invoke('crm-email-automation', {
-        body: data
+        body: values
       });
 
       if (automationError) {
@@ -320,4 +323,4 @@ export const ContactForm = () => {
       </form>
     </Form>
   );
-};
+});
