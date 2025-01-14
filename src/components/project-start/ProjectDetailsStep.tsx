@@ -25,21 +25,21 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
   };
 
   return (
-    <div className="space-y-6 pb-20">
-      <Card className="p-4 space-y-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <Card className="p-4 space-y-4">
         <ServiceTypeSection 
           formData={formData}
           onServiceTypeChange={handleServiceTypeChange}
         />
         
-        <div className="h-px bg-border my-6" />
+        <div className="h-px bg-border" />
         
         <BudgetSection
           formData={formData}
           onBudgetChange={(value) => setFormData({ ...formData, budgetRange: value })}
         />
         
-        <div className="h-px bg-border my-6" />
+        <div className="h-px bg-border" />
         
         <TeamSizeSection
           formData={formData}
@@ -53,8 +53,8 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
           AI & Automation Requirements
         </h2>
         
-        <Card className="p-4 space-y-6">
-          <div className="space-y-4">
+        <Card className="p-4 space-y-4">
+          <div className="space-y-2">
             <label className="text-sm font-medium">Digital Workforce Scope</label>
             <Textarea
               value={formData.workforce_simulation_scope || ''}
@@ -66,7 +66,7 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
             />
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-2">
             <label className="text-sm font-medium">Project Description</label>
             <Textarea
               value={formData.description}

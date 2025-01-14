@@ -150,7 +150,7 @@ const ProjectStartModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleModalClose}>
-      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto px-4 sm:px-6 py-4 sm:py-6">
+      <DialogContent className="sm:max-w-[1000px] max-h-[90vh] overflow-y-auto px-4 sm:px-6 py-4 sm:py-6">
         <DialogHeader className="space-y-2">
           <DialogTitle className="text-xl sm:text-2xl">
             {showCalendly ? "Schedule a Consultation" : "Project Intake Form"}
@@ -163,9 +163,11 @@ const ProjectStartModal = ({
         </DialogHeader>
         <div className="relative mt-4">
           {!showCalendly && <ProgressSteps currentStep={step} />}
-          <div className={!showCalendly ? "mt-12 sm:mt-16" : ""}>{renderStep()}</div>
+          <div className={`${!showCalendly ? "mt-8 sm:mt-12" : ""} max-h-[calc(90vh-12rem)] overflow-y-auto`}>
+            {renderStep()}
+          </div>
           {!showCalendly && (
-            <div className="flex justify-between mt-6 sm:mt-8 sticky bottom-0 bg-background py-4">
+            <div className="flex justify-between mt-4 sm:mt-6 sticky bottom-0 bg-background/80 backdrop-blur-sm py-3 border-t">
               <Button
                 variant="outline"
                 onClick={handleBack}
