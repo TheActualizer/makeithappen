@@ -29,24 +29,21 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         value: value 
-      }), 
+      }),
       { 
-        headers: { 
-          ...corsHeaders,
-          'Content-Type': 'application/json',
-        } 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 200 
       }
     )
   } catch (error) {
-    console.error('Error in get-secret function:', error.message)
+    console.error('Error in get-secret function:', error)
     return new Response(
-      JSON.stringify({ error: error.message }), 
+      JSON.stringify({ 
+        error: error.message 
+      }),
       { 
-        status: 400,
-        headers: { 
-          ...corsHeaders,
-          'Content-Type': 'application/json',
-        } 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 500 
       }
     )
   }
