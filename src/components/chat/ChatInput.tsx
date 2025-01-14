@@ -14,7 +14,6 @@ const ChatInput = () => {
   const [conversationId] = useState(() => uuidv4());
 
   useEffect(() => {
-    // Create conversation when component mounts
     const createConversation = async () => {
       console.log('ChatInput: Creating new conversation');
       const { data: existingConv, error: checkError } = await supabase
