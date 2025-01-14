@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { Brain, Building2, Scale, Calculator, Truck, Factory, Search, Database, Shield, Code, Network, Bot } from "lucide-react";
+import { motion } from "framer-motion";
+import { Brain, Calculator, Scale, Truck, Search, Database } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -132,35 +131,55 @@ const services: Service[] = [
 ];
 
 const ServiceCard = ({ service }: { service: Service }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
   const Icon = service.icon;
   
   return (
-    <HoverCard>
-      <HoverCardTrigger asChild>
-        <Card className="relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 cursor-pointer border-accent/20 bg-accent/40 backdrop-blur-sm group">
-          <CardHeader>
-            <div className="mb-4 inline-flex p-3 rounded-lg bg-accent/30 group-hover:bg-accent/40 transition-colors">
-              <Icon className="w-6 h-6 text-secondary" />
-            </div>
-            <CardTitle className="group-hover:text-secondary transition-colors">{service.title}</CardTitle>
-            <CardDescription className="text-gray-400">{service.description}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm font-medium text-secondary/80">{service.metrics}</p>
-          </CardContent>
-        </Card>
-      </HoverCardTrigger>
-      <HoverCardContent className="w-80 bg-accent/95 backdrop-blur-sm border-accent/20">
-        <div className="space-y-2">
-          <h4 className="text-sm font-semibold text-secondary">Key Benefits:</h4>
-          <ul className="text-sm list-disc pl-4 space-y-1 text-gray-300">
-            {service.benefits.map((benefit, index) => (
-              <li key={index}>{benefit}</li>
-            ))}
-          </ul>
-        </div>
-      </HoverCardContent>
-    </HoverCard>
+    <motion.div
+      className="relative w-full h-[400px] cursor-pointer preserve-3d"
+      initial={false}
+      animate={{ rotateY: isFlipped ? 180 : 0 }}
+      transition={{ duration: 0.6, ease: "easeInOut" }}
+      onClick={() => setIsFlipped(!isFlipped)}
+      style={{ transformStyle: "preserve-3d" }}
+    >
+      {/* Front of card */}
+      <Card className="absolute w-full h-full backface-hidden border-accent/20 bg-accent/40 backdrop-blur-sm">
+        <CardHeader>
+          <div className="mb-4 inline-flex p-3 rounded-lg bg-accent/30 group-hover:bg-accent/40 transition-colors">
+            <Icon className="w-6 h-6 text-secondary" />
+          </div>
+          <CardTitle className="group-hover:text-secondary transition-colors">{service.title}</CardTitle>
+          <CardDescription className="text-gray-400">{service.description}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm font-medium text-secondary/80">{service.metrics}</p>
+        </CardContent>
+      </Card>
+
+      {/* Back of card */}
+      <Card 
+        className="absolute w-full h-full backface-hidden border-accent/20 bg-accent/40 backdrop-blur-sm rotate-y-180"
+      >
+        <CardHeader>
+          <CardTitle className="text-xl text-secondary">{service.caseStudy.title}</CardTitle>
+          <CardDescription className="text-gray-400">{service.caseStudy.description}</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <h4 className="text-sm font-semibold text-secondary">Key Benefits:</h4>
+            <ul className="text-sm list-disc pl-4 space-y-1 text-gray-300">
+              {service.benefits.map((benefit, index) => (
+                <li key={index}>{benefit}</li>
+              ))}
+            </ul>
+          </div>
+          <p className="text-sm font-medium text-primary mt-4">
+            Results: {service.caseStudy.results}
+          </p>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 };
 
@@ -170,7 +189,13 @@ export const ServicesShowcase = () => {
   return (
     <section className="py-24 px-4 md:px-6 lg:px-8 bg-background relative" id="services">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           <h2 className="text-3xl font-bold tracking-tight text-white mb-6">
             Enterprise-Grade Automation Solutions
           </h2>
@@ -178,17 +203,29 @@ export const ServicesShowcase = () => {
             Leverage cutting-edge AI and automation across your entire organization,
             from financial operations to research and development.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service) => (
-            <div key={service.id}>
+          {services.map((service, index) => (
+            <motion.div
+              key={service.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
               <ServiceCard service={service} />
-            </div>
+            </motion.div>
           ))}
         </div>
 
-        <div className="mt-16 text-center">
+        <motion.div 
+          className="mt-16 text-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           <Button 
             variant="default" 
             size="lg"
@@ -200,7 +237,7 @@ export const ServicesShowcase = () => {
           <p className="mt-4 text-sm text-gray-400">
             Ready to revolutionize your business operations? Let's discuss your project.
           </p>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
