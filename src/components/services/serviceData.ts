@@ -13,9 +13,7 @@ export const services = [
       "Intelligent follow-up automation",
       "Document processing and management",
       "Client portal development"
-    ],
-    tags: ["AI-Powered", "Automation", "Integration"],
-    metrics: "Average 85% reduction in manual operations"
+    ]
   },
   {
     id: 2,
@@ -29,9 +27,7 @@ export const services = [
       "Business process optimization",
       "Automated decision systems",
       "Intelligent task distribution"
-    ],
-    tags: ["Multi-Agent", "Orchestration", "Optimization"],
-    metrics: "Up to 95% faster process execution"
+    ]
   },
   {
     id: 3,
@@ -45,9 +41,7 @@ export const services = [
       "Financial modeling",
       "Risk assessment calculations",
       "Technical documentation generation"
-    ],
-    tags: ["Automation", "Analysis", "Compliance"],
-    metrics: "99.9% calculation accuracy"
+    ]
   },
   {
     id: 4,
@@ -61,8 +55,6 @@ export const services = [
       "Healthcare workflow automation",
       "Medical record processing",
       "Compliance monitoring"
-    ],
-    tags: ["HIPAA", "Healthcare", "Compliance"],
-    metrics: "100% HIPAA compliance maintained"
+    ]
   }
 ];
