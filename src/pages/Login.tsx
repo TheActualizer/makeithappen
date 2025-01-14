@@ -2,16 +2,14 @@ import { useEffect, useState } from "react";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { useToast } from "@/hooks/use-toast";
 import { AuthError } from "@supabase/supabase-js";
-import TermsOfServiceDialog from "@/components/TermsOfServiceDialog";
 
 const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [showTerms, setShowTerms] = useState(false);
 
   const getErrorMessage = (error: AuthError) => {
     switch (error.message) {
@@ -108,24 +106,20 @@ const Login = () => {
           <div className="mt-8 text-center text-sm text-gray-300">
             <p>
               By signing up, you agree to our{" "}
-              <button 
-                onClick={() => setShowTerms(true)} 
+              <Link 
+                to="/terms-of-service" 
                 className="text-primary hover:underline focus:outline-none"
               >
                 Terms of Service
-              </button>
+              </Link>
               {" "}and{" "}
-              <a href="#" className="text-primary hover:underline">
+              <Link to="/privacy-policy" className="text-primary hover:underline">
                 Privacy Policy
-              </a>
+              </Link>
             </p>
           </div>
         </div>
       </div>
-      <TermsOfServiceDialog 
-        open={showTerms} 
-        onOpenChange={setShowTerms}
-      />
     </div>
   );
 };
