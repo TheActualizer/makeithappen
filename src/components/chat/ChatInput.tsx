@@ -12,41 +12,74 @@ const ChatInput = () => {
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
-  const [conversationId] = useState(() => uuidv4()); // Generate a stable conversation ID
+  const [conversationId] = useState(() => {
+    const id = uuidv4();
+    console.log('Generated new conversation ID:', id);
+    return id;
+  });
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Send message triggered with:', {
+      message: newMessage,
+      messageLength: newMessage.length,
+      isLoading,
+      timestamp: new Date().toISOString()
+    });
+
     if (!newMessage.trim() || isLoading) {
       console.log('Message send prevented:', {
         hasContent: !!newMessage.trim(),
-        isLoading
+        isLoading,
+        reason: !newMessage.trim() ? 'empty message' : 'loading state'
       });
       return;
     }
 
-    console.log('Initiating message send:', {
+    console.log('Proceeding with message send:', {
       messageContent: newMessage,
-      conversationId
+      conversationId,
+      timestamp: new Date().toISOString()
     });
 
     setIsLoading(true);
     try {
-      console.log('Calling sendMessageToDify...');
+      console.log('Calling sendMessageToDify with params:', {
+        message: newMessage,
+        conversationId,
+        timestamp: new Date().toISOString()
+      });
+
       const response = await sendMessageToDify(newMessage, conversationId);
-      console.log('Message sent successfully:', response);
+      
+      console.log('Message sent successfully:', {
+        response,
+        timestamp: new Date().toISOString()
+      });
+
       setNewMessage('');
       toast({
         title: "Message sent",
         description: "Your message has been processed by the AI.",
       });
     } catch (error) {
-      console.error('Error in handleSendMessage:', error);
+      console.error('Error in handleSendMessage:', {
+        error,
+        messageAttempted: newMessage,
+        conversationId,
+        timestamp: new Date().toISOString()
+      });
+      
       toast({
         variant: "destructive",
         title: "Error",
         description: "Failed to send message. Please try again.",
       });
     } finally {
+      console.log('Finishing message send process:', {
+        success: !isLoading,
+        timestamp: new Date().toISOString()
+      });
       setIsLoading(false);
     }
   };
