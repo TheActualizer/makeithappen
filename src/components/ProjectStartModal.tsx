@@ -153,10 +153,10 @@ const ProjectStartModal = ({
       <DialogContent className="sm:max-w-[95vw] md:max-w-[90vw] lg:max-w-[1000px] h-[95vh] sm:h-auto overflow-hidden p-0">
         <div className="h-full flex flex-col">
           <DialogHeader className="p-4 sm:p-6 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <DialogTitle className="text-lg sm:text-xl font-semibold">
+            <DialogTitle className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-gradient">
               {showCalendly ? "Schedule a Consultation" : "Project Intake Form"}
             </DialogTitle>
-            <DialogDescription className="text-sm sm:text-base">
+            <DialogDescription className="text-sm sm:text-base text-muted-foreground mt-2">
               {showCalendly 
                 ? "Choose a time that works best for you."
                 : "Help us understand your project requirements and objectives"}
@@ -165,11 +165,11 @@ const ProjectStartModal = ({
 
           <div className="flex-1 overflow-auto px-4 sm:px-6 py-4">
             {!showCalendly && (
-              <div className="mb-6">
+              <div className="mb-8">
                 <ProgressSteps currentStep={step} />
               </div>
             )}
-            <div className="space-y-4">
+            <div className="space-y-6">
               {renderStep()}
             </div>
           </div>
