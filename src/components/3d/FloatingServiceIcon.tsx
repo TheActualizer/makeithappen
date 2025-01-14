@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 interface FloatingServiceIconProps {
-  iconType: 'cube' | 'sphere' | 'torus';
+  iconType: 'finance' | 'legal' | 'logistics' | 'research' | 'data' | 'agentic';
   color?: string;
   hovered?: boolean;
 }
@@ -28,7 +28,7 @@ export const FloatingServiceIcon = ({ iconType, color = '#06B6D4', hovered = fal
 
     // Renderer setup
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(64, 64);
+    renderer.setSize(48, 48); // Smaller size for better layout
     containerRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
@@ -38,25 +38,43 @@ export const FloatingServiceIcon = ({ iconType, color = '#06B6D4', hovered = fal
     scene.add(light);
     scene.add(new THREE.AmbientLight(0xffffff, 0.5));
 
-    // Geometry based on icon type
+    // Create geometry based on service type
     let geometry: THREE.BufferGeometry;
     switch (iconType) {
-      case 'cube':
-        geometry = new THREE.BoxGeometry(1, 1, 1);
+      case 'finance':
+        // Cube with beveled edges for finance
+        geometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
         break;
-      case 'sphere':
+      case 'legal':
+        // Cylinder for legal (like a gavel)
+        geometry = new THREE.CylinderGeometry(0.3, 0.3, 1, 32);
+        break;
+      case 'logistics':
+        // Octahedron for logistics (like a package)
+        geometry = new THREE.OctahedronGeometry(0.6);
+        break;
+      case 'research':
+        // Icosahedron for research (complex, scientific)
+        geometry = new THREE.IcosahedronGeometry(0.6);
+        break;
+      case 'data':
+        // Torus for data (circular flow)
+        geometry = new THREE.TorusGeometry(0.4, 0.2, 16, 32);
+        break;
+      case 'agentic':
+        // Dodecahedron for agentic systems (neural network-like)
+        geometry = new THREE.DodecahedronGeometry(0.6);
+        break;
+      default:
         geometry = new THREE.SphereGeometry(0.6, 32, 32);
-        break;
-      case 'torus':
-        geometry = new THREE.TorusGeometry(0.5, 0.2, 16, 32);
-        break;
     }
 
-    // Material
+    // Material with improved visual appeal
     const material = new THREE.MeshStandardMaterial({
       color: new THREE.Color(color),
-      metalness: 0.5,
-      roughness: 0.5,
+      metalness: 0.7,
+      roughness: 0.3,
+      envMapIntensity: 1,
     });
 
     // Mesh
@@ -70,11 +88,11 @@ export const FloatingServiceIcon = ({ iconType, color = '#06B6D4', hovered = fal
 
       requestAnimationFrame(animate);
       
-      // Rotate the mesh
+      // Smooth rotation
       meshRef.current.rotation.x += 0.01;
       meshRef.current.rotation.y += 0.01;
 
-      // Scale effect on hover
+      // Scale effect on hover with smoother transition
       const targetScale = hovered ? 1.2 : 1;
       meshRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.1);
 
@@ -96,12 +114,5 @@ export const FloatingServiceIcon = ({ iconType, color = '#06B6D4', hovered = fal
     };
   }, [iconType, color]);
 
-  // Update scale on hover change
-  useEffect(() => {
-    if (!meshRef.current) return;
-    const targetScale = hovered ? 1.2 : 1;
-    meshRef.current.scale.set(targetScale, targetScale, targetScale);
-  }, [hovered]);
-
-  return <div ref={containerRef} className="w-16 h-16" />;
+  return <div ref={containerRef} className="w-12 h-12" />;
 };

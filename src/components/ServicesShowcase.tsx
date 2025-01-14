@@ -134,15 +134,23 @@ const services: Service[] = [
 const ServiceCard = ({ service }: { service: Service }) => {
   const [isHovered, setIsHovered] = useState(false);
   
-  // Map service types to 3D icon types
-  const getIconType = (title: string): 'cube' | 'sphere' | 'torus' => {
+  // Map service types to meaningful 3D icons
+  const getIconType = (title: string): 'finance' | 'legal' | 'logistics' | 'research' | 'data' | 'agentic' => {
     switch (title) {
       case "Finance & Markets Automation":
-        return "cube";
+        return "finance";
       case "Legal Department Automation":
-        return "torus";
+        return "legal";
+      case "Logistics & Manufacturing":
+        return "logistics";
+      case "Research & Development":
+        return "research";
+      case "Data Architecture & Processing":
+        return "data";
+      case "Agentic Systems Development":
+        return "agentic";
       default:
-        return "sphere";
+        return "data";
     }
   };
   
@@ -150,20 +158,28 @@ const ServiceCard = ({ service }: { service: Service }) => {
     <HoverCard>
       <HoverCardTrigger asChild>
         <Card 
-          className="relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 cursor-pointer border-accent/20 bg-accent/40 backdrop-blur-sm group"
+          className="relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 cursor-pointer border-accent/20 bg-accent/40 backdrop-blur-sm group h-full"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          <CardHeader>
-            <div className="mb-4 inline-flex p-3 rounded-lg bg-accent/30 group-hover:bg-accent/40 transition-colors">
-              <FloatingServiceIcon 
-                iconType={getIconType(service.title)}
-                color="#06B6D4"
-                hovered={isHovered}
-              />
+          <CardHeader className="space-y-4">
+            <div className="flex items-center justify-center w-full">
+              <div className="p-4 rounded-full bg-accent/30 group-hover:bg-accent/40 transition-colors">
+                <FloatingServiceIcon 
+                  iconType={getIconType(service.title)}
+                  color="#06B6D4"
+                  hovered={isHovered}
+                />
+              </div>
             </div>
-            <CardTitle className="group-hover:text-secondary transition-colors">{service.title}</CardTitle>
-            <CardDescription className="text-gray-400">{service.description}</CardDescription>
+            <div className="space-y-2">
+              <CardTitle className="group-hover:text-secondary transition-colors text-xl">
+                {service.title}
+              </CardTitle>
+              <CardDescription className="text-gray-400">
+                {service.description}
+              </CardDescription>
+            </div>
           </CardHeader>
           <CardContent>
             <p className="text-sm font-medium text-secondary/80">{service.metrics}</p>
