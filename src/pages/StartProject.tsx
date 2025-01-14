@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Briefcase, Building, Users, DollarSign, Calendar } from "lucide-react";
 import { FormData } from "@/components/project-start/types";
 import BasicInfoStep from "@/components/project-start/BasicInfoStep";
 import ProjectDetailsStep from "@/components/project-start/ProjectDetailsStep";
@@ -134,20 +134,60 @@ const StartProject = () => {
     }
   };
 
+  const renderStepIcon = (currentStep: number) => {
+    switch (currentStep) {
+      case 1:
+        return <Building className="w-6 h-6 text-primary" />;
+      case 2:
+        return <Briefcase className="w-6 h-6 text-primary" />;
+      case 3:
+        return <Calendar className="w-6 h-6 text-primary" />;
+      default:
+        return null;
+    }
+  };
+
+  const getStepTitle = (currentStep: number) => {
+    switch (currentStep) {
+      case 1:
+        return "Tell us about your organization";
+      case 2:
+        return "Project requirements";
+      case 3:
+        return "Timeline and next steps";
+      default:
+        return "";
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-accent via-accent/95 to-primary/20">
+    <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-background">
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-background/95 backdrop-blur-md rounded-lg shadow-xl border border-accent/20">
-            <div className="p-6 border-b border-accent/20">
-              <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-semibold">
-                  {showCalendly ? "Schedule Consultation" : "New Project"}
-                </h1>
-                {!showCalendly && <ProgressSteps currentStep={step} />}
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-8 text-center">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+              {showCalendly ? "Schedule Your Consultation" : "Start Your Project"}
+            </h1>
+            <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+              {showCalendly 
+                ? "Choose a time that works best for you to discuss your project in detail."
+                : "Tell us about your project, and we'll help you bring it to life with our expertise in AI and automation."}
+            </p>
+          </div>
+
+          <div className="bg-card/50 backdrop-blur-sm rounded-xl shadow-lg border border-accent/20">
+            {!showCalendly && (
+              <div className="p-6 border-b border-accent/20">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    {renderStepIcon(step)}
+                    <h2 className="text-xl font-semibold">{getStepTitle(step)}</h2>
+                  </div>
+                  <ProgressSteps currentStep={step} />
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="p-6">
               <div className="space-y-6">
@@ -162,6 +202,7 @@ const StartProject = () => {
                     variant="ghost"
                     onClick={handleBack}
                     disabled={step === 1}
+                    className="w-32"
                   >
                     Back
                   </Button>
@@ -169,14 +210,14 @@ const StartProject = () => {
                     <Button
                       onClick={handleSubmit}
                       disabled={isSubmitting}
-                      className="bg-primary hover:bg-primary/90"
+                      className="w-32 bg-primary hover:bg-primary/90"
                     >
                       {isSubmitting ? "Saving..." : "Submit"}
                     </Button>
                   ) : (
                     <Button 
                       onClick={handleNext}
-                      className="group bg-primary hover:bg-primary/90"
+                      className="w-32 group bg-primary hover:bg-primary/90"
                     >
                       Next
                       <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
