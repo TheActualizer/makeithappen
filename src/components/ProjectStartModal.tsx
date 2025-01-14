@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, ChevronDown } from "lucide-react";
 import { FormData } from "./project-start/types";
 import BasicInfoStep from "./project-start/BasicInfoStep";
 import ProjectDetailsStep from "./project-start/ProjectDetailsStep";
@@ -150,62 +150,60 @@ const ProjectStartModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleModalClose}>
-      <DialogContent className="sm:max-w-[95vw] md:max-w-[90vw] lg:max-w-[1000px] h-[95vh] sm:h-auto overflow-hidden p-0">
-        <div className="h-full flex flex-col">
-          <DialogHeader className="p-4 sm:p-6 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <DialogTitle className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-gradient">
-              {showCalendly ? "Schedule a Consultation" : "Project Intake Form"}
-            </DialogTitle>
-            <DialogDescription className="text-sm sm:text-base text-muted-foreground mt-2">
-              {showCalendly 
-                ? "Choose a time that works best for you."
-                : "Help us understand your project requirements and objectives"}
-            </DialogDescription>
-          </DialogHeader>
+      <DialogContent className="sm:max-w-[95vw] md:max-w-[90vw] lg:max-w-[1000px] h-[90vh] sm:h-[90vh] overflow-hidden flex flex-col">
+        <DialogHeader className="p-4 sm:p-6 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shrink-0">
+          <DialogTitle className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-gradient">
+            {showCalendly ? "Schedule a Consultation" : "Project Intake Form"}
+          </DialogTitle>
+          <DialogDescription className="text-sm sm:text-base text-muted-foreground mt-2">
+            {showCalendly 
+              ? "Choose a time that works best for you."
+              : "Help us understand your project requirements and objectives"}
+          </DialogDescription>
+        </DialogHeader>
 
-          <div className="flex-1 overflow-auto px-4 sm:px-6 py-4">
-            {!showCalendly && (
-              <div className="mb-8">
-                <ProgressSteps currentStep={step} />
-              </div>
-            )}
-            <div className="space-y-6">
-              {renderStep()}
-            </div>
-          </div>
-
+        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4">
           {!showCalendly && (
-            <div className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-4 sm:p-6">
-              <div className="flex items-center justify-between gap-4">
-                <Button
-                  variant="ghost"
-                  onClick={handleBack}
-                  disabled={step === 1}
-                  className="h-10 px-4 text-sm font-medium"
-                >
-                  Back
-                </Button>
-                {step === 3 ? (
-                  <Button
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                    className="h-10 px-6 text-sm font-medium bg-primary hover:bg-primary/90 transition-colors"
-                  >
-                    {isSubmitting ? "Saving..." : "Submit"}
-                  </Button>
-                ) : (
-                  <Button 
-                    onClick={handleNext} 
-                    className="h-10 px-6 text-sm font-medium group inline-flex items-center bg-primary hover:bg-primary/90 transition-colors"
-                  >
-                    Next
-                    <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
-                  </Button>
-                )}
-              </div>
+            <div className="mb-8 sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10 pb-4">
+              <ProgressSteps currentStep={step} />
             </div>
           )}
+          <div className="space-y-6 pb-20">
+            {renderStep()}
+          </div>
         </div>
+
+        {!showCalendly && (
+          <div className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-4 sm:p-6 sticky bottom-0 mt-auto shrink-0">
+            <div className="flex items-center justify-between gap-4 max-w-[1000px] mx-auto">
+              <Button
+                variant="ghost"
+                onClick={handleBack}
+                disabled={step === 1}
+                className="h-10 px-4 text-sm font-medium"
+              >
+                Back
+              </Button>
+              {step === 3 ? (
+                <Button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className="h-10 px-6 text-sm font-medium bg-primary hover:bg-primary/90 transition-colors"
+                >
+                  {isSubmitting ? "Saving..." : "Submit"}
+                </Button>
+              ) : (
+                <Button 
+                  onClick={handleNext} 
+                  className="h-10 px-6 text-sm font-medium group inline-flex items-center bg-primary hover:bg-primary/90 transition-colors"
+                >
+                  Next
+                  <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
