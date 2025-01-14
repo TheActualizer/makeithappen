@@ -63,8 +63,9 @@ serve(async (req) => {
 
     // Send notification email
     try {
+      console.log('Attempting to send email notification...')
       const emailResult = await resend.emails.send({
-        from: 'Cytoom <no-reply@cytoom.com>',
+        from: 'Cytoom <onboarding@resend.dev>', // Using Resend's default testing domain
         to: ['belchonen18@gmail.com'], // Admin notification
         subject: `New Contact Form Submission - ${submission.name}`,
         html: `
@@ -100,7 +101,7 @@ serve(async (req) => {
 
     } catch (emailError) {
       console.error('Error sending email:', emailError)
-      // Don't throw here, we still want to return success for the submission
+      throw new Error(`Failed to send email: ${emailError.message}`)
     }
 
     // Return success response with funnel ID
