@@ -1,58 +1,68 @@
-import { Brain, Calculator, Scale, Truck, Search, Database, Bot, Network, Shield, Workflow, Mail, Calendar, Users, FileText, BarChart, MessageSquare, Cloud } from "lucide-react";
+import { Brain, Calculator, Scale, Stethoscope, Bot, Network, Shield, Workflow, Mail, Calendar, Users, FileText, BarChart, MessageSquare, Cloud } from "lucide-react";
 
 export const services = [
   {
     id: 1,
-    title: "Financial Automation",
-    description: "AI-powered financial operations & market analysis",
-    icon: Calculator,
-    features: ["Real-time Analysis", "Automated Accounting", "Risk Assessment"],
-    metrics: "85% Processing Time ↓",
-    tags: ["Finance", "AI", "Automation"]
+    title: "Website & Business Operations",
+    description: "Comprehensive digital transformation of your business operations with AI-powered automation.",
+    icon: Workflow,
+    features: [
+      "AI-powered client management system",
+      "CRM integration with automated workflows",
+      "Zoom integration with AI meeting summaries",
+      "Intelligent follow-up automation",
+      "Document processing and management",
+      "Client portal development"
+    ],
+    metrics: "85% Operational Efficiency ↑",
+    tags: ["Automation", "CRM", "AI"]
   },
   {
     id: 2,
-    title: "Legal Tech",
-    description: "HIPAA & GDPR compliant document automation",
-    icon: Scale,
-    features: ["Contract Review", "Compliance", "Case Management"],
-    metrics: "75% Review Time ↓",
-    tags: ["Legal", "Compliance", "AI"]
+    title: "Extensive AI Agent Operations",
+    description: "Multi-agent swarms that revolutionize your business processes through intelligent automation.",
+    icon: Brain,
+    features: [
+      "Policy automation and enforcement",
+      "Complex workflow orchestration",
+      "Multi-agent swarm coordination",
+      "Business process optimization",
+      "Automated decision systems",
+      "Intelligent task distribution"
+    ],
+    metrics: "90% Process Automation ↑",
+    tags: ["AI", "Automation", "Workflow"]
   },
   {
     id: 3,
-    title: "Supply Chain",
-    description: "End-to-end logistics optimization",
-    icon: Truck,
-    features: ["Inventory", "Maintenance", "Quality Control"],
-    metrics: "60% Efficiency ↑",
-    tags: ["Logistics", "IoT", "Analytics"]
+    title: "Advanced Industry Calculations",
+    description: "Specialized computation engines tailored for professional services and technical industries.",
+    icon: Calculator,
+    features: [
+      "Accounting automation systems",
+      "Legal analysis and compliance",
+      "Engineering simulations",
+      "Financial modeling",
+      "Risk assessment calculations",
+      "Technical documentation generation"
+    ],
+    metrics: "99.9% Calculation Accuracy",
+    tags: ["Finance", "Legal", "Engineering"]
   },
   {
     id: 4,
-    title: "R&D Acceleration",
-    description: "Rapid prototyping & research automation",
-    icon: Search,
-    features: ["Fast Prototyping", "Data Analysis", "Innovation"],
-    metrics: "10x Research Speed",
-    tags: ["Research", "AI", "Innovation"]
-  },
-  {
-    id: 5,
-    title: "Data Architecture",
-    description: "AWS & vector database integration",
-    icon: Database,
-    features: ["Data Processing", "Analytics", "Integration"],
-    metrics: "99.9% Accuracy",
-    tags: ["Data", "Cloud", "Scale"]
-  },
-  {
-    id: 6,
-    title: "AI Systems",
-    description: "Custom agent networks & orchestration",
-    icon: Brain,
-    features: ["Automation", "Memory Systems", "Workflows"],
-    metrics: "24/7 Operation",
-    tags: ["AI", "Agents", "Automation"]
+    title: "Healthcare Automation",
+    description: "HIPAA-compliant autonomous systems for modern healthcare operations.",
+    icon: Stethoscope,
+    features: [
+      "HIPAA-compliant systems",
+      "FHIR integration",
+      "Patient data management",
+      "Healthcare workflow automation",
+      "Medical record processing",
+      "Compliance monitoring"
+    ],
+    metrics: "100% HIPAA Compliance",
+    tags: ["Healthcare", "HIPAA", "Automation"]
   }
 ];
