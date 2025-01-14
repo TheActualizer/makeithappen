@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, Suspense } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useLoader } from '@react-three/fiber';
@@ -12,11 +12,10 @@ const locations = [
   { city: "Palo Alto", coordinates: [37.4419, -122.1430], color: "#6D28D9" }
 ];
 
-const Globe = () => {
+const GlobeContent = () => {
   const globeRef = useRef<THREE.Mesh>(null);
   const markersGroup = useRef<THREE.Group>(null);
   
-  // Load texture using useLoader instead of useTexture
   const earthMap = useLoader(TextureLoader, 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg');
 
   useEffect(() => {
@@ -75,6 +74,15 @@ const Globe = () => {
       
       <group ref={markersGroup} />
     </>
+  );
+};
+
+// Wrap the component with Suspense
+const Globe = () => {
+  return (
+    <Suspense fallback={null}>
+      <GlobeContent />
+    </Suspense>
   );
 };
 

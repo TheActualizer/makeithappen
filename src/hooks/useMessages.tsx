@@ -76,7 +76,7 @@ export const useMessages = () => {
   const fetchMessages = async (conversationId: string) => {
     console.log('Fetching messages for conversation:', conversationId);
     try {
-      const { data, error } = await supabase
+      const { data: messagesData, error: messagesError } = await supabase
         .from('messages')
         .select(`
           id,
@@ -95,12 +95,12 @@ export const useMessages = () => {
         .eq('conversation_id', conversationId)
         .order('created_at', { ascending: true });
 
-      if (error) {
-        console.error('Error fetching messages:', error);
-        throw error;
+      if (messagesError) {
+        console.error('Error fetching messages:', messagesError);
+        throw messagesError;
       }
 
-      const typedMessages: Message[] = (data || []).map(msg => ({
+      const typedMessages: Message[] = (messagesData || []).map(msg => ({
         id: msg.id,
         content: msg.content,
         sender_id: msg.sender_id,
