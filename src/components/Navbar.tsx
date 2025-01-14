@@ -41,6 +41,53 @@ const Navbar = () => {
     return location.pathname.startsWith(href);
   };
 
+  const menuVariants = {
+    hidden: { 
+      opacity: 0,
+      y: -5,
+      scale: 0.95
+    },
+    visible: { 
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.15,
+        ease: "easeOut"
+      }
+    },
+    exit: {
+      opacity: 0,
+      y: -5,
+      scale: 0.95,
+      transition: {
+        duration: 0.1,
+        ease: "easeIn"
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, x: -10 },
+    visible: (i: number) => ({
+      opacity: 1,
+      x: 0,
+      transition: {
+        delay: i * 0.05,
+        duration: 0.15,
+        ease: "easeOut"
+      }
+    }),
+    exit: { 
+      opacity: 0,
+      x: -10,
+      transition: {
+        duration: 0.1,
+        ease: "easeIn"
+      }
+    }
+  };
+
   return (
     <nav className="fixed w-full bg-accent/95 backdrop-blur-sm z-50 py-4">
       <div className="container mx-auto px-4 flex justify-between items-center">
@@ -121,34 +168,36 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu with Animation */}
+      {/* Mobile Menu with Enhanced Animation */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden absolute top-full left-0 right-0 border-t border-accent-foreground/10"
+            variants={menuVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="md:hidden absolute top-full left-0 right-0 border-t-2 border-secondary/30"
           >
-            <div className="bg-accent/98 backdrop-blur-md shadow-lg">
-              <div className="container mx-auto px-4 py-4">
-                <div className="space-y-3 divide-y divide-accent-foreground/10">
-                  <div className="space-y-3 pb-3">
-                    {navItems.map((item) => (
+            <div className="bg-accent/98 backdrop-blur-md shadow-2xl border-b-2 border-x-2 border-secondary/30 rounded-b-xl mx-2">
+              <div className="container mx-auto p-4">
+                <div className="space-y-2 divide-y-2 divide-secondary/20">
+                  <div className="space-y-2 pb-3">
+                    {navItems.map((item, i) => (
                       <motion.div
                         key={item.name}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 }}
+                        custom={i}
+                        variants={itemVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
                       >
                         {item.href.startsWith("/") ? (
                           <Link
                             to={item.href}
-                            className={`block px-4 py-2 rounded-lg transition-colors ${
+                            className={`block px-4 py-3 rounded-lg transition-all duration-200 ${
                               isActive(item.href)
-                                ? 'bg-accent-foreground/10 text-secondary font-medium'
-                                : 'text-gray-300 hover:bg-accent-foreground/5 hover:text-white'
+                                ? 'bg-secondary/20 text-secondary font-medium shadow-inner'
+                                : 'text-gray-300 hover:bg-accent-foreground/10 hover:text-white hover:shadow-lg'
                             }`}
                             onClick={() => setIsOpen(false)}
                           >
@@ -157,10 +206,10 @@ const Navbar = () => {
                         ) : (
                           <button
                             onClick={() => handleNavigation(item.href)}
-                            className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
+                            className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 ${
                               isActive(item.href)
-                                ? 'bg-accent-foreground/10 text-secondary font-medium'
-                                : 'text-gray-300 hover:bg-accent-foreground/5 hover:text-white'
+                                ? 'bg-secondary/20 text-secondary font-medium shadow-inner'
+                                : 'text-gray-300 hover:bg-accent-foreground/10 hover:text-white hover:shadow-lg'
                             }`}
                           >
                             {item.name}
@@ -171,9 +220,11 @@ const Navbar = () => {
                   </div>
                   <div className="pt-3 space-y-3">
                     <motion.div
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.2 }}
+                      variants={itemVariants}
+                      custom={navItems.length}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
                     >
                       <Button 
                         variant="ghost"
@@ -183,8 +234,8 @@ const Navbar = () => {
                         }}
                         className={`w-full justify-start rounded-lg ${
                           isActive('/login')
-                            ? 'bg-accent-foreground/10 text-secondary'
-                            : 'text-gray-300 hover:bg-accent-foreground/5 hover:text-white'
+                            ? 'bg-secondary/20 text-secondary shadow-inner'
+                            : 'text-gray-300 hover:bg-accent-foreground/10 hover:text-white hover:shadow-lg'
                         }`}
                       >
                         <User className="w-5 h-5 mr-2" />
@@ -192,13 +243,15 @@ const Navbar = () => {
                       </Button>
                     </motion.div>
                     <motion.div
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.3 }}
+                      variants={itemVariants}
+                      custom={navItems.length + 1}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
                     >
                       <Button 
                         variant="secondary" 
-                        className="w-full"
+                        className="w-full shadow-lg hover:shadow-xl transition-shadow duration-200"
                         onClick={() => {
                           setIsOpen(false);
                           navigate('/start-project');
