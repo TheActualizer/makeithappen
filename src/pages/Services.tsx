@@ -12,16 +12,38 @@ const Services = () => {
       <Navbar />
       <main className="relative">
         {/* Hero Section */}
-        <section className="pt-32 pb-16 px-4 relative">
-          <div className="max-w-6xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Complete Business Automation Solutions
+        <section className="pt-32 pb-16 px-4 relative overflow-hidden">
+          {/* Animated background elements */}
+          <div className="absolute inset-0 bg-grid-white/5 bg-[size:20px_20px]" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-[500px] h-[500px] bg-primary/30 rounded-full blur-3xl animate-pulse opacity-20" />
+          </div>
+
+          <div className="max-w-6xl mx-auto text-center relative">
+            {/* Floating images */}
+            <div className="hidden lg:block absolute -left-4 top-0 animate-float">
+              <img
+                src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=300&h=400"
+                alt="AI Automation"
+                className="w-64 h-80 object-cover rounded-2xl opacity-60 transform -rotate-6"
+              />
+            </div>
+            <div className="hidden lg:block absolute -right-4 top-20 animate-float delay-200">
+              <img
+                src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?auto=format&fit=crop&w=300&h=400"
+                alt="Enterprise Solutions"
+                className="w-64 h-80 object-cover rounded-2xl opacity-60 transform rotate-6"
+              />
+            </div>
+
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 animate-fade-in">
+              Autonomous Enterprise Websites
             </h1>
-            <p className="text-lg text-gray-300 max-w-2xl mx-auto mb-8">
-              Transform your business with our comprehensive suite of AI-powered automation solutions.
-              From digital workforce to departmental setups, we've got you covered.
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto mb-8 animate-fade-in delay-100">
+              Experience the future of web development with our AI-powered autonomous solutions. 
+              We create intelligent, self-managing websites that adapt and scale with your enterprise.
             </p>
-            <div className="flex flex-wrap gap-4 justify-center">
+            <div className="flex flex-wrap gap-4 justify-center animate-fade-in delay-200">
               <Button
                 variant="default"
                 size="lg"
