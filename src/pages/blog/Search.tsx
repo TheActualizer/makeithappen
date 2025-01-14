@@ -32,108 +32,146 @@ const Search = () => {
   const { toast } = useToast();
 
   const searchBlogPosts = async (searchTerm: string) => {
-    console.log('Searching blog posts...');
-    const { data: blogPosts, error } = await supabase
-      .from('blog_posts')
-      .select('id, title, excerpt, slug, reading_time, views, content')
-      .or(`title.ilike.%${searchTerm}%,content.ilike.%${searchTerm}%,excerpt.ilike.%${searchTerm}%`)
-      .eq('status', 'published');
+    console.log('\n=== Searching Blog Posts ===');
+    console.log('Search term:', searchTerm);
+    
+    try {
+      const { data: blogPosts, error, count } = await supabase
+        .from('blog_posts')
+        .select('id, title, excerpt, slug, reading_time, views, content', { count: 'exact' })
+        .or(`title.ilike.%${searchTerm}%,content.ilike.%${searchTerm}%,excerpt.ilike.%${searchTerm}%`)
+        .eq('status', 'published');
 
-    if (error) throw error;
-
-    console.log(`Found ${blogPosts?.length || 0} blog posts`);
-    blogPosts?.forEach(post => {
-      console.log('\nAnalyzing blog post:', post.title);
-      console.log('Content:', post.content?.substring(0, 200));
-      console.log('Excerpt:', post.excerpt);
-    });
-
-    return blogPosts?.map(post => ({
-      id: post.id,
-      title: post.title,
-      description: post.excerpt || post.content?.substring(0, 200) + '...',
-      type: 'blog' as const,
-      url: `/blog/${post.slug}`,
-      metadata: {
-        views: post.views,
-        reading_time: post.reading_time,
+      if (error) {
+        console.error('Blog posts search error:', error);
+        throw error;
       }
-    })) || [];
+
+      console.log(`Found ${count} blog posts matching search term`);
+      blogPosts?.forEach(post => {
+        console.log('\nBlog post match:', {
+          id: post.id,
+          title: post.title,
+          excerpt: post.excerpt?.substring(0, 100) + '...',
+          matchInContent: post.content?.toLowerCase().includes(searchTerm.toLowerCase()),
+          matchInTitle: post.title?.toLowerCase().includes(searchTerm.toLowerCase()),
+          matchInExcerpt: post.excerpt?.toLowerCase().includes(searchTerm.toLowerCase())
+        });
+      });
+
+      return blogPosts?.map(post => ({
+        id: post.id,
+        title: post.title,
+        description: post.excerpt || post.content?.substring(0, 200) + '...',
+        type: 'blog' as const,
+        url: `/blog/${post.slug}`,
+        metadata: {
+          views: post.views,
+          reading_time: post.reading_time,
+        }
+      })) || [];
+    } catch (error) {
+      console.error('Error in searchBlogPosts:', error);
+      return [];
+    }
   };
 
   const searchProjects = async (searchTerm: string) => {
-    console.log('Searching projects...');
-    const { data: projects, error } = await supabase
-      .from('projects')
-      .select('*')
-      .or(`
-        name.ilike.%${searchTerm}%,
-        description.ilike.%${searchTerm}%,
-        current_challenges::text.ilike.%${searchTerm}%,
-        business_objectives::text.ilike.%${searchTerm}%,
-        pain_points::text.ilike.%${searchTerm}%
-      `);
+    console.log('\n=== Searching Projects ===');
+    console.log('Search term:', searchTerm);
+    
+    try {
+      const { data: projects, error, count } = await supabase
+        .from('projects')
+        .select('*', { count: 'exact' })
+        .or(`
+          name.ilike.%${searchTerm}%,
+          description.ilike.%${searchTerm}%,
+          current_challenges::text.ilike.%${searchTerm}%,
+          business_objectives::text.ilike.%${searchTerm}%
+        `);
 
-    if (error) throw error;
-
-    console.log(`Found ${projects?.length || 0} projects`);
-    projects?.forEach(project => {
-      console.log('\nAnalyzing project:', project.name);
-      console.log('Description:', project.description);
-      console.log('Challenges:', project.current_challenges);
-      console.log('Objectives:', project.business_objectives);
-    });
-
-    return projects?.map(project => ({
-      id: project.id,
-      title: project.name,
-      description: [
-        project.description,
-        project.current_challenges?.join(', '),
-        project.business_objectives?.join(', '),
-        project.pain_points?.join(', ')
-      ].filter(Boolean).join(' | ').substring(0, 200) + '...',
-      type: 'project' as const,
-      url: `/projects/${project.id}`,
-      metadata: {
-        project_type: project.project_type,
+      if (error) {
+        console.error('Projects search error:', error);
+        throw error;
       }
-    })) || [];
+
+      console.log(`Found ${count} projects matching search term`);
+      projects?.forEach(project => {
+        console.log('\nProject match:', {
+          id: project.id,
+          name: project.name,
+          matchInName: project.name?.toLowerCase().includes(searchTerm.toLowerCase()),
+          matchInDescription: project.description?.toLowerCase().includes(searchTerm.toLowerCase()),
+          matchInChallenges: project.current_challenges?.some(
+            (challenge: string) => challenge.toLowerCase().includes(searchTerm.toLowerCase())
+          ),
+          matchInObjectives: project.business_objectives?.some(
+            (objective: string) => objective.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+        });
+      });
+
+      return projects?.map(project => ({
+        id: project.id,
+        title: project.name,
+        description: project.description,
+        type: 'project' as const,
+        url: `/projects/${project.id}`,
+        metadata: {
+          project_type: project.project_type,
+        }
+      })) || [];
+    } catch (error) {
+      console.error('Error in searchProjects:', error);
+      return [];
+    }
   };
 
   const searchDocuments = async (searchTerm: string) => {
-    console.log('Searching documents...');
-    const { data: documents, error } = await supabase
-      .from('documents')
-      .select('*')
-      .or(`
-        title.ilike.%${searchTerm}%,
-        description.ilike.%${searchTerm}%,
-        notes.ilike.%${searchTerm}%
-      `);
+    console.log('\n=== Searching Documents ===');
+    console.log('Search term:', searchTerm);
+    
+    try {
+      const { data: documents, error, count } = await supabase
+        .from('documents')
+        .select('*', { count: 'exact' })
+        .or(`
+          title.ilike.%${searchTerm}%,
+          description.ilike.%${searchTerm}%,
+          notes.ilike.%${searchTerm}%
+        `);
 
-    if (error) throw error;
-
-    console.log(`Found ${documents?.length || 0} documents`);
-    documents?.forEach(doc => {
-      console.log('\nAnalyzing document:', doc.title);
-      console.log('Description:', doc.description);
-      console.log('Notes:', doc.notes);
-    });
-
-    return documents?.map(doc => ({
-      id: doc.id,
-      title: doc.title,
-      description: [doc.description, doc.notes]
-        .filter(Boolean)
-        .join(' | ')
-        .substring(0, 200) + '...',
-      type: 'document' as const,
-      url: `/documents/${doc.id}`,
-      metadata: {
-        file_type: doc.file_type,
+      if (error) {
+        console.error('Documents search error:', error);
+        throw error;
       }
-    })) || [];
+
+      console.log(`Found ${count} documents matching search term`);
+      documents?.forEach(doc => {
+        console.log('\nDocument match:', {
+          id: doc.id,
+          title: doc.title,
+          matchInTitle: doc.title?.toLowerCase().includes(searchTerm.toLowerCase()),
+          matchInDescription: doc.description?.toLowerCase().includes(searchTerm.toLowerCase()),
+          matchInNotes: doc.notes?.toLowerCase().includes(searchTerm.toLowerCase())
+        });
+      });
+
+      return documents?.map(doc => ({
+        id: doc.id,
+        title: doc.title,
+        description: doc.description || doc.notes || 'No description available',
+        type: 'document' as const,
+        url: `/documents/${doc.id}`,
+        metadata: {
+          file_type: doc.file_type,
+        }
+      })) || [];
+    } catch (error) {
+      console.error('Error in searchDocuments:', error);
+      return [];
+    }
   };
 
   const handleSearch = async () => {
@@ -146,9 +184,11 @@ const Search = () => {
     }
 
     setIsSearching(true);
+    console.log('\n=== Starting Global Search ===');
+    console.log('Search term:', query);
+    console.log('Timestamp:', new Date().toISOString());
+    
     try {
-      console.log('Starting search for term:', query);
-      
       // Execute all searches in parallel
       const [blogResults, projectResults, documentResults] = await Promise.all([
         searchBlogPosts(query),
@@ -156,14 +196,16 @@ const Search = () => {
         searchDocuments(query)
       ]);
 
-      // Combine all results
+      // Combine and log all results
       const allResults = [...blogResults, ...projectResults, ...documentResults];
-
-      console.log('\nSearch complete. Total results:', allResults.length);
-      console.log('Results breakdown:');
-      console.log('- Blog posts:', blogResults.length);
-      console.log('- Projects:', projectResults.length);
-      console.log('- Documents:', documentResults.length);
+      
+      console.log('\n=== Search Complete ===');
+      console.log('Total results:', allResults.length);
+      console.log('Results breakdown:', {
+        blogPosts: blogResults.length,
+        projects: projectResults.length,
+        documents: documentResults.length
+      });
 
       setResults(allResults);
     } catch (error) {
@@ -177,6 +219,8 @@ const Search = () => {
       setIsSearching(false);
     }
   };
+
+  // ... keep existing code (JSX for rendering the search interface)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-accent to-accent/95">
