@@ -1,40 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 @layer base {
   :root {
-    --background: hsl(var(--background));
-    --foreground: hsl(var(--foreground));
-    --border: hsl(var(--border));
-    --input: hsl(var(--input));
-    --ring: hsl(var(--ring));
-    --card: hsl(var(--card));
-    --card-foreground: hsl(var(--card-foreground));
-    --popover: hsl(var(--popover));
-    --popover-foreground: hsl(var(--popover-foreground));
-    --muted: hsl(var(--muted));
-    --muted-foreground: hsl(var(--muted-foreground));
-    --destructive: hsl(var(--destructive));
-    --destructive-foreground: hsl(var(--destructive-foreground));
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 262.1 83.3% 57.8%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 187.9 100% 42.2%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 226.7 57.9% 10.2%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
     --radius: 0.5rem;
   }
- 
-  .dark {
-    --background: hsl(240, 10%, 10%);
-    --foreground: hsl(0, 0%, 100%);
-    --border: hsl(240, 10%, 20%);
-    --input: hsl(240, 10%, 20%);
-    --ring: hsl(240, 10%, 30%);
-    --card: hsl(240, 10%, 15%);
-    --card-foreground: hsl(0, 0%, 100%);
-    --popover: hsl(240, 10%, 20%);
-    --popover-foreground: hsl(0, 0%, 100%);
-    --muted: hsl(240, 10%, 30%);
-    --muted-foreground: hsl(0, 0%, 100%);
-    --destructive: hsl(0, 100%, 50%);
-    --destructive-foreground: hsl(0, 0%, 100%);
-    --radius: 0.5rem;
+
+  * {
+    @apply border-border;
   }
 
   body {
@@ -56,19 +51,5 @@
   /* Ensure content doesn't shift during page transitions */
   #root {
     @apply relative min-h-screen;
-  }
-
-  /* 3D card flip styles */
-  .preserve-3d {
-    transform-style: preserve-3d;
-    perspective: 1000px;
-  }
-
-  .backface-hidden {
-    backface-visibility: hidden;
-  }
-
-  .rotate-y-180 {
-    transform: rotateY(180deg);
   }
 }
