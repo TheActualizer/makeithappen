@@ -3,6 +3,7 @@ import Index from "@/pages/Index";
 import Services from "@/pages/Services";
 import CaseStudies from "@/pages/CaseStudies";
 import Blog from "@/pages/Blog";
+import BlogCategory from "@/pages/blog/BlogCategory";
 import AgenticSystems from "@/pages/blog/AgenticSystems";
 import AITrends from "@/pages/blog/AITrends";
 import About from "@/pages/About";
@@ -24,6 +25,7 @@ function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/case-studies" element={<CaseStudies />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/category/:slug" element={<BlogCategory />} />
         <Route path="/blog/agentic-systems" element={<AgenticSystems />} />
         <Route path="/blog/ai-trends" element={<AITrends />} />
         <Route path="/about" element={<About />} />
