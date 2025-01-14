@@ -151,25 +151,23 @@ const ProjectStartModal = ({
   return (
     <Dialog open={isOpen} onOpenChange={handleModalClose}>
       <DialogContent className="max-w-[600px] h-[85vh] flex flex-col bg-background/95 backdrop-blur-md">
-        <DialogHeader className="px-4 py-3 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10">
-          <DialogTitle className="text-xl font-semibold">
-            {showCalendly ? "Schedule Consultation" : `Step ${step} of 3`}
-          </DialogTitle>
-          {!showCalendly && (
-            <div className="mt-2">
-              <ProgressSteps currentStep={step} />
-            </div>
-          )}
+        <DialogHeader className="px-4 py-2 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10">
+          <div className="flex items-center justify-between">
+            <DialogTitle className="text-lg font-medium">
+              {showCalendly ? "Schedule Consultation" : "New Project"}
+            </DialogTitle>
+            {!showCalendly && <ProgressSteps currentStep={step} />}
+          </div>
         </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto px-4">
-          <div className="py-4 space-y-6">
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-4 space-y-6">
             {renderStep()}
           </div>
         </div>
 
         {!showCalendly && (
-          <div className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-4 sticky bottom-0 mt-auto">
+          <div className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-3 sticky bottom-0 mt-auto">
             <div className="flex justify-between gap-3">
               <Button
                 variant="ghost"

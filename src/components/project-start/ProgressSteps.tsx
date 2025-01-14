@@ -5,37 +5,37 @@ interface ProgressStepsProps {
 }
 
 const steps = [
-  { number: 1, label: "Basic Info" },
-  { number: 2, label: "Project Details" },
-  { number: 3, label: "Timeline" }
+  { number: 1, label: "Info" },
+  { number: 2, label: "Details" },
+  { number: 3, label: "Review" }
 ];
 
 const ProgressSteps = ({ currentStep }: ProgressStepsProps) => {
   return (
-    <div className="relative pt-8 pb-4">
-      <div className="flex justify-between items-center relative">
-        <div className="absolute h-[2px] bg-border top-1/2 left-0 right-0 -translate-y-1/2 z-0" />
-        {steps.map(({ number, label }) => (
-          <div key={number} className="relative z-10 flex flex-col items-center">
-            <div
-              className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300 ${
-                currentStep >= number
-                  ? "border-primary bg-primary text-white"
-                  : "border-gray-300 bg-background"
-              }`}
-            >
-              {currentStep > number ? (
-                <Check className="w-5 h-5" />
-              ) : (
-                <span className="text-sm font-medium">{number}</span>
-              )}
-            </div>
-            <span className="mt-2 text-xs font-medium text-muted-foreground">
-              {label}
-            </span>
+    <div className="flex items-center gap-2">
+      {steps.map(({ number, label }) => (
+        <div key={number} className="flex items-center">
+          <div
+            className={`flex items-center justify-center w-5 h-5 text-xs rounded-full transition-all duration-300 ${
+              currentStep >= number
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted text-muted-foreground"
+            }`}
+          >
+            {currentStep > number ? (
+              <Check className="w-3 h-3" />
+            ) : (
+              <span>{number}</span>
+            )}
           </div>
-        ))}
-      </div>
+          <span className="text-xs text-muted-foreground ml-1 mr-2">
+            {label}
+          </span>
+          {number < steps.length && (
+            <span className="text-muted-foreground/30">•</span>
+          )}
+        </div>
+      ))}
     </div>
   );
 };
