@@ -28,8 +28,12 @@ const Login = () => {
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("Auth state changed:", event, session);
       if (event === "SIGNED_IN" && session) {
         navigate("/dashboard");
+      }
+      if (event === "PASSWORD_RECOVERY") {
+        navigate("/reset-password");
       }
       if (event === "USER_UPDATED" || event === "SIGNED_OUT") {
         const urlParams = new URLSearchParams(window.location.search);
@@ -60,9 +64,9 @@ const Login = () => {
       <div className="container mx-auto px-4 pt-24">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-white">Create Your Account</h1>
+            <h1 className="text-3xl font-bold text-white">Welcome Back</h1>
             <p className="text-gray-300 mt-2">
-              Join MakeITHappen and start building your projects
+              Sign in to your account or create a new one
             </p>
           </div>
           <div className="bg-background rounded-lg p-8 shadow-xl border border-border/5">
@@ -99,8 +103,7 @@ const Login = () => {
               }}
               theme="dark"
               providers={[]}
-              view="sign_up"
-              showLinks={true}
+              redirectTo={`${window.location.origin}/reset-password`}
             />
           </div>
           <div className="mt-8 text-center text-sm text-gray-300">
