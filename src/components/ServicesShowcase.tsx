@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Brain, Building2, Scale, Calculator, Truck, Factory, Search, Database, Shield, Code, Network, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { FloatingServiceIcon } from "./3d/FloatingServiceIcon";
 
 interface Service {
   id: number;
@@ -132,15 +132,35 @@ const services: Service[] = [
 ];
 
 const ServiceCard = ({ service }: { service: Service }) => {
-  const Icon = service.icon;
+  const [isHovered, setIsHovered] = useState(false);
+  
+  // Map service types to 3D icon types
+  const getIconType = (title: string): 'cube' | 'sphere' | 'torus' => {
+    switch (title) {
+      case "Finance & Markets Automation":
+        return "cube";
+      case "Legal Department Automation":
+        return "torus";
+      default:
+        return "sphere";
+    }
+  };
   
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
-        <Card className="relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 cursor-pointer border-accent/20 bg-accent/40 backdrop-blur-sm group">
+        <Card 
+          className="relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 cursor-pointer border-accent/20 bg-accent/40 backdrop-blur-sm group"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
           <CardHeader>
             <div className="mb-4 inline-flex p-3 rounded-lg bg-accent/30 group-hover:bg-accent/40 transition-colors">
-              <Icon className="w-6 h-6 text-secondary" />
+              <FloatingServiceIcon 
+                iconType={getIconType(service.title)}
+                color="#06B6D4"
+                hovered={isHovered}
+              />
             </div>
             <CardTitle className="group-hover:text-secondary transition-colors">{service.title}</CardTitle>
             <CardDescription className="text-gray-400">{service.description}</CardDescription>
