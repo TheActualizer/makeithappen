@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -42,7 +42,7 @@ const ProjectStartModal = ({
   const navigate = useNavigate();
 
   // Simulate loading state
-  useState(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);

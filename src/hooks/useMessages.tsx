@@ -52,7 +52,7 @@ export const useMessages = (): UseMessagesReturn => {
           conversation_id,
           type,
           is_admin_message,
-          sender:profiles!messages_sender_id_fkey (
+          profiles!messages_sender_id_fkey (
             first_name,
             last_name,
             email,
@@ -77,11 +77,11 @@ export const useMessages = (): UseMessagesReturn => {
         created_at: msg.created_at,
         conversation_id: msg.conversation_id,
         type: msg.type || 'text',
-        profiles: msg.sender ? {
-          first_name: msg.sender.first_name,
-          last_name: msg.sender.last_name,
-          email: msg.sender.email,
-          avatar_url: msg.sender.avatar_url
+        profiles: msg.profiles ? {
+          first_name: msg.profiles.first_name,
+          last_name: msg.profiles.last_name,
+          email: msg.profiles.email,
+          avatar_url: msg.profiles.avatar_url
         } : null
       })) || [];
 
