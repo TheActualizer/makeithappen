@@ -18,7 +18,7 @@ const Index = () => {
       <Navbar />
       
       <main className="relative">
-        <div className="space-y-12">
+        <div className="space-y-8">
           <Hero />
           <ServicesShowcase />
         </div>
