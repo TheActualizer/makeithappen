@@ -1,6 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { BriefcaseIcon, Star } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import { FormData } from "../types";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface ServiceTypeSectionProps {
   formData: FormData;
@@ -19,33 +25,64 @@ const serviceTypes = [
 ];
 
 export const ServiceTypeSection = ({ formData, onServiceTypeChange }: ServiceTypeSectionProps) => {
+  const selectedCount = formData.projectType?.length || 0;
+
   return (
-    <div className="space-y-6">
-      <h3 className="flex items-center gap-3 text-2xl font-bold relative group">
-        <Star className="w-7 h-7 text-secondary animate-pulse" />
-        <span className="bg-gradient-to-r from-secondary via-primary to-secondary bg-clip-text text-transparent animate-gradient">
-          Services Required
-        </span>
-        <div className="absolute -bottom-2 left-0 w-full h-0.5 bg-gradient-to-r from-secondary/50 via-primary/50 to-secondary/50 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
-      </h3>
-      <div className="grid grid-cols-1 gap-3">
-        {serviceTypes.map((type) => (
-          <Button
-            key={type.value}
-            variant={formData.projectType?.includes(type.value) ? "default" : "outline"}
-            size="lg"
-            onClick={() => onServiceTypeChange(type.value)}
-            className={`justify-start text-base h-auto py-4 px-4 w-full transition-all duration-200 ${
-              formData.projectType?.includes(type.value)
-                ? "bg-primary/10 text-primary hover:bg-primary/20"
-                : "hover:bg-accent/5"
-            }`}
+    <div className="space-y-2">
+      <h3 className="text-sm font-medium">Select Service Types</h3>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button 
+            variant="outline" 
+            className="w-full justify-between"
           >
-            <span className="mr-2 text-xl">{type.icon}</span>
-            {type.label}
+            {selectedCount === 0 ? (
+              "Select services..."
+            ) : (
+              `${selectedCount} service${selectedCount === 1 ? '' : 's'} selected`
+            )}
+            <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
           </Button>
-        ))}
-      </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent 
+          className="w-[300px] max-h-[300px] overflow-y-auto bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+          align="start"
+        >
+          {serviceTypes.map((type) => (
+            <DropdownMenuCheckboxItem
+              key={type.value}
+              checked={formData.projectType?.includes(type.value)}
+              onCheckedChange={() => onServiceTypeChange(type.value)}
+              className="flex items-center gap-2"
+            >
+              <span className="text-lg">{type.icon}</span>
+              {type.label}
+            </DropdownMenuCheckboxItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+      {selectedCount > 0 && (
+        <div className="flex flex-wrap gap-2 mt-2">
+          {formData.projectType?.map((selected) => {
+            const service = serviceTypes.find(t => t.value === selected);
+            return (
+              <div
+                key={selected}
+                className="inline-flex items-center gap-1 text-xs bg-primary/10 text-primary rounded-full px-2 py-1"
+              >
+                <span>{service?.icon}</span>
+                <span>{service?.label}</span>
+                <button
+                  onClick={() => onServiceTypeChange(selected)}
+                  className="ml-1 hover:text-primary/80"
+                >
+                  ×
+                </button>
+              </div>
+            )}
+          )}
+        </div>
+      )}
     </div>
   );
 };
