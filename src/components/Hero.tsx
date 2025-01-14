@@ -109,7 +109,7 @@ const Hero = () => {
                   className="absolute -inset-1 blur-xl bg-gradient-to-r from-secondary via-primary to-secondary"
                 />
                 <span className="relative bg-gradient-to-r from-secondary via-primary to-secondary bg-clip-text text-transparent">
-                  Next-Generation
+                  AI-Powered
                 </span>
               </span>{" "}
               Digital Solutions
@@ -119,7 +119,20 @@ const Hero = () => {
               variants={itemVariants}
               className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto backdrop-blur-sm"
             >
-              Accelerate your vision with AI-powered development. We build 20x faster 
+              <motion.span 
+                className="inline-block font-semibold text-secondary"
+                animate={{
+                  scale: [1, 1.1, 1],
+                  color: ['#06B6D4', '#6D28D9', '#06B6D4'],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                We build 20x faster
+              </motion.span>{" "}
               than traditional methods, turning ideas into production-ready solutions at lightspeed.
             </motion.p>
             
@@ -153,7 +166,7 @@ const Hero = () => {
               <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 {[
                   {
-                    title: "Digital Business Suite",
+                    title: "AI Business Suite",
                     description: "Custom websites, CRM & automation"
                   },
                   {
