@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, User } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const navItems = [
     { name: "Services", href: "/services" },
@@ -32,10 +33,22 @@ const Navbar = () => {
     }
   };
 
+  const isActive = (href: string) => {
+    if (href === '/') {
+      return location.pathname === href;
+    }
+    return location.pathname.startsWith(href);
+  };
+
   return (
     <nav className="fixed w-full bg-accent/95 backdrop-blur-sm z-50 py-4">
       <div className="container mx-auto px-4 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold text-white">
+        <Link 
+          to="/" 
+          className={`text-2xl font-bold transition-colors ${
+            isActive('/') ? 'text-secondary' : 'text-white'
+          }`}
+        >
           MakeITHappen
         </Link>
 
@@ -46,14 +59,25 @@ const Navbar = () => {
               {item.href.startsWith("/") ? (
                 <Link
                   to={item.href}
-                  className="text-gray-300 hover:text-white transition-colors"
+                  className={`transition-colors relative ${
+                    isActive(item.href)
+                      ? 'text-secondary font-medium'
+                      : 'text-gray-300 hover:text-white'
+                  }`}
                 >
                   {item.name}
+                  {isActive(item.href) && (
+                    <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-secondary rounded-full" />
+                  )}
                 </Link>
               ) : (
                 <button
                   onClick={() => handleNavigation(item.href)}
-                  className="text-gray-300 hover:text-white transition-colors"
+                  className={`transition-colors ${
+                    isActive(item.href)
+                      ? 'text-secondary font-medium'
+                      : 'text-gray-300 hover:text-white'
+                  }`}
                 >
                   {item.name}
                 </button>
@@ -64,7 +88,11 @@ const Navbar = () => {
             <Button 
               variant="ghost"
               onClick={() => navigate('/login')}
-              className="text-white hover:text-white hover:bg-accent-foreground/10"
+              className={`transition-colors ${
+                isActive('/login')
+                  ? 'text-secondary bg-accent-foreground/10'
+                  : 'text-white hover:text-white hover:bg-accent-foreground/10'
+              }`}
             >
               <User className="w-5 h-5 mr-2" />
               Login
@@ -72,6 +100,7 @@ const Navbar = () => {
             <Button 
               variant="secondary"
               onClick={() => navigate('/start-project')}
+              className={isActive('/start-project') ? 'bg-opacity-90' : ''}
             >
               Get Started
             </Button>
@@ -100,7 +129,11 @@ const Navbar = () => {
                 {item.href.startsWith("/") ? (
                   <Link
                     to={item.href}
-                    className="text-gray-300 hover:text-white transition-colors block"
+                    className={`transition-colors block ${
+                      isActive(item.href)
+                        ? 'text-secondary font-medium'
+                        : 'text-gray-300 hover:text-white'
+                    }`}
                     onClick={() => setIsOpen(false)}
                   >
                     {item.name}
@@ -108,7 +141,11 @@ const Navbar = () => {
                 ) : (
                   <button
                     onClick={() => handleNavigation(item.href)}
-                    className="text-gray-300 hover:text-white transition-colors text-left w-full"
+                    className={`transition-colors text-left w-full ${
+                      isActive(item.href)
+                        ? 'text-secondary font-medium'
+                        : 'text-gray-300 hover:text-white'
+                    }`}
                   >
                     {item.name}
                   </button>
@@ -122,7 +159,11 @@ const Navbar = () => {
                   setIsOpen(false);
                   navigate('/login');
                 }}
-                className="text-white hover:text-white hover:bg-accent-foreground/10 w-full justify-start"
+                className={`transition-colors w-full justify-start ${
+                  isActive('/login')
+                    ? 'text-secondary bg-accent-foreground/10'
+                    : 'text-white hover:text-white hover:bg-accent-foreground/10'
+                }`}
               >
                 <User className="w-5 h-5 mr-2" />
                 Login
