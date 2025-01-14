@@ -1,63 +1,58 @@
-import React, { useState } from 'react';
-import { Button } from "@/components/ui/button";
-import { ArrowUp, Link2, Settings2, ChevronDown } from "lucide-react";
-import ChatMessages from "./ChatMessages";
-import ChatInput from "./ChatInput";
-import ChatHeader from "./ChatHeader";
+import React, { useRef, useEffect } from 'react';
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import ChatButton from './ChatButton';
+import ChatHeader from './ChatHeader';
+import ChatMessages from './ChatMessages';
+import ChatInput from './ChatInput';
+import { useChat } from '@/hooks/useChat';
+import type { Message, AIModel } from '@/types/message';
 
 const ChatInterface = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const {
+    isOpen,
+    setIsOpen,
+    messages,
+    newMessage,
+    setNewMessage,
+    selectedModel,
+    setSelectedModel,
+    isLoading,
+    sendMessage
+  } = useChat();
+  
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleOpen = (open: boolean) => {
+    console.log('Chat interface visibility changed:', open);
+    setIsOpen(open);
+  };
+
+  const handleModelChange = (model: AIModel) => {
+    setSelectedModel(model);
+  };
 
   return (
-    <div className="fixed bottom-0 right-0 w-full md:w-[420px] bg-accent/95 backdrop-blur-lg border-t md:border-l border-secondary/20 shadow-2xl transition-all duration-300 ease-in-out z-50">
-      {/* Header */}
-      <div 
-        className="flex items-center justify-between px-4 py-3 border-b border-secondary/20 cursor-pointer"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-gray-200">Assistant</span>
-            <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="w-8 h-8">
-            <Settings2 className="w-4 h-4 text-gray-400" />
-          </Button>
-        </div>
-      </div>
-
-      {/* Chat Container */}
-      <div className={`flex flex-col transition-all duration-300 ease-in-out ${isOpen ? 'h-[600px]' : 'h-0'} overflow-hidden`}>
-        {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          <ChatMessages />
-        </div>
-
-        {/* Input Area */}
-        <div className="border-t border-secondary/20 p-4 bg-accent/90 backdrop-blur-sm">
-          <div className="relative">
-            <ChatInput />
-            <div className="absolute right-2 bottom-2 flex items-center gap-2">
-              <Button variant="ghost" size="icon" className="w-8 h-8">
-                <Link2 className="w-4 h-4 text-gray-400" />
-              </Button>
-              <Button size="icon" className="w-8 h-8 bg-primary hover:bg-primary/90">
-                <ArrowUp className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-          <div className="mt-2 flex items-center justify-between text-xs text-gray-400">
-            <span>Type / to see available commands</span>
-            <div className="flex items-center gap-2">
-              <span>Claude can make mistakes.</span>
-              <span>Please verify responses.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Sheet open={isOpen} onOpenChange={handleOpen}>
+      <ChatButton />
+      <SheetContent className="w-[400px] sm:w-[540px] h-full flex flex-col p-0">
+        <ChatHeader selectedModel={selectedModel} onModelChange={handleModelChange} />
+        <ChatMessages messages={messages as Message[]} messagesEndRef={messagesEndRef} />
+        <ChatInput
+          newMessage={newMessage}
+          setNewMessage={setNewMessage}
+          onSubmit={sendMessage}
+          isLoading={isLoading}
+        />
+      </SheetContent>
+    </Sheet>
   );
 };
 
