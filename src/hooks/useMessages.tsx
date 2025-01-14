@@ -52,7 +52,7 @@ export const useMessages = (): UseMessagesReturn => {
           conversation_id,
           type,
           is_admin_message,
-          profiles (
+          profiles:sender_id (
             first_name,
             last_name,
             email,
