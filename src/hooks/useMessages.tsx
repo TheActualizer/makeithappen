@@ -1,14 +1,6 @@
-import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import type { Message } from "@/types/message";
-
-interface UseMessagesReturn {
-  conversations: any[];
-  messages: Message[];
-  selectedConversation: string | null;
-  setSelectedConversation: (id: string | null) => void;
-  fetchMessages: (conversationId: string) => Promise<void>;
-}
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { Message, MessageType } from '@/types/message';
 
 interface ProfileData {
   first_name: string | null;
@@ -17,89 +9,68 @@ interface ProfileData {
   avatar_url: string | null;
 }
 
-export const useMessages = (): UseMessagesReturn => {
-  const [conversations, setConversations] = useState<any[]>([]);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
+interface MessageWithProfile extends Message {
+  profiles: ProfileData | null;
+}
+
+export const useMessages = (conversationId: string) => {
+  const [messages, setMessages] = useState<MessageWithProfile[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchConversations();
-  }, []);
+    const fetchMessages = async () => {
+      try {
+        console.log('Fetching messages for conversation:', conversationId);
+        
+        const { data: messagesData, error: messagesError } = await supabase
+          .from('messages')
+          .select(`
+            *,
+            profiles (
+              first_name,
+              last_name,
+              email,
+              avatar_url
+            )
+          `)
+          .eq('conversation_id', conversationId)
+          .order('created_at', { ascending: true });
 
-  const fetchConversations = async () => {
-    try {
-      console.log('Fetching conversations...');
-      const { data, error } = await supabase
-        .from('conversations')
-        .select('*')
-        .order('created_at', { ascending: false });
+        if (messagesError) {
+          console.error('Error fetching messages:', messagesError);
+          setError(messagesError.message);
+          return;
+        }
 
-      if (error) {
-        console.error('Error fetching conversations:', error);
-        return;
+        console.log('Fetched messages:', messagesData);
+
+        const typedMessages = messagesData?.map(msg => ({
+          id: msg.id,
+          content: msg.content,
+          sender_id: msg.sender_id,
+          is_admin_message: msg.is_admin_message || false,
+          created_at: msg.created_at,
+          conversation_id: msg.conversation_id,
+          type: msg.type as MessageType || 'text',
+          profiles: msg.profiles as ProfileData | null
+        })) || [];
+
+        setMessages(typedMessages);
+      } catch (err) {
+        console.error('Error in fetchMessages:', err);
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setLoading(false);
       }
+    };
 
-      console.log('Conversations fetched:', data);
-      setConversations(data || []);
-    } catch (error) {
-      console.error('Error in fetchConversations:', error);
+    if (conversationId) {
+      fetchMessages();
     }
-  };
+  }, [conversationId]);
 
-  const fetchMessages = async (conversationId: string) => {
-    try {
-      console.log('Fetching messages for conversation:', conversationId);
-      const { data, error } = await supabase
-        .from('messages')
-        .select(`
-          id,
-          content,
-          sender_id,
-          created_at,
-          conversation_id,
-          type,
-          is_admin_message,
-          profiles!sender_id (
-            first_name,
-            last_name,
-            email,
-            avatar_url
-          )
-        `)
-        .eq('conversation_id', conversationId)
-        .order('created_at', { ascending: true });
-
-      if (error) {
-        console.error('Error fetching messages:', error);
-        return;
-      }
-
-      console.log('Messages fetched:', data);
-      
-      // Transform the data to match the Message interface
-      const typedMessages: Message[] = data?.map(msg => ({
-        id: msg.id,
-        content: msg.content,
-        sender_id: msg.sender_id,
-        created_at: msg.created_at,
-        conversation_id: msg.conversation_id,
-        type: msg.type || 'text',
-        profiles: msg.profiles as ProfileData
-      })) || [];
-
-      setMessages(typedMessages);
-    } catch (error) {
-      console.error('Error in fetchMessages:', error);
-    }
-  };
-
-  return {
-    conversations,
-    messages,
-    selectedConversation,
-    setSelectedConversation,
-    fetchMessages,
-  };
+  return { messages, loading, error };
 };
 
 export default useMessages;
