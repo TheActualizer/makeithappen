@@ -10,6 +10,7 @@ import CaseStudies from "./pages/CaseStudies";
 import StartProject from "./pages/StartProject";
 import ResetPassword from "./pages/ResetPassword";
 import TermsOfService from "./pages/TermsOfService";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/start-project" element={<StartProject />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/terms-of-service" element={<TermsOfService />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       </Routes>
     </Router>
   );
