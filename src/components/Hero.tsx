@@ -13,7 +13,6 @@ const Hero = () => {
 
   return (
     <div className="relative min-h-[90vh] flex items-center justify-center pt-8 overflow-hidden">
-      {/* Enhanced animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-accent to-secondary/20" />
         <div className="absolute top-1/4 -right-20 w-[500px] h-[500px] bg-primary/20 rounded-[20%] blur-3xl animate-pulse transform rotate-45" />
@@ -67,18 +66,22 @@ const Hero = () => {
             </div>
 
             <div className="mt-16 max-w-5xl mx-auto">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <div className="p-4 rounded-lg bg-accent/10 backdrop-blur-sm border border-accent/20 hover:bg-accent/20 transition-colors">
-                  <h3 className="text-lg font-semibold text-white mb-2">Advanced AI</h3>
-                  <p className="text-sm text-gray-300">Custom agent networks & LLM orchestration</p>
+                  <h3 className="text-lg font-semibold text-white mb-2">Digital Business Suite</h3>
+                  <p className="text-sm text-gray-300">Custom websites, CRM & automation</p>
                 </div>
                 <div className="p-4 rounded-lg bg-accent/10 backdrop-blur-sm border border-accent/20 hover:bg-accent/20 transition-colors">
-                  <h3 className="text-lg font-semibold text-white mb-2">SaaS Platforms</h3>
-                  <p className="text-sm text-gray-300">Scalable cloud-native solutions</p>
+                  <h3 className="text-lg font-semibold text-white mb-2">Business Process AI</h3>
+                  <p className="text-sm text-gray-300">90% workflow automation</p>
                 </div>
                 <div className="p-4 rounded-lg bg-accent/10 backdrop-blur-sm border border-accent/20 hover:bg-accent/20 transition-colors">
-                  <h3 className="text-lg font-semibold text-white mb-2">Enterprise Apps</h3>
-                  <p className="text-sm text-gray-300">Custom business automation</p>
+                  <h3 className="text-lg font-semibold text-white mb-2">Precision Systems</h3>
+                  <p className="text-sm text-gray-300">Engineering-grade calculations</p>
+                </div>
+                <div className="p-4 rounded-lg bg-accent/10 backdrop-blur-sm border border-accent/20 hover:bg-accent/20 transition-colors">
+                  <h3 className="text-lg font-semibold text-white mb-2">Healthcare Suite</h3>
+                  <p className="text-sm text-gray-300">HIPAA & FHIR compliant</p>
                 </div>
               </div>
 
@@ -93,28 +96,28 @@ const Hero = () => {
                   <AccordionContent>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-gray-400">
                       <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
-                        • Process Automation
+                        • Custom Websites & CRM
                       </div>
                       <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
-                        • Digital Workforce
+                        • AI Workflow Automation
                       </div>
                       <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
-                        • Data Analytics
+                        • Technical Calculations
                       </div>
                       <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
-                        • Cloud Integration
+                        • HIPAA Compliance
                       </div>
                       <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
-                        • API Development
+                        • Zoom Integration
                       </div>
                       <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
-                        • Machine Learning
+                        • Multi-Agent Systems
                       </div>
                       <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
-                        • DevOps & CI/CD
+                        • Legal & Finance AI
                       </div>
                       <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
-                        • Security & Compliance
+                        • FHIR Integration
                       </div>
                     </div>
                   </AccordionContent>
