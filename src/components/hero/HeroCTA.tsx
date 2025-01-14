@@ -6,10 +6,10 @@ export const HeroCTA = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-wrap gap-3 mt-6">
+    <div className="flex flex-wrap justify-center gap-4 mt-8">
       <Button
         size="lg"
-        className="bg-sky-500 hover:bg-sky-600 text-white shadow-lg transition-all duration-300 hover:translate-y-[-2px]"
+        className="bg-gradient-to-r from-[#9b87f5] to-[#0EA5E9] text-white border-0 shadow-lg shadow-purple-500/25 hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-300 hover:scale-105"
         onClick={() => navigate('/start-project')}
       >
         Start Building
@@ -20,7 +20,7 @@ export const HeroCTA = () => {
         variant="outline"
         size="lg"
         onClick={() => document.getElementById("capabilities")?.scrollIntoView({ behavior: 'smooth' })}
-        className="border-sky-400/20 text-sky-100 hover:bg-sky-500/10 transition-all duration-300"
+        className="border-white/10 text-white hover:bg-white/5 hover:border-white/20 transition-all duration-300"
       >
         Explore Solutions
       </Button>
