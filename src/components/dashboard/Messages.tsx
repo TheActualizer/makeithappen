@@ -3,7 +3,7 @@ import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { useMessages } from "@/hooks/useMessages";
 import { useMessageSender } from "@/hooks/useMessageSender";
 import { ConversationList } from './messages/ConversationList';
-import { MessageArea } from './messages/MessageArea';
+import MessageArea from './messages/MessageArea';
 import { MonitoringPanel } from './monitoring/MonitoringPanel';
 
 export const Messages = () => {
