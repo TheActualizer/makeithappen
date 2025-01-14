@@ -34,6 +34,7 @@ const formSchema = z.object({
 });
 
 export const ContactForm = () => {
+  console.log("ContactForm: Component initialized");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -48,6 +49,8 @@ export const ContactForm = () => {
     },
   });
 
+  console.log("ContactForm: Form initialized with default values", form.getValues());
+
   const formSteps = [
     ["name", "email", "phone"],
     ["projectType"],
@@ -57,27 +60,32 @@ export const ContactForm = () => {
   const currentFields = formSteps[currentStep];
 
   const nextStep = async () => {
+    console.log("ContactForm: Attempting to move to next step", { currentStep, fieldsToValidate: formSteps[currentStep] });
     const fieldsToValidate = formSteps[currentStep];
     const isValid = await form.trigger(fieldsToValidate as any[]);
     
     if (isValid && currentStep < formSteps.length - 1) {
+      console.log("ContactForm: Step validation successful, moving to next step");
       setCurrentStep((prev) => prev + 1);
+    } else {
+      console.log("ContactForm: Step validation failed or last step reached", { isValid, currentStep });
     }
   };
 
   const prevStep = () => {
+    console.log("ContactForm: Moving to previous step", { currentStep });
     setCurrentStep((prev) => Math.max(prev - 1, 0));
   };
 
   const isLastStep = currentStep === formSteps.length - 1;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("Starting form submission with values:", values);
+    console.log("ContactForm: Starting form submission with values:", values);
     setIsSubmitting(true);
     
     try {
-      console.log("Attempting to save submission to Supabase...");
-      const { error: submissionError } = await supabase
+      console.log("ContactForm: Attempting to save submission to Supabase...");
+      const { data, error: submissionError } = await supabase
         .from("contact_submissions")
         .insert({
           name: values.name,
@@ -85,23 +93,39 @@ export const ContactForm = () => {
           phone: values.phone || null,
           project_type: values.projectType,
           message: values.message,
-        });
+        })
+        .select()
+        .single();
 
       if (submissionError) {
-        console.error("Supabase submission error:", submissionError);
+        console.error("ContactForm: Supabase submission error:", submissionError);
         throw submissionError;
       }
 
-      console.log("Contact submission saved successfully");
+      console.log("ContactForm: Contact submission saved successfully", data);
+
+      // Trigger CRM automation
+      console.log("ContactForm: Triggering CRM automation...");
+      const { error: automationError } = await supabase.functions.invoke('crm-email-automation', {
+        body: data
+      });
+
+      if (automationError) {
+        console.error("ContactForm: CRM automation error:", automationError);
+        throw automationError;
+      }
+
+      console.log("ContactForm: CRM automation completed successfully");
       toast.success("Message sent successfully!");
       form.reset();
       setCurrentStep(0);
     } catch (error) {
-      console.error("Error in form submission:", error);
+      console.error("ContactForm: Error in form submission:", error);
       toast.error(
         "Failed to send message. Please try again or contact support directly."
       );
     } finally {
+      console.log("ContactForm: Submission process completed");
       setIsSubmitting(false);
     }
   };

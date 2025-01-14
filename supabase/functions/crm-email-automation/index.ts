@@ -14,20 +14,19 @@ const corsHeaders = {
 const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!);
 
 const handler = async (req: Request): Promise<Response> => {
-  console.log("CRM Email Automation function triggered");
+  console.log("[CRM Automation] Function triggered");
 
-  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
-    console.log("Handling CORS preflight request");
+    console.log("[CRM Automation] Handling CORS preflight request");
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const contactData = await req.json();
-    console.log("Received contact data:", contactData);
+    console.log("[CRM Automation] Received contact data:", contactData);
 
     // 1. Create contact funnel entry
-    console.log("Creating contact funnel entry...");
+    console.log("[CRM Automation] Creating contact funnel entry...");
     const { data: funnelData, error: funnelError } = await supabase
       .from("contact_funnel")
       .insert({
@@ -39,14 +38,14 @@ const handler = async (req: Request): Promise<Response> => {
       .single();
 
     if (funnelError) {
-      console.error("Error creating funnel entry:", funnelError);
+      console.error("[CRM Automation] Error creating funnel entry:", funnelError);
       throw funnelError;
     }
 
-    console.log("Contact funnel entry created:", funnelData);
+    console.log("[CRM Automation] Contact funnel entry created:", funnelData);
 
     // 2. Get welcome email template
-    console.log("Fetching welcome email template...");
+    console.log("[CRM Automation] Fetching welcome email template...");
     const { data: templateData, error: templateError } = await supabase
       .from("email_templates")
       .select("*")
@@ -54,21 +53,23 @@ const handler = async (req: Request): Promise<Response> => {
       .single();
 
     if (templateError) {
-      console.error("Error fetching email template:", templateError);
+      console.error("[CRM Automation] Error fetching email template:", templateError);
       throw templateError;
     }
 
-    console.log("Email template found:", templateData);
+    console.log("[CRM Automation] Email template found:", templateData);
 
     // 3. Send welcome email via Resend
     if (!RESEND_API_KEY) {
-      throw new Error("RESEND_API_KEY is not configured");
+      const error = new Error("RESEND_API_KEY is not configured");
+      console.error("[CRM Automation]", error);
+      throw error;
     }
 
-    console.log("Sending welcome email...");
+    console.log("[CRM Automation] Sending welcome email...");
     const emailHtml = templateData.body
       .replace("{{name}}", contactData.name)
-      .replace("{{projectType}}", contactData.projectType);
+      .replace("{{projectType}}", contactData.project_type);
 
     const resendResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -86,14 +87,14 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (!resendResponse.ok) {
       const error = await resendResponse.text();
-      console.error("Resend API error:", error);
+      console.error("[CRM Automation] Resend API error:", error);
       throw new Error(`Failed to send welcome email: ${error}`);
     }
 
-    console.log("Welcome email sent successfully");
+    console.log("[CRM Automation] Welcome email sent successfully");
 
     // 4. Record the email communication
-    console.log("Recording email communication...");
+    console.log("[CRM Automation] Recording email communication...");
     const { error: communicationError } = await supabase
       .from("email_communications")
       .insert({
@@ -107,20 +108,20 @@ const handler = async (req: Request): Promise<Response> => {
       });
 
     if (communicationError) {
-      console.error("Error recording email communication:", communicationError);
+      console.error("[CRM Automation] Error recording email communication:", communicationError);
       throw communicationError;
     }
 
-    console.log("Email communication recorded successfully");
+    console.log("[CRM Automation] Email communication recorded successfully");
 
     // 5. Send admin notification
-    console.log("Sending admin notification...");
+    console.log("[CRM Automation] Sending admin notification...");
     const adminEmailHtml = `
       <h2>New Contact Form Submission</h2>
       <p><strong>Name:</strong> ${contactData.name}</p>
       <p><strong>Email:</strong> ${contactData.email}</p>
       <p><strong>Phone:</strong> ${contactData.phone || 'Not provided'}</p>
-      <p><strong>Project Type:</strong> ${contactData.projectType}</p>
+      <p><strong>Project Type:</strong> ${contactData.project_type}</p>
       <p><strong>Message:</strong></p>
       <p>${contactData.message}</p>
     `;
@@ -134,18 +135,19 @@ const handler = async (req: Request): Promise<Response> => {
       body: JSON.stringify({
         from: "MakeITHappen Support <support@makeitappen.ai>",
         to: ["belchonen18@gmail.com"],
-        subject: `New Contact: ${contactData.name} - ${contactData.projectType}`,
+        subject: `New Contact: ${contactData.name} - ${contactData.project_type}`,
         html: adminEmailHtml,
       }),
     });
 
     if (!adminNotification.ok) {
       const error = await adminNotification.text();
-      console.error("Admin notification error:", error);
+      console.error("[CRM Automation] Admin notification error:", error);
       throw new Error(`Failed to send admin notification: ${error}`);
     }
 
-    console.log("Admin notification sent successfully");
+    console.log("[CRM Automation] Admin notification sent successfully");
+    console.log("[CRM Automation] Process completed successfully");
 
     return new Response(
       JSON.stringify({ 
@@ -158,7 +160,7 @@ const handler = async (req: Request): Promise<Response> => {
     );
 
   } catch (error) {
-    console.error("Error in CRM automation:", error);
+    console.error("[CRM Automation] Error in CRM automation:", error);
     return new Response(
       JSON.stringify({ 
         success: false, 
