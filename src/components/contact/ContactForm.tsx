@@ -23,6 +23,7 @@ import * as z from "zod";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -47,64 +48,6 @@ export const ContactForm = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("Starting form submission with values:", values);
-    setIsSubmitting(true);
-    
-    try {
-      // Step 1: Save to contact_submissions
-      console.log("Attempting to save submission to Supabase...");
-      const { data: submission, error: submissionError } = await supabase
-        .from("contact_submissions")
-        .insert({
-          name: values.name,
-          email: values.email,
-          phone: values.phone || null,
-          project_type: values.projectType,
-          message: values.message,
-        })
-        .select()
-        .single();
-
-      if (submissionError) {
-        console.error("Supabase submission error:", submissionError);
-        throw submissionError;
-      }
-
-      console.log("Contact submission saved successfully:", submission);
-
-      // Step 2: Trigger CRM automation
-      console.log("Triggering CRM automation with data:", { ...values, id: submission.id });
-      const { error: automationError } = await supabase.functions.invoke(
-        "crm-email-automation",
-        {
-          body: JSON.stringify({ ...values, id: submission.id }),
-        }
-      );
-
-      if (automationError) {
-        console.error("Error in CRM automation:", automationError);
-        throw automationError;
-      }
-
-      console.log("CRM automation completed successfully");
-
-      toast.success(
-        "Message sent successfully! Check your email for further information."
-      );
-      form.reset();
-      setCurrentStep(0);
-    } catch (error) {
-      console.error("Error in form submission:", error);
-      toast.error(
-        "Failed to send message. Please try again or contact support directly."
-      );
-    } finally {
-      console.log("Form submission process completed");
-      setIsSubmitting(false);
-    }
-  };
-
   const formSteps = [
     ["name", "email", "phone"],
     ["projectType"],
@@ -113,13 +56,13 @@ export const ContactForm = () => {
 
   const currentFields = formSteps[currentStep];
 
-  const nextStep = () => {
+  const nextStep = async () => {
     const fieldsToValidate = formSteps[currentStep];
-    form.trigger(fieldsToValidate as any[]).then((isValid) => {
-      if (isValid) {
-        setCurrentStep((prev) => Math.min(prev + 1, formSteps.length - 1));
-      }
-    });
+    const isValid = await form.trigger(fieldsToValidate as any[]);
+    
+    if (isValid && currentStep < formSteps.length - 1) {
+      setCurrentStep((prev) => prev + 1);
+    }
   };
 
   const prevStep = () => {
@@ -127,6 +70,41 @@ export const ContactForm = () => {
   };
 
   const isLastStep = currentStep === formSteps.length - 1;
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log("Starting form submission with values:", values);
+    setIsSubmitting(true);
+    
+    try {
+      console.log("Attempting to save submission to Supabase...");
+      const { error: submissionError } = await supabase
+        .from("contact_submissions")
+        .insert({
+          name: values.name,
+          email: values.email,
+          phone: values.phone || null,
+          project_type: values.projectType,
+          message: values.message,
+        });
+
+      if (submissionError) {
+        console.error("Supabase submission error:", submissionError);
+        throw submissionError;
+      }
+
+      console.log("Contact submission saved successfully");
+      toast.success("Message sent successfully!");
+      form.reset();
+      setCurrentStep(0);
+    } catch (error) {
+      console.error("Error in form submission:", error);
+      toast.error(
+        "Failed to send message. Please try again or contact support directly."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <Form {...form}>
@@ -154,6 +132,7 @@ export const ContactForm = () => {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.3 }}
+          className="space-y-4"
         >
           {currentFields.includes("name") && (
             <FormField
@@ -167,6 +146,7 @@ export const ContactForm = () => {
                       placeholder="Your name"
                       {...field}
                       className="transition-all duration-300 focus:scale-[1.02]"
+                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage />
@@ -188,6 +168,7 @@ export const ContactForm = () => {
                       placeholder="your.email@example.com"
                       {...field}
                       className="transition-all duration-300 focus:scale-[1.02]"
+                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage />
@@ -208,6 +189,7 @@ export const ContactForm = () => {
                       placeholder="Your phone number"
                       {...field}
                       className="transition-all duration-300 focus:scale-[1.02]"
+                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage />
@@ -226,6 +208,7 @@ export const ContactForm = () => {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
+                    disabled={isSubmitting}
                   >
                     <FormControl>
                       <SelectTrigger className="transition-all duration-300 focus:scale-[1.02]">
@@ -261,6 +244,7 @@ export const ContactForm = () => {
                       placeholder="Tell us about your project or inquiry"
                       className="min-h-[120px] transition-all duration-300 focus:scale-[1.02]"
                       {...field}
+                      disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormMessage />
@@ -277,27 +261,32 @@ export const ContactForm = () => {
               variant="outline"
               onClick={prevStep}
               className="w-full"
+              disabled={isSubmitting}
             >
               Previous
             </Button>
           )}
 
           {!isLastStep ? (
-            <Button type="button" onClick={nextStep} className="w-full">
+            <Button
+              type="button"
+              onClick={nextStep}
+              className="w-full"
+              disabled={isSubmitting}
+            >
               Next
             </Button>
           ) : (
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? (
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{
-                    duration: 1,
-                    repeat: Infinity,
-                    ease: "linear",
-                  }}
-                  className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
-                />
+                <span className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Sending...
+                </span>
               ) : (
                 "Send Message"
               )}
