@@ -11,7 +11,6 @@ interface ChatMessageProps {
     type: 'text' | 'system' | 'ai';
     created_at: string;
     sender_id?: string | null;
-    is_admin_message?: boolean;
     profiles?: {
       first_name: string | null;
       last_name: string | null;
