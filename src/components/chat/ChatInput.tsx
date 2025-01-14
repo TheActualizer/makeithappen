@@ -61,6 +61,9 @@ const ChatInput = () => {
     const timestamp = new Date().toISOString();
     
     try {
+      // Clear input immediately for better UX
+      setNewMessage('');
+      
       console.log('ChatInput: Storing user message in Supabase');
       const { data: messageData, error: messageError } = await supabase
         .from('messages')
@@ -83,7 +86,6 @@ const ChatInput = () => {
       }
 
       console.log('ChatInput: Message stored successfully:', messageData);
-      setNewMessage(''); // Clear input after successful store
 
       console.log('ChatInput: Sending message to Dify');
       const difyResponse = await sendMessageToDify(messageContent, conversationId);
@@ -119,7 +121,8 @@ const ChatInput = () => {
 
     } catch (error) {
       console.error('ChatInput: Error in send message flow:', error);
-      setNewMessage(messageContent); // Restore message on error
+      // Only restore message on error
+      setNewMessage(messageContent);
       toast({
         variant: "destructive",
         title: "Error",
