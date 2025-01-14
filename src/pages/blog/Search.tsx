@@ -44,37 +44,47 @@ const Search = () => {
     try {
       console.log('Searching for:', query);
       
-      // Search blog posts
+      // Search blog posts - now including content and excerpt
       const { data: blogPosts, error: blogError } = await supabase
         .from('blog_posts')
         .select('id, title, excerpt, slug, reading_time, views, content')
-        .or(`title.ilike.%${query}%,content.ilike.%${query}%`)
+        .or(`title.ilike.%${query}%,content.ilike.%${query}%,excerpt.ilike.%${query}%`)
         .eq('status', 'published')
         .order('views', { ascending: false });
 
       if (blogError) throw blogError;
 
-      // Search projects
+      // Search projects - now including all text fields
       const { data: projects, error: projectError } = await supabase
         .from('projects')
-        .select('id, name, description, project_type')
-        .or(`name.ilike.%${query}%,description.ilike.%${query}%`)
+        .select('id, name, description, project_type, current_challenges, business_objectives, pain_points')
+        .or(`
+          name.ilike.%${query}%,
+          description.ilike.%${query}%,
+          current_challenges::text.ilike.%${query}%,
+          business_objectives::text.ilike.%${query}%,
+          pain_points::text.ilike.%${query}%
+        `)
         .order('created_at', { ascending: false });
 
       if (projectError) throw projectError;
 
-      // Search documents
+      // Search documents - now including notes and description
       const { data: documents, error: documentError } = await supabase
         .from('documents')
-        .select('id, title, description, file_type')
-        .or(`title.ilike.%${query}%,description.ilike.%${query}%`)
+        .select('id, title, description, notes, file_type')
+        .or(`
+          title.ilike.%${query}%,
+          description.ilike.%${query}%,
+          notes.ilike.%${query}%
+        `)
         .order('created_at', { ascending: false });
 
       if (documentError) throw documentError;
 
       console.log('Search results:', { blogPosts, projects, documents });
 
-      // Format results
+      // Format results with more comprehensive descriptions
       const formattedResults: SearchResult[] = [
         ...(blogPosts?.map(post => ({
           id: post.id,
@@ -90,7 +100,12 @@ const Search = () => {
         ...(projects?.map(project => ({
           id: project.id,
           title: project.name,
-          description: project.description,
+          description: [
+            project.description,
+            project.current_challenges?.join(', '),
+            project.business_objectives?.join(', '),
+            project.pain_points?.join(', ')
+          ].filter(Boolean).join(' | ').substring(0, 200) + '...',
           type: 'project' as const,
           url: `/projects/${project.id}`,
           metadata: {
@@ -100,7 +115,10 @@ const Search = () => {
         ...(documents?.map(doc => ({
           id: doc.id,
           title: doc.title,
-          description: doc.description || '',
+          description: [doc.description, doc.notes]
+            .filter(Boolean)
+            .join(' | ')
+            .substring(0, 200) + '...',
           type: 'document' as const,
           url: `/documents/${doc.id}`,
           metadata: {
@@ -196,7 +214,13 @@ const Search = () => {
                 >
                   <div className="flex items-start gap-4">
                     <div className="p-2 bg-white/10 rounded-lg">
-                      {getResultIcon(result.type)}
+                      {result.type === 'blog' ? (
+                        <Book className="h-5 w-5 text-blue-500" />
+                      ) : result.type === 'project' ? (
+                        <FolderOpen className="h-5 w-5 text-green-500" />
+                      ) : (
+                        <FileText className="h-5 w-5 text-yellow-500" />
+                      )}
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
