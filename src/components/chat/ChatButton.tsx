@@ -1,81 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { MessageCircle, Sparkles } from "lucide-react";
+import { MessageCircle, X } from "lucide-react";
 import { SheetTrigger } from "@/components/ui/sheet";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ChatButton = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [showGreeting, setShowGreeting] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [showSparkle, setShowSparkle] = useState(false);
 
   useEffect(() => {
-    // Show greeting after a short delay
-    const greetingTimer = setTimeout(() => {
-      setIsExpanded(true);
-      setShowGreeting(true);
-      setShowSparkle(true);
-    }, 1000);
-
-    // Hide greeting after 4 seconds
-    const hideTimer = setTimeout(() => {
-      setIsExpanded(false);
-      setShowGreeting(false);
-    }, 5000);
-
-    // Keep sparkle visible for a bit longer
-    const sparkleTimer = setTimeout(() => {
+    // Show sparkle effect on initial load
+    setShowSparkle(true);
+    const timer = setTimeout(() => {
       setShowSparkle(false);
-    }, 6000);
+    }, 3000);
 
-    return () => {
-      clearTimeout(greetingTimer);
-      clearTimeout(hideTimer);
-      clearTimeout(sparkleTimer);
-    };
+    return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div className="fixed bottom-4 right-4 flex items-center gap-3 z-50">
-      <AnimatePresence>
-        {showGreeting && (
-          <motion.div
-            initial={{ opacity: 0, x: 50, scale: 0.9 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 50, scale: 0.9 }}
-            className="bg-purple-900/95 backdrop-blur-sm text-white px-6 py-3 rounded-lg shadow-lg max-w-[280px]"
-          >
-            <p className="text-sm font-medium">
-              👋 Hi! I'm your AI companion. I can help you navigate and customize this application.
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      
-      <SheetTrigger asChild>
+    <div className="fixed bottom-4 right-4 z-50">
+      <SheetTrigger asChild onClick={() => setIsOpen(!isOpen)}>
         <motion.div
+          initial={false}
           animate={{
-            scale: isExpanded ? 1.1 : 1,
+            scale: isOpen ? 0.9 : 1,
+            rotate: isOpen ? 180 : 0
           }}
-          whileHover={{ scale: 1.1 }}
-          className="relative"
+          transition={{
+            type: "spring",
+            stiffness: 260,
+            damping: 20
+          }}
         >
           <Button
-            className={`h-12 w-12 rounded-full shadow-lg transition-all duration-300 bg-purple-600 hover:bg-purple-700
-              ${!showGreeting && "animate-pulse"}`}
+            className="h-12 w-12 rounded-full shadow-lg transition-all duration-300 bg-purple-600 hover:bg-purple-700"
             size="icon"
           >
-            <MessageCircle className="h-6 w-6" />
+            <motion.div
+              animate={{
+                rotate: isOpen ? 180 : 0
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 200,
+                damping: 30
+              }}
+            >
+              {isOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <MessageCircle className="h-6 w-6" />
+              )}
+            </motion.div>
           </Button>
           <AnimatePresence>
-            {showSparkle && (
+            {showSparkle && !isOpen && (
               <motion.div
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0 }}
-                className="absolute -top-1 -right-1"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0, opacity: 0 }}
+                className="absolute -top-1 -right-1 bg-yellow-400 rounded-full p-1"
               >
-                <Sparkles className="h-4 w-4 text-yellow-400 animate-pulse" />
+                <div className="h-2 w-2" />
               </motion.div>
             )}
           </AnimatePresence>
