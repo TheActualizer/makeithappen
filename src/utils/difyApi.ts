@@ -1,15 +1,18 @@
 import { supabase } from '@/integrations/supabase/client';
 
 export async function sendMessageToDify(message: string, conversationId: string) {
+  const startTime = performance.now();
+  
   console.log('DifyAPI: Starting API call', { 
     messageLength: message.length, 
     conversationId,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    startTime
   });
   
   try {
     console.log('DifyAPI: Fetching API key from Supabase');
-    const { data: { secret: DIFY_API_KEY }, error: secretError } = await supabase
+    const { data, error: secretError } = await supabase
       .functions.invoke('get-secret', {
         body: { name: 'DIFY_API_KEY' }
       });
@@ -19,9 +22,17 @@ export async function sendMessageToDify(message: string, conversationId: string)
       throw new Error(`Failed to get Dify API key: ${secretError.message}`);
     }
 
+    const DIFY_API_KEY = data?.DIFY_API_KEY;
+    
+    if (!DIFY_API_KEY) {
+      console.error('DifyAPI: No API key found in response');
+      throw new Error('No Dify API key found in response');
+    }
+
     console.log('DifyAPI: Making request to Dify API', {
       conversationId,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      hasApiKey: !!DIFY_API_KEY
     });
 
     const response = await fetch('https://api.dify.ai/v1/chat-messages', {
@@ -38,6 +49,12 @@ export async function sendMessageToDify(message: string, conversationId: string)
       })
     });
 
+    console.log('DifyAPI: Received response from Dify', {
+      status: response.status,
+      ok: response.ok,
+      timestamp: new Date().toISOString()
+    });
+
     if (!response.ok) {
       const errorData = await response.clone().json();
       console.error('DifyAPI: Error response:', {
@@ -50,9 +67,12 @@ export async function sendMessageToDify(message: string, conversationId: string)
     }
 
     const responseData = await response.json();
-    console.log('DifyAPI: Successful response:', {
+    const endTime = performance.now();
+    
+    console.log('DifyAPI: Successfully parsed response:', {
       hasAnswer: !!responseData.answer,
       responseLength: responseData.answer?.length,
+      processingTime: endTime - startTime,
       timestamp: new Date().toISOString()
     });
 
@@ -67,12 +87,14 @@ export async function sendMessageToDify(message: string, conversationId: string)
           status: 'processed',
           request_payload: { message },
           response_payload: responseData,
-          processing_time_ms: Date.now() - performance.now()
+          processing_time_ms: endTime - startTime
         }
       ]);
 
     if (logError) {
       console.error('DifyAPI: Error logging interaction:', logError);
+    } else {
+      console.log('DifyAPI: Successfully logged interaction');
     }
 
     return responseData;
