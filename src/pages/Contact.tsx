@@ -40,14 +40,15 @@ const Contact = () => {
     },
   };
 
-  // Generate random stars
-  const stars = Array.from({ length: 50 }, (_, i) => ({
+  // Generate random stars with enhanced animation properties
+  const stars = Array.from({ length: 70 }, (_, i) => ({
     id: i,
-    size: Math.random() * 2 + 1,
+    size: Math.random() * 2.5 + 0.5, // Slightly varied sizes
     x: Math.random() * 100,
     y: Math.random() * 100,
-    duration: Math.random() * 3 + 2,
-    delay: Math.random() * 2,
+    duration: Math.random() * 5 + 3, // Longer base duration
+    delay: Math.random() * 4, // More varied delays
+    shimmerDelay: Math.random() * 8, // Additional delay for shimmer effect
   }));
 
   return (
@@ -65,8 +66,8 @@ const Contact = () => {
         animate="visible"
       >
         <div className="max-w-2xl mx-auto relative">
-          {/* Stars background */}
-          <div className="absolute inset-0 -z-10">
+          {/* Enhanced stars background */}
+          <div className="fixed inset-0 -z-10">
             {stars.map((star) => (
               <motion.div
                 key={star.id}
@@ -78,14 +79,20 @@ const Contact = () => {
                   top: `${star.y}%`,
                 }}
                 animate={{
-                  opacity: [0.2, 1, 0.2],
-                  scale: [1, 1.5, 1],
+                  opacity: [0.2, 0.8, 0.2],
+                  scale: [1, 1.3, 1],
+                  filter: [
+                    "brightness(1)",
+                    "brightness(1.5)",
+                    "brightness(1)",
+                  ],
                 }}
                 transition={{
                   duration: star.duration,
                   repeat: Infinity,
                   delay: star.delay,
                   ease: "easeInOut",
+                  times: [0, 0.5, 1],
                 }}
               />
             ))}
