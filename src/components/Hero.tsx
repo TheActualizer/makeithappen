@@ -50,7 +50,7 @@ const Hero = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
               <div className="p-6 rounded-xl bg-accent/20 backdrop-blur-sm border border-accent/10 hover:border-accent/30 transition-all">
                 <h3 className="text-lg font-semibold text-[#F97316] mb-2">Website & Business Operations</h3>
-                <p className="text-sm text-gray-300">AI-powered client management with CRM integration, meeting summaries, and automated follow-ups</p>
+                <p className="text-sm text-gray-300">AI-powered client management with CRM integration, Zoom with AI meeting summaries, and automated follow-ups</p>
               </div>
               
               <div className="p-6 rounded-xl bg-accent/20 backdrop-blur-sm border border-accent/10 hover:border-accent/30 transition-all">
