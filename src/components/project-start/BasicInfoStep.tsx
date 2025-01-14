@@ -1,5 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { FormData } from "./types";
+import { UserCircle } from "lucide-react";
 
 interface BasicInfoStepProps {
   formData: FormData;
@@ -8,7 +9,13 @@ interface BasicInfoStepProps {
 
 const BasicInfoStep = ({ formData, setFormData }: BasicInfoStepProps) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="col-span-full">
+        <h3 className="flex items-center gap-2 text-xl font-semibold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          <UserCircle className="w-6 h-6 text-primary" />
+          Personal Information
+        </h3>
+      </div>
       <div className="space-y-2">
         <label htmlFor="name" className="text-sm font-medium">
           Full Name *
@@ -20,6 +27,7 @@ const BasicInfoStep = ({ formData, setFormData }: BasicInfoStepProps) => {
             setFormData({ ...formData, name: e.target.value })
           }
           placeholder="John Doe"
+          className="transition-all duration-200 focus:ring-2 focus:ring-primary/20"
         />
       </div>
       <div className="space-y-2">
@@ -34,6 +42,7 @@ const BasicInfoStep = ({ formData, setFormData }: BasicInfoStepProps) => {
             setFormData({ ...formData, email: e.target.value })
           }
           placeholder="john@example.com"
+          className="transition-all duration-200 focus:ring-2 focus:ring-primary/20"
         />
       </div>
       <div className="space-y-2">
@@ -47,6 +56,7 @@ const BasicInfoStep = ({ formData, setFormData }: BasicInfoStepProps) => {
             setFormData({ ...formData, phone: e.target.value })
           }
           placeholder="+1 (555) 000-0000"
+          className="transition-all duration-200 focus:ring-2 focus:ring-primary/20"
         />
       </div>
       <div className="space-y-2">
@@ -60,6 +70,7 @@ const BasicInfoStep = ({ formData, setFormData }: BasicInfoStepProps) => {
             setFormData({ ...formData, company: e.target.value })
           }
           placeholder="Company Inc."
+          className="transition-all duration-200 focus:ring-2 focus:ring-primary/20"
         />
       </div>
     </div>

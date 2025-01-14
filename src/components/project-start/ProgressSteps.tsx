@@ -4,25 +4,35 @@ interface ProgressStepsProps {
   currentStep: number;
 }
 
+const steps = [
+  { number: 1, label: "Basic Info" },
+  { number: 2, label: "Project Details" },
+  { number: 3, label: "Timeline" }
+];
+
 const ProgressSteps = ({ currentStep }: ProgressStepsProps) => {
   return (
-    <div className="absolute top-0 w-full">
-      <div className="flex justify-between items-center mb-6 sm:mb-8 relative">
+    <div className="relative pt-8 pb-4">
+      <div className="flex justify-between items-center relative">
         <div className="absolute h-[2px] bg-border top-1/2 left-0 right-0 -translate-y-1/2 z-0" />
-        {[1, 2, 3].map((stepNumber) => (
-          <div
-            key={stepNumber}
-            className={`relative z-10 flex items-center justify-center w-8 h-8 rounded-full border-2 ${
-              currentStep >= stepNumber
-                ? "border-primary bg-primary text-white"
-                : "border-gray-300 bg-background"
-            }`}
-          >
-            {currentStep > stepNumber ? (
-              <Check className="w-4 h-4" />
-            ) : (
-              <span className="text-sm">{stepNumber}</span>
-            )}
+        {steps.map(({ number, label }) => (
+          <div key={number} className="relative z-10 flex flex-col items-center">
+            <div
+              className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300 ${
+                currentStep >= number
+                  ? "border-primary bg-primary text-white"
+                  : "border-gray-300 bg-background"
+              }`}
+            >
+              {currentStep > number ? (
+                <Check className="w-5 h-5" />
+              ) : (
+                <span className="text-sm font-medium">{number}</span>
+              )}
+            </div>
+            <span className="mt-2 text-xs font-medium text-muted-foreground">
+              {label}
+            </span>
           </div>
         ))}
       </div>

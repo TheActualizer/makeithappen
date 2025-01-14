@@ -181,7 +181,7 @@ const ProjectStartModal = ({
                   variant="ghost"
                   onClick={handleBack}
                   disabled={step === 1}
-                  className="h-9 px-3 text-sm"
+                  className="h-10 px-4 text-sm font-medium"
                 >
                   Back
                 </Button>
@@ -189,17 +189,17 @@ const ProjectStartModal = ({
                   <Button
                     onClick={handleSubmit}
                     disabled={isSubmitting}
-                    className="h-9 px-4 text-sm font-medium bg-primary hover:bg-primary/90"
+                    className="h-10 px-6 text-sm font-medium bg-primary hover:bg-primary/90 transition-colors"
                   >
                     {isSubmitting ? "Saving..." : "Submit"}
                   </Button>
                 ) : (
                   <Button 
                     onClick={handleNext} 
-                    className="h-9 px-4 text-sm font-medium group inline-flex items-center bg-primary hover:bg-primary/90"
+                    className="h-10 px-6 text-sm font-medium group inline-flex items-center bg-primary hover:bg-primary/90 transition-colors"
                   >
                     Next
-                    <ChevronRight className="ml-1 h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
+                    <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
                   </Button>
                 )}
               </div>
