@@ -1,31 +1,25 @@
 import React from 'react';
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Send } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { useMessageSender } from '@/hooks/useMessageSender';
 
-interface ChatInputProps {
-  newMessage: string;
-  setNewMessage: (message: string) => void;
-  onSubmit: (e: React.FormEvent) => void;
-  isLoading: boolean;
-}
+const ChatInput = () => {
+  const { message, setMessage, sendMessage } = useMessageSender();
 
-const ChatInput = ({ newMessage, setNewMessage, onSubmit, isLoading }: ChatInputProps) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
   return (
-    <form
-      onSubmit={onSubmit}
-      className="border-t p-4 flex gap-4 items-center"
-    >
-      <Input
-        placeholder="Type your message..."
-        value={newMessage}
-        onChange={(e) => setNewMessage(e.target.value)}
-        disabled={isLoading}
-      />
-      <Button type="submit" size="icon" disabled={isLoading}>
-        <Send className="h-4 w-4" />
-      </Button>
-    </form>
+    <Textarea
+      value={message}
+      onChange={(e) => setMessage(e.target.value)}
+      onKeyDown={handleKeyDown}
+      placeholder="Message..."
+      className="min-h-[60px] w-full pr-20 bg-accent/50 border-secondary/20 focus:ring-primary/50 resize-none"
+    />
   );
 };
 
