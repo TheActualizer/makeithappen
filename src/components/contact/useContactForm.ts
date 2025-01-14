@@ -67,11 +67,20 @@ export const useContactForm = () => {
       }
 
       console.log("ContactForm: Process completed successfully");
-      toast.success("Message sent successfully!");
+      
+      // Show a success message with Sonner toast
+      toast.success("Message sent successfully!", {
+        description: "Thank you for reaching out. We'll get back to you soon!",
+        duration: 5000,
+      });
+      
       form.reset();
     } catch (error) {
       console.error("ContactForm: Error in form submission:", error);
-      toast.error("Failed to send message. Please try again.");
+      toast.error("Failed to send message. Please try again.", {
+        description: "There was an error sending your message. Please try again later.",
+        duration: 5000,
+      });
     } finally {
       setIsSubmitting(false);
     }
