@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { DollarSign } from "lucide-react";
+import { DollarSign, Award } from "lucide-react";
 import { FormData } from "../types";
 
 interface BudgetSectionProps {
@@ -18,11 +18,14 @@ const budgetRanges = [
 
 export const BudgetSection = ({ formData, onBudgetChange }: BudgetSectionProps) => {
   return (
-    <div className="space-y-4">
-      <label className="text-sm font-medium flex items-center gap-2">
-        <DollarSign className="w-4 h-4" />
-        Budget Range
-      </label>
+    <div className="space-y-6">
+      <h3 className="flex items-center gap-3 text-2xl font-bold relative group">
+        <Award className="w-7 h-7 text-primary animate-pulse" />
+        <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-gradient">
+          Budget Range
+        </span>
+        <div className="absolute -bottom-2 left-0 w-full h-0.5 bg-gradient-to-r from-primary/50 via-secondary/50 to-primary/50 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
+      </h3>
       <div className="grid grid-cols-1 gap-2">
         {budgetRanges.map((range) => (
           <Button

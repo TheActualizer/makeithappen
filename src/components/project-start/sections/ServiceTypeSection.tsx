@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { BriefcaseIcon } from "lucide-react";
+import { BriefcaseIcon, Star } from "lucide-react";
 import { FormData } from "../types";
 
 interface ServiceTypeSectionProps {
@@ -20,12 +20,15 @@ const serviceTypes = [
 
 export const ServiceTypeSection = ({ formData, onServiceTypeChange }: ServiceTypeSectionProps) => {
   return (
-    <div className="space-y-4">
-      <h3 className="flex items-center gap-2 text-xl font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-        <BriefcaseIcon className="w-6 h-6 text-primary" />
-        Services Required
+    <div className="space-y-6">
+      <h3 className="flex items-center gap-3 text-2xl font-bold relative group">
+        <Star className="w-7 h-7 text-secondary animate-pulse" />
+        <span className="bg-gradient-to-r from-secondary via-primary to-secondary bg-clip-text text-transparent animate-gradient">
+          Services Required
+        </span>
+        <div className="absolute -bottom-2 left-0 w-full h-0.5 bg-gradient-to-r from-secondary/50 via-primary/50 to-secondary/50 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
       </h3>
-      <div className="grid grid-cols-1 gap-2">
+      <div className="grid grid-cols-1 gap-3">
         {serviceTypes.map((type) => (
           <Button
             key={type.value}
