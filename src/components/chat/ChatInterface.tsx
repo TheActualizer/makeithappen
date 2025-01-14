@@ -36,7 +36,6 @@ const ChatInterface = () => {
   };
 
   const handleModelChange = (model: AIModel) => {
-    console.log('Changing AI model to:', model);
     setSelectedModel(model);
   };
 

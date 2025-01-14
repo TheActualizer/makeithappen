@@ -47,7 +47,8 @@ export const Messages = () => {
           newMessage={newMessage}
           setNewMessage={setNewMessage}
           onSendMessage={sendMessage}
-          isLoading={loading || sendingMessage}
+          isLoading={sendingMessage}
+          loading={loading}
         />
       </div>
     </div>
