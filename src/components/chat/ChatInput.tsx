@@ -16,10 +16,22 @@ const ChatInput = () => {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim() || isLoading) return;
+    if (!newMessage.trim() || isLoading) {
+      console.log('Message send prevented:', {
+        hasContent: !!newMessage.trim(),
+        isLoading
+      });
+      return;
+    }
+
+    console.log('Initiating message send:', {
+      messageContent: newMessage,
+      conversationId
+    });
 
     setIsLoading(true);
     try {
+      console.log('Calling sendMessageToDify...');
       const response = await sendMessageToDify(newMessage, conversationId);
       console.log('Message sent successfully:', response);
       setNewMessage('');
@@ -28,7 +40,7 @@ const ChatInput = () => {
         description: "Your message has been processed by the AI.",
       });
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('Error in handleSendMessage:', error);
       toast({
         variant: "destructive",
         title: "Error",
