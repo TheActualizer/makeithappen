@@ -137,37 +137,25 @@ const ServiceCard = ({ service }: { service: Service }) => {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
-        <Card className="relative overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 cursor-pointer border-accent/20 bg-gradient-to-br from-accent/40 via-accent/30 to-accent/20 backdrop-blur-sm group">
-          <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <div className="absolute -inset-1 bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 rounded-xl blur opacity-30 group-hover:opacity-70 transition duration-500 group-hover:duration-200" />
-          
-          <CardHeader className="relative">
-            <div className="mb-4 inline-flex p-3 rounded-lg bg-gradient-to-br from-accent/40 to-accent/20 group-hover:from-accent/50 group-hover:to-accent/30 transition-all duration-500 backdrop-blur-md">
-              <Icon className="w-6 h-6 text-secondary animate-pulse" />
+        <Card className="relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 cursor-pointer border-accent/20 bg-accent/40 backdrop-blur-sm group">
+          <CardHeader>
+            <div className="mb-4 inline-flex p-3 rounded-lg bg-accent/30 group-hover:bg-accent/40 transition-colors">
+              <Icon className="w-6 h-6 text-secondary" />
             </div>
-            <CardTitle className="group-hover:text-secondary transition-colors duration-500 text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-300">
-              {service.title}
-            </CardTitle>
-            <CardDescription className="text-gray-400 group-hover:text-gray-300 transition-colors duration-500">
-              {service.description}
-            </CardDescription>
+            <CardTitle className="group-hover:text-secondary transition-colors">{service.title}</CardTitle>
+            <CardDescription className="text-gray-400">{service.description}</CardDescription>
           </CardHeader>
-          <CardContent className="relative">
-            <p className="text-sm font-medium text-secondary/80 group-hover:text-secondary transition-colors duration-500">
-              {service.metrics}
-            </p>
-            <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-secondary/50 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 opacity-0 group-hover:opacity-100" />
+          <CardContent>
+            <p className="text-sm font-medium text-secondary/80">{service.metrics}</p>
           </CardContent>
         </Card>
       </HoverCardTrigger>
-      <HoverCardContent className="w-80 bg-gradient-to-br from-accent/95 to-accent/90 backdrop-blur-md border-accent/20 animate-in zoom-in-95 duration-200">
+      <HoverCardContent className="w-80 bg-accent/95 backdrop-blur-sm border-accent/20">
         <div className="space-y-2">
           <h4 className="text-sm font-semibold text-secondary">Key Benefits:</h4>
           <ul className="text-sm list-disc pl-4 space-y-1 text-gray-300">
             {service.benefits.map((benefit, index) => (
-              <li key={index} className="animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
-                {benefit}
-              </li>
+              <li key={index}>{benefit}</li>
             ))}
           </ul>
         </div>
@@ -180,51 +168,34 @@ export const ServicesShowcase = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="py-24 px-4 md:px-6 lg:px-8 bg-background relative overflow-hidden" id="services">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute w-full h-full bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 animate-pulse" />
-        <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-gradient-to-br from-primary/10 to-transparent rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-secondary/10 to-transparent rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-      </div>
-
-      <div className="max-w-7xl mx-auto relative">
+    <section className="py-24 px-4 md:px-6 lg:px-8 bg-background relative" id="services">
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/20 mb-6 animate-fade-in">
-            <span className="text-sm text-secondary">Enterprise Solutions</span>
-          </div>
-          
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-300 to-gray-400 mb-6 animate-fade-in" style={{ animationDelay: '200ms' }}>
-            Advanced Automation Solutions
+          <h2 className="text-3xl font-bold tracking-tight text-white mb-6">
+            Enterprise-Grade Automation Solutions
           </h2>
-          
-          <p className="text-gray-400 max-w-3xl mx-auto animate-fade-in" style={{ animationDelay: '400ms' }}>
+          <p className="text-gray-400 max-w-3xl mx-auto">
             Leverage cutting-edge AI and automation across your entire organization,
             from financial operations to research and development.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <div 
-              key={service.id}
-              className="animate-fade-in"
-              style={{ animationDelay: `${index * 150}ms` }}
-            >
+          {services.map((service) => (
+            <div key={service.id}>
               <ServiceCard service={service} />
             </div>
           ))}
         </div>
 
-        <div className="mt-16 text-center animate-fade-in" style={{ animationDelay: '1000ms' }}>
+        <div className="mt-16 text-center">
           <Button 
             variant="default" 
             size="lg"
             onClick={() => navigate("/start-project")}
-            className="group relative overflow-hidden bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-500"
+            className="group bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300"
           >
-            <span className="relative z-10">Start Your Digital Transformation</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-secondary via-primary to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse" />
+            Start Your Digital Transformation
           </Button>
           <p className="mt-4 text-sm text-gray-400">
             Ready to revolutionize your business operations? Let's discuss your project.
