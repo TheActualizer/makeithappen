@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -69,11 +70,14 @@ export const useContactForm = () => {
       console.log("ContactForm: Process completed successfully");
       
       // Enhanced success toast with animation
-      toast.custom((t) => (
-        <div className={`${t.visible ? 'animate-in fade-in-50 zoom-in-95' : 'animate-out fade-out-50 zoom-out-95'} 
-          max-w-md w-full bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 
-          text-white rounded-lg shadow-lg p-6 flex items-center gap-4
-          transform transition-all duration-500 ease-out`}
+      toast.custom((t: { id: string; dismiss: () => void; }) => (
+        <div 
+          className={`
+            max-w-md w-full bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 
+            text-white rounded-lg shadow-lg p-6 flex items-center gap-4
+            transform transition-all duration-500 ease-out
+            animate-in fade-in-50 zoom-in-95
+          `}
         >
           <div className="flex-shrink-0 relative">
             <CheckCircle2 className="w-8 h-8 animate-pulse" />
