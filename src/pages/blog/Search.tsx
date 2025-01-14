@@ -49,7 +49,8 @@ const Search = () => {
         .from('blog_posts')
         .select('id, title, excerpt, slug, reading_time, views, content')
         .or(`title.ilike.%${query}%,content.ilike.%${query}%`)
-        .eq('status', 'published');
+        .eq('status', 'published')
+        .order('views', { ascending: false });
 
       if (blogError) throw blogError;
 
@@ -57,7 +58,8 @@ const Search = () => {
       const { data: projects, error: projectError } = await supabase
         .from('projects')
         .select('id, name, description, project_type')
-        .or(`name.ilike.%${query}%,description.ilike.%${query}%`);
+        .or(`name.ilike.%${query}%,description.ilike.%${query}%`)
+        .order('created_at', { ascending: false });
 
       if (projectError) throw projectError;
 
@@ -65,7 +67,8 @@ const Search = () => {
       const { data: documents, error: documentError } = await supabase
         .from('documents')
         .select('id, title, description, file_type')
-        .or(`title.ilike.%${query}%,description.ilike.%${query}%`);
+        .or(`title.ilike.%${query}%,description.ilike.%${query}%`)
+        .order('created_at', { ascending: false });
 
       if (documentError) throw documentError;
 
