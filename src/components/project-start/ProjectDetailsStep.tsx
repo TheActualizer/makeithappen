@@ -70,27 +70,27 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div className="space-y-4">
         <h2 className="text-lg font-semibold flex items-center gap-2">
           <BriefcaseIcon className="w-5 h-5" />
           Project Scope Details
         </h2>
         
-        <Card className="p-6 space-y-6">
+        <Card className="p-4 sm:p-6 space-y-6">
           <div className="space-y-4">
             <label className="text-sm font-medium flex items-center gap-2">
               <BriefcaseIcon className="w-4 h-4" />
               Services Required
             </label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
               {serviceTypes.map((type) => (
                 <Button
                   key={type.value}
                   variant={formData.projectType?.includes(type.value) ? "default" : "outline"}
                   size="sm"
                   onClick={() => handleServiceTypeChange(type.value)}
-                  className="justify-start"
+                  className="justify-start text-sm h-auto py-2.5 px-3"
                 >
                   {type.label}
                 </Button>
@@ -105,13 +105,14 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
               <DollarSign className="w-4 h-4" />
               Budget Range
             </label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
               {budgetRanges.map((range) => (
                 <Button
                   key={range.value}
                   variant={formData.budgetRange === range.value ? "default" : "outline"}
                   size="sm"
                   onClick={() => setFormData({ ...formData, budgetRange: range.value })}
+                  className="justify-start text-sm h-auto py-2.5 px-3"
                 >
                   {range.label}
                 </Button>
@@ -126,13 +127,14 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
               <Users className="w-4 h-4" />
               Team Size
             </label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
               {teamSizes.map((size) => (
                 <Button
                   key={size.value}
                   variant={formData.teamSize === size.value ? "default" : "outline"}
                   size="sm"
                   onClick={() => setFormData({ ...formData, teamSize: size.value })}
+                  className="justify-start text-sm h-auto py-2.5 px-3"
                 >
                   {size.label}
                 </Button>
@@ -147,13 +149,14 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
               <Calendar className="w-4 h-4" />
               Preferred Timeline
             </label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
               {timelineOptions.map((option) => (
                 <Button
                   key={option.value}
                   variant={formData.timeline === option.value ? "default" : "outline"}
                   size="sm"
                   onClick={() => setFormData({ ...formData, timeline: option.value as Timeline })}
+                  className="justify-start text-sm h-auto py-2.5 px-3"
                 >
                   {option.label}
                 </Button>
@@ -169,7 +172,7 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
           AI & Automation Requirements
         </h2>
         
-        <Card className="p-6 space-y-6">
+        <Card className="p-4 sm:p-6 space-y-6">
           <div className="space-y-4">
             <label className="text-sm font-medium">Digital Workforce Scope</label>
             <Textarea

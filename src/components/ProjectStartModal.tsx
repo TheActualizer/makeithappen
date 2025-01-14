@@ -150,26 +150,27 @@ const ProjectStartModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleModalClose}>
-      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>
+      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto px-4 sm:px-6 py-4 sm:py-6">
+        <DialogHeader className="space-y-2">
+          <DialogTitle className="text-xl sm:text-2xl">
             {showCalendly ? "Schedule a Consultation" : "Project Intake Form"}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-sm sm:text-base">
             {showCalendly 
               ? "Choose a time that works best for you."
               : "Help us understand your project requirements and objectives"}
           </DialogDescription>
         </DialogHeader>
-        <div className="relative">
+        <div className="relative mt-4">
           {!showCalendly && <ProgressSteps currentStep={step} />}
-          <div className={!showCalendly ? "mt-16" : ""}>{renderStep()}</div>
+          <div className={!showCalendly ? "mt-12 sm:mt-16" : ""}>{renderStep()}</div>
           {!showCalendly && (
-            <div className="flex justify-between mt-8 sticky bottom-0 bg-background py-4">
+            <div className="flex justify-between mt-6 sm:mt-8 sticky bottom-0 bg-background py-4">
               <Button
                 variant="outline"
                 onClick={handleBack}
                 disabled={step === 1}
+                className="px-3 sm:px-4"
               >
                 Back
               </Button>
@@ -177,11 +178,12 @@ const ProjectStartModal = ({
                 <Button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
+                  className="px-3 sm:px-4"
                 >
                   {isSubmitting ? "Saving..." : "Submit Project"}
                 </Button>
               ) : (
-                <Button onClick={handleNext} className="group">
+                <Button onClick={handleNext} className="group px-3 sm:px-4">
                   Next
                   <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
