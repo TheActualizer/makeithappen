@@ -3,12 +3,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { useMessageSender } from '@/hooks/useMessageSender';
 
 const ChatInput = () => {
-  const { newMessage, setNewMessage, sendMessage } = useMessageSender();
+  const { newMessage, setNewMessage, sendMessage } = useMessageSender(null, () => {});
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      sendMessage();
+      sendMessage(e);
     }
   };
 
