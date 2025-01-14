@@ -8,16 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/integrations/supabase/client';
 
 const ChatInput = () => {
-  const [newMessage, setNewMessage] = useState(
-    `I need help implementing a robust Dify chat integration in my React application. Specifically:
-
-1. What's the recommended approach for handling streaming responses from Dify while ensuring proper message storage in Supabase?
-2. How should I structure my error handling to gracefully handle API failures, timeouts, and rate limits?
-3. What's the best way to implement real-time message updates using Supabase subscriptions while maintaining message order and consistency?
-
-Please provide specific code examples focusing on the integration between Dify's streaming responses and Supabase's real-time features.`
-  );
-  
+  const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const [conversationId] = useState(() => uuidv4());
