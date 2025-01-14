@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, ChevronDown } from "lucide-react";
 import ProjectStartModal from "./ProjectStartModal";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const Hero = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -10,17 +16,16 @@ const Hero = () => {
     <div className="relative min-h-[90vh] flex items-center justify-center pt-8 overflow-hidden">
       {/* Enhanced animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Primary gradient background */}
+        {/* Isometric grid background */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-accent to-secondary/20" />
         
-        {/* Animated orbs */}
-        <div className="absolute top-1/4 -right-20 w-[500px] h-[500px] bg-primary/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute -bottom-32 -left-40 w-[600px] h-[600px] bg-secondary/20 rounded-full blur-3xl animate-pulse delay-700" />
-        <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-accent/10 rounded-full blur-3xl animate-pulse delay-1000" />
+        {/* Animated geometric shapes */}
+        <div className="absolute top-1/4 -right-20 w-[500px] h-[500px] bg-primary/20 rounded-[20%] blur-3xl animate-pulse transform rotate-45" />
+        <div className="absolute -bottom-32 -left-40 w-[600px] h-[600px] bg-secondary/20 rounded-[30%] blur-3xl animate-pulse delay-700 transform -rotate-12" />
+        <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-accent/10 rounded-[25%] blur-3xl animate-pulse delay-1000 transform rotate-90" />
         
-        {/* Decorative elements */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px)] bg-[size:40px] bg-opacity-20" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:40px] bg-opacity-20" />
+        {/* Isometric grid overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(45deg,#4f4f4f2e_1px,transparent_1px)] bg-[size:50px_50px] bg-opacity-20 transform rotate-45" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -42,22 +47,21 @@ const Hero = () => {
               Digital Solutions
             </h1>
             
-            <p className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto backdrop-blur-sm">
-              Transform your vision into reality with our comprehensive development solutions. 
-              From responsive websites to sophisticated enterprise SaaS platforms powered by AI, 
-              we deliver scalable solutions with advanced reporting, third-party integrations, 
-              and complex computational capabilities.
+            <p className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto backdrop-blur-sm">
+              Accelerate your vision with AI-powered development. We build 20x faster 
+              than traditional methods, turning ideas into production-ready solutions at lightspeed.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-12">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-8">
               <Button
                 size="lg"
                 className="group relative overflow-hidden bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 transform hover:scale-105 min-w-[200px]"
                 onClick={() => setIsModalOpen(true)}
               >
-                Start Your Project
+                Start Building
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
+              
               <Button
                 variant="outline"
                 size="lg"
@@ -67,6 +71,26 @@ const Hero = () => {
                 Explore Solutions
               </Button>
             </div>
+
+            <Accordion type="single" collapsible className="w-full max-w-2xl mx-auto mt-12">
+              <AccordionItem value="capabilities" className="border-accent/20">
+                <AccordionTrigger className="text-gray-300 hover:text-white">
+                  <span className="flex items-center gap-2">
+                    <ChevronDown className="h-4 w-4" />
+                    Our Capabilities
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent className="text-left text-gray-400">
+                  <ul className="space-y-3">
+                    <li>• Advanced AI Integration & Automation</li>
+                    <li>• Custom SaaS Platform Development</li>
+                    <li>• Enterprise-Grade Solutions</li>
+                    <li>• Responsive Web Applications</li>
+                    <li>• Digital Transformation Services</li>
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </div>
         </div>
       </div>
