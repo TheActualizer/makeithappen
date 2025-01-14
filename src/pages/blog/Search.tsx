@@ -31,6 +31,111 @@ const Search = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const searchBlogPosts = async (searchTerm: string) => {
+    console.log('Searching blog posts...');
+    const { data: blogPosts, error } = await supabase
+      .from('blog_posts')
+      .select('id, title, excerpt, slug, reading_time, views, content')
+      .or(`title.ilike.%${searchTerm}%,content.ilike.%${searchTerm}%,excerpt.ilike.%${searchTerm}%`)
+      .eq('status', 'published');
+
+    if (error) throw error;
+
+    console.log(`Found ${blogPosts?.length || 0} blog posts`);
+    blogPosts?.forEach(post => {
+      console.log('\nAnalyzing blog post:', post.title);
+      console.log('Content:', post.content?.substring(0, 200));
+      console.log('Excerpt:', post.excerpt);
+    });
+
+    return blogPosts?.map(post => ({
+      id: post.id,
+      title: post.title,
+      description: post.excerpt || post.content?.substring(0, 200) + '...',
+      type: 'blog' as const,
+      url: `/blog/${post.slug}`,
+      metadata: {
+        views: post.views,
+        reading_time: post.reading_time,
+      }
+    })) || [];
+  };
+
+  const searchProjects = async (searchTerm: string) => {
+    console.log('Searching projects...');
+    const { data: projects, error } = await supabase
+      .from('projects')
+      .select('*')
+      .or(`
+        name.ilike.%${searchTerm}%,
+        description.ilike.%${searchTerm}%,
+        current_challenges::text.ilike.%${searchTerm}%,
+        business_objectives::text.ilike.%${searchTerm}%,
+        pain_points::text.ilike.%${searchTerm}%
+      `);
+
+    if (error) throw error;
+
+    console.log(`Found ${projects?.length || 0} projects`);
+    projects?.forEach(project => {
+      console.log('\nAnalyzing project:', project.name);
+      console.log('Description:', project.description);
+      console.log('Challenges:', project.current_challenges);
+      console.log('Objectives:', project.business_objectives);
+    });
+
+    return projects?.map(project => ({
+      id: project.id,
+      title: project.name,
+      description: [
+        project.description,
+        project.current_challenges?.join(', '),
+        project.business_objectives?.join(', '),
+        project.pain_points?.join(', ')
+      ].filter(Boolean).join(' | ').substring(0, 200) + '...',
+      type: 'project' as const,
+      url: `/projects/${project.id}`,
+      metadata: {
+        project_type: project.project_type,
+      }
+    })) || [];
+  };
+
+  const searchDocuments = async (searchTerm: string) => {
+    console.log('Searching documents...');
+    const { data: documents, error } = await supabase
+      .from('documents')
+      .select('*')
+      .or(`
+        title.ilike.%${searchTerm}%,
+        description.ilike.%${searchTerm}%,
+        notes.ilike.%${searchTerm}%
+      `);
+
+    if (error) throw error;
+
+    console.log(`Found ${documents?.length || 0} documents`);
+    documents?.forEach(doc => {
+      console.log('\nAnalyzing document:', doc.title);
+      console.log('Description:', doc.description);
+      console.log('Notes:', doc.notes);
+    });
+
+    return documents?.map(doc => ({
+      id: doc.id,
+      title: doc.title,
+      description: [doc.description, doc.notes]
+        .filter(Boolean)
+        .join(' | ')
+        .substring(0, 200) + '...',
+      type: 'document' as const,
+      url: `/documents/${doc.id}`,
+      metadata: {
+        file_type: doc.file_type,
+      }
+    })) || [];
+  };
+
   const handleSearch = async () => {
     if (!query.trim()) {
       toast({
@@ -44,146 +149,23 @@ const Search = () => {
     try {
       console.log('Starting search for term:', query);
       
-      // Search blog posts with detailed logging
-      console.log('Searching blog posts...');
-      const { data: blogPosts, error: blogError } = await supabase
-        .from('blog_posts')
-        .select('id, title, excerpt, slug, reading_time, views, content')
-        .or(`title.ilike.%${query}%,content.ilike.%${query}%,excerpt.ilike.%${query}%`)
-        .eq('status', 'published')
-        .order('views', { ascending: false });
+      // Execute all searches in parallel
+      const [blogResults, projectResults, documentResults] = await Promise.all([
+        searchBlogPosts(query),
+        searchProjects(query),
+        searchDocuments(query)
+      ]);
 
-      if (blogError) throw blogError;
+      // Combine all results
+      const allResults = [...blogResults, ...projectResults, ...documentResults];
 
-      console.log(`Found ${blogPosts?.length || 0} blog posts`);
-      blogPosts?.forEach(post => {
-        console.log('\nAnalyzing blog post:', post.title);
-        const titleMatch = post.title.toLowerCase().includes(query.toLowerCase());
-        const contentMatch = post.content.toLowerCase().includes(query.toLowerCase());
-        const excerptMatch = post.excerpt?.toLowerCase().includes(query.toLowerCase());
-        
-        console.log('Matches found in:');
-        if (titleMatch) console.log('- Title:', post.title);
-        if (contentMatch) console.log('- Content excerpt:', post.content.substring(0, 100) + '...');
-        if (excerptMatch) console.log('- Excerpt:', post.excerpt);
-      });
-
-      // Search projects with detailed logging
-      console.log('\nSearching projects...');
-      const { data: projects, error: projectError } = await supabase
-        .from('projects')
-        .select('id, name, description, project_type, current_challenges, business_objectives, pain_points')
-        .or(`
-          name.ilike.%${query}%,
-          description.ilike.%${query}%,
-          current_challenges::text.ilike.%${query}%,
-          business_objectives::text.ilike.%${query}%,
-          pain_points::text.ilike.%${query}%
-        `)
-        .order('created_at', { ascending: false });
-
-      if (projectError) throw projectError;
-
-      console.log(`Found ${projects?.length || 0} projects`);
-      projects?.forEach(project => {
-        console.log('\nAnalyzing project:', project.name);
-        const nameMatch = project.name.toLowerCase().includes(query.toLowerCase());
-        const descMatch = project.description.toLowerCase().includes(query.toLowerCase());
-        const challengesMatch = project.current_challenges?.some(c => 
-          c.toLowerCase().includes(query.toLowerCase())
-        );
-        const objectivesMatch = project.business_objectives?.some(o => 
-          o.toLowerCase().includes(query.toLowerCase())
-        );
-        const painPointsMatch = project.pain_points?.some(p => 
-          p.toLowerCase().includes(query.toLowerCase())
-        );
-
-        console.log('Matches found in:');
-        if (nameMatch) console.log('- Name:', project.name);
-        if (descMatch) console.log('- Description:', project.description);
-        if (challengesMatch) console.log('- Challenges:', project.current_challenges?.join(', '));
-        if (objectivesMatch) console.log('- Objectives:', project.business_objectives?.join(', '));
-        if (painPointsMatch) console.log('- Pain Points:', project.pain_points?.join(', '));
-      });
-
-      // Search documents with detailed logging
-      console.log('\nSearching documents...');
-      const { data: documents, error: documentError } = await supabase
-        .from('documents')
-        .select('id, title, description, notes, file_type')
-        .or(`
-          title.ilike.%${query}%,
-          description.ilike.%${query}%,
-          notes.ilike.%${query}%
-        `)
-        .order('created_at', { ascending: false });
-
-      if (documentError) throw documentError;
-
-      console.log(`Found ${documents?.length || 0} documents`);
-      documents?.forEach(doc => {
-        console.log('\nAnalyzing document:', doc.title);
-        const titleMatch = doc.title.toLowerCase().includes(query.toLowerCase());
-        const descMatch = doc.description?.toLowerCase().includes(query.toLowerCase());
-        const notesMatch = doc.notes?.toLowerCase().includes(query.toLowerCase());
-
-        console.log('Matches found in:');
-        if (titleMatch) console.log('- Title:', doc.title);
-        if (descMatch) console.log('- Description:', doc.description);
-        if (notesMatch) console.log('- Notes:', doc.notes);
-      });
-
-      // Format results with detailed descriptions
-      const formattedResults: SearchResult[] = [
-        ...(blogPosts?.map(post => ({
-          id: post.id,
-          title: post.title,
-          description: post.excerpt || post.content.substring(0, 200) + '...',
-          type: 'blog' as const,
-          url: `/blog/${post.slug}`,
-          metadata: {
-            views: post.views,
-            reading_time: post.reading_time,
-          }
-        })) || []),
-        ...(projects?.map(project => ({
-          id: project.id,
-          title: project.name,
-          description: [
-            project.description,
-            project.current_challenges?.join(', '),
-            project.business_objectives?.join(', '),
-            project.pain_points?.join(', ')
-          ].filter(Boolean).join(' | ').substring(0, 200) + '...',
-          type: 'project' as const,
-          url: `/projects/${project.id}`,
-          metadata: {
-            project_type: project.project_type,
-          }
-        })) || []),
-        ...(documents?.map(doc => ({
-          id: doc.id,
-          title: doc.title,
-          description: [doc.description, doc.notes]
-            .filter(Boolean)
-            .join(' | ')
-            .substring(0, 200) + '...',
-          type: 'document' as const,
-          url: `/documents/${doc.id}`,
-          metadata: {
-            file_type: doc.file_type,
-          }
-        })) || [])
-      ];
-
-      console.log('\nSearch complete. Total results:', formattedResults.length);
+      console.log('\nSearch complete. Total results:', allResults.length);
       console.log('Results breakdown:');
-      console.log('- Blog posts:', blogPosts?.length || 0);
-      console.log('- Projects:', projects?.length || 0);
-      console.log('- Documents:', documents?.length || 0);
+      console.log('- Blog posts:', blogResults.length);
+      console.log('- Projects:', projectResults.length);
+      console.log('- Documents:', documentResults.length);
 
-      setResults(formattedResults);
+      setResults(allResults);
     } catch (error) {
       console.error('Error during search:', error);
       toast({
@@ -324,4 +306,3 @@ const Search = () => {
 };
 
 export default Search;
-
