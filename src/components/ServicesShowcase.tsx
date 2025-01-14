@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { ServiceCard } from "./services/ServiceCard";
-import { ServicesHeader } from "./services/ServicesHeader";
+import ServicesHeader from "./services/ServicesHeader";
 import { services } from "./services/serviceData";
 import { ArrowRight } from "lucide-react";
 
