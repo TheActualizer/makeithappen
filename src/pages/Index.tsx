@@ -5,6 +5,8 @@ import ChatInterface from "@/components/chat/ChatInterface";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowRight } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -78,21 +80,28 @@ const Index = () => {
               transition: 'transform 0.1s linear',
             }}
           >
-            <div className="my-20 text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-white mb-6">
-                Ready to Transform Your Business?
-              </h2>
-              <p className="text-lg text-gray-300 mb-12 max-w-2xl mx-auto">
-                Start your journey towards digital transformation today. Let's discuss how we can help bring your vision to life.
-              </p>
-              <Button 
-                size="lg"
-                className="bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 transform hover:scale-105"
-                onClick={() => navigate("/start-project")}
-              >
-                Start Your Project Now
-              </Button>
-            </div>
+            <Card className="my-20 bg-accent/40 backdrop-blur-sm border-accent/20">
+              <CardContent className="p-8">
+                <div className="text-center space-y-8">
+                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                    Ready to Transform Your Business?
+                  </h2>
+                  <p className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
+                    Start your journey towards digital transformation today. Let's discuss how we can help bring your vision to life with our cutting-edge solutions and expertise.
+                  </p>
+                  <div className="pt-4">
+                    <Button 
+                      size="lg"
+                      className="group relative overflow-hidden bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 transform hover:scale-105"
+                      onClick={() => navigate("/start-project")}
+                    >
+                      Start Your Project Now
+                      <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </main>
