@@ -1,16 +1,12 @@
 import { 
-  Database,
-  Bot,
+  Code,
+  LayoutDashboard,
   Users,
-  Calendar,
+  Video,
   Mail,
   FileText,
   BarChart,
-  Lock,
-  LayoutDashboard,
-  Code,
-  Video,
-  MessageSquare
+  Lock
 } from "lucide-react";
 import { FeatureCard } from "./FeatureCard";
 
@@ -107,8 +103,8 @@ const platformFeatures = [
 
 export const PlatformFeatures = () => {
   return (
-    <div id="capabilities" className="mt-16 pt-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+    <div id="capabilities" className="mt-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {platformFeatures.map((feature, index) => (
           <FeatureCard
             key={index}
