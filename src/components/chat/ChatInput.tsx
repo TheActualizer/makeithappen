@@ -18,7 +18,7 @@ const ChatInput = () => {
       onChange={(e) => setNewMessage(e.target.value)}
       onKeyDown={handleKeyDown}
       placeholder="Ask me anything..."
-      className="min-h-[60px] w-full pr-20 bg-purple-800/30 border-purple-300/20 focus:ring-purple-400/50 resize-none rounded-lg placeholder-purple-300/50 text-purple-100"
+      className="min-h-[60px] w-full pr-20 bg-white/5 border-white/10 focus:ring-purple-400/30 resize-none rounded-lg placeholder-purple-200/40 text-purple-100"
     />
   );
 };
