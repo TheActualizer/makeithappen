@@ -10,20 +10,11 @@ const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   phone: z.string().optional(),
   projectType: z.enum(["healthcare", "financial", "realestate", "other"]),
-  message: z.string()
-    .min(10, "Message must be at least 10 characters")
-    .refine(
-      (val) => {
-        const trimmed = val.trim();
-        return trimmed !== '' && !trimmed.split('').every(char => char === ',');
-      },
-      "Message cannot be empty or contain only commas"
-    ),
+  message: z.string().min(10, "Message must be at least 10 characters"),
 });
 
 export const useContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -35,28 +26,6 @@ export const useContactForm = () => {
       message: "",
     },
   });
-
-  const formSteps = [
-    ["name", "email", "phone"],
-    ["projectType"],
-    ["message"],
-  ];
-
-  const currentFields = formSteps[currentStep];
-  const isLastStep = currentStep === formSteps.length - 1;
-
-  const nextStep = async () => {
-    const fieldsToValidate = formSteps[currentStep];
-    const isValid = await form.trigger(fieldsToValidate as any[]);
-    
-    if (isValid && currentStep < formSteps.length - 1) {
-      setCurrentStep((prev) => prev + 1);
-    }
-  };
-
-  const prevStep = () => {
-    setCurrentStep((prev) => Math.max(prev - 1, 0));
-  };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("ContactForm: Starting submission with values:", values);
@@ -83,7 +52,6 @@ export const useContactForm = () => {
       console.log("ContactForm: Submission successful, received data:", data);
       toast.success("Message sent successfully!");
       form.reset();
-      setCurrentStep(0);
     } catch (error) {
       console.error("ContactForm: Error in form submission:", error);
       toast.error("Failed to send message. Please try again.");
@@ -95,12 +63,6 @@ export const useContactForm = () => {
   return {
     form,
     isSubmitting,
-    currentStep,
-    currentFields,
-    isLastStep,
-    nextStep,
-    prevStep,
     onSubmit,
-    formSteps,
   };
 };

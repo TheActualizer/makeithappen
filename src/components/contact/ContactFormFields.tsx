@@ -1,5 +1,4 @@
 import {
-  Form,
   FormControl,
   FormField,
   FormItem,
@@ -16,131 +15,119 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
-import * as z from "zod";
 
 interface ContactFormFieldsProps {
   form: UseFormReturn<any>;
-  currentFields: string[];
   isSubmitting: boolean;
 }
 
-export const ContactFormFields = ({ form, currentFields, isSubmitting }: ContactFormFieldsProps) => {
+export const ContactFormFields = ({ form, isSubmitting }: ContactFormFieldsProps) => {
   return (
     <>
-      {currentFields.includes("name") && (
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Your name"
-                  {...field}
-                  className="transition-all duration-300 focus:scale-[1.02]"
-                  disabled={isSubmitting}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      )}
-
-      {currentFields.includes("email") && (
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="your.email@example.com"
-                  {...field}
-                  className="transition-all duration-300 focus:scale-[1.02]"
-                  disabled={isSubmitting}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      )}
-
-      {currentFields.includes("phone") && (
-        <FormField
-          control={form.control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Phone (Optional)</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Your phone number"
-                  {...field}
-                  className="transition-all duration-300 focus:scale-[1.02]"
-                  disabled={isSubmitting}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      )}
-
-      {currentFields.includes("projectType") && (
-        <FormField
-          control={form.control}
-          name="projectType"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Project Type</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
+      <FormField
+        control={form.control}
+        name="name"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Name</FormLabel>
+            <FormControl>
+              <Input
+                placeholder="Your name"
+                {...field}
+                className="transition-all duration-300 focus:scale-[1.02]"
                 disabled={isSubmitting}
-              >
-                <FormControl>
-                  <SelectTrigger className="transition-all duration-300 focus:scale-[1.02]">
-                    <SelectValue placeholder="Select a project type" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="healthcare">Healthcare AI</SelectItem>
-                  <SelectItem value="financial">Financial Automation</SelectItem>
-                  <SelectItem value="realestate">Real Estate Underwriting</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      )}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
-      {currentFields.includes("message") && (
-        <FormField
-          control={form.control}
-          name="message"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Message</FormLabel>
+      <FormField
+        control={form.control}
+        name="email"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Email</FormLabel>
+            <FormControl>
+              <Input
+                type="email"
+                placeholder="your.email@example.com"
+                {...field}
+                className="transition-all duration-300 focus:scale-[1.02]"
+                disabled={isSubmitting}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="phone"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Phone (Optional)</FormLabel>
+            <FormControl>
+              <Input
+                placeholder="Your phone number"
+                {...field}
+                className="transition-all duration-300 focus:scale-[1.02]"
+                disabled={isSubmitting}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="projectType"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Project Type</FormLabel>
+            <Select
+              onValueChange={field.onChange}
+              defaultValue={field.value}
+              disabled={isSubmitting}
+            >
               <FormControl>
-                <Textarea
-                  placeholder="Tell us about your project or inquiry"
-                  className="min-h-[120px] transition-all duration-300 focus:scale-[1.02]"
-                  {...field}
-                  disabled={isSubmitting}
-                />
+                <SelectTrigger className="transition-all duration-300 focus:scale-[1.02]">
+                  <SelectValue placeholder="Select a project type" />
+                </SelectTrigger>
               </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      )}
+              <SelectContent>
+                <SelectItem value="healthcare">Healthcare AI</SelectItem>
+                <SelectItem value="financial">Financial Automation</SelectItem>
+                <SelectItem value="realestate">Real Estate Underwriting</SelectItem>
+                <SelectItem value="other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="message"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Message</FormLabel>
+            <FormControl>
+              <Textarea
+                placeholder="Tell us about your project or inquiry"
+                className="min-h-[120px] transition-all duration-300 focus:scale-[1.02]"
+                {...field}
+                disabled={isSubmitting}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
     </>
   );
 };
