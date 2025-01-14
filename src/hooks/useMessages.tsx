@@ -108,10 +108,10 @@ export const useMessages = () => {
         conversation_id: msg.conversation_id,
         type: msg.type || 'text',
         profiles: msg.profiles ? {
-          first_name: msg.profiles.first_name,
-          last_name: msg.profiles.last_name,
-          email: msg.profiles.email,
-          avatar_url: msg.profiles.avatar_url
+          first_name: msg.profiles.first_name || '',
+          last_name: msg.profiles.last_name || '',
+          email: msg.profiles.email || '',
+          avatar_url: msg.profiles.avatar_url || ''
         } : null
       }));
 

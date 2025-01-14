@@ -47,10 +47,9 @@ const Search = () => {
       // Search blog posts
       const { data: blogPosts, error: blogError } = await supabase
         .from('blog_posts')
-        .select('id, title, excerpt, slug, reading_time, views')
-        .or(`title.ilike.%${query}%,excerpt.ilike.%${query}%,content.ilike.%${query}%`)
-        .eq('status', 'published')
-        .order('views', { ascending: false });
+        .select('id, title, excerpt, slug, reading_time, views, content')
+        .or(`title.ilike.%${query}%,content.ilike.%${query}%`)
+        .eq('status', 'published');
 
       if (blogError) throw blogError;
 
@@ -58,8 +57,7 @@ const Search = () => {
       const { data: projects, error: projectError } = await supabase
         .from('projects')
         .select('id, name, description, project_type')
-        .or(`name.ilike.%${query}%,description.ilike.%${query}%`)
-        .order('created_at', { ascending: false });
+        .or(`name.ilike.%${query}%,description.ilike.%${query}%`);
 
       if (projectError) throw projectError;
 
@@ -67,17 +65,18 @@ const Search = () => {
       const { data: documents, error: documentError } = await supabase
         .from('documents')
         .select('id, title, description, file_type')
-        .or(`title.ilike.%${query}%,description.ilike.%${query}%`)
-        .order('created_at', { ascending: false });
+        .or(`title.ilike.%${query}%,description.ilike.%${query}%`);
 
       if (documentError) throw documentError;
 
-      // Combine and format results
+      console.log('Search results:', { blogPosts, projects, documents });
+
+      // Format results
       const formattedResults: SearchResult[] = [
         ...(blogPosts?.map(post => ({
           id: post.id,
           title: post.title,
-          description: post.excerpt || '',
+          description: post.excerpt || post.content.substring(0, 200) + '...',
           type: 'blog' as const,
           url: `/blog/${post.slug}`,
           metadata: {
@@ -107,7 +106,7 @@ const Search = () => {
         })) || [])
       ];
 
-      console.log('Search results:', formattedResults);
+      console.log('Formatted results:', formattedResults);
       setResults(formattedResults);
     } catch (error) {
       console.error('Error during search:', error);
@@ -124,11 +123,11 @@ const Search = () => {
   const getResultIcon = (type: SearchResult['type']) => {
     switch (type) {
       case 'blog':
-        return <Book className="h-5 w-5" />;
+        return <Book className="h-5 w-5 text-blue-500" />;
       case 'project':
-        return <FolderOpen className="h-5 w-5" />;
+        return <FolderOpen className="h-5 w-5 text-green-500" />;
       case 'document':
-        return <FileText className="h-5 w-5" />;
+        return <FileText className="h-5 w-5 text-yellow-500" />;
     }
   };
 
