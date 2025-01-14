@@ -17,36 +17,44 @@ export const ResetPassword = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkSession = async () => {
-      console.log("Checking session for password reset");
-      const { data: { session }, error } = await supabase.auth.getSession();
-      console.log("Session data:", session);
-      console.log("Session error:", error);
+    const validateSession = async () => {
+      console.log("[ResetPassword] Starting session validation");
       
-      // Get the hash fragment from the URL
+      // Get current session
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      console.log("[ResetPassword] Current session:", { session, error: sessionError });
+
+      // Parse URL hash
       const hash = window.location.hash;
-      console.log("URL hash:", hash);
+      console.log("[ResetPassword] URL hash:", hash);
       
-      // Parse the hash fragment
       const fragment = new URLSearchParams(hash.substring(1));
       const type = fragment.get('type');
       const accessToken = fragment.get('access_token');
       
-      console.log("Recovery type:", type);
-      console.log("Access token present:", !!accessToken);
-      
+      console.log("[ResetPassword] Recovery flow details:", {
+        type,
+        hasAccessToken: !!accessToken,
+        currentUrl: window.location.href
+      });
+
+      // Validate recovery flow
       if (!session && type !== 'recovery') {
-        console.error("No valid session or recovery token found");
+        console.error("[ResetPassword] Invalid recovery flow:", {
+          hasSession: !!session,
+          type,
+          accessToken: !!accessToken
+        });
         setError("Invalid or expired password reset link. Please request a new one.");
-        return;
       }
     };
 
-    checkSession();
+    validateSession();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("[ResetPassword] Starting password reset");
     setError(null);
     
     if (password !== confirmPassword) {
@@ -70,26 +78,34 @@ export const ResetPassword = () => {
     setIsLoading(true);
 
     try {
-      console.log("Attempting to update password");
-      const { error } = await supabase.auth.updateUser({
+      console.log("[ResetPassword] Attempting to update password");
+      const { data, error } = await supabase.auth.updateUser({
         password: password,
       });
+
+      console.log("[ResetPassword] Update password response:", { data, error });
 
       if (error) {
         throw error;
       }
 
-      console.log("Password updated successfully");
+      console.log("[ResetPassword] Password updated successfully");
       toast({
         title: "Success",
         description: "Your password has been reset successfully.",
       });
       
-      // Sign out the user after password reset
+      // Sign out and redirect
       await supabase.auth.signOut();
       navigate("/login");
     } catch (error: any) {
-      console.error("Password reset error:", error);
+      console.error("[ResetPassword] Error details:", {
+        message: error.message,
+        status: error.status,
+        name: error.name,
+        stack: error.stack
+      });
+      
       setError(error.message);
       toast({
         title: "Error",

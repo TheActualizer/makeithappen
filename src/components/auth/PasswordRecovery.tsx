@@ -15,11 +15,18 @@ export const PasswordRecovery = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    console.log("[PasswordRecovery] Initiating password recovery for email:", email);
+    console.log("[PasswordRecovery] Current origin:", window.location.origin);
 
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+      const redirectUrl = `${window.location.origin}/reset-password`;
+      console.log("[PasswordRecovery] Redirect URL:", redirectUrl);
+
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: redirectUrl,
       });
+
+      console.log("[PasswordRecovery] Reset password response:", { data, error });
 
       if (error) {
         throw error;
@@ -30,11 +37,17 @@ export const PasswordRecovery = () => {
         title: "Recovery email sent",
         description: "Please check your inbox for the password reset link.",
       });
-    } catch (error) {
-      console.error("Password recovery error:", error);
+    } catch (error: any) {
+      console.error("[PasswordRecovery] Error details:", {
+        message: error.message,
+        status: error.status,
+        name: error.name,
+        stack: error.stack,
+      });
+      
       toast({
         title: "Error",
-        description: "Failed to send recovery email. Please try again.",
+        description: error.message || "Failed to send recovery email. Please try again.",
         variant: "destructive",
       });
     } finally {
