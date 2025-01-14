@@ -14,14 +14,14 @@ interface ServiceTypeSectionProps {
 }
 
 const serviceTypes = [
-  { value: "website", label: "Website & Digital Presence", icon: "🌐" },
-  { value: "crm", label: "Customer Relationship Management", icon: "👥" },
-  { value: "accounting", label: "Financial & Accounting Systems", icon: "💰" },
-  { value: "marketing", label: "Marketing & Automation", icon: "📈" },
-  { value: "digital-workforce", label: "Digital Workforce & AI", icon: "🤖" },
-  { value: "legal", label: "Legal Operations", icon: "⚖️" },
-  { value: "hr", label: "Human Resources", icon: "👤" },
-  { value: "other", label: "Other Services", icon: "✨" }
+  { value: "website", label: "Web", icon: "🌐" },
+  { value: "crm", label: "CRM", icon: "👥" },
+  { value: "accounting", label: "Finance", icon: "💰" },
+  { value: "marketing", label: "Marketing", icon: "📈" },
+  { value: "digital-workforce", label: "AI", icon: "🤖" },
+  { value: "legal", label: "Legal", icon: "⚖️" },
+  { value: "hr", label: "HR", icon: "👤" },
+  { value: "other", label: "More", icon: "✨" }
 ];
 
 export const ServiceTypeSection = ({ formData, onServiceTypeChange }: ServiceTypeSectionProps) => {
@@ -29,23 +29,26 @@ export const ServiceTypeSection = ({ formData, onServiceTypeChange }: ServiceTyp
 
   return (
     <div className="space-y-2">
-      <h3 className="text-sm font-medium">Select Service Types</h3>
+      <h3 className="text-xs font-medium opacity-70">🎯 Services</h3>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button 
             variant="outline" 
-            className="w-full justify-between"
+            className="w-full justify-between h-9 px-3"
           >
-            {selectedCount === 0 ? (
-              "Select services..."
-            ) : (
-              `${selectedCount} service${selectedCount === 1 ? '' : 's'} selected`
-            )}
-            <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
+            <span className="flex items-center gap-2">
+              <span className="text-lg">🔍</span>
+              {selectedCount === 0 ? (
+                "Select"
+              ) : (
+                `${selectedCount} ${selectedCount === 1 ? 'service' : 'services'}`
+              )}
+            </span>
+            <ChevronDown className="h-4 w-4 opacity-50" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent 
-          className="w-[300px] max-h-[300px] overflow-y-auto bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+          className="w-[200px] max-h-[300px] overflow-y-auto bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
           align="start"
         >
           {serviceTypes.map((type) => (
@@ -53,29 +56,28 @@ export const ServiceTypeSection = ({ formData, onServiceTypeChange }: ServiceTyp
               key={type.value}
               checked={formData.projectType?.includes(type.value)}
               onCheckedChange={() => onServiceTypeChange(type.value)}
-              className="flex items-center gap-2 py-2"
+              className="flex items-center gap-2 py-1.5 px-2"
             >
-              <span className="text-2xl transform hover:scale-110 transition-transform">{type.icon}</span>
-              <span className="ml-2">{type.label}</span>
+              <span className="text-xl transform hover:scale-110 transition-transform">{type.icon}</span>
+              <span className="text-sm">{type.label}</span>
             </DropdownMenuCheckboxItem>
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
       {selectedCount > 0 && (
-        <div className="flex flex-wrap gap-2 mt-2">
+        <div className="flex flex-wrap gap-1.5 mt-2">
           {formData.projectType?.map((selected) => {
             const service = serviceTypes.find(t => t.value === selected);
             return service && (
               <div
                 key={selected}
-                className="inline-flex items-center gap-2 text-sm bg-primary/10 text-primary rounded-full px-3 py-1.5 hover:bg-primary/20 transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs bg-primary/5 text-primary rounded-lg px-2 py-1 hover:bg-primary/10 transition-colors"
               >
-                <span className="text-xl">{service.icon}</span>
-                <span>{service.label}</span>
+                <span className="text-base">{service.icon}</span>
                 <button
                   onClick={() => onServiceTypeChange(selected)}
-                  className="ml-1 hover:text-primary/80"
-                  aria-label="Remove service"
+                  className="hover:text-primary/80"
+                  aria-label={`Remove ${service.label}`}
                 >
                   ×
                 </button>
