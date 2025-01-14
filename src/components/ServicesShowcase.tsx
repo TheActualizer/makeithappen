@@ -170,10 +170,10 @@ export const ServicesShowcase = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="py-12 px-4 md:px-6 lg:px-8 bg-background relative" id="services">
+    <section className="py-24 px-4 md:px-6 lg:px-8 bg-background relative" id="services">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold tracking-tight text-white mb-4">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl font-bold tracking-tight text-white mb-6">
             Enterprise-Grade Automation Solutions
           </h2>
           <p className="text-gray-400 max-w-3xl mx-auto">
