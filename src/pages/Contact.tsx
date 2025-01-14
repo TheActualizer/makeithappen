@@ -53,7 +53,8 @@ const Contact = () => {
     try {
       console.log("Submitting form to Supabase:", values);
       
-      const { error } = await supabase.from("contact_submissions").insert({
+      // First, save to contact_submissions
+      const { error: submissionError } = await supabase.from("contact_submissions").insert({
         name: values.name,
         email: values.email,
         phone: values.phone || null,
@@ -61,9 +62,54 @@ const Contact = () => {
         message: values.message,
       });
 
-      if (error) {
-        console.error("Supabase error:", error);
-        throw error;
+      if (submissionError) {
+        console.error("Supabase submission error:", submissionError);
+        throw submissionError;
+      }
+
+      // Create a conversation for this contact
+      const { data: conversation, error: conversationError } = await supabase
+        .from('conversations')
+        .insert({
+          title: `Contact from ${values.name}`,
+          provider: 'dify',
+        })
+        .select()
+        .single();
+
+      if (conversationError) {
+        console.error("Error creating conversation:", conversationError);
+        throw conversationError;
+      }
+
+      // Add the message to the conversation
+      const { data: message, error: messageError } = await supabase
+        .from('messages')
+        .insert({
+          conversation_id: conversation.id,
+          content: values.message,
+          type: 'text',
+        })
+        .select()
+        .single();
+
+      if (messageError) {
+        console.error("Error creating message:", messageError);
+        throw messageError;
+      }
+
+      // Trigger the notification edge function
+      const { error: notificationError } = await supabase.functions.invoke('notify-admin', {
+        body: {
+          message: values.message,
+          userId: message.sender_id,
+          conversationId: conversation.id,
+        },
+      });
+
+      if (notificationError) {
+        console.error("Error sending notification:", notificationError);
+        throw notificationError;
       }
 
       toast.success("Message sent successfully! We'll be in touch soon.");
