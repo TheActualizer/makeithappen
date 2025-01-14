@@ -85,7 +85,7 @@ export const useMessages = () => {
           created_at,
           conversation_id,
           type,
-          profiles (
+          profiles:sender_id (
             first_name,
             last_name,
             email,
