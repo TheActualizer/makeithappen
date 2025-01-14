@@ -84,7 +84,7 @@ export const useMessages = (): UseMessagesReturn => {
         created_at: msg.created_at,
         conversation_id: msg.conversation_id,
         type: msg.type || 'text',
-        profiles: msg.profiles as ProfileData | null
+        profiles: msg.profiles as ProfileData
       })) || [];
 
       setMessages(typedMessages);
