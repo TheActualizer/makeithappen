@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
-import { BookOpen, TrendingUp, Clock, Eye, ArrowRight } from "lucide-react";
+import { BookOpen, TrendingUp, Clock, Eye, ArrowRight, Shield, Activity, Brain } from "lucide-react";
 
 interface BlogCategory {
   id: string;
@@ -69,16 +69,16 @@ const Blog = () => {
 
   const featuredArticles = [
     {
-      title: "Agentic Systems: Redefining Autonomy in Business",
-      description: "Discover how autonomous AI agents can revolutionize processes and disrupt entire industries.",
+      title: "The Rise of Agentic AI Systems",
+      description: "Discover how autonomous AI agents are revolutionizing industries with independent decision-making capabilities and multi-agent collaboration.",
       link: "/blog/agentic-systems",
-      icon: <TrendingUp className="w-8 h-8 text-primary" />
+      icon: <Brain className="w-8 h-8 text-primary" />
     },
     {
-      title: "AI Trends Shaping the Future",
-      description: "Stay ahead of the curve with insights into emerging AI breakthroughs that will redefine competitive landscapes.",
+      title: "2025 AI Trends & Transformations",
+      description: "Explore the latest AI breakthroughs including multimodal advancement, enhanced business operations, and human-AI collaboration.",
       link: "/blog/ai-trends",
-      icon: <BookOpen className="w-8 h-8 text-primary" />
+      icon: <Activity className="w-8 h-8 text-primary" />
     }
   ];
 
@@ -101,14 +101,14 @@ const Blog = () => {
             Explore Our Tech Universe
           </h1>
           <p className="text-gray-300 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
-            Dive into cutting-edge insights, expert tutorials, and revolutionary ideas shaping the future of technology.
+            Dive into cutting-edge insights, expert analysis, and revolutionary ideas shaping the future of AI and technology.
           </p>
         </motion.div>
 
         {/* Featured Articles Section */}
         <section className="mb-16">
           <h2 className="text-2xl font-semibold text-white mb-8">Featured Articles</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {featuredArticles.map((article, index) => (
               <motion.div
                 key={index}
@@ -148,21 +148,31 @@ const Blog = () => {
           <h2 className="text-2xl font-semibold text-white mb-8">Categories</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categories.map((category) => (
-              <Card 
-                key={category.id} 
-                className="bg-accent/40 backdrop-blur-sm border border-accent/20 hover:border-primary/50 transition-all duration-300 cursor-pointer"
-                onClick={() => handleNavigation(`/blog/category/${category.slug}`)}
+              <motion.div
+                key={category.id}
+                whileHover={{ scale: 1.02 }}
               >
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-white mb-2">{category.name}</h3>
-                  <p className="text-gray-300 mb-4">{category.description}</p>
-                  <Button
-                    variant="secondary"
-                  >
-                    Explore {category.name}
-                  </Button>
-                </div>
-              </Card>
+                <Card 
+                  className="bg-accent/40 backdrop-blur-sm border border-accent/20 hover:border-primary/50 transition-all duration-300 cursor-pointer"
+                  onClick={() => handleNavigation(`/blog/category/${category.slug}`)}
+                >
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold text-white mb-2">{category.name}</h3>
+                    <p className="text-gray-300 mb-4">{
+                      category.slug === 'tutorials' 
+                        ? "Exploring FHIR integration and HIPAA-compliant open-source AI frameworks revolutionizing healthcare tech"
+                        : category.description
+                    }</p>
+                    <Button
+                      variant="secondary"
+                      className="w-full group hover:bg-primary hover:text-white transition-all duration-300"
+                    >
+                      Explore {category.name}
+                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </div>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </section>
