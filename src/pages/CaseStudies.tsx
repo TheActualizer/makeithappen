@@ -46,17 +46,17 @@ const CaseStudies = () => {
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-4">
         <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 animate-fade-in">
             Transforming Businesses Through Innovation
           </h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8 animate-fade-in [animation-delay:200ms]">
             Discover how we've helped organizations achieve breakthrough results with our cutting-edge AI and automation solutions.
           </p>
           <Button 
             variant="secondary"
             size="lg"
             onClick={() => navigate("/start-project")}
-            className="animate-float"
+            className="animate-float hover:scale-105 transition-transform duration-300"
           >
             Start Your Success Story
             <ArrowRight className="ml-2 w-5 h-5" />
@@ -68,13 +68,27 @@ const CaseStudies = () => {
       <section className="px-4 pb-24">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {caseStudies.map((study, index) => (
-            <Card key={index} className="bg-accent/40 backdrop-blur-sm border border-accent/20 hover:border-primary/50 transition-all duration-300">
+            <Card 
+              key={index} 
+              className="group bg-accent/40 backdrop-blur-sm relative overflow-hidden
+                before:absolute before:inset-0 before:border before:border-primary/10 before:rounded-lg
+                after:absolute after:inset-0 after:border after:border-primary/20 after:rounded-lg after:transition-transform after:duration-700
+                hover:after:scale-95 hover:before:scale-105
+                animate-fade-in [animation-delay:var(--delay)]"
+              style={{ '--delay': `${(index + 1) * 200}ms` } as React.CSSProperties}
+            >
               <CardHeader>
                 <div className="flex items-center justify-between mb-4">
-                  {study.icon}
-                  <Badge variant="secondary">{study.industry}</Badge>
+                  <div className="transform transition-transform duration-300 group-hover:scale-110">
+                    {study.icon}
+                  </div>
+                  <Badge variant="secondary" className="transition-colors duration-300 group-hover:bg-primary group-hover:text-white">
+                    {study.industry}
+                  </Badge>
                 </div>
-                <CardTitle className="text-xl text-white mb-2">{study.title}</CardTitle>
+                <CardTitle className="text-xl text-white mb-2 transition-colors duration-300 group-hover:text-primary">
+                  {study.title}
+                </CardTitle>
                 <CardDescription className="text-gray-300 font-medium">
                   {study.company}
                 </CardDescription>
@@ -85,15 +99,19 @@ const CaseStudies = () => {
                   <h4 className="text-sm font-semibold text-white">Key Impact:</h4>
                   <ul className="space-y-2">
                     {study.impact.map((item, i) => (
-                      <li key={i} className="text-gray-300 flex items-center">
-                        <div className="w-2 h-2 rounded-full bg-primary mr-2" />
+                      <li key={i} className="text-gray-300 flex items-center group-hover:transform group-hover:translate-x-2 transition-transform duration-300">
+                        <div className="w-2 h-2 rounded-full bg-primary mr-2 transition-transform duration-300 group-hover:scale-125" />
                         {item}
                       </li>
                     ))}
                   </ul>
                   <div className="pt-4 flex flex-wrap gap-2">
                     {study.tags.map((tag, i) => (
-                      <Badge key={i} variant="outline" className="text-gray-300">
+                      <Badge 
+                        key={i} 
+                        variant="outline" 
+                        className="text-gray-300 transition-all duration-300 hover:bg-primary/10"
+                      >
                         {tag}
                       </Badge>
                     ))}
