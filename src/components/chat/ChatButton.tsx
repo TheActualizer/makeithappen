@@ -13,15 +13,15 @@ const ChatButton = () => {
       setShowSparkle(true);
     }, 1000);
 
-    // Hide message after 5 seconds
+    // Hide message after 2 seconds
     const hideTimer = setTimeout(() => {
       setShowMessage(false);
-    }, 6000);
+    }, 2000);
 
     // Keep sparkle visible slightly longer
     const sparkleTimer = setTimeout(() => {
       setShowSparkle(false);
-    }, 7000);
+    }, 3000);
 
     return () => {
       clearTimeout(showTimer);
