@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search as SearchIcon, ArrowLeft, Loader2, FileText, Book, FolderOpen } from "lucide-react";
+import { Search as SearchIcon, ArrowLeft, Loader2, Book, FolderOpen, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import Navbar from "@/components/Navbar";
 
 interface SearchResult {
   id: string;
@@ -323,3 +324,4 @@ const Search = () => {
 };
 
 export default Search;
+

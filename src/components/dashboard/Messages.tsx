@@ -1,6 +1,6 @@
 import React from 'react';
 import { useIsAdmin } from "@/hooks/useIsAdmin";
-import { useMessages } from "@/hooks/useMessages";
+import useMessages from "@/hooks/useMessages";
 import { useMessageSender } from "@/hooks/useMessageSender";
 import { ConversationList } from './messages/ConversationList';
 import { MessageArea } from './messages/MessageArea';
