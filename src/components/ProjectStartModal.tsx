@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -10,8 +10,6 @@ import ProjectDetailsStep from "./project-start/ProjectDetailsStep";
 import TimelineStep from "./project-start/TimelineStep";
 import ProgressSteps from "./project-start/ProgressSteps";
 import ConsultationScheduler from "./project-start/ConsultationScheduler";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 
 const initialFormData: FormData = {
@@ -38,16 +36,7 @@ const ProjectStartModal = ({
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showCalendly, setShowCalendly] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-
-  // Simulate loading state
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleNext = () => {
     if (step < 3) {
@@ -143,16 +132,6 @@ const ProjectStartModal = ({
   };
 
   const renderStep = () => {
-    if (isLoading) {
-      return (
-        <div className="space-y-4 animate-pulse">
-          <Skeleton className="h-12 w-full" />
-          <Skeleton className="h-32 w-full" />
-          <Skeleton className="h-12 w-3/4" />
-        </div>
-      );
-    }
-
     if (showCalendly) {
       return <ConsultationScheduler formData={formData} />;
     }
@@ -171,54 +150,47 @@ const ProjectStartModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleModalClose}>
-      <DialogContent className="sm:max-w-[800px] max-h-[90vh] p-0">
-        <ScrollArea className="h-full max-h-[90vh]">
-          <div className="px-4 sm:px-6 py-4 sm:py-6">
-            <DialogHeader className="space-y-2">
-              <DialogTitle className="text-xl sm:text-2xl">
-                {showCalendly ? "Schedule a Consultation" : "Project Intake Form"}
-              </DialogTitle>
-              <DialogDescription className="text-sm sm:text-base">
-                {showCalendly 
-                  ? "Choose a time that works best for you."
-                  : "Help us understand your project requirements and objectives"}
-              </DialogDescription>
-            </DialogHeader>
-            <div className="relative mt-4">
-              {!showCalendly && <ProgressSteps currentStep={step} />}
-              <div className={!showCalendly ? "mt-12 sm:mt-16" : ""}>{renderStep()}</div>
-              {!showCalendly && (
-                <div className="flex justify-between mt-6 sm:mt-8 sticky bottom-0 bg-background/80 backdrop-blur-sm py-4 border-t">
-                  <Button
-                    variant="outline"
-                    onClick={handleBack}
-                    disabled={step === 1}
-                    className="px-3 sm:px-4 transition-all duration-200 hover:translate-x-[-2px]"
-                  >
-                    Back
-                  </Button>
-                  {step === 3 ? (
-                    <Button
-                      onClick={handleSubmit}
-                      disabled={isSubmitting}
-                      className="px-3 sm:px-4 transition-all duration-200 hover:translate-x-[2px]"
-                    >
-                      {isSubmitting ? "Saving..." : "Submit Project"}
-                    </Button>
-                  ) : (
-                    <Button 
-                      onClick={handleNext} 
-                      className="group px-3 sm:px-4 transition-all duration-200 hover:translate-x-[2px]"
-                    >
-                      Next
-                      <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  )}
-                </div>
+      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto px-4 sm:px-6 py-4 sm:py-6">
+        <DialogHeader className="space-y-2">
+          <DialogTitle className="text-xl sm:text-2xl">
+            {showCalendly ? "Schedule a Consultation" : "Project Intake Form"}
+          </DialogTitle>
+          <DialogDescription className="text-sm sm:text-base">
+            {showCalendly 
+              ? "Choose a time that works best for you."
+              : "Help us understand your project requirements and objectives"}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="relative mt-4">
+          {!showCalendly && <ProgressSteps currentStep={step} />}
+          <div className={!showCalendly ? "mt-12 sm:mt-16" : ""}>{renderStep()}</div>
+          {!showCalendly && (
+            <div className="flex justify-between mt-6 sm:mt-8 sticky bottom-0 bg-background py-4">
+              <Button
+                variant="outline"
+                onClick={handleBack}
+                disabled={step === 1}
+                className="px-3 sm:px-4"
+              >
+                Back
+              </Button>
+              {step === 3 ? (
+                <Button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className="px-3 sm:px-4"
+                >
+                  {isSubmitting ? "Saving..." : "Submit Project"}
+                </Button>
+              ) : (
+                <Button onClick={handleNext} className="group px-3 sm:px-4">
+                  Next
+                  <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
               )}
             </div>
-          </div>
-        </ScrollArea>
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );
