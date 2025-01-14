@@ -29,6 +29,8 @@ const DifyChat = () => {
         if (data?.value && window.DifyChat?.updateToken) {
           console.log('DifyChat: Updating token');
           window.DifyChat.updateToken(data.value);
+        } else {
+          console.error('DifyChat: No API key found or DifyChat not initialized');
         }
       } catch (error) {
         console.error('DifyChat: Error initializing chat:', error);
