@@ -85,7 +85,7 @@ export const useMessages = () => {
           created_at,
           conversation_id,
           type,
-          profiles:sender_id (
+          profiles (
             first_name,
             last_name,
             email,
@@ -100,13 +100,28 @@ export const useMessages = () => {
         throw messagesError;
       }
 
-      const typedMessages: Message[] = (messagesData || []).map(msg => ({
+      interface MessageWithProfile {
+        id: string;
+        content: string;
+        sender_id: string | null;
+        created_at: string;
+        conversation_id: string;
+        type: 'text' | 'system' | 'ai';
+        profiles: {
+          first_name: string | null;
+          last_name: string | null;
+          email: string | null;
+          avatar_url: string | null;
+        } | null;
+      }
+
+      const typedMessages: Message[] = (messagesData as MessageWithProfile[] || []).map(msg => ({
         id: msg.id,
         content: msg.content,
         sender_id: msg.sender_id,
         created_at: msg.created_at,
         conversation_id: msg.conversation_id,
-        type: msg.type || 'text',
+        type: msg.type,
         profiles: msg.profiles ? {
           first_name: msg.profiles.first_name,
           last_name: msg.profiles.last_name,
