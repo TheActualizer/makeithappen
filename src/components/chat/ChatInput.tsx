@@ -20,9 +20,9 @@ const ChatInput = () => {
         .from('conversations')
         .select('id')
         .eq('id', conversationId)
-        .single();
+        .maybeSingle();  // Changed from .single() to .maybeSingle()
 
-      if (checkError && !existingConv) {
+      if (!existingConv) {
         console.log('ChatInput: No existing conversation found, creating new one...');
         const { error: createError } = await supabase
           .from('conversations')
