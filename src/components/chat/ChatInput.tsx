@@ -23,6 +23,7 @@ const ChatInput = () => {
         .single();
 
       if (checkError && !existingConv) {
+        console.log('ChatInput: No existing conversation found, creating new one...');
         const { error: createError } = await supabase
           .from('conversations')
           .insert([
@@ -39,7 +40,7 @@ const ChatInput = () => {
           console.error('ChatInput: Error creating conversation:', createError);
           return;
         }
-        console.log('ChatInput: Conversation created successfully');
+        console.log('ChatInput: Conversation created successfully with ID:', conversationId);
       }
     };
 
@@ -48,7 +49,7 @@ const ChatInput = () => {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('ChatInput: Send message triggered', { newMessage, isLoading });
+    console.log('ChatInput: Send message triggered', { newMessage, isLoading, conversationId });
     
     if (!newMessage.trim() || isLoading) {
       console.log('ChatInput: Send prevented - empty message or loading');
@@ -111,6 +112,8 @@ const ChatInput = () => {
           console.error('ChatInput: Error storing AI response:', aiError);
           throw aiError;
         }
+        
+        console.log('ChatInput: AI response stored successfully');
       }
 
       toast({
