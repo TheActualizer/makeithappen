@@ -33,7 +33,7 @@ export const useContactForm = () => {
     
     try {
       console.log("ContactForm: Attempting to insert into contact_submissions table...");
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("contact_submissions")
         .insert({
           name: values.name,
@@ -41,14 +41,26 @@ export const useContactForm = () => {
           phone: values.phone || null,
           project_type: values.projectType,
           message: values.message,
-        });
+        })
+        .select()
+        .single();
 
       if (error) {
         console.error("ContactForm: Submission error:", error);
         throw error;
       }
 
-      console.log("ContactForm: Submission successful");
+      console.log("ContactForm: Submission successful, triggering webhook...");
+      
+      // Trigger the webhook function
+      const { error: webhookError } = await supabase.functions.invoke('contact-webhook');
+      
+      if (webhookError) {
+        console.error("ContactForm: Webhook error:", webhookError);
+        // Don't throw here, as the submission was successful
+      }
+
+      console.log("ContactForm: Process completed successfully");
       toast.success("Message sent successfully!");
       form.reset();
     } catch (error) {
