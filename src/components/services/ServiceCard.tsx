@@ -19,15 +19,15 @@ interface ServiceCardProps {
 
 export const ServiceCard = ({ service, Icon }: ServiceCardProps) => {
   return (
-    <Card className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg border-accent/20 bg-gradient-to-br from-accent/40 to-background backdrop-blur-sm">
+    <Card className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-accent/20 bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm">
       <CardContent className="p-6">
         <div className="flex items-start gap-4">
-          <div className="rounded-lg bg-accent/30 p-3 group-hover:bg-accent/40 transition-colors">
-            <Icon className="w-6 h-6 text-secondary" />
+          <div className="rounded-xl bg-primary/10 p-3 group-hover:bg-primary/20 transition-colors">
+            <Icon className="w-6 h-6 text-primary" />
           </div>
           
           <div className="space-y-1 flex-1">
-            <h3 className="font-semibold text-lg text-foreground group-hover:text-secondary transition-colors">
+            <h3 className="font-semibold text-lg text-foreground group-hover:text-primary transition-colors">
               {service.title}
             </h3>
             <p className="text-sm text-muted-foreground">
@@ -42,7 +42,7 @@ export const ServiceCard = ({ service, Icon }: ServiceCardProps) => {
               <Badge 
                 key={tag} 
                 variant="secondary" 
-                className="bg-accent/30 hover:bg-accent/40"
+                className="bg-primary/10 text-primary hover:bg-primary/20"
               >
                 {tag}
               </Badge>
@@ -57,7 +57,7 @@ export const ServiceCard = ({ service, Icon }: ServiceCardProps) => {
                 key={index}
                 className="flex items-center gap-2 text-sm text-muted-foreground"
               >
-                <div className="w-1 h-1 rounded-full bg-secondary" />
+                <div className="w-1 h-1 rounded-full bg-primary/70" />
                 {feature}
               </div>
             ))}
@@ -66,7 +66,7 @@ export const ServiceCard = ({ service, Icon }: ServiceCardProps) => {
 
         {service.metrics && (
           <div className="mt-4 pt-4 border-t border-accent/20">
-            <p className="text-sm font-medium text-secondary">
+            <p className="text-sm font-medium text-primary">
               {service.metrics}
             </p>
           </div>
