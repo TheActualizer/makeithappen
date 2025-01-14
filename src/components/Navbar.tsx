@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, User } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -6,8 +6,35 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Track scroll position for dynamic opacity
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Calculate opacity based on scroll position
+  const getBackgroundStyle = () => {
+    const minOpacity = 0.85; // Minimum opacity to ensure readability
+    const maxOpacity = 0.95; // Maximum opacity for solid look
+    const scrollThreshold = 100; // Pixels to scroll before reaching max opacity
+    
+    const opacity = Math.min(
+      maxOpacity,
+      minOpacity + (scrollPosition / scrollThreshold) * (maxOpacity - minOpacity)
+    );
+
+    return {
+      backgroundColor: `rgba(15, 23, 42, ${opacity})`,
+      backdropFilter: "blur(12px)",
+    };
+  };
 
   const primaryNavItems = [
     { name: "About", href: "/about" },
@@ -79,7 +106,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed w-full bg-gradient-to-r from-accent/95 via-primary/20 to-secondary/30 backdrop-blur-xl z-50 py-4 border-b border-secondary/20 shadow-lg">
+    <nav 
+      className="fixed w-full z-50 py-4 border-b border-secondary/20 shadow-lg transition-colors duration-300"
+      style={getBackgroundStyle()}
+    >
       <div className="container mx-auto px-4 flex justify-between items-center relative">
         <Link 
           to="/" 
@@ -98,10 +128,10 @@ const Navbar = () => {
             <Link
               key={item.name}
               to={item.href}
-              className={`transition-all duration-300 relative ${
+              className={`transition-all duration-300 relative font-medium ${
                 isActive(item.href)
-                  ? 'text-secondary font-medium drop-shadow-[0_0_6px_rgba(6,182,212,0.3)]'
-                  : 'text-gray-300 hover:text-white hover:drop-shadow-[0_0_4px_rgba(255,255,255,0.3)]'
+                  ? 'text-secondary drop-shadow-[0_0_6px_rgba(6,182,212,0.3)]'
+                  : 'text-gray-100 hover:text-white hover:drop-shadow-[0_0_4px_rgba(255,255,255,0.3)]'
               }`}
             >
               {item.name}
@@ -117,7 +147,7 @@ const Navbar = () => {
             <Button 
               variant="ghost"
               onClick={() => navigate('/login')}
-              className="text-white hover:bg-white/10 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all duration-300"
+              className="text-white hover:bg-white/15 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all duration-300"
             >
               <User className="w-5 h-5 mr-2" />
               Login
@@ -138,7 +168,7 @@ const Navbar = () => {
             variant="ghost"
             size="icon"
             onClick={() => setIsOpen(!isOpen)}
-            className="text-white hover:bg-white/10 transition-all duration-300"
+            className="text-white hover:bg-white/15 transition-all duration-300"
           >
             <AnimatePresence mode="wait">
               {isOpen ? (
@@ -176,7 +206,7 @@ const Navbar = () => {
               exit="exit"
               className="absolute top-full left-0 right-0 mt-2"
             >
-              <div className="bg-gradient-to-br from-accent/95 via-primary/20 to-secondary/30 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-2 border-secondary/20 rounded-2xl mx-2 overflow-hidden">
+              <div className="bg-accent/95 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-2 border-secondary/20 rounded-2xl mx-2 overflow-hidden">
                 <div className="container mx-auto p-4">
                   <div className="space-y-4">
                     {/* Primary Navigation Items */}
