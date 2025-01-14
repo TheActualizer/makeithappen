@@ -73,7 +73,9 @@ export async function sendMessageToDify(message: string, conversationId?: string
       throw new Error(`Dify API error: ${response.status}`);
     }
 
-    const data = await response.json();
+    // Clone the response before reading it
+    const responseClone = response.clone();
+    const data = await responseClone.json();
     console.log('Dify API response:', data);
 
     const processingTime = Date.now() - startTime;
