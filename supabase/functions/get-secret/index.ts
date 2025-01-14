@@ -1,5 +1,4 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import "https://deno.land/x/xhr@0.1.0/mod.ts"
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -7,18 +6,26 @@ const corsHeaders = {
 }
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
 
   try {
-    const { key } = await req.json()
-    const value = Deno.env.get(key)
-
-    if (!value) {
-      throw new Error(`Secret ${key} not found`)
+    const { name } = await req.json()
+    
+    if (!name) {
+      throw new Error('Secret name is required')
     }
 
+    console.log('Fetching secret:', name)
+    const value = Deno.env.get(name)
+
+    if (!value) {
+      throw new Error(`Secret ${name} not found`)
+    }
+
+    console.log('Secret found for:', name)
     return new Response(
       JSON.stringify({ 
         value: value 

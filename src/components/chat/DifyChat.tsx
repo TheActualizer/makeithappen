@@ -15,11 +15,10 @@ const DifyChat = () => {
     const initializeDifyChat = async () => {
       try {
         console.log('DifyChat: Initializing chat widget');
-        const { data: { session } } = await supabase.auth.getSession();
         
         // Fetch Dify API key from Supabase Edge Function
         const { data, error } = await supabase.functions.invoke('get-secret', {
-          body: { key: 'DIFY_API_KEY' }
+          body: { name: 'DIFY_API_KEY' }
         });
 
         if (error) {
