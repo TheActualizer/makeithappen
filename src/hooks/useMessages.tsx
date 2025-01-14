@@ -1,53 +1,94 @@
-import { useEffect, useState } from "react";
-import type { Message } from "@/types/message";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
-type FormattedMessage = {
+export interface Message {
   id: string;
   content: string;
-  sender_id: string;
+  sender_id: string | null;
   created_at: string;
-  conversation_id: string;
-  type: string;
-  profiles: {
-    first_name: string;
-    last_name: string;
-    email: string;
-    avatar_url: string;
+  conversation_id?: string;
+  type: 'text' | 'system' | 'ai';
+  profiles?: {
+    first_name: string | null;
+    last_name: string | null;
+    email: string | null;
+    avatar_url: string | null;
   } | null;
-};
+}
 
-const formatMessages = (messages: Message[]): FormattedMessage[] => {
-  return messages.map(msg => ({
-    id: msg.id,
-    content: msg.content,
-    sender_id: msg.sender_id,
-    created_at: msg.created_at,
-    conversation_id: msg.conversation_id,
-    type: msg.type || 'text',
-    profiles: msg.profiles && 'id' in msg.profiles ? {
-      first_name: msg.profiles.first_name || '',
-      last_name: msg.profiles.last_name || '',
-      email: msg.profiles.email || '',
-      avatar_url: msg.profiles.avatar_url || ''
-    } : null
-  }));
-};
+interface UseMessagesReturn {
+  conversations: any[];
+  messages: Message[];
+  selectedConversation: string | null;
+  setSelectedConversation: (id: string | null) => void;
+  fetchMessages: (conversationId: string) => Promise<void>;
+}
 
-const useMessages = (conversationId: string) => {
-  const [messages, setMessages] = useState<FormattedMessage[]>([]);
+export const useMessages = (): UseMessagesReturn => {
+  const [conversations, setConversations] = useState<any[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchMessages = async () => {
-      // Fetch messages from your API or database
-      const response = await fetch(`/api/messages?conversationId=${conversationId}`);
-      const data: Message[] = await response.json();
-      setMessages(formatMessages(data));
-    };
+    fetchConversations();
+  }, []);
 
-    fetchMessages();
-  }, [conversationId]);
+  const fetchConversations = async () => {
+    try {
+      console.log('Fetching conversations...');
+      const { data, error } = await supabase
+        .from('conversations')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-  return messages;
+      if (error) {
+        console.error('Error fetching conversations:', error);
+        return;
+      }
+
+      console.log('Conversations fetched:', data);
+      setConversations(data || []);
+    } catch (error) {
+      console.error('Error in fetchConversations:', error);
+    }
+  };
+
+  const fetchMessages = async (conversationId: string) => {
+    try {
+      console.log('Fetching messages for conversation:', conversationId);
+      const { data, error } = await supabase
+        .from('messages')
+        .select(`
+          *,
+          profiles (
+            first_name,
+            last_name,
+            email,
+            avatar_url
+          )
+        `)
+        .eq('conversation_id', conversationId)
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        console.error('Error fetching messages:', error);
+        return;
+      }
+
+      console.log('Messages fetched:', data);
+      setMessages(data || []);
+    } catch (error) {
+      console.error('Error in fetchMessages:', error);
+    }
+  };
+
+  return {
+    conversations,
+    messages,
+    selectedConversation,
+    setSelectedConversation,
+    fetchMessages,
+  };
 };
 
 export default useMessages;
