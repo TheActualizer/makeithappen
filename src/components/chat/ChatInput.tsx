@@ -24,6 +24,7 @@ const ChatInput = () => {
 
     setIsLoading(true);
     const messageContent = newMessage.trim();
+    const timestamp = new Date().toISOString();
     
     try {
       console.log('ChatInput: Storing user message in Supabase');
@@ -34,7 +35,9 @@ const ChatInput = () => {
             conversation_id: conversationId,
             content: messageContent,
             type: 'text',
-            is_admin_message: false
+            is_admin_message: false,
+            created_at: timestamp,
+            updated_at: timestamp
           }
         ])
         .select()
@@ -54,6 +57,7 @@ const ChatInput = () => {
 
       // Store AI response
       if (difyResponse.answer) {
+        const aiTimestamp = new Date().toISOString();
         console.log('ChatInput: Storing AI response in Supabase');
         const { error: aiError } = await supabase
           .from('messages')
@@ -62,7 +66,9 @@ const ChatInput = () => {
               conversation_id: conversationId,
               content: difyResponse.answer,
               type: 'ai',
-              is_admin_message: true
+              is_admin_message: true,
+              created_at: aiTimestamp,
+              updated_at: aiTimestamp
             }
           ]);
 
