@@ -13,7 +13,7 @@ interface ChatInputProps {
 const ChatInput = ({ newMessage, setNewMessage, onSubmit, isLoading }: ChatInputProps) => {
   return (
     <form
-      onSubmit={onSubmit}
+      onSubmit={(e) => onSubmit(e)}
       className="border-t p-4 flex gap-4 items-center"
     >
       <Input
