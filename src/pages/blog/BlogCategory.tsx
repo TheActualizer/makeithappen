@@ -32,7 +32,7 @@ const BlogCategory = () => {
         // First get the category details
         const { data: categoryData, error: categoryError } = await supabase
           .from('blog_categories')
-          .select('name')
+          .select('id, name')
           .eq('slug', slug)
           .single();
 
@@ -43,35 +43,31 @@ const BlogCategory = () => {
 
         if (categoryData) {
           setCategoryName(categoryData.name);
+          
+          // Then get all posts for this category using the category ID
+          const { data: postsData, error: postsError } = await supabase
+            .from('blog_posts')
+            .select(`
+              id,
+              title,
+              excerpt,
+              slug,
+              reading_time,
+              views,
+              published_at
+            `)
+            .eq('category_id', categoryData.id)
+            .eq('status', 'published')
+            .order('published_at', { ascending: false });
+
+          if (postsError) {
+            console.error('Error fetching posts:', postsError);
+            return;
+          }
+
+          console.log('Posts fetched:', postsData);
+          setPosts(postsData || []);
         }
-
-        // Then get all posts for this category
-        const { data: postsData, error: postsError } = await supabase
-          .from('blog_posts')
-          .select(`
-            id,
-            title,
-            excerpt,
-            slug,
-            reading_time,
-            views,
-            published_at
-          `)
-          .eq('category_id', (await supabase
-            .from('blog_categories')
-            .select('id')
-            .eq('slug', slug)
-            .single()).data?.id)
-          .eq('status', 'published')
-          .order('published_at', { ascending: false });
-
-        if (postsError) {
-          console.error('Error fetching posts:', postsError);
-          return;
-        }
-
-        console.log('Posts fetched:', postsData);
-        setPosts(postsData || []);
       } catch (error) {
         console.error('Error:', error);
       } finally {
