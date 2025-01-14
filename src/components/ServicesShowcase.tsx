@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ServiceCard } from "./services/ServiceCard";
 import { ServicesHeader } from "./services/ServicesHeader";
 import { services } from "./services/serviceData";
+import { ArrowRight } from "lucide-react";
 
 export const ServicesShowcase = () => {
   const navigate = useNavigate();
@@ -12,26 +13,22 @@ export const ServicesShowcase = () => {
       <div className="max-w-7xl mx-auto">
         <ServicesHeader />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service) => (
-            <div key={service.id}>
-              <ServiceCard service={service} />
-            </div>
+            <ServiceCard key={service.id} service={service} />
           ))}
         </div>
 
-        <div className="mt-16 text-center">
+        <div className="mt-12 text-center">
           <Button 
             variant="default" 
             size="lg"
             onClick={() => navigate("/start-project")}
             className="group bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300"
           >
-            Start Your Digital Transformation
+            Start Building
+            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Button>
-          <p className="mt-4 text-sm text-gray-400">
-            Ready to revolutionize your business operations? Let's discuss your project.
-          </p>
         </div>
       </div>
     </section>
