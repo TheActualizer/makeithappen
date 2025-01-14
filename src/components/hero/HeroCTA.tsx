@@ -9,7 +9,7 @@ export const HeroCTA = () => {
     <div className="flex flex-wrap gap-4 mt-8">
       <Button
         size="lg"
-        className="relative overflow-hidden bg-gradient-to-r from-[#9b87f5] to-[#33C3F0] hover:from-[#7E69AB] hover:to-[#33C3F0] text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:translate-x-1 transform skew-x-1 after:absolute after:inset-0 after:bg-white/20 after:opacity-0 hover:after:opacity-100 after:transition-opacity"
+        className="bg-primary hover:bg-primary/90 text-white font-semibold rounded-full px-8 transition-all duration-300 hover:-translate-y-1"
         onClick={() => navigate('/start-project')}
       >
         Start Building
@@ -20,7 +20,7 @@ export const HeroCTA = () => {
         variant="outline"
         size="lg"
         onClick={() => document.getElementById("capabilities")?.scrollIntoView({ behavior: 'smooth' })}
-        className="border-white/10 text-[#D6BCFA] hover:text-white hover:bg-white/5 transition-all duration-300 backdrop-blur-sm transform hover:-translate-y-1 hover:translate-x-1 skew-x-1"
+        className="rounded-full border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300"
       >
         Explore Solutions
       </Button>
