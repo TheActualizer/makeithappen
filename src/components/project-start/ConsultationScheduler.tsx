@@ -109,11 +109,11 @@ Contact Information:
 - Phone: ${formData.phone || 'Not provided'}`;
 
   return (
-    <div className="flex flex-col h-full">
-      <p className={`text-sm text-muted-foreground mb-4 ${isMobile ? 'px-4' : ''}`}>
+    <div className="space-y-4">
+      <p className={`text-sm text-muted-foreground ${isMobile ? 'px-4' : ''}`}>
         Please select a time that works best for you to discuss your project in detail.
       </p>
-      <div className={`flex-1 min-h-0 ${isMobile ? 'mx-4' : ''}`} style={{ height: 'calc(100vh - 250px)' }}>
+      <div className={`${isMobile ? 'h-[500px] mx-4' : 'h-[600px]'}`}>
         <CalendlyEmbed 
           url="https://calendly.com/belchonen18/make-it-happen" 
           prefill={{
