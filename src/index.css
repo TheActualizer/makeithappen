@@ -26,11 +26,6 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
     --radius: 0.5rem;
-    
-    /* Layout System */
-    --spacing-unit: 8px;
-    --container-padding: clamp(1rem, 5vw, 2rem);
-    --content-width: min(65ch, 100% - var(--container-padding) * 2);
   }
 
   * {
@@ -38,23 +33,18 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans text-base leading-relaxed tracking-wide;
+    @apply bg-gradient-to-b from-accent to-accent/90 text-foreground font-sans text-base leading-relaxed tracking-wide min-h-screen;
     font-family: 'Inter', sans-serif;
-    overflow-x: hidden;
   }
 
-  html {
-    scroll-behavior: smooth;
-    overflow-x: hidden;
-  }
-
+  /* Improved typography scale */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold tracking-normal leading-tight;
+    @apply font-semibold tracking-tight;
     letter-spacing: -0.02em;
   }
 
   h1 {
-    @apply text-4xl md:text-5xl mb-6;
+    @apply text-4xl md:text-5xl mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
   }
 
   h2 {
@@ -65,22 +55,46 @@
     @apply text-2xl md:text-3xl mb-4;
   }
 
-  p {
-    @apply mb-4 leading-relaxed tracking-wide;
+  /* Enhanced form elements */
+  input, select, textarea {
+    @apply bg-background/50 backdrop-blur-sm border-border/10 focus:border-primary/50 transition-all duration-200;
   }
 
-  /* Increase spacing between paragraphs */
-  p + p {
-    @apply mt-6;
+  /* Card enhancements */
+  .card {
+    @apply bg-background/40 backdrop-blur-md border border-border/10 shadow-xl;
+    box-shadow: 0 4px 32px -2px rgba(0, 0, 0, 0.1), 0 2px 8px -2px rgba(0, 0, 0, 0.05);
   }
 
-  /* Smooth transition for all interactive elements */
-  a, button, input, select, textarea {
-    @apply transition-all duration-200;
+  /* Button improvements */
+  button {
+    @apply transition-all duration-200 active:scale-95;
   }
 
-  /* Ensure content doesn't shift during page transitions */
-  #root {
-    @apply relative min-h-screen;
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+    @apply overflow-x-hidden;
+  }
+
+  /* Container system */
+  .container {
+    @apply px-4 mx-auto max-w-7xl;
+  }
+
+  /* Animation utilities */
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* Grid background */
+  .bg-grid-white {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
   }
 }

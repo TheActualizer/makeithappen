@@ -57,17 +57,19 @@ export const PasswordRecovery = () => {
 
   if (submitted) {
     return (
-      <Card className="p-6 max-w-md mx-auto text-center">
-        <Lock className="w-12 h-12 mx-auto mb-4 text-primary" />
-        <h2 className="text-2xl font-semibold mb-4">Check Your Email</h2>
-        <p className="text-muted-foreground mb-4">
+      <Card className="p-8 max-w-md mx-auto backdrop-blur-md bg-background/30 border border-border/10 shadow-2xl">
+        <Lock className="w-12 h-12 mx-auto mb-6 text-primary animate-float" />
+        <h2 className="text-2xl font-semibold mb-4 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+          Check Your Email
+        </h2>
+        <p className="text-muted-foreground mb-6 text-center">
           We've sent a password recovery link to {email}. Please check your inbox
           and follow the instructions to reset your password.
         </p>
         <Button
           variant="outline"
           onClick={() => setSubmitted(false)}
-          className="w-full"
+          className="w-full bg-background/50 hover:bg-background/70 transition-all duration-200"
         >
           Send another email
         </Button>
@@ -76,16 +78,18 @@ export const PasswordRecovery = () => {
   }
 
   return (
-    <Card className="p-6 max-w-md mx-auto">
-      <div className="text-center mb-6">
-        <Lock className="w-12 h-12 mx-auto mb-4 text-primary" />
-        <h2 className="text-2xl font-semibold">Forgot Password?</h2>
-        <p className="text-muted-foreground">
+    <Card className="p-8 max-w-md mx-auto backdrop-blur-md bg-background/30 border border-border/10 shadow-2xl">
+      <div className="text-center mb-8">
+        <Lock className="w-12 h-12 mx-auto mb-6 text-primary animate-float" />
+        <h2 className="text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+          Forgot Password?
+        </h2>
+        <p className="text-muted-foreground mt-2">
           Enter your email address to receive a password reset link.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <Input
             type="email"
@@ -93,13 +97,13 @@ export const PasswordRecovery = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full"
+            className="w-full bg-background/50 backdrop-blur-sm border-border/10 focus:border-primary/50"
             disabled={isLoading}
           />
         </div>
         <Button
           type="submit"
-          className="w-full"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200"
           disabled={isLoading}
         >
           {isLoading ? "Sending..." : "Send Recovery Link"}
