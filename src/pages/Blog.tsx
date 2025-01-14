@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   BookOpen, TrendingUp, Building2, Scale, Brain, 
   Wrench, Database, FileCode, Workflow, Heart, 
-  Github, Rocket, ArrowRight 
+  Github, Rocket, ArrowRight, ArrowUp, Search, 
+  MessageSquare 
 } from "lucide-react";
 
 interface BlogCategory {
@@ -65,7 +66,21 @@ const Blog = () => {
   const [categories, setCategories] = useState<BlogCategory[]>([]);
   const [featuredPosts, setFeaturedPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -221,6 +236,43 @@ const Blog = () => {
           </div>
         </section>
       </div>
+
+      {/* Floating Action Buttons */}
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-6 right-6 space-y-4"
+          >
+            <Button
+              variant="secondary"
+              size="icon"
+              className="rounded-full shadow-lg hover:shadow-xl transition-all duration-300 animate-float"
+              onClick={scrollToTop}
+            >
+              <ArrowUp className="h-5 w-5" />
+            </Button>
+            <Button
+              variant="secondary"
+              size="icon"
+              className="rounded-full shadow-lg hover:shadow-xl transition-all duration-300 animate-float"
+              onClick={() => navigate('/contact')}
+            >
+              <MessageSquare className="h-5 w-5" />
+            </Button>
+            <Button
+              variant="primary"
+              size="icon"
+              className="rounded-full shadow-lg hover:shadow-xl transition-all duration-300 animate-float"
+              onClick={() => navigate('/blog/search')}
+            >
+              <Search className="h-5 w-5" />
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
