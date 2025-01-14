@@ -32,6 +32,19 @@
     @apply border-border;
   }
 
+  /* Custom Scrollbar Styles */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-accent/10 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary/50 rounded-full transition-colors hover:bg-primary/70;
+  }
+
   body {
     @apply bg-background text-foreground font-sans text-base leading-normal tracking-tight;
     font-family: 'Inter', sans-serif;
@@ -86,5 +99,19 @@
   /* Ensure content doesn't shift during page transitions */
   #root {
     @apply relative min-h-screen;
+  }
+
+  /* Form field focus styles */
+  input:focus, textarea:focus, select:focus {
+    @apply ring-2 ring-primary/50 ring-offset-1 ring-offset-background;
+  }
+
+  /* Dialog animations */
+  .dialog-content {
+    @apply animate-in fade-in-0 slide-in-from-bottom-4 duration-300;
+  }
+
+  .dialog-overlay {
+    @apply animate-in fade-in-0 duration-300;
   }
 }
