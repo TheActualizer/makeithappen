@@ -17,12 +17,12 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-accent via-accent/95 to-primary/20">
       <Navbar />
       
-      <main className="relative space-y-12 md:space-y-20">
+      <main className="relative space-y-16 md:space-y-24">
         <div className="pt-16 lg:pt-20">
           <Hero />
         </div>
 
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-24">
           <ServicesShowcase />
         </div>
       </main>
