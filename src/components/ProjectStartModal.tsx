@@ -167,12 +167,12 @@ const ProjectStartModal = ({
             {renderStep()}
           </div>
           {!showCalendly && (
-            <div className="flex justify-between mt-4 sm:mt-6 sticky bottom-0 bg-background/80 backdrop-blur-sm py-3 border-t">
+            <div className="flex items-center justify-between gap-2 mt-4 sm:mt-6 sticky bottom-0 bg-background/80 backdrop-blur-sm py-2 border-t">
               <Button
-                variant="outline"
+                variant="ghost"
                 onClick={handleBack}
                 disabled={step === 1}
-                className="px-3 sm:px-4"
+                className="h-8 px-3 text-sm"
               >
                 Back
               </Button>
@@ -180,14 +180,17 @@ const ProjectStartModal = ({
                 <Button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="px-3 sm:px-4"
+                  className="h-8 px-3 text-sm font-medium bg-primary hover:bg-primary/90"
                 >
-                  {isSubmitting ? "Saving..." : "Submit Project"}
+                  {isSubmitting ? "Saving..." : "Submit"}
                 </Button>
               ) : (
-                <Button onClick={handleNext} className="group px-3 sm:px-4">
+                <Button 
+                  onClick={handleNext} 
+                  className="h-8 px-3 text-sm font-medium group inline-flex items-center bg-primary hover:bg-primary/90"
+                >
                   Next
-                  <ChevronRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <ChevronRight className="ml-1 h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
                 </Button>
               )}
             </div>
