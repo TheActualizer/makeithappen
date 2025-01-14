@@ -15,24 +15,4 @@ export interface FormData {
   pain_points?: string[];
   workforce_simulation_scope?: string | null;
   ai_agent_requirements?: string[];
-  has_existing_codebase?: boolean;
-  industry_vertical?: string;
-  current_tech_stack?: Record<string, any>;
-  integration_requirements?: string[];
-  preferred_technologies?: string[];
-  data_sources?: string[];
-  compliance_requirements?: string[];
-  success_metrics?: string[];
-  business_objectives?: string[];
-  expected_roi?: string;
-  success_criteria?: string[];
-  decision_makers?: string[];
-  automation_categories?: string[];
-  current_manual_processes?: string[];
-  desired_automation_outcomes?: string[];
-  digital_transformation_goals?: string[];
-  business_processes?: string[];
-  target_completion_date?: Date;
-  project_constraints?: string[];
-  project_timeline?: Record<string, any>;
 }
