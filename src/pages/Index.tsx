@@ -1,10 +1,13 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import { ServicesShowcase } from "@/components/ServicesShowcase";
-import CalendlyEmbed from "@/components/CalendlyEmbed";
 import ChatInterface from "@/components/chat/ChatInterface";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-accent via-accent/95 to-primary/20">
       <Navbar />
@@ -23,14 +26,18 @@ const Index = () => {
           <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="my-20 text-center">
               <h2 className="text-3xl font-bold tracking-tight text-white mb-6">
-                Schedule a Consultation
+                Ready to Transform Your Business?
               </h2>
               <p className="text-lg text-gray-300 mb-12 max-w-2xl mx-auto">
-                Book a time that works best for you, and let's discuss how we can help transform your business with AI solutions.
+                Start your journey towards digital transformation today. Let's discuss how we can help bring your vision to life.
               </p>
-            </div>
-            <div className="mb-20">
-              <CalendlyEmbed url="https://calendly.com/belchonen18/30min" />
+              <Button 
+                size="lg"
+                className="bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 transform hover:scale-105"
+                onClick={() => navigate("/start-project")}
+              >
+                Start Your Project Now
+              </Button>
             </div>
           </div>
         </div>
