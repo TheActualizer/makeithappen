@@ -34,7 +34,7 @@ const Contact = () => {
       transition: {
         duration: 4,
         repeat: Infinity,
-        repeatType: "mirror",
+        repeatType: "mirror" as const,
         ease: "easeInOut",
       },
     },
@@ -46,8 +46,8 @@ const Contact = () => {
     size: Math.random() * 3 + 1, // Larger stars
     x: Math.random() * 100,
     y: Math.random() * 100,
-    duration: Math.random() * 8 + 5, // Much longer duration
-    delay: Math.random() * 5,
+    duration: Math.random() * 8 + 5, // Longer duration for base animation
+    shimmerDelay: Math.random() * 10, // Varied delays for shimmer effect
   }));
 
   return (
@@ -65,8 +65,8 @@ const Contact = () => {
         animate="visible"
       >
         <div className="max-w-2xl mx-auto relative">
-          {/* Enhanced stars background */}
-          <div className="fixed inset-0 -z-10 bg-gradient-to-b from-accent to-accent/90">
+          {/* Fixed stars background with gradient overlay */}
+          <div className="fixed inset-0 -z-10 bg-gradient-to-b from-accent to-accent/95">
             {stars.map((star) => (
               <motion.div
                 key={star.id}
@@ -78,13 +78,18 @@ const Contact = () => {
                   top: `${star.y}%`,
                 }}
                 animate={{
-                  opacity: [0.2, 1, 0.2],
-                  scale: [1, 1.5, 1],
+                  opacity: [0.4, 1, 0.4],
+                  scale: [1, 1.2, 1],
+                  filter: [
+                    "brightness(1)",
+                    "brightness(1.5)",
+                    "brightness(1)",
+                  ],
                 }}
                 transition={{
                   duration: star.duration,
                   repeat: Infinity,
-                  delay: star.delay,
+                  delay: star.shimmerDelay,
                   ease: "easeInOut",
                 }}
               />
@@ -103,7 +108,6 @@ const Contact = () => {
             variants={floatingVariants}
             initial="initial"
             animate="animate"
-            transition={{ delay: 1 }}
           />
 
           <div className="text-center mb-12 relative">
