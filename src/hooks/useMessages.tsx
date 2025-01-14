@@ -10,6 +10,13 @@ interface UseMessagesReturn {
   fetchMessages: (conversationId: string) => Promise<void>;
 }
 
+const formatSender = (sender: any) => {
+  if (!sender) return 'Unknown';
+  const firstName = sender.first_name || '';
+  const lastName = sender.last_name || '';
+  return firstName && lastName ? `${firstName} ${lastName}` : sender.email || 'Unknown';
+};
+
 export const useMessages = (): UseMessagesReturn => {
   const [conversations, setConversations] = useState<any[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);

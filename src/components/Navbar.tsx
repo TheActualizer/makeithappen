@@ -13,9 +13,6 @@ const Navbar = () => {
     { name: "About", href: "/about" },
     { name: "Blog", href: "/blog" },
     { name: "Contact", href: "/contact" },
-  ];
-
-  const secondaryNavItems = [
     { name: "Services", href: "/services" },
     { name: "Case Studies", href: "/case-studies" },
   ];
@@ -79,35 +76,35 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed w-full bg-accent/90 backdrop-blur-xl z-50 py-4 border-b border-secondary/20 shadow-lg">
-      <div className="container mx-auto px-4 flex justify-between items-center relative">
-        {/* Dynamic Logo Section */}
+    <nav className="fixed w-full bg-accent/90 backdrop-blur-xl z-50 py-3 md:py-4 border-b border-secondary/20 shadow-lg">
+      <div className="container mx-auto px-3 md:px-4 flex items-center justify-between relative">
+        {/* Dynamic Logo Section with precise spacing */}
         <motion.div 
-          className={`flex-1 md:flex-none transition-all duration-300 ${
+          className={`flex items-center transition-all duration-300 ${
             isOpen ? 'md:translate-x-0' : ''
           }`}
           layout
         >
           <Link 
             to="/" 
-            className={`text-xl md:text-2xl font-bold transition-all duration-300 ${
+            className={`text-xl md:text-2xl font-bold tracking-tight transition-all duration-300 ${
               isActive('/') 
                 ? 'text-secondary drop-shadow-[0_0_8px_rgba(6,182,212,0.3)]' 
                 : 'text-white hover:text-secondary/90'
             }`}
           >
-            <span className="hidden sm:inline">MakeITHappen</span>
-            <span className="sm:hidden">MIH</span>
+            <span className="hidden md:inline">MakeITHappen</span>
+            <span className="md:hidden">MIH</span>
           </Link>
         </motion.div>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center justify-center flex-1 space-x-8">
-          {[...primaryNavItems, ...secondaryNavItems].map((item) => (
+        {/* Desktop Navigation with precise spacing */}
+        <div className="hidden md:flex items-center justify-center space-x-6 lg:space-x-8 flex-1 ml-8">
+          {primaryNavItems.map((item) => (
             <Link
               key={item.name}
               to={item.href}
-              className={`transition-all duration-300 relative ${
+              className={`transition-all duration-300 relative text-sm lg:text-base ${
                 isActive(item.href)
                   ? 'text-secondary font-medium drop-shadow-[0_0_6px_rgba(6,182,212,0.3)]'
                   : 'text-gray-300 hover:text-white hover:drop-shadow-[0_0_4px_rgba(255,255,255,0.3)]'
@@ -124,15 +121,15 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center space-x-2 md:space-x-4 flex-1 md:flex-none justify-end">
-          <div className="hidden sm:flex items-center space-x-4">
+        {/* Action Buttons with consistent spacing */}
+        <div className="flex items-center space-x-2 md:space-x-4">
+          <div className="hidden sm:flex items-center space-x-3">
             <Button 
               variant="ghost"
               onClick={() => navigate('/login')}
               className="text-white hover:bg-white/10 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all duration-300"
             >
-              <User className="w-5 h-5 mr-2" />
+              <User className="w-4 h-4 mr-2" />
               Login
             </Button>
             <Button 
@@ -144,12 +141,12 @@ const Navbar = () => {
             </Button>
           </div>
 
-          {/* Mobile Menu Toggle */}
+          {/* Mobile Menu Toggle with improved touch target */}
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-white hover:bg-white/10 transition-all duration-300"
+            className="md:hidden text-white hover:bg-white/10 transition-all duration-300 p-2"
           >
             <AnimatePresence mode="wait">
               {isOpen ? (
@@ -177,7 +174,7 @@ const Navbar = () => {
           </Button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu with improved spacing and transitions */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -188,35 +185,32 @@ const Navbar = () => {
               className="absolute top-full left-0 right-0 mt-2"
             >
               <div className="bg-accent/95 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-2 border-secondary/20 rounded-2xl mx-2 overflow-hidden">
-                <div className="container mx-auto p-4">
-                  <div className="space-y-4">
-                    {/* Navigation Items */}
-                    <div className="space-y-2">
-                      {[...primaryNavItems, ...secondaryNavItems].map((item) => (
-                        <motion.div
-                          key={item.name}
-                          variants={itemVariants}
-                          className="overflow-hidden"
+                <div className="p-4">
+                  <div className="space-y-2">
+                    {primaryNavItems.map((item) => (
+                      <motion.div
+                        key={item.name}
+                        variants={itemVariants}
+                        className="overflow-hidden"
+                      >
+                        <Link
+                          to={item.href}
+                          onClick={() => setIsOpen(false)}
+                          className={`block px-4 py-3 rounded-xl transition-all duration-300 ${
+                            isActive(item.href)
+                              ? 'bg-secondary/20 text-secondary font-medium translate-x-2 shadow-[0_0_15px_rgba(6,182,212,0.15)]'
+                              : 'text-gray-300 hover:bg-white/5 hover:text-white hover:translate-x-2'
+                          }`}
                         >
-                          <Link
-                            to={item.href}
-                            onClick={() => setIsOpen(false)}
-                            className={`block px-4 py-3 rounded-xl transition-all duration-300 ${
-                              isActive(item.href)
-                                ? 'bg-secondary/20 text-secondary font-medium translate-x-2 shadow-[0_0_15px_rgba(6,182,212,0.15)]'
-                                : 'text-gray-300 hover:bg-white/5 hover:text-white hover:translate-x-2'
-                            }`}
-                          >
-                            {item.name}
-                          </Link>
-                        </motion.div>
-                      ))}
-                    </div>
-
+                          {item.name}
+                        </Link>
+                      </motion.div>
+                    ))}
+                    
                     {/* Mobile Action Buttons */}
                     <motion.div 
                       variants={itemVariants}
-                      className="pt-4 space-y-3 border-t border-secondary/30"
+                      className="pt-4 space-y-3 border-t border-secondary/30 mt-4"
                     >
                       <Button 
                         variant="ghost"
