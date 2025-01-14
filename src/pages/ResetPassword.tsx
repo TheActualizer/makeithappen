@@ -19,7 +19,11 @@ export const ResetPassword = () => {
   useEffect(() => {
     // Check if we have a valid session for password reset
     const checkSession = async () => {
+      console.log("Checking session for password reset");
       const { data: { session }, error } = await supabase.auth.getSession();
+      console.log("Session data:", session);
+      console.log("Session error:", error);
+      
       if (error || !session) {
         console.error("Session error:", error);
         setError("Invalid or expired password reset link. Please request a new one.");
@@ -55,6 +59,7 @@ export const ResetPassword = () => {
     setIsLoading(true);
 
     try {
+      console.log("Attempting to update password");
       const { error } = await supabase.auth.updateUser({
         password: password,
       });
@@ -63,6 +68,7 @@ export const ResetPassword = () => {
         throw error;
       }
 
+      console.log("Password updated successfully");
       toast({
         title: "Success",
         description: "Your password has been reset successfully.",
