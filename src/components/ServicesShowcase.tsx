@@ -138,9 +138,11 @@ const ServiceCard = ({ service }: { service: Service }) => {
     <HoverCard>
       <HoverCardTrigger asChild>
         <Card className="relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 cursor-pointer border-accent/20 bg-accent/40 backdrop-blur-sm group">
-          <CardHeader>
-            <div className="mb-4 inline-flex p-3 rounded-lg bg-accent/30 group-hover:bg-accent/40 transition-colors">
-              <Icon className="w-6 h-6 text-secondary" />
+          <CardHeader className="text-center"> {/* Added text-center */}
+            <div className="flex justify-center mb-4"> {/* Changed to flex container with center justification */}
+              <div className="inline-flex p-3 rounded-lg bg-accent/30 group-hover:bg-accent/40 transition-colors">
+                <Icon className="w-6 h-6 text-secondary" />
+              </div>
             </div>
             <CardTitle className="group-hover:text-secondary transition-colors">{service.title}</CardTitle>
             <CardDescription className="text-gray-400">{service.description}</CardDescription>
