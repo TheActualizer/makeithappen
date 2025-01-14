@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Check, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { FormData } from "../types";
 import {
   DropdownMenu,
@@ -53,10 +53,10 @@ export const ServiceTypeSection = ({ formData, onServiceTypeChange }: ServiceTyp
               key={type.value}
               checked={formData.projectType?.includes(type.value)}
               onCheckedChange={() => onServiceTypeChange(type.value)}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 py-2"
             >
-              <span className="text-lg">{type.icon}</span>
-              {type.label}
+              <span className="text-2xl transform hover:scale-110 transition-transform">{type.icon}</span>
+              <span className="ml-2">{type.label}</span>
             </DropdownMenuCheckboxItem>
           ))}
         </DropdownMenuContent>
@@ -65,22 +65,23 @@ export const ServiceTypeSection = ({ formData, onServiceTypeChange }: ServiceTyp
         <div className="flex flex-wrap gap-2 mt-2">
           {formData.projectType?.map((selected) => {
             const service = serviceTypes.find(t => t.value === selected);
-            return (
+            return service && (
               <div
                 key={selected}
-                className="inline-flex items-center gap-1 text-xs bg-primary/10 text-primary rounded-full px-2 py-1"
+                className="inline-flex items-center gap-2 text-sm bg-primary/10 text-primary rounded-full px-3 py-1.5 hover:bg-primary/20 transition-colors"
               >
-                <span>{service?.icon}</span>
-                <span>{service?.label}</span>
+                <span className="text-xl">{service.icon}</span>
+                <span>{service.label}</span>
                 <button
                   onClick={() => onServiceTypeChange(selected)}
                   className="ml-1 hover:text-primary/80"
+                  aria-label="Remove service"
                 >
                   ×
                 </button>
               </div>
-            )}
-          )}
+            );
+          })}
         </div>
       )}
     </div>
