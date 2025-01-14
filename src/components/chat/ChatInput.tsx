@@ -29,7 +29,11 @@ Please provide specific code examples focusing on the integration between Dify's
         .from('conversations')
         .select('id')
         .eq('id', conversationId)
-        .maybeSingle();  // Changed from .single() to .maybeSingle()
+        .maybeSingle();
+
+      if (checkError) {
+        console.error('ChatInput: Error checking existing conversation:', checkError);
+      }
 
       if (!existingConv) {
         console.log('ChatInput: No existing conversation found, creating new one...');
@@ -50,6 +54,8 @@ Please provide specific code examples focusing on the integration between Dify's
           return;
         }
         console.log('ChatInput: Conversation created successfully with ID:', conversationId);
+      } else {
+        console.log('ChatInput: Found existing conversation:', existingConv.id);
       }
     };
 
@@ -58,10 +64,17 @@ Please provide specific code examples focusing on the integration between Dify's
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('ChatInput: Send message triggered', { newMessage, isLoading, conversationId });
+    console.log('ChatInput: Send message triggered', { 
+      messageLength: newMessage.length,
+      conversationId,
+      isLoading 
+    });
     
     if (!newMessage.trim() || isLoading) {
-      console.log('ChatInput: Send prevented - empty message or loading');
+      console.log('ChatInput: Send prevented - empty message or loading state', {
+        isEmpty: !newMessage.trim(),
+        isLoading
+      });
       return;
     }
 
@@ -73,7 +86,12 @@ Please provide specific code examples focusing on the integration between Dify's
       // Clear input immediately for better UX
       setNewMessage('');
       
-      console.log('ChatInput: Storing user message in Supabase');
+      console.log('ChatInput: Storing user message in Supabase', {
+        conversationId,
+        messageLength: messageContent.length,
+        timestamp
+      });
+
       const { data: messageData, error: messageError } = await supabase
         .from('messages')
         .insert([
@@ -94,16 +112,31 @@ Please provide specific code examples focusing on the integration between Dify's
         throw messageError;
       }
 
-      console.log('ChatInput: Message stored successfully:', messageData);
+      console.log('ChatInput: Message stored successfully:', {
+        messageId: messageData.id,
+        timestamp: messageData.created_at
+      });
 
-      console.log('ChatInput: Sending message to Dify');
+      console.log('ChatInput: Sending message to Dify', {
+        messageLength: messageContent.length,
+        conversationId
+      });
+      
       const difyResponse = await sendMessageToDify(messageContent, conversationId);
-      console.log('ChatInput: Dify response received:', difyResponse);
+      console.log('ChatInput: Dify response received:', {
+        hasAnswer: !!difyResponse.answer,
+        responseLength: difyResponse.answer?.length
+      });
 
       // Store AI response
       if (difyResponse.answer) {
         const aiTimestamp = new Date().toISOString();
-        console.log('ChatInput: Storing AI response in Supabase');
+        console.log('ChatInput: Storing AI response in Supabase', {
+          conversationId,
+          responseLength: difyResponse.answer.length,
+          timestamp: aiTimestamp
+        });
+
         const { error: aiError } = await supabase
           .from('messages')
           .insert([
@@ -141,6 +174,7 @@ Please provide specific code examples focusing on the integration between Dify's
       });
     } finally {
       setIsLoading(false);
+      console.log('ChatInput: Message flow completed');
     }
   };
 
