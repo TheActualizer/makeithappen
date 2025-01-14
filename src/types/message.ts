@@ -1,6 +1,6 @@
 export type MessageType = 'text' | 'system' | 'ai';
 
-export type AIModel = 'dify' | 'gpt-3.5-turbo' | 'gpt-4';
+export type AIModel = 'dify';
 
 export interface Message {
   id: string;
@@ -24,7 +24,7 @@ export interface ConversationType {
   created_at: string;
   updated_at: string;
   is_archived: boolean;
-  provider: 'dify' | string;
+  provider: 'dify';
   provider_conversation_id: string | null;
 }
 
@@ -35,4 +35,12 @@ export interface MessageWithProfile extends Message {
     email: string | null;
     avatar_url: string | null;
   } | null;
+}
+
+export interface MessageAreaProps {
+  messages: MessageWithProfile[];
+  newMessage: string;
+  setNewMessage: (message: string) => void;
+  onSendMessage: (e: React.FormEvent) => Promise<void>;
+  isLoading: boolean;
 }
