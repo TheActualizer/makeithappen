@@ -150,49 +150,59 @@ const ProjectStartModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleModalClose}>
-      <DialogContent className="sm:max-w-[1000px] max-h-[90vh] overflow-y-auto px-4 sm:px-6 py-4 sm:py-6">
-        <DialogHeader className="space-y-2">
-          <DialogTitle className="text-xl sm:text-2xl">
-            {showCalendly ? "Schedule a Consultation" : "Project Intake Form"}
-          </DialogTitle>
-          <DialogDescription className="text-sm sm:text-base">
-            {showCalendly 
-              ? "Choose a time that works best for you."
-              : "Help us understand your project requirements and objectives"}
-          </DialogDescription>
-        </DialogHeader>
-        <div className="relative mt-4">
-          {!showCalendly && <ProgressSteps currentStep={step} />}
-          <div className={`${!showCalendly ? "mt-8 sm:mt-12" : ""} max-h-[calc(90vh-12rem)] overflow-y-auto`}>
-            {renderStep()}
+      <DialogContent className="sm:max-w-[95vw] md:max-w-[90vw] lg:max-w-[1000px] h-[95vh] sm:h-auto overflow-hidden p-0">
+        <div className="h-full flex flex-col">
+          <DialogHeader className="p-4 sm:p-6 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <DialogTitle className="text-lg sm:text-xl font-semibold">
+              {showCalendly ? "Schedule a Consultation" : "Project Intake Form"}
+            </DialogTitle>
+            <DialogDescription className="text-sm sm:text-base">
+              {showCalendly 
+                ? "Choose a time that works best for you."
+                : "Help us understand your project requirements and objectives"}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex-1 overflow-auto px-4 sm:px-6 py-4">
+            {!showCalendly && (
+              <div className="mb-6">
+                <ProgressSteps currentStep={step} />
+              </div>
+            )}
+            <div className="space-y-4">
+              {renderStep()}
+            </div>
           </div>
+
           {!showCalendly && (
-            <div className="flex items-center justify-between gap-2 mt-4 sm:mt-6 sticky bottom-0 bg-background/80 backdrop-blur-sm py-2 border-t">
-              <Button
-                variant="ghost"
-                onClick={handleBack}
-                disabled={step === 1}
-                className="h-8 px-3 text-sm"
-              >
-                Back
-              </Button>
-              {step === 3 ? (
+            <div className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-4 sm:p-6">
+              <div className="flex items-center justify-between gap-4">
                 <Button
-                  onClick={handleSubmit}
-                  disabled={isSubmitting}
-                  className="h-8 px-3 text-sm font-medium bg-primary hover:bg-primary/90"
+                  variant="ghost"
+                  onClick={handleBack}
+                  disabled={step === 1}
+                  className="h-9 px-3 text-sm"
                 >
-                  {isSubmitting ? "Saving..." : "Submit"}
+                  Back
                 </Button>
-              ) : (
-                <Button 
-                  onClick={handleNext} 
-                  className="h-8 px-3 text-sm font-medium group inline-flex items-center bg-primary hover:bg-primary/90"
-                >
-                  Next
-                  <ChevronRight className="ml-1 h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
-                </Button>
-              )}
+                {step === 3 ? (
+                  <Button
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                    className="h-9 px-4 text-sm font-medium bg-primary hover:bg-primary/90"
+                  >
+                    {isSubmitting ? "Saving..." : "Submit"}
+                  </Button>
+                ) : (
+                  <Button 
+                    onClick={handleNext} 
+                    className="h-9 px-4 text-sm font-medium group inline-flex items-center bg-primary hover:bg-primary/90"
+                  >
+                    Next
+                    <ChevronRight className="ml-1 h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
+                  </Button>
+                )}
+              </div>
             </div>
           )}
         </div>
