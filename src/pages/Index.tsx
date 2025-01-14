@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import { ServicesShowcase } from "@/components/ServicesShowcase";
-import ChatInterface from "@/components/chat/ChatInterface";
+import DifyChat from "@/components/chat/DifyChat";
 import { useEffect, useState } from "react";
 
 const Index = () => {
@@ -29,7 +29,7 @@ const Index = () => {
         </div>
       </main>
 
-      <ChatInterface />
+      <DifyChat />
     </div>
   );
 };

@@ -13,5 +13,36 @@
     <div id="root"></div>
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Dify Chat Widget -->
+    <script>
+      window.addEventListener('load', function() {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.dify.ai/webchat/v1.0.0/web-chat.js';
+        script.defer = true;
+        document.body.appendChild(script);
+        
+        script.onload = function() {
+          window.DifyChat = {
+            init: function(config) {
+              window.difyConfig = config;
+            }
+          };
+          
+          // Initialize chat with configuration
+          window.DifyChat.init({
+            apiEndpoint: "https://api.dify.ai/v1",
+            token: "", // Will be set dynamically
+            container: "#dify-chat-container",
+            greeting: "Hello! I'm your AI assistant. How can I help you today?",
+            theme: {
+              primaryColor: "#6D28D9",
+              textColor: "#FFFFFF",
+              position: "bottom-right"
+            }
+          });
+        };
+      });
+    </script>
   </body>
 </html>
