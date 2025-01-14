@@ -5,7 +5,11 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
-import { BookOpen, TrendingUp, Clock, Eye, ArrowRight, Shield, Activity, Brain } from "lucide-react";
+import { 
+  BookOpen, TrendingUp, Building2, Scale, Brain, 
+  Tool, Database, FileCode, Workflow, Heart, 
+  Github, Rocket, ArrowRight 
+} from "lucide-react";
 
 interface BlogCategory {
   id: string;
@@ -22,6 +26,24 @@ interface BlogPost {
   views: number;
   published_at: string;
 }
+
+const getCategoryIcon = (slug: string) => {
+  const icons = {
+    'financial-automation': <TrendingUp className="w-8 h-8 text-primary" />,
+    'real-estate-logistics': <Building2 className="w-8 h-8 text-primary" />,
+    'legal-tech': <Scale className="w-8 h-8 text-primary" />,
+    'agentic-systems': <Brain className="w-8 h-8 text-primary" />,
+    'agent-tooling': <Tool className="w-8 h-8 text-primary" />,
+    'vector-systems': <Database className="w-8 h-8 text-primary" />,
+    'data-engineering': <FileCode className="w-8 h-8 text-primary" />,
+    'workflow-automation': <Workflow className="w-8 h-8 text-primary" />,
+    'healthcare-compliance': <Heart className="w-8 h-8 text-primary" />,
+    'open-source-ai': <Github className="w-8 h-8 text-primary" />,
+    'rapid-prototyping': <Rocket className="w-8 h-8 text-primary" />,
+    'manufacturing': <BookOpen className="w-8 h-8 text-primary" />
+  };
+  return icons[slug as keyof typeof icons] || <BookOpen className="w-8 h-8 text-primary" />;
+};
 
 const Blog = () => {
   const [categories, setCategories] = useState<BlogCategory[]>([]);
@@ -78,14 +100,9 @@ const Blog = () => {
       title: "2025 AI Trends & Transformations",
       description: "Explore the latest AI breakthroughs including multimodal advancement, enhanced business operations, and human-AI collaboration.",
       link: "/blog/ai-trends",
-      icon: <Activity className="w-8 h-8 text-primary" />
+      icon: <TrendingUp className="w-8 h-8 text-primary" />
     }
   ];
-
-  const handleNavigation = (path: string) => {
-    console.log('Navigating to:', path);
-    navigate(path);
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-accent to-accent/95">
@@ -101,14 +118,14 @@ const Blog = () => {
             Explore Our Tech Universe
           </h1>
           <p className="text-gray-300 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
-            Dive into cutting-edge insights, expert analysis, and revolutionary ideas shaping the future of AI and technology.
+            Deep dive into cutting-edge AI technologies, industry transformations, and revolutionary frameworks shaping the future of business and technology.
           </p>
         </motion.div>
 
         {/* Featured Articles Section */}
         <section className="mb-16">
           <h2 className="text-2xl font-semibold text-white mb-8">Featured Articles</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {featuredArticles.map((article, index) => (
               <motion.div
                 key={index}
@@ -117,16 +134,16 @@ const Blog = () => {
               >
                 <Card 
                   className="h-full bg-accent-foreground/5 backdrop-blur-sm border-accent-foreground/10 hover:border-primary/50 transition-all duration-300 cursor-pointer"
-                  onClick={() => handleNavigation(article.link)}
+                  onClick={() => navigate(article.link)}
                 >
-                  <div className="p-6 flex flex-col h-full">
+                  <div className="p-8 flex flex-col h-full">
                     <div className="mb-4">
                       {article.icon}
                     </div>
-                    <h3 className="text-xl font-semibold text-white mb-3">
+                    <h3 className="text-2xl font-semibold text-white mb-4">
                       {article.title}
                     </h3>
-                    <p className="text-gray-300 mb-6 flex-grow">
+                    <p className="text-gray-300 mb-6 flex-grow text-lg">
                       {article.description}
                     </p>
                     <Button
@@ -145,24 +162,23 @@ const Blog = () => {
 
         {/* Categories Section */}
         <section>
-          <h2 className="text-2xl font-semibold text-white mb-8">Categories</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <h2 className="text-2xl font-semibold text-white mb-8">Explore Topics</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {categories.map((category) => (
               <motion.div
                 key={category.id}
                 whileHover={{ scale: 1.02 }}
               >
                 <Card 
-                  className="bg-accent/40 backdrop-blur-sm border border-accent/20 hover:border-primary/50 transition-all duration-300 cursor-pointer"
-                  onClick={() => handleNavigation(`/blog/category/${category.slug}`)}
+                  className="bg-accent/40 backdrop-blur-sm border border-accent/20 hover:border-primary/50 transition-all duration-300 cursor-pointer h-full"
+                  onClick={() => navigate(`/blog/category/${category.slug}`)}
                 >
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold text-white mb-2">{category.name}</h3>
-                    <p className="text-gray-300 mb-4">{
-                      category.slug === 'tutorials' 
-                        ? "Exploring FHIR integration and HIPAA-compliant open-source AI frameworks revolutionizing healthcare tech"
-                        : category.description
-                    }</p>
+                  <div className="p-8">
+                    <div className="mb-4">
+                      {getCategoryIcon(category.slug)}
+                    </div>
+                    <h3 className="text-xl font-semibold text-white mb-3">{category.name}</h3>
+                    <p className="text-gray-300 mb-6">{category.description}</p>
                     <Button
                       variant="secondary"
                       className="w-full group hover:bg-primary hover:text-white transition-all duration-300"
