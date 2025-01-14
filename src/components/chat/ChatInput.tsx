@@ -20,7 +20,7 @@ const ChatInput = () => {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Send message triggered with:', {
+    console.log('Send message button clicked', {
       message: newMessage,
       messageLength: newMessage.length,
       isLoading,
@@ -36,15 +36,9 @@ const ChatInput = () => {
       return;
     }
 
-    console.log('Proceeding with message send:', {
-      messageContent: newMessage,
-      conversationId,
-      timestamp: new Date().toISOString()
-    });
-
     setIsLoading(true);
     try {
-      console.log('Calling sendMessageToDify with params:', {
+      console.log('Attempting to send message to Dify:', {
         message: newMessage,
         conversationId,
         timestamp: new Date().toISOString()
@@ -76,10 +70,6 @@ const ChatInput = () => {
         description: "Failed to send message. Please try again.",
       });
     } finally {
-      console.log('Finishing message send process:', {
-        success: !isLoading,
-        timestamp: new Date().toISOString()
-      });
       setIsLoading(false);
     }
   };
@@ -87,11 +77,13 @@ const ChatInput = () => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
+      console.log('Enter key pressed - triggering message send');
       handleSendMessage(e);
     }
   };
 
   const handleAttachmentClick = () => {
+    console.log('Attachment button clicked');
     fileInputRef.current?.click();
   };
 
@@ -99,15 +91,21 @@ const ChatInput = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    console.log('File selected for upload:', {
+      name: file.name,
+      type: file.type,
+      size: file.size
+    });
+
     try {
       const attachment = await uploadChatAttachment(file);
+      console.log('File uploaded successfully:', attachment);
       toast({
-        title: "File uploaded successfully",
+        title: "File uploaded",
         description: `${file.name} has been attached to your message.`,
       });
-      console.log('Attachment uploaded:', attachment);
     } catch (error) {
-      console.error('Error uploading attachment:', error);
+      console.error('Error uploading file:', error);
       toast({
         variant: "destructive",
         title: "Upload failed",
@@ -120,7 +118,10 @@ const ChatInput = () => {
     <div className="relative">
       <Textarea
         value={newMessage}
-        onChange={(e) => setNewMessage(e.target.value)}
+        onChange={(e) => {
+          console.log('Message input changed:', e.target.value);
+          setNewMessage(e.target.value);
+        }}
         onKeyDown={handleKeyDown}
         placeholder="Ask me anything..."
         className="min-h-[60px] w-full pr-20 bg-white/5 border-white/10 focus:ring-purple-400/30 resize-none rounded-lg placeholder-purple-200/40 text-purple-100"
