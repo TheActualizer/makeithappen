@@ -13,33 +13,28 @@ import { Toaster } from "@/components/ui/toaster";
 import PageTransition from "@/components/PageTransition";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-const queryClient = new QueryClient();
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <SessionContextProvider supabaseClient={supabase}>
-        <Router>
-          <PageTransition>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/case-studies" element={<CaseStudies />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/start-project" element={<StartProject />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-            </Routes>
-          </PageTransition>
-          <Toaster />
-        </Router>
-      </SessionContextProvider>
-    </QueryClientProvider>
+    <SessionContextProvider supabaseClient={supabase}>
+      <Router>
+        <PageTransition>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/case-studies" element={<CaseStudies />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/start-project" element={<StartProject />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Routes>
+        </PageTransition>
+        <Toaster />
+      </Router>
+    </SessionContextProvider>
   );
 }
 

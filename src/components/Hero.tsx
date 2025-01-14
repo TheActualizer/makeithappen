@@ -7,7 +7,7 @@ const Hero = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className="relative min-h-[90vh] flex items-center justify-center pt-8 overflow-hidden">
+    <div className="relative min-h-[90vh] flex items-center justify-center pt-16 overflow-hidden">
       {/* Enhanced animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Primary gradient background */}

@@ -9,7 +9,7 @@ interface ChatMessageProps {
 
 const ChatMessage = ({ message }: ChatMessageProps) => {
   return (
-    <div className={`flex gap-4 ${message.is_admin_message ? 'bg-accent/50 p-4 rounded-lg' : ''}`}>
+    <div className={`flex gap-4 ${message.isAdmin ? 'bg-accent/50 p-4 rounded-lg' : ''}`}>
       <div className="flex-1 space-y-2">
         <div className="prose prose-invert max-w-none">
           {message.content}
