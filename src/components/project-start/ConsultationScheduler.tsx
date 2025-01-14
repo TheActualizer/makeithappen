@@ -1,11 +1,14 @@
 import CalendlyEmbed from "../CalendlyEmbed";
 import { FormData } from "./types";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ConsultationSchedulerProps {
   formData: FormData;
 }
 
 const ConsultationScheduler = ({ formData }: ConsultationSchedulerProps) => {
+  const isMobile = useIsMobile();
+  
   const formatArrayOrDefault = (arr?: string[] | null, defaultText: string = 'None specified') => 
     arr && arr.length > 0 ? arr.join(', ') : defaultText;
 
@@ -69,12 +72,36 @@ Business Context:
 - Team Size: ${formData.teamSize || 'Not specified'}
 - Budget Range: ${getBudgetRangeText(formData.budgetRange)}
 - Project Complexity: ${formatComplexity(formData.complexity)}
+- Has Existing Codebase: ${formData.has_existing_codebase ? 'Yes' : 'No'}
+- Industry Vertical: ${formData.industry_vertical || 'Not specified'}
+- Current Tech Stack: ${formData.current_tech_stack ? JSON.stringify(formData.current_tech_stack, null, 2) : 'Not specified'}
 
 Technical Requirements:
 - AI Agent Requirements: ${formatArrayOrDefault(formData.ai_agent_requirements)}
+- Integration Requirements: ${formatArrayOrDefault(formData.integration_requirements)}
+- Preferred Technologies: ${formatArrayOrDefault(formData.preferred_technologies)}
+- Data Sources: ${formatArrayOrDefault(formData.data_sources)}
+- Compliance Requirements: ${formatArrayOrDefault(formData.compliance_requirements)}
+
+Business Goals:
+- Success Metrics: ${formatArrayOrDefault(formData.success_metrics)}
+- Business Objectives: ${formatArrayOrDefault(formData.business_objectives)}
+- Expected ROI: ${formData.expected_roi || 'Not specified'}
+- Success Criteria: ${formatArrayOrDefault(formData.success_criteria)}
+- Decision Makers: ${formatArrayOrDefault(formData.decision_makers)}
+
+Automation & Integration:
+- Automation Categories: ${formatArrayOrDefault(formData.automation_categories)}
+- Current Manual Processes: ${formatArrayOrDefault(formData.current_manual_processes)}
+- Desired Automation Outcomes: ${formatArrayOrDefault(formData.desired_automation_outcomes)}
+- Digital Transformation Goals: ${formatArrayOrDefault(formData.digital_transformation_goals)}
+- Business Processes: ${formatArrayOrDefault(formData.business_processes)}
 
 Timeline & Planning:
 - Timeline Preference: ${formData.timeline || 'Not specified'}
+- Target Completion: ${formData.target_completion_date ? new Date(formData.target_completion_date).toLocaleDateString() : 'Not specified'}
+- Project Constraints: ${formatArrayOrDefault(formData.project_constraints)}
+- Project Timeline Details: ${formData.project_timeline ? JSON.stringify(formData.project_timeline, null, 2) : 'Not specified'}
 
 Contact Information:
 - Name: ${formData.name}
@@ -83,10 +110,10 @@ Contact Information:
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-muted-foreground">
+      <p className={`text-sm text-muted-foreground ${isMobile ? 'px-4' : ''}`}>
         Please select a time that works best for you to discuss your project in detail.
       </p>
-      <div className="h-[600px]">
+      <div className={`${isMobile ? 'h-[500px] mx-4' : 'h-[600px]'}`}>
         <CalendlyEmbed 
           url="https://calendly.com/belchonen18/make-it-happen" 
           prefill={{
