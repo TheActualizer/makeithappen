@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { Link2, ArrowUp } from "lucide-react";
@@ -12,6 +12,40 @@ const ChatInput = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const [conversationId] = useState(() => uuidv4());
+
+  useEffect(() => {
+    // Create conversation when component mounts
+    const createConversation = async () => {
+      console.log('ChatInput: Creating new conversation');
+      const { data: existingConv, error: checkError } = await supabase
+        .from('conversations')
+        .select('id')
+        .eq('id', conversationId)
+        .single();
+
+      if (checkError && !existingConv) {
+        const { error: createError } = await supabase
+          .from('conversations')
+          .insert([
+            {
+              id: conversationId,
+              title: 'New Conversation',
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+              provider: 'dify'
+            }
+          ]);
+
+        if (createError) {
+          console.error('ChatInput: Error creating conversation:', createError);
+          return;
+        }
+        console.log('ChatInput: Conversation created successfully');
+      }
+    };
+
+    createConversation();
+  }, [conversationId]);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
