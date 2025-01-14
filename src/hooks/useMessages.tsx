@@ -85,7 +85,7 @@ export const useMessages = () => {
           created_at,
           conversation_id,
           type,
-          profiles:sender_id (
+          profiles!messages_sender_id_fkey (
             first_name,
             last_name,
             email,
@@ -100,6 +100,8 @@ export const useMessages = () => {
         throw messagesError;
       }
 
+      console.log('Raw messages data:', messagesData);
+
       const typedMessages: Message[] = (messagesData || []).map(msg => ({
         id: msg.id,
         content: msg.content,
@@ -107,15 +109,10 @@ export const useMessages = () => {
         created_at: msg.created_at,
         conversation_id: msg.conversation_id,
         type: msg.type || 'text',
-        profiles: msg.profiles ? {
-          first_name: msg.profiles.first_name,
-          last_name: msg.profiles.last_name,
-          email: msg.profiles.email,
-          avatar_url: msg.profiles.avatar_url
-        } : null
+        profiles: msg.profiles || null
       }));
 
-      console.log('Messages fetched:', typedMessages);
+      console.log('Processed messages:', typedMessages);
       setMessages(typedMessages);
     } catch (error) {
       console.error('Error in fetchMessages:', error);
