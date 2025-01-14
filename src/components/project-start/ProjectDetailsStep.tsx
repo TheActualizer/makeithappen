@@ -1,10 +1,16 @@
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Bot } from "lucide-react";
+import { Bot, ChevronDown } from "lucide-react";
 import { FormData } from "./types";
 import { ServiceTypeSection } from "./sections/ServiceTypeSection";
 import { BudgetSection } from "./sections/BudgetSection";
 import { TeamSizeSection } from "./sections/TeamSizeSection";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface ProjectDetailsStepProps {
   formData: FormData;
@@ -25,60 +31,75 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <Card className="p-4 space-y-4">
-        <ServiceTypeSection 
-          formData={formData}
-          onServiceTypeChange={handleServiceTypeChange}
-        />
-        
-        <div className="h-px bg-border" />
-        
-        <BudgetSection
-          formData={formData}
-          onBudgetChange={(value) => setFormData({ ...formData, budgetRange: value })}
-        />
-        
-        <div className="h-px bg-border" />
-        
-        <TeamSizeSection
-          formData={formData}
-          onTeamSizeChange={(value) => setFormData({ ...formData, teamSize: value })}
-        />
-      </Card>
-
-      <div className="space-y-4">
-        <h2 className="text-lg font-semibold flex items-center gap-2">
-          <Bot className="w-5 h-5" />
-          AI & Automation Requirements
-        </h2>
-        
-        <Card className="p-4 space-y-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Digital Workforce Scope</label>
-            <Textarea
-              value={formData.workforce_simulation_scope || ''}
-              onChange={(e) =>
-                setFormData({ ...formData, workforce_simulation_scope: e.target.value })
-              }
-              placeholder="Describe your digital workforce needs and objectives..."
-              className="min-h-[100px] resize-y"
+    <div className="space-y-4">
+      <Accordion type="single" collapsible defaultValue="services" className="w-full">
+        <AccordionItem value="services">
+          <AccordionTrigger className="text-sm font-medium">
+            Services Required
+          </AccordionTrigger>
+          <AccordionContent>
+            <ServiceTypeSection 
+              formData={formData}
+              onServiceTypeChange={handleServiceTypeChange}
             />
-          </div>
+          </AccordionContent>
+        </AccordionItem>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Project Description</label>
-            <Textarea
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              placeholder="Please provide details about your project requirements and goals..."
-              className="min-h-[100px] resize-y"
+        <AccordionItem value="budget">
+          <AccordionTrigger className="text-sm font-medium">
+            Budget Range
+          </AccordionTrigger>
+          <AccordionContent>
+            <BudgetSection
+              formData={formData}
+              onBudgetChange={(value) => setFormData({ ...formData, budgetRange: value })}
             />
-          </div>
-        </Card>
-      </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="team">
+          <AccordionTrigger className="text-sm font-medium">
+            Team Size
+          </AccordionTrigger>
+          <AccordionContent>
+            <TeamSizeSection
+              formData={formData}
+              onTeamSizeChange={(value) => setFormData({ ...formData, teamSize: value })}
+            />
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="ai">
+          <AccordionTrigger className="text-sm font-medium">
+            AI & Automation Requirements
+          </AccordionTrigger>
+          <AccordionContent className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Digital Workforce Scope</label>
+              <Textarea
+                value={formData.workforce_simulation_scope || ''}
+                onChange={(e) =>
+                  setFormData({ ...formData, workforce_simulation_scope: e.target.value })
+                }
+                placeholder="Describe your digital workforce needs and objectives..."
+                className="min-h-[100px] resize-y"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Project Description</label>
+              <Textarea
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+                placeholder="Please provide details about your project requirements and goals..."
+                className="min-h-[100px] resize-y"
+              />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </div>
   );
 };
