@@ -80,14 +80,27 @@ const Hero = () => {
                     Our Capabilities
                   </span>
                 </AccordionTrigger>
-                <AccordionContent className="text-left text-gray-400">
-                  <ul className="space-y-3">
-                    <li>• Advanced AI Integration & Automation</li>
-                    <li>• Custom SaaS Platform Development</li>
-                    <li>• Enterprise-Grade Solutions</li>
-                    <li>• Responsive Web Applications</li>
-                    <li>• Digital Transformation Services</li>
-                  </ul>
+                <AccordionContent className="text-left">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-gray-400">
+                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
+                      • Advanced AI Integration
+                    </div>
+                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
+                      • Custom SaaS Platforms
+                    </div>
+                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
+                      • Enterprise Solutions
+                    </div>
+                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
+                      • Web Applications
+                    </div>
+                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
+                      • Digital Transformation
+                    </div>
+                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
+                      • Process Automation
+                    </div>
+                  </div>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
