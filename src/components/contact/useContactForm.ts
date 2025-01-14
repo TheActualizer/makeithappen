@@ -68,7 +68,8 @@ export const useContactForm = () => {
     setIsSubmitting(true);
     
     try {
-      console.log("ContactForm: Saving contact submission to database...");
+      // Step 1: Save contact submission
+      console.log("ContactForm: Attempting to save contact submission...");
       const { error: submissionError, data: submissionData } = await supabase
         .from("contact_submissions")
         .insert({
@@ -86,8 +87,11 @@ export const useContactForm = () => {
         throw submissionError;
       }
 
+      console.log("ContactForm: Contact submission saved successfully:", submissionData);
+
+      // Step 2: Log initial automation attempt
       console.log("ContactForm: Logging initial automation attempt...");
-      await supabase
+      const { error: logError } = await supabase
         .from("automation_logs")
         .insert({
           contact_submission_id: submissionData.id,
@@ -98,6 +102,12 @@ export const useContactForm = () => {
           }
         });
 
+      if (logError) {
+        console.error("ContactForm: Error logging automation:", logError);
+        // Don't throw here, continue with the process
+      }
+
+      // Step 3: Trigger CRM automation
       console.log("ContactForm: Triggering CRM automation...");
       const { error: automationError, data: automationData } = await supabase.functions.invoke('crm-email-automation', {
         body: {
@@ -109,6 +119,7 @@ export const useContactForm = () => {
       if (automationError) {
         console.error("ContactForm: CRM automation error:", automationError);
         
+        // Log the automation error
         await supabase
           .from("automation_logs")
           .insert({
@@ -119,6 +130,7 @@ export const useContactForm = () => {
             error_context: { error: automationError }
           });
 
+        // Add to retry queue
         await supabase
           .from("automation_retry_queue")
           .insert({
@@ -130,6 +142,7 @@ export const useContactForm = () => {
             }
           });
 
+        // Update submission status
         await supabase
           .from("contact_submissions")
           .update({
@@ -142,6 +155,7 @@ export const useContactForm = () => {
       } else {
         console.log("ContactForm: CRM automation completed successfully", automationData);
         
+        // Log successful automation
         await supabase
           .from("automation_logs")
           .insert({
@@ -151,6 +165,7 @@ export const useContactForm = () => {
             metadata: { automation_response: automationData }
           });
 
+        // Update submission status
         await supabase
           .from("contact_submissions")
           .update({
