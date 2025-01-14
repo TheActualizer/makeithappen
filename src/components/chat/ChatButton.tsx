@@ -1,30 +1,35 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { MessageCircle, Sparkles } from "lucide-react";
+import { SheetTrigger } from "@/components/ui/sheet";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles } from "lucide-react";
 
 const ChatButton = () => {
-  const [showMessage, setShowMessage] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [showGreeting, setShowGreeting] = useState(false);
   const [showSparkle, setShowSparkle] = useState(false);
 
   useEffect(() => {
-    // Show message and sparkle after a short delay
-    const showTimer = setTimeout(() => {
-      setShowMessage(true);
+    // Show greeting after a short delay
+    const greetingTimer = setTimeout(() => {
+      setIsExpanded(true);
+      setShowGreeting(true);
       setShowSparkle(true);
     }, 1000);
 
-    // Hide message after 2 seconds
+    // Hide greeting after 4 seconds
     const hideTimer = setTimeout(() => {
-      setShowMessage(false);
-    }, 2000);
+      setIsExpanded(false);
+      setShowGreeting(false);
+    }, 5000);
 
-    // Keep sparkle visible slightly longer
+    // Keep sparkle visible for a bit longer
     const sparkleTimer = setTimeout(() => {
       setShowSparkle(false);
-    }, 3000);
+    }, 6000);
 
     return () => {
-      clearTimeout(showTimer);
+      clearTimeout(greetingTimer);
       clearTimeout(hideTimer);
       clearTimeout(sparkleTimer);
     };
@@ -33,30 +38,49 @@ const ChatButton = () => {
   return (
     <div className="fixed bottom-4 right-4 flex items-center gap-3 z-50">
       <AnimatePresence>
-        {showMessage && (
+        {showGreeting && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.9 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="bg-purple-900/95 backdrop-blur-sm text-white px-6 py-4 rounded-lg shadow-lg max-w-[300px] relative"
+            initial={{ opacity: 0, x: 50, scale: 0.9 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 50, scale: 0.9 }}
+            className="bg-purple-900/95 backdrop-blur-sm text-white px-6 py-3 rounded-lg shadow-lg max-w-[280px]"
           >
-            <p className="text-sm font-medium leading-relaxed">
-              👋 AI Assistant coming soon! We're working on making your experience even better.
+            <p className="text-sm font-medium">
+              👋 Hi! I'm your AI companion. I can help you navigate and customize this application.
             </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
+      <SheetTrigger asChild>
+        <motion.div
+          animate={{
+            scale: isExpanded ? 1.1 : 1,
+          }}
+          whileHover={{ scale: 1.1 }}
+          className="relative"
+        >
+          <Button
+            className={`h-12 w-12 rounded-full shadow-lg transition-all duration-300 bg-purple-600 hover:bg-purple-700
+              ${!showGreeting && "animate-pulse"}`}
+            size="icon"
+          >
+            <MessageCircle className="h-6 w-6" />
+          </Button>
+          <AnimatePresence>
             {showSparkle && (
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0 }}
-                className="absolute -top-2 -right-2"
+                className="absolute -top-1 -right-1"
               >
-                <Sparkles className="h-5 w-5 text-yellow-400 animate-pulse" />
+                <Sparkles className="h-4 w-4 text-yellow-400 animate-pulse" />
               </motion.div>
             )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </AnimatePresence>
+        </motion.div>
+      </SheetTrigger>
     </div>
   );
 };
