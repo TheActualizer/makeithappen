@@ -35,6 +35,15 @@ const ConsultationScheduler = ({ formData }: ConsultationSchedulerProps) => {
     return points.map(point => painPointLabels[point as keyof typeof painPointLabels]).join('\n- ');
   };
 
+  const formatComplexity = (complexity?: string) => {
+    switch (complexity) {
+      case 'simple': return 'Simple - Straightforward implementation';
+      case 'moderate': return 'Moderate - Some complexity involved';
+      case 'complex': return 'Complex - Significant technical challenges';
+      default: return 'Not specified';
+    }
+  };
+
   const meetingPrep = `Project Overview:
 Type of Services: ${formatArrayOrDefault(formData.projectType)}
 
@@ -48,8 +57,28 @@ Business Context:
 - Company: ${formData.company || 'Not provided'}
 - Team Size: ${formData.teamSize || 'Not specified'}
 - Budget Range: ${getBudgetRangeText(formData.budgetRange)}
+- Project Complexity: ${formatComplexity(formData.complexity)}
+
+Technical Requirements:
+- AI Agent Requirements: ${formatArrayOrDefault(formData.ai_agent_requirements)}
+- Integration Requirements: ${formatArrayOrDefault(formData.integration_requirements)}
+- Current Tech Stack: ${formData.current_tech_stack ? JSON.stringify(formData.current_tech_stack, null, 2) : 'Not specified'}
+- Preferred Technologies: ${formatArrayOrDefault(formData.preferred_technologies)}
+
+Business Goals:
+- Success Metrics: ${formatArrayOrDefault(formData.success_metrics)}
+- Business Objectives: ${formatArrayOrDefault(formData.business_objectives)}
+- Industry Vertical: ${formData.industry_vertical || 'Not specified'}
+- Expected ROI: ${formData.expected_roi || 'Not specified'}
+
+Timeline & Planning:
+- Timeline Preference: ${formData.timeline || 'Not specified'}
+- Target Completion: ${formData.target_completion_date ? new Date(formData.target_completion_date).toLocaleDateString() : 'Not specified'}
+- Project Constraints: ${formatArrayOrDefault(formData.project_constraints)}
 
 Contact Information:
+- Name: ${formData.name}
+- Email: ${formData.email}
 - Phone: ${formData.phone || 'Not provided'}`;
 
   return (
@@ -64,7 +93,7 @@ Contact Information:
             name: formData.name,
             email: formData.email,
             customAnswers: {
-              a1: formData.company || 'Not provided',
+              a1: formData.projectType?.join(', ') || 'Not provided',
               a2: formData.phone || 'Not provided',
               a3: meetingPrep
             }
