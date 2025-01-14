@@ -48,11 +48,12 @@ export const ContactForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log("Starting form submission with values:", values);
     setIsSubmitting(true);
+    
     try {
-      console.log("Submitting form to Supabase:", values);
-      
-      // Save to contact_submissions
+      // Step 1: Save to contact_submissions
+      console.log("Attempting to save submission to Supabase...");
       const { data: submission, error: submissionError } = await supabase
         .from("contact_submissions")
         .insert({
@@ -70,9 +71,10 @@ export const ContactForm = () => {
         throw submissionError;
       }
 
-      console.log("Contact submission saved:", submission);
+      console.log("Contact submission saved successfully:", submission);
 
-      // Trigger CRM automation
+      // Step 2: Trigger CRM automation
+      console.log("Triggering CRM automation with data:", { ...values, id: submission.id });
       const { data: automationData, error: automationError } = await supabase.functions.invoke(
         "crm-email-automation",
         {
@@ -80,12 +82,14 @@ export const ContactForm = () => {
         }
       );
 
+      console.log("CRM automation response:", automationData);
+
       if (automationError) {
         console.error("Error in CRM automation:", automationError);
         throw automationError;
       }
 
-      console.log("CRM automation completed:", automationData);
+      console.log("CRM automation completed successfully");
 
       toast.success(
         "Message sent successfully! Check your email for further information."
@@ -93,11 +97,12 @@ export const ContactForm = () => {
       form.reset();
       setCurrentStep(0);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Error in form submission:", error);
       toast.error(
         "Failed to send message. Please try again or contact support directly."
       );
     } finally {
+      console.log("Form submission process completed");
       setIsSubmitting(false);
     }
   };
