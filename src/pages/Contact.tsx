@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { Toaster } from "sonner";
 
 const Contact = () => {
   return (
@@ -24,6 +25,7 @@ const Contact = () => {
           <ContactForm />
         </motion.div>
       </div>
+      <Toaster />
     </div>
   );
 };
