@@ -70,7 +70,7 @@ export const useContactForm = () => {
       console.log("ContactForm: Process completed successfully");
       
       // Enhanced success toast with animation
-      toast.custom((t: { id: string; dismiss: () => void; }) => (
+      toast.custom((id: string) => (
         <div 
           className={`
             max-w-md w-full bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 
