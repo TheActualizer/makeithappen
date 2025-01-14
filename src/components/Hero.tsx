@@ -35,23 +35,24 @@ const Hero = () => {
           <div className="space-y-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-6 animate-fade-in">
               <Sparkles className="w-4 h-4 text-secondary animate-pulse" />
-              <span className="text-sm text-gray-300">From Simple Websites to Enterprise SaaS Solutions</span>
+              <span className="text-sm font-light tracking-wider text-[#D946EF] animate-pulse">Transforming Ideas into Digital Reality at 20x Speed</span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              Building{" "}
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-6 leading-tight animate-float">
+              Unleashing{" "}
               <span className="relative">
-                <span className="absolute -inset-1 blur-xl bg-gradient-to-r from-secondary via-primary to-secondary opacity-30"></span>
-                <span className="relative bg-gradient-to-r from-secondary via-primary to-secondary bg-clip-text text-transparent">
-                  Next-Generation
+                <span className="absolute -inset-1 blur-xl bg-gradient-to-r from-[#8B5CF6] via-[#D946EF] to-[#F97316] opacity-30"></span>
+                <span className="relative bg-gradient-to-r from-[#8B5CF6] via-[#D946EF] to-[#F97316] bg-clip-text text-transparent animate-pulse">
+                  Autonomous Agents
                 </span>
               </span>{" "}
-              Digital Solutions
+              <br />
+              <span className="text-[#0EA5E9] animate-bounce inline-block">Building at Hyperspeed</span>
             </h1>
             
-            <p className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto backdrop-blur-sm">
-              Accelerate your vision with AI-powered development. We build 20x faster 
-              than traditional methods, turning ideas into production-ready solutions at lightspeed.
+            <p className="text-base md:text-lg text-[#9b87f5] leading-relaxed max-w-2xl mx-auto backdrop-blur-sm animate-fade-in">
+              From startup websites to enterprise-scale systems, our autonomous agent swarms 
+              build, test, and deploy at 20x speed. Experience the future of disruptive development.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-8">
@@ -84,23 +85,23 @@ const Hero = () => {
                 </AccordionTrigger>
                 <AccordionContent className="text-left">
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-gray-400">
-                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
-                      • Advanced AI Integration
+                    <div className="p-3 rounded-lg bg-[#1A1F2C]/30 backdrop-blur-sm border border-[#8B5CF6]/20 hover:border-[#8B5CF6]/50 transition-all">
+                      • Multi-Agent Systems
                     </div>
-                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
-                      • Custom SaaS Platforms
+                    <div className="p-3 rounded-lg bg-[#1A1F2C]/30 backdrop-blur-sm border border-[#D946EF]/20 hover:border-[#D946EF]/50 transition-all">
+                      • Autonomous Development
                     </div>
-                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
-                      • Enterprise Solutions
+                    <div className="p-3 rounded-lg bg-[#1A1F2C]/30 backdrop-blur-sm border border-[#F97316]/20 hover:border-[#F97316]/50 transition-all">
+                      • Swarm Intelligence
                     </div>
-                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
-                      • Web Applications
+                    <div className="p-3 rounded-lg bg-[#1A1F2C]/30 backdrop-blur-sm border border-[#0EA5E9]/20 hover:border-[#0EA5E9]/50 transition-all">
+                      • Rapid Prototyping
                     </div>
-                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
-                      • Digital Transformation
+                    <div className="p-3 rounded-lg bg-[#1A1F2C]/30 backdrop-blur-sm border border-[#8B5CF6]/20 hover:border-[#8B5CF6]/50 transition-all">
+                      • AI-Driven Architecture
                     </div>
-                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
-                      • Process Automation
+                    <div className="p-3 rounded-lg bg-[#1A1F2C]/30 backdrop-blur-sm border border-[#D946EF]/20 hover:border-[#D946EF]/50 transition-all">
+                      • Disruptive Innovation
                     </div>
                   </div>
                 </AccordionContent>
