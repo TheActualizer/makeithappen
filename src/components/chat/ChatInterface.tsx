@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { ArrowUp, Link2, Settings2, ChevronDown, MessageCircle, HelpCircle, Info, Network } from "lucide-react";
+import { ArrowUp, Link2, Settings2, ChevronDown, MessageCircle, HelpCircle, Info, Network, Database, Cpu, GitBranch, Workflow } from "lucide-react";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
 import { motion, AnimatePresence } from "framer-motion";
@@ -78,22 +78,71 @@ const ChatInterface = () => {
                   <Settings2 className="w-4 h-4" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-80 bg-purple-900/90 backdrop-blur-lg border-white/10 text-purple-100">
-                <div className="space-y-4">
-                  <h4 className="font-medium text-sm">Interface Settings</h4>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between text-xs">
-                      <span>Connected to Enterprise Pipeline</span>
-                      <span className="text-emerald-400">Active</span>
+              <PopoverContent className="w-96 bg-purple-900/90 backdrop-blur-lg border-white/10 text-purple-100">
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="font-medium text-sm mb-3">System Infrastructure</h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-xs border-b border-white/5 pb-2">
+                        <div className="flex items-center gap-2">
+                          <Database className="w-3 h-3" />
+                          <span>Enterprise Pipeline Connection</span>
+                        </div>
+                        <span className="text-yellow-400">Pending</span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs border-b border-white/5 pb-2">
+                        <div className="flex items-center gap-2">
+                          <Cpu className="w-3 h-3" />
+                          <span>Swarm Intelligence Mode</span>
+                        </div>
+                        <span className="text-yellow-400">Pending</span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs border-b border-white/5 pb-2">
+                        <div className="flex items-center gap-2">
+                          <GitBranch className="w-3 h-3" />
+                          <span>Data Processing Status</span>
+                        </div>
+                        <span className="text-yellow-400">Pending</span>
+                      </div>
                     </div>
-                    <div className="flex items-center justify-between text-xs">
-                      <span>Swarm Intelligence Mode</span>
-                      <span className="text-emerald-400">Enabled</span>
+                  </div>
+
+                  <div>
+                    <h4 className="font-medium text-sm mb-3">Engineering Resources</h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-xs border-b border-white/5 pb-2">
+                        <div className="flex items-center gap-2">
+                          <Workflow className="w-3 h-3" />
+                          <span>PostgreSQL Database</span>
+                        </div>
+                        <span className="text-xs text-purple-200/70">Connected via Supabase</span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs border-b border-white/5 pb-2">
+                        <div className="flex items-center gap-2">
+                          <Workflow className="w-3 h-3" />
+                          <span>Edge Functions</span>
+                        </div>
+                        <span className="text-xs text-purple-200/70">Serverless Ready</span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs border-b border-white/5 pb-2">
+                        <div className="flex items-center gap-2">
+                          <Workflow className="w-3 h-3" />
+                          <span>Real-time Subscriptions</span>
+                        </div>
+                        <span className="text-xs text-purple-200/70">Available</span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs border-b border-white/5 pb-2">
+                        <div className="flex items-center gap-2">
+                          <Workflow className="w-3 h-3" />
+                          <span>Storage Buckets</span>
+                        </div>
+                        <span className="text-xs text-purple-200/70">Configured</span>
+                      </div>
                     </div>
-                    <div className="flex items-center justify-between text-xs">
-                      <span>Data Processing Status</span>
-                      <span className="text-emerald-400">Online</span>
-                    </div>
+                  </div>
+
+                  <div className="text-xs text-purple-200/50 pt-2">
+                    <p>All engineering resources are provisioned through Supabase infrastructure</p>
                   </div>
                 </div>
               </PopoverContent>
