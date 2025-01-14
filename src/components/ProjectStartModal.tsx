@@ -9,6 +9,7 @@ import BasicInfoStep from "./project-start/BasicInfoStep";
 import ProjectDetailsStep from "./project-start/ProjectDetailsStep";
 import TimelineStep from "./project-start/TimelineStep";
 import ProgressSteps from "./project-start/ProgressSteps";
+import ConsultationScheduler from "./project-start/ConsultationScheduler";
 import { supabase } from "@/integrations/supabase/client";
 
 const initialFormData: FormData = {
@@ -34,6 +35,7 @@ const ProjectStartModal = ({
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showCalendly, setShowCalendly] = useState(false);
   const navigate = useNavigate();
 
   const handleNext = () => {
@@ -107,11 +109,7 @@ const ProjectStartModal = ({
         description: "Your project details have been saved. Let's schedule a consultation!",
       });
       
-      // Instead of showing Calendly in modal, redirect to consultation page
-      onClose();
-      navigate("/schedule-consultation", { 
-        state: { formData }
-      });
+      setShowCalendly(true);
       
     } catch (error) {
       console.error('Submission error:', error);
@@ -126,6 +124,7 @@ const ProjectStartModal = ({
   };
 
   const handleModalClose = () => {
+    setShowCalendly(false);
     setStep(1);
     setFormData(initialFormData);
     onClose();
@@ -133,6 +132,10 @@ const ProjectStartModal = ({
   };
 
   const renderStep = () => {
+    if (showCalendly) {
+      return <ConsultationScheduler formData={formData} />;
+    }
+
     switch (step) {
       case 1:
         return <BasicInfoStep formData={formData} setFormData={setFormData} />;
@@ -150,8 +153,10 @@ const ProjectStartModal = ({
       <DialogContent className="max-w-[600px] h-[85vh] flex flex-col bg-background/95 backdrop-blur-md">
         <DialogHeader className="px-4 py-2 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10">
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-lg font-medium">New Project</DialogTitle>
-            <ProgressSteps currentStep={step} />
+            <DialogTitle className="text-lg font-medium">
+              {showCalendly ? "Schedule Consultation" : "New Project"}
+            </DialogTitle>
+            {!showCalendly && <ProgressSteps currentStep={step} />}
           </div>
         </DialogHeader>
 
@@ -161,37 +166,39 @@ const ProjectStartModal = ({
           </div>
         </div>
 
-        <div className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-3 sticky bottom-0 mt-auto">
-          <div className="flex justify-between gap-3">
-            <Button
-              variant="ghost"
-              onClick={handleBack}
-              disabled={step === 1}
-              size="sm"
-            >
-              Back
-            </Button>
-            {step === 3 ? (
+        {!showCalendly && (
+          <div className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-3 sticky bottom-0 mt-auto">
+            <div className="flex justify-between gap-3">
               <Button
-                onClick={handleSubmit}
-                disabled={isSubmitting}
+                variant="ghost"
+                onClick={handleBack}
+                disabled={step === 1}
                 size="sm"
-                className="bg-primary hover:bg-primary/90"
               >
-                {isSubmitting ? "Saving..." : "Submit"}
+                Back
               </Button>
-            ) : (
-              <Button 
-                onClick={handleNext}
-                size="sm"
-                className="group bg-primary hover:bg-primary/90"
-              >
-                Next
-                <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
-              </Button>
-            )}
+              {step === 3 ? (
+                <Button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  size="sm"
+                  className="bg-primary hover:bg-primary/90"
+                >
+                  {isSubmitting ? "Saving..." : "Submit"}
+                </Button>
+              ) : (
+                <Button 
+                  onClick={handleNext}
+                  size="sm"
+                  className="group bg-primary hover:bg-primary/90"
+                >
+                  Next
+                  <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                </Button>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </DialogContent>
     </Dialog>
   );
