@@ -30,5 +30,15 @@ export interface MessageAreaProps {
   setNewMessage: (message: string) => void;
   onSendMessage: (e: React.FormEvent) => Promise<void>;
   isLoading: boolean;
-  loading: boolean;
+}
+
+export interface ConversationType {
+  id: string;
+  title: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+  is_archived: boolean;
+  provider: 'dify' | 'openai';
+  provider_conversation_id: string | null;
 }
