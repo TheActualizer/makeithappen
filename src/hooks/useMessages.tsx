@@ -59,7 +59,14 @@ export const useMessages = (): UseMessagesReturn => {
       const { data, error } = await supabase
         .from('messages')
         .select(`
-          *,
+          id,
+          content,
+          sender_id,
+          created_at,
+          conversation_id,
+          type,
+          is_admin_message,
+          updated_at,
           profiles (
             first_name,
             last_name,
@@ -76,7 +83,18 @@ export const useMessages = (): UseMessagesReturn => {
       }
 
       console.log('Messages fetched:', data);
-      setMessages(data || []);
+      // Ensure the data matches the Message interface
+      const typedMessages: Message[] = data?.map(msg => ({
+        id: msg.id,
+        content: msg.content,
+        sender_id: msg.sender_id,
+        created_at: msg.created_at,
+        conversation_id: msg.conversation_id,
+        type: msg.type,
+        profiles: msg.profiles
+      })) || [];
+
+      setMessages(typedMessages);
     } catch (error) {
       console.error('Error in fetchMessages:', error);
     }
