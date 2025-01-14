@@ -11,7 +11,7 @@ import {
   BookOpen, TrendingUp, Building2, Scale, Brain, 
   Wrench, Database, FileCode, Workflow, Heart, 
   Github, Rocket, ArrowRight, ArrowUp, Search, 
-  MessageSquare, BarChart, PieChart, LineChart 
+  MessageSquare 
 } from "lucide-react";
 
 interface BlogCategory {
@@ -138,28 +138,24 @@ const Blog = () => {
 
   const carouselItems = [
     {
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
-      title: "AI Growth Metrics",
-      description: "Key performance indicators in artificial intelligence adoption",
-      icon: <BarChart className="w-8 h-8 text-secondary absolute top-4 right-4" />
+      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
+      title: "AI Infrastructure",
+      description: "Building robust systems for the future of automation"
     },
     {
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f",
-      title: "Technology Adoption",
-      description: "Global trends in emerging technology implementation",
-      icon: <PieChart className="w-8 h-8 text-secondary absolute top-4 right-4" />
+      image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6",
+      title: "Code Intelligence",
+      description: "Advanced algorithms powering next-gen solutions"
     },
     {
-      image: "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74",
+      image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
       title: "Digital Transformation",
-      description: "Industry-specific digital transformation success rates",
-      icon: <LineChart className="w-8 h-8 text-secondary absolute top-4 right-4" />
+      description: "Revolutionizing business through technology"
     },
     {
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
-      title: "Innovation Metrics",
-      description: "Measuring the impact of AI-driven innovation",
-      icon: <TrendingUp className="w-8 h-8 text-secondary absolute top-4 right-4" />
+      image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+      title: "AI Development",
+      description: "Creating intelligent systems for tomorrow"
     }
   ];
 
@@ -189,30 +185,27 @@ const Blog = () => {
           className="mb-20"
         >
           <Carousel className="w-full max-w-6xl mx-auto">
-            <CarouselContent>
+            <CarouselContent className="-ml-2 md:-ml-4">
               {carouselItems.map((item, index) => (
-                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                  <div className="p-2">
-                    <Card className="overflow-hidden bg-gradient-to-br from-accent/95 via-primary/10 to-secondary/20 backdrop-blur-sm border-secondary/20">
-                      <div className="aspect-[16/10] relative overflow-hidden">
-                        <img 
-                          src={item.image} 
-                          alt={item.title}
-                          className="object-cover w-full h-full transform hover:scale-105 transition-transform duration-300"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-accent/90 to-transparent flex flex-col justify-end p-6">
-                          {item.icon}
-                          <h3 className="text-xl font-semibold text-white mb-2">{item.title}</h3>
-                          <p className="text-gray-200 text-sm leading-relaxed">{item.description}</p>
-                        </div>
+                <CarouselItem key={index} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3">
+                  <Card className="overflow-hidden bg-gradient-to-br from-accent/95 via-primary/10 to-secondary/20 backdrop-blur-sm border-secondary/20 h-full">
+                    <div className="aspect-[16/10] relative overflow-hidden">
+                      <img 
+                        src={item.image} 
+                        alt={item.title}
+                        className="object-cover w-full h-full transform hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-accent/90 via-accent/50 to-transparent flex flex-col justify-end p-6">
+                        <h3 className="text-xl md:text-2xl font-semibold text-white mb-2">{item.title}</h3>
+                        <p className="text-gray-200 text-sm md:text-base">{item.description}</p>
                       </div>
-                    </Card>
-                  </div>
+                    </div>
+                  </Card>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex -left-4 lg:-left-8" />
-            <CarouselNext className="hidden md:flex -right-4 lg:-right-8" />
+            <CarouselPrevious className="hidden md:flex -left-12 bg-secondary/20 hover:bg-secondary/30 border-secondary/30" />
+            <CarouselNext className="hidden md:flex -right-12 bg-secondary/20 hover:bg-secondary/30 border-secondary/30" />
           </Carousel>
         </motion.div>
 
