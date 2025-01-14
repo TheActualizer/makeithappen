@@ -3,9 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, User } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import ProjectStartModal from "./ProjectStartModal";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -124,7 +126,7 @@ const Navbar = () => {
             </Button>
             <Button 
               variant="secondary"
-              onClick={() => navigate('/start-project')}
+              onClick={() => setIsModalOpen(true)}
               className="shadow-lg hover:shadow-secondary/30 transition-all duration-300"
             >
               Get Started
@@ -250,7 +252,7 @@ const Navbar = () => {
                         variant="secondary"
                         onClick={() => {
                           setIsOpen(false);
-                          navigate('/start-project');
+                          setIsModalOpen(true);
                         }}
                         className="w-full shadow-lg hover:shadow-secondary/20 transition-all duration-300"
                       >
@@ -264,6 +266,11 @@ const Navbar = () => {
           )}
         </AnimatePresence>
       </div>
+
+      <ProjectStartModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </nav>
   );
 };

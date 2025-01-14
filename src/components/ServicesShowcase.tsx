@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 import { ServiceCard } from "./services/ServiceCard";
 import { ServicesHeader } from "./services/ServicesHeader";
 import { services } from "./services/serviceData";
 import { ArrowRight } from "lucide-react";
+import { useState } from "react";
+import ProjectStartModal from "./ProjectStartModal";
 
 export const ServicesShowcase = () => {
-  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <section className="py-12 px-4 md:px-6 lg:px-8 bg-background relative" id="services">
@@ -23,7 +24,7 @@ export const ServicesShowcase = () => {
           <Button 
             variant="default" 
             size="lg"
-            onClick={() => navigate("/start-project")}
+            onClick={() => setIsModalOpen(true)}
             className="group bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300"
           >
             Start Building
@@ -31,6 +32,11 @@ export const ServicesShowcase = () => {
           </Button>
         </div>
       </div>
+
+      <ProjectStartModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </section>
   );
 };

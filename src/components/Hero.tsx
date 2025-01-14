@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, ChevronDown } from "lucide-react";
+import { useState } from "react";
+import ProjectStartModal from "./ProjectStartModal";
 import {
   Accordion,
   AccordionContent,
@@ -10,6 +12,7 @@ import {
 
 const Hero = () => {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div className="relative min-h-[90vh] flex items-center justify-center pt-8 overflow-hidden">
@@ -55,7 +58,7 @@ const Hero = () => {
               <Button
                 size="lg"
                 className="group relative overflow-hidden bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 transform hover:scale-105 min-w-[200px]"
-                onClick={() => navigate('/start-project')}
+                onClick={() => setIsModalOpen(true)}
               >
                 Start Building
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -106,6 +109,11 @@ const Hero = () => {
           </div>
         </div>
       </div>
+
+      <ProjectStartModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };

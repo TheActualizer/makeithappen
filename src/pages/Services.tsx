@@ -3,10 +3,11 @@ import { WebsiteCategories } from "@/components/services/WebsiteCategories";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import ProjectStartModal from "@/components/ProjectStartModal";
 
 const Services = () => {
-  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-accent via-accent/95 to-primary/20">
@@ -25,7 +26,7 @@ const Services = () => {
               <Button
                 variant="default"
                 size="lg"
-                onClick={() => navigate("/start-project")}
+                onClick={() => setIsModalOpen(true)}
                 className="group bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90"
               >
                 Start Your Project
@@ -49,6 +50,11 @@ const Services = () => {
         {/* Services Showcase */}
         <ServicesShowcase />
       </main>
+
+      <ProjectStartModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };
