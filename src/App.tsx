@@ -1,7 +1,8 @@
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import PageTransition from "@/components/PageTransition";
+import Index from "@/pages/Index";
 import "./App.css";
 
 // Create a client
@@ -18,7 +19,11 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <PageTransition />
+        <PageTransition>
+          <Routes>
+            <Route path="/" element={<Index />} />
+          </Routes>
+        </PageTransition>
         <Toaster />
       </BrowserRouter>
     </QueryClientProvider>
