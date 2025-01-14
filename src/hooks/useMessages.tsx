@@ -45,11 +45,11 @@ export const useMessages = () => {
         .select(`
           id,
           content,
+          type,
           sender_id,
           created_at,
           conversation_id,
-          type,
-          sender:sender_id (
+          profiles:sender_id (
             first_name,
             last_name,
             email,
@@ -73,7 +73,7 @@ export const useMessages = () => {
         created_at: msg.created_at,
         conversation_id: msg.conversation_id,
         type: msg.type || 'text',
-        profiles: msg.sender || null
+        profiles: msg.profiles || null
       }));
 
       console.log('Processed messages:', typedMessages);
