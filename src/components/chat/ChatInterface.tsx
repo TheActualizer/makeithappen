@@ -3,14 +3,12 @@ import { Button } from "@/components/ui/button";
 import { ArrowUp, Link2, Settings2, ChevronDown } from "lucide-react";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
-import ChatHeader from "./ChatHeader";
 
 const ChatInterface = () => {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
     <div className="fixed bottom-0 right-0 w-full md:w-[420px] bg-accent/95 backdrop-blur-lg border-t md:border-l border-secondary/20 shadow-2xl transition-all duration-300 ease-in-out z-50">
-      {/* Header */}
       <div 
         className="flex items-center justify-between px-4 py-3 border-b border-secondary/20 cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
@@ -28,14 +26,11 @@ const ChatInterface = () => {
         </div>
       </div>
 
-      {/* Chat Container */}
       <div className={`flex flex-col transition-all duration-300 ease-in-out ${isOpen ? 'h-[600px]' : 'h-0'} overflow-hidden`}>
-        {/* Messages Area */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           <ChatMessages />
         </div>
 
-        {/* Input Area */}
         <div className="border-t border-secondary/20 p-4 bg-accent/90 backdrop-blur-sm">
           <div className="relative">
             <ChatInput />
@@ -51,7 +46,7 @@ const ChatInterface = () => {
           <div className="mt-2 flex items-center justify-between text-xs text-gray-400">
             <span>Type / to see available commands</span>
             <div className="flex items-center gap-2">
-              <span>Claude can make mistakes.</span>
+              <span>AI can make mistakes.</span>
               <span>Please verify responses.</span>
             </div>
           </div>
