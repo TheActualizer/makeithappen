@@ -37,6 +37,57 @@ export const useMessages = () => {
     };
   }, [selectedConversation]);
 
+  const fetchMessages = async (conversationId: string) => {
+    console.log('Fetching messages for conversation:', conversationId);
+    try {
+      const { data: messagesData, error: messagesError } = await supabase
+        .from('messages')
+        .select(`
+          id,
+          content,
+          sender_id,
+          created_at,
+          conversation_id,
+          type,
+          sender:sender_id (
+            first_name,
+            last_name,
+            email,
+            avatar_url
+          )
+        `)
+        .eq('conversation_id', conversationId)
+        .order('created_at', { ascending: true });
+
+      if (messagesError) {
+        console.error('Error fetching messages:', messagesError);
+        throw messagesError;
+      }
+
+      console.log('Raw messages data:', messagesData);
+
+      const typedMessages: Message[] = (messagesData || []).map(msg => ({
+        id: msg.id,
+        content: msg.content,
+        sender_id: msg.sender_id,
+        created_at: msg.created_at,
+        conversation_id: msg.conversation_id,
+        type: msg.type || 'text',
+        profiles: msg.sender || null
+      }));
+
+      console.log('Processed messages:', typedMessages);
+      setMessages(typedMessages);
+    } catch (error) {
+      console.error('Error in fetchMessages:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to load messages",
+      });
+    }
+  };
+
   useEffect(() => {
     console.log('Initial load - fetching conversations');
     fetchConversations();
@@ -69,57 +120,6 @@ export const useMessages = () => {
         variant: "destructive",
         title: "Error",
         description: "Failed to load conversations",
-      });
-    }
-  };
-
-  const fetchMessages = async (conversationId: string) => {
-    console.log('Fetching messages for conversation:', conversationId);
-    try {
-      const { data: messagesData, error: messagesError } = await supabase
-        .from('messages')
-        .select(`
-          id,
-          content,
-          sender_id,
-          created_at,
-          conversation_id,
-          type,
-          profiles:sender_id (
-            first_name,
-            last_name,
-            email,
-            avatar_url
-          )
-        `)
-        .eq('conversation_id', conversationId)
-        .order('created_at', { ascending: true });
-
-      if (messagesError) {
-        console.error('Error fetching messages:', messagesError);
-        throw messagesError;
-      }
-
-      console.log('Raw messages data:', messagesData);
-
-      const typedMessages: Message[] = (messagesData || []).map(msg => ({
-        id: msg.id,
-        content: msg.content,
-        sender_id: msg.sender_id,
-        created_at: msg.created_at,
-        conversation_id: msg.conversation_id,
-        type: msg.type || 'text',
-        profiles: msg.profiles || null
-      }));
-
-      console.log('Processed messages:', typedMessages);
-      setMessages(typedMessages);
-    } catch (error) {
-      console.error('Error in fetchMessages:', error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to load messages",
       });
     }
   };
