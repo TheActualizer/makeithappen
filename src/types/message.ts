@@ -9,6 +9,8 @@ export interface Message {
   sender_id: string | null;
   created_at: string;
   conversation_id?: string;
+  is_admin_message?: boolean;
+  updated_at?: string;
   profiles?: {
     first_name: string | null;
     last_name: string | null;

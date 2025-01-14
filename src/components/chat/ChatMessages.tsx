@@ -16,7 +16,15 @@ const ChatMessages = () => {
     console.log('ChatMessages: Fetching messages from Supabase');
     const { data, error } = await supabase
       .from('messages')
-      .select('*, profiles(*)')
+      .select(`
+        *,
+        profiles:sender_id (
+          first_name,
+          last_name,
+          email,
+          avatar_url
+        )
+      `)
       .order('created_at', { ascending: true });
 
     if (error) {
@@ -25,7 +33,7 @@ const ChatMessages = () => {
     }
 
     console.log('ChatMessages: Successfully fetched messages:', data);
-    setMessages(data);
+    setMessages(data as Message[]);
   };
 
   const subscribeToMessages = () => {
