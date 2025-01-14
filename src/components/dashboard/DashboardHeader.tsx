@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Settings, LogOut, Home, Menu, ChevronDown, Users } from "lucide-react";
+import { Settings, LogOut, Home, Menu, ChevronDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import {
@@ -44,7 +44,6 @@ export const DashboardHeader = () => {
     { name: "Projects", href: "/dashboard/projects" },
     { name: "Calendar", href: "/dashboard/calendar" },
     { name: "Messages", href: "/dashboard/messages" },
-    { name: "Social Marketplace", href: "/dashboard/social", icon: Users },
     { name: "Documents", href: "/dashboard/documents" },
     { name: "Financial Metrics", href: "/dashboard/financials" },
     { name: "Project Progress", href: "/dashboard/progress" },
@@ -92,7 +91,6 @@ export const DashboardHeader = () => {
                         navigate(section.href);
                       }}
                     >
-                      {section.icon && <section.icon className="mr-2 h-4 w-4" />}
                       {section.name}
                     </Button>
                   ))}
@@ -120,14 +118,13 @@ export const DashboardHeader = () => {
         </div>
         
         <div className="hidden md:flex items-center space-x-4">
-          {sections.slice(0, 5).map((section) => (
+          {sections.slice(0, 4).map((section) => (
             <Button
               key={section.name}
               variant="ghost"
-              className="text-white hover:bg-accent-foreground/10 flex items-center gap-2"
+              className="text-white hover:bg-accent-foreground/10"
               onClick={() => navigate(section.href)}
             >
-              {section.icon && <section.icon className="h-4 w-4" />}
               {section.name}
             </Button>
           ))}
@@ -149,9 +146,7 @@ export const DashboardHeader = () => {
                   <DropdownMenuItem
                     key={section.name}
                     onClick={() => navigate(section.href)}
-                    className="flex items-center"
                   >
-                    {section.icon && <section.icon className="mr-2 h-4 w-4" />}
                     {section.name}
                   </DropdownMenuItem>
                 ))}
