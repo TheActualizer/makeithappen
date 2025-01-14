@@ -7,7 +7,7 @@ import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
 import { 
   BookOpen, TrendingUp, Building2, Scale, Brain, 
-  Tool, Database, FileCode, Workflow, Heart, 
+  Wrench, Database, FileCode, Workflow, Heart, 
   Github, Rocket, ArrowRight 
 } from "lucide-react";
 
@@ -33,7 +33,7 @@ const getCategoryIcon = (slug: string) => {
     'real-estate-logistics': <Building2 className="w-8 h-8 text-primary" />,
     'legal-tech': <Scale className="w-8 h-8 text-primary" />,
     'agentic-systems': <Brain className="w-8 h-8 text-primary" />,
-    'agent-tooling': <Tool className="w-8 h-8 text-primary" />,
+    'agent-tooling': <Wrench className="w-8 h-8 text-primary" />,
     'vector-systems': <Database className="w-8 h-8 text-primary" />,
     'data-engineering': <FileCode className="w-8 h-8 text-primary" />,
     'workflow-automation': <Workflow className="w-8 h-8 text-primary" />,
