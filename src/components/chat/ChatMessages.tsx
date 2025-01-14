@@ -25,7 +25,7 @@ const ChatMessages = () => {
         updated_at,
         conversation_id,
         is_admin_message,
-        profiles:sender_id (
+        profiles (
           first_name,
           last_name,
           email,
@@ -40,7 +40,11 @@ const ChatMessages = () => {
     }
 
     console.log('ChatMessages: Successfully fetched messages:', data);
-    setMessages(data as Message[]);
+    const formattedMessages: Message[] = data.map(msg => ({
+      ...msg,
+      profiles: msg.profiles || null
+    }));
+    setMessages(formattedMessages);
   };
 
   const subscribeToMessages = () => {
