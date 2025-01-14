@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowRight, Brain, Rocket, Shield, Play } from "lucide-react";
+import { ArrowRight, Brain, Rocket, Shield } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import ProjectStartModal from "@/components/ProjectStartModal";
 
 const About = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
   
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -91,72 +90,30 @@ const About = () => {
 
       {/* Video Section */}
       <motion.section 
-        className="py-24 px-4 bg-gradient-to-b from-accent/30 to-accent/10"
+        className="py-16 px-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
       >
-        <div className="max-w-6xl mx-auto">
-          <motion.div 
-            className="text-center mb-12"
+        <div className="max-w-4xl mx-auto">
+          <motion.h2 
+            className="text-3xl md:text-4xl font-bold mb-8 text-center"
             {...fadeIn}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              See Innovation in Action
-            </h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-              Watch how we transform complex challenges into elegant solutions
-            </p>
-          </motion.div>
-          
+            Our Approach
+          </motion.h2>
           <motion.div 
-            className="relative aspect-video rounded-2xl overflow-hidden group cursor-pointer"
+            className="aspect-w-16 aspect-h-9 rounded-xl overflow-hidden"
             {...fadeIn}
             transition={{ delay: 0.7 }}
-            onClick={() => setIsPlaying(true)}
           >
-            {!isPlaying ? (
-              <>
-                <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 group-hover:opacity-75 transition-opacity duration-300" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
-                    <Play className="w-8 h-8 text-white fill-current ml-1" />
-                  </div>
-                </div>
-                <img 
-                  src="/video-thumbnail.jpg" 
-                  alt="Video thumbnail" 
-                  className="w-full h-full object-cover"
-                />
-              </>
-            ) : (
-              <iframe
-                src="https://www.youtube.com/embed/eXlqLTSWMv4?autoplay=1"
-                title="MakeITHappen Approach"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-              />
-            )}
-          </motion.div>
-          
-          <motion.div 
-            className="grid md:grid-cols-3 gap-8 mt-12"
-            {...fadeIn}
-            transition={{ delay: 0.9 }}
-          >
-            <div className="bg-accent/20 rounded-xl p-6">
-              <h3 className="text-xl font-semibold mb-2">Rapid Development</h3>
-              <p className="text-gray-400">See how we deliver enterprise-grade solutions in weeks, not months</p>
-            </div>
-            <div className="bg-accent/20 rounded-xl p-6">
-              <h3 className="text-xl font-semibold mb-2">AI Integration</h3>
-              <p className="text-gray-400">Watch our intelligent automation capabilities in action</p>
-            </div>
-            <div className="bg-accent/20 rounded-xl p-6">
-              <h3 className="text-xl font-semibold mb-2">Real Results</h3>
-              <p className="text-gray-400">Discover the tangible impact we've created for our clients</p>
-            </div>
+            <iframe
+              src="https://www.youtube.com/embed/eXlqLTSWMv4"
+              title="MakeITHappen Approach"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full rounded-xl"
+            ></iframe>
           </motion.div>
         </div>
       </motion.section>

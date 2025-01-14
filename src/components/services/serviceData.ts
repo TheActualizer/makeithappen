@@ -1,97 +1,10 @@
-import { Brain, Calculator, Scale, Truck, Search, Database, Bot, Network, Shield, Workflow, Users, ShoppingCart, MessageSquare, Map, FileText, Mail, Calendar, BarChart } from "lucide-react";
-
-export const websiteCategories = [
-  {
-    id: "client-portal",
-    title: "Client Portals & CRM",
-    description: "Secure client management platforms with project tracking",
-    features: [
-      "Project request handling",
-      "Zoom meeting scheduling",
-      "AI meeting summaries",
-      "Document sharing",
-      "Client dashboards"
-    ],
-    icon: Users,
-    metrics: "40% Client Engagement ↑"
-  },
-  {
-    id: "marketplace",
-    title: "Digital Marketplaces",
-    description: "Custom B2B/B2C marketplace solutions",
-    features: [
-      "Vendor management",
-      "Payment processing",
-      "Inventory tracking",
-      "Rating systems",
-      "Analytics dashboard"
-    ],
-    icon: ShoppingCart,
-    metrics: "2x Transaction Volume"
-  },
-  {
-    id: "communication",
-    title: "Communication Platforms",
-    description: "Real-time messaging and collaboration tools",
-    features: [
-      "Chat systems",
-      "Video conferencing",
-      "File sharing",
-      "Thread management",
-      "Notifications"
-    ],
-    icon: MessageSquare,
-    metrics: "90% Response Time ↓"
-  },
-  {
-    id: "logistics",
-    title: "Logistics & Tracking",
-    description: "GPS-enabled fleet and asset management",
-    features: [
-      "Real-time tracking",
-      "Route optimization",
-      "Delivery management",
-      "Performance analytics",
-      "Mobile apps"
-    ],
-    icon: Map,
-    metrics: "30% Efficiency ↑"
-  },
-  {
-    id: "data-enrichment",
-    title: "Data Enrichment Tools",
-    description: "Intelligent data collection and analysis",
-    features: [
-      "Web scraping",
-      "Data processing",
-      "API integrations",
-      "Custom algorithms",
-      "Reporting"
-    ],
-    icon: Database,
-    metrics: "10x Data Processing"
-  },
-  {
-    id: "automation",
-    title: "Business Automation",
-    description: "Streamline operations with AI",
-    features: [
-      "Email automation",
-      "Task scheduling",
-      "Document processing",
-      "Workflow automation",
-      "Integration hub"
-    ],
-    icon: Workflow,
-    metrics: "75% Manual Work ↓"
-  }
-];
+import { Brain, Calculator, Scale, Truck, Search, Database, Bot, Network, Shield, Workflow, Mail, Calendar, Users, FileText, BarChart, MessageSquare, Cloud } from "lucide-react";
 
 export const services = [
   {
     id: 1,
-    title: "Financial Systems",
-    description: "AI-powered financial operations & analysis",
+    title: "Financial Automation",
+    description: "AI-powered financial operations & market analysis",
     icon: Calculator,
     features: ["Real-time Analysis", "Automated Accounting", "Risk Assessment"],
     metrics: "85% Processing Time ↓",
@@ -100,7 +13,7 @@ export const services = [
   {
     id: 2,
     title: "Legal Tech",
-    description: "HIPAA & GDPR compliant solutions",
+    description: "HIPAA & GDPR compliant document automation",
     icon: Scale,
     features: ["Contract Review", "Compliance", "Case Management"],
     metrics: "75% Review Time ↓",
@@ -118,7 +31,7 @@ export const services = [
   {
     id: 4,
     title: "R&D Acceleration",
-    description: "Rapid prototyping & research",
+    description: "Rapid prototyping & research automation",
     icon: Search,
     features: ["Fast Prototyping", "Data Analysis", "Innovation"],
     metrics: "10x Research Speed",

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   BookOpen, TrendingUp, Building2, Scale, Brain, 
   Wrench, Database, FileCode, Workflow, Heart, 
@@ -139,68 +139,21 @@ const Blog = () => {
     <div className="min-h-screen bg-gradient-to-b from-accent to-accent/95">
       <Navbar />
       <div className="container mx-auto px-4 pt-24 pb-12 max-w-7xl">
-        <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1DA1F2]/10 via-transparent to-[#33C3F0]/10 opacity-50" />
-          <div className="absolute inset-0 bg-[linear-gradient(45deg,#4f4f4f1a_1px,transparent_1px)] bg-[length:20px_20px] opacity-20" />
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="relative z-10"
-          >
-            <div className="max-w-4xl mx-auto text-center space-y-6">
-              <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#1DA1F2]/10 border border-[#1DA1F2]/20 mb-6">
-                <span className="text-sm font-medium bg-gradient-to-r from-[#1DA1F2] to-[#33C3F0] bg-clip-text text-transparent">
-                  Disruptive Innovation Hub
-                </span>
-              </div>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16 mx-auto max-w-4xl"
+        >
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-8 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+            Explore Our Tech Universe
+          </h1>
+          <p className="text-gray-300 text-lg md:text-xl mx-auto leading-relaxed">
+            Deep dive into cutting-edge AI technologies, industry transformations, and revolutionary frameworks shaping the future of business and technology.
+          </p>
+        </motion.div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
-                Building the{" "}
-                <span className="bg-gradient-to-r from-[#1DA1F2] to-[#33C3F0] bg-clip-text text-transparent">
-                  Future of Tech
-                </span>
-              </h1>
-
-              <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
-                Explore groundbreaking solutions that challenge the status quo and redefine what's possible in technology.
-              </p>
-
-              <div className="max-w-2xl mx-auto mt-8">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search revolutionary ideas..."
-                    className="w-full px-6 py-4 bg-white/5 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1DA1F2] text-gray-200 placeholder-gray-400"
-                  />
-                  <Button 
-                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#1DA1F2] hover:bg-[#1DA1F2]/90"
-                    size="sm"
-                  >
-                    <Search className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4 max-w-2xl mx-auto mt-12">
-                <div className="px-4 py-3 bg-white/5 rounded-lg border border-gray-700/50">
-                  <div className="text-2xl font-bold text-[#1DA1F2]">200+</div>
-                  <div className="text-sm text-gray-400">Innovations</div>
-                </div>
-                <div className="px-4 py-3 bg-white/5 rounded-lg border border-gray-700/50">
-                  <div className="text-2xl font-bold text-[#33C3F0]">50k+</div>
-                  <div className="text-sm text-gray-400">Pioneers</div>
-                </div>
-                <div className="px-4 py-3 bg-white/5 rounded-lg border border-gray-700/50">
-                  <div className="text-2xl font-bold text-[#1DA1F2]">12</div>
-                  <div className="text-sm text-gray-400">Tech Domains</div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
+        {/* Featured Articles Section */}
         <section className="mb-20">
           <h2 className="text-2xl font-semibold text-white mb-8 text-center">Featured Articles</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
@@ -238,6 +191,7 @@ const Blog = () => {
           </div>
         </section>
 
+        {/* Categories Section */}
         <section>
           <h2 className="text-2xl font-semibold text-white mb-8 text-center">Explore Topics</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
@@ -283,6 +237,7 @@ const Blog = () => {
         </section>
       </div>
 
+      {/* Floating Action Buttons */}
       <AnimatePresence>
         {showScrollTop && (
           <motion.div

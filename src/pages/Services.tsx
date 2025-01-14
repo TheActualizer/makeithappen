@@ -1,157 +1,51 @@
+import { ServicesShowcase } from "@/components/ServicesShowcase";
+import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, Zap, Brain, Calculator, Activity } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Services = () => {
   const navigate = useNavigate();
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5
-      }
-    }
-  };
-
-  const services = [
-    {
-      title: "Website & Business Operations",
-      description: "Comprehensive digital transformation of your business operations with AI-powered automation.",
-      icon: <Zap className="w-6 h-6 text-primary" />,
-      color: "text-primary",
-      features: [
-        "AI-powered client management system",
-        "CRM integration with automated workflows",
-        "Zoom integration with AI meeting summaries",
-        "Intelligent follow-up automation",
-        "Document processing and management",
-        "Client portal development"
-      ]
-    },
-    {
-      title: "Extensive AI Agent Operations",
-      description: "Multi-agent swarms that revolutionize your business processes through intelligent automation.",
-      icon: <Brain className="w-6 h-6 text-primary" />,
-      color: "text-primary",
-      features: [
-        "Policy automation and enforcement",
-        "Complex workflow orchestration",
-        "Multi-agent swarm coordination",
-        "Business process optimization",
-        "Automated decision systems",
-        "Intelligent task distribution"
-      ]
-    },
-    {
-      title: "Advanced Industry Calculations",
-      description: "Specialized computation engines tailored for professional services and technical industries.",
-      icon: <Calculator className="w-6 h-6 text-primary" />,
-      color: "text-primary",
-      features: [
-        "Accounting automation systems",
-        "Legal analysis and compliance",
-        "Engineering simulations",
-        "Financial modeling",
-        "Risk assessment calculations",
-        "Technical documentation generation"
-      ]
-    },
-    {
-      title: "Healthcare Automation",
-      description: "HIPAA-compliant autonomous systems for modern healthcare operations.",
-      icon: <Activity className="w-6 h-6 text-primary" />,
-      color: "text-primary",
-      features: [
-        "HIPAA-compliant systems",
-        "FHIR integration",
-        "Patient data management",
-        "Healthcare workflow automation",
-        "Medical record processing",
-        "Compliance monitoring"
-      ]
-    }
-  ];
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-accent via-accent/95 to-primary/20 pt-24">
-      <div className="container mx-auto px-4">
-        {/* Header Section */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-4">
-            <Sparkles className="w-4 h-4 text-primary animate-pulse" />
-            <span className="text-sm font-light tracking-wider text-primary">
-              Next-Generation Solutions
-            </span>
+    <div className="min-h-screen bg-gradient-to-br from-accent via-accent/95 to-primary/20">
+      <Navbar />
+      <main className="relative">
+        {/* Hero Section */}
+        <section className="pt-32 pb-16 px-4 relative">
+          <div className="max-w-6xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Complete Business Automation Solutions
+            </h1>
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto mb-8">
+              Transform your business with our comprehensive suite of AI-powered automation solutions.
+              From digital workforce to departmental setups, we've got you covered.
+            </p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Button
+                variant="default"
+                size="lg"
+                onClick={() => navigate("/start-project")}
+                className="group bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90"
+              >
+                Start Your Project
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => navigate("/contact")}
+                className="border-gray-300 text-white hover:bg-white/10"
+              >
+                Contact Sales
+              </Button>
+            </div>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Transform Your Business with{" "}
-            <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              AI-Powered Solutions
-            </span>
-          </h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            From website development to autonomous enterprise systems, we deliver cutting-edge solutions at unprecedented speed.
-          </p>
-        </div>
+        </section>
 
-        {/* Services Grid */}
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {services.map((service, index) => (
-            <motion.div
-              key={index}
-              variants={itemVariants}
-              className="p-8 rounded-xl bg-accent/20 backdrop-blur-sm border border-accent/10 hover:border-primary/30 transition-all"
-            >
-              <div className="flex items-center gap-4 mb-4">
-                {service.icon}
-                <h3 className={`text-xl font-semibold ${service.color}`}>
-                  {service.title}
-                </h3>
-              </div>
-              <p className="text-gray-300 mb-6">{service.description}</p>
-              <ul className="space-y-3">
-                {service.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-center gap-2 text-gray-300">
-                    <ArrowRight className="w-4 h-4 text-primary/60" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* CTA Section */}
-        <div className="text-center pb-16">
-          <Button
-            size="lg"
-            className="group relative overflow-hidden bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-300 transform hover:scale-105"
-            onClick={() => navigate("/start-project")}
-          >
-            Start Your Transformation
-            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-          </Button>
-        </div>
-      </div>
+        {/* Services Showcase */}
+        <ServicesShowcase />
+      </main>
     </div>
   );
 };
