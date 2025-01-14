@@ -1,4 +1,4 @@
-import { Brain, Calculator, Scale, Truck, Search, Database, Bot, Network, Shield, Workflow } from "lucide-react";
+import { Brain, Calculator, Scale, Truck, Search, Database, Bot, Network, Shield, Workflow, Mail, Calendar, Users, FileText, BarChart, MessageSquare, Cloud } from "lucide-react";
 
 export const services = [
   {
