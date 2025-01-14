@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -15,6 +15,12 @@ import Services from "./pages/Services";
 import CaseStudies from "./pages/CaseStudies";
 import ProfileSettings from "./pages/settings/ProfileSettings";
 import ResetPassword from "./pages/ResetPassword";
+import { AdminLayout } from "./components/admin/AdminLayout";
+import { AdminUsers } from "./components/admin/AdminUsers";
+import { AdminProjects } from "./components/admin/AdminProjects";
+import { AdminContacts } from "./components/admin/AdminContacts";
+import { AdminMessages } from "./components/admin/AdminMessages";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { FinancialMetrics } from "./components/dashboard/FinancialMetrics";
 import { DashboardHeader } from "./components/dashboard/DashboardHeader";
 import { DashboardCalendar } from "./components/dashboard/DashboardCalendar";
@@ -25,6 +31,21 @@ import { DashboardActivity } from "./components/dashboard/DashboardActivity";
 import { Messages } from "./components/dashboard/Messages";
 
 const queryClient = new QueryClient();
+
+// Protected route component
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAdmin, isLoading } = useIsAdmin();
+  
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  
+  if (!isAdmin) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  return <AdminLayout>{children}</AdminLayout>;
+};
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => (
   <div className="min-h-screen bg-background">
@@ -48,6 +69,14 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/start-project" element={<StartProject />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            
+            {/* Admin Routes */}
+            <Route path="/admin" element={<AdminRoute><AdminUsers /></AdminRoute>} />
+            <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
+            <Route path="/admin/projects" element={<AdminRoute><AdminProjects /></AdminRoute>} />
+            <Route path="/admin/contacts" element={<AdminRoute><AdminContacts /></AdminRoute>} />
+            <Route path="/admin/messages" element={<AdminRoute><AdminMessages /></AdminRoute>} />
+            
             <Route path="/dashboard/projects" element={
               <DashboardLayout>
                 <h1 className="text-3xl font-bold mb-8">Projects</h1>
