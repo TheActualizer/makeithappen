@@ -172,8 +172,8 @@ export const ServicesShowcase = () => {
   return (
     <section className="py-12 px-4 md:px-6 lg:px-8 bg-background relative" id="services">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-3">
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-2">
             <Sparkle className="w-4 h-4 text-secondary animate-pulse" />
             <span className="text-sm text-gray-300">From Simple Websites to Enterprise SaaS Solutions</span>
           </div>
