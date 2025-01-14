@@ -18,24 +18,39 @@ const ConsultationScheduler = ({ formData }: ConsultationSchedulerProps) => {
            `$${matches[0]},000 - $${matches[1]},000`;
   };
 
+  const formatPainPoints = (points?: string[] | null) => {
+    if (!points || points.length === 0) return 'No specific challenges mentioned';
+    const painPointLabels = {
+      "time-consuming": "Time-consuming manual processes",
+      "inefficient-workflows": "Inefficient workflows",
+      "data-accuracy": "Data accuracy and consistency issues",
+      "scalability": "Difficulty scaling operations",
+      "integration": "Integration challenges with existing systems",
+      "user-experience": "Poor user experience",
+      "reporting": "Limited reporting and analytics",
+      "compliance": "Compliance and security concerns",
+      "cost": "High operational costs",
+      "communication": "Communication gaps"
+    };
+    return points.map(point => painPointLabels[point as keyof typeof painPointLabels]).join('\n- ');
+  };
+
   const meetingPrep = `Project Overview:
 Type of Services: ${formatArrayOrDefault(formData.projectType)}
 
-Project Description:
+Project Vision:
 ${formData.description || 'Not provided'}
 
-Timeline & Budget:
-- Preferred Timeline: ${formData.timeline}
-- Budget Range: ${getBudgetRangeText(formData.budgetRange)}
-- Team Size: ${formData.teamSize || 'Not specified'}
+Current Challenges:
+- ${formatPainPoints(formData.pain_points)}
 
-Technical Requirements:
-- Digital Workforce Scope: ${formData.workforce_simulation_scope || 'Not specified'}
-- AI Agent Requirements: ${formatArrayOrDefault(formData.ai_agent_requirements)}
-
-Additional Context:
+Business Context:
 - Company: ${formData.company || 'Not provided'}
-- Pain Points: ${formatArrayOrDefault(formData.pain_points)}`;
+- Team Size: ${formData.teamSize || 'Not specified'}
+- Budget Range: ${getBudgetRangeText(formData.budgetRange)}
+
+Contact Information:
+- Phone: ${formData.phone || 'Not provided'}`;
 
   return (
     <div className="space-y-4">
