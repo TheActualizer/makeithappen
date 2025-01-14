@@ -44,7 +44,7 @@ Additional Context:
       </p>
       <div className="h-[600px]">
         <CalendlyEmbed 
-          url="https://calendly.com/belchonen18/30min" 
+          url="https://calendly.com/belchonen18/make-it-happen" 
           prefill={{
             name: formData.name,
             email: formData.email,

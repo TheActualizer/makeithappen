@@ -7,7 +7,7 @@ export const DashboardCalendar = () => {
       <h2 className="text-2xl font-semibold mb-4">Schedule a Meeting</h2>
       <div className="h-[600px]">
         <CalendlyEmbed 
-          url="https://calendly.com/belchonen18/30min"
+          url="https://calendly.com/belchonen18/make-it-happen"
         />
       </div>
     </Card>

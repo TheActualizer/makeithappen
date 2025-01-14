@@ -14,7 +14,7 @@ const ScheduleStep = ({ formData, setFormData }: ScheduleStepProps) => {
           Schedule Your Consultation
         </div>
         <div className="h-[500px]">
-          <CalendlyEmbed url="https://calendly.com/belchonen18/30min" />
+          <CalendlyEmbed url="https://calendly.com/belchonen18/make-it-happen" />
         </div>
       </div>
     </div>
