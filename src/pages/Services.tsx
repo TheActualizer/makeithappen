@@ -16,16 +16,19 @@ const Services = () => {
 
   const images = [
     {
-      src: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
-      alt: "Technology Infrastructure",
+      src: "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
+      alt: "AI Network Visualization",
+      caption: "Multi-Agent Systems Working in Harmony"
     },
     {
-      src: "https://images.unsplash.com/photo-1518770660439-4636190af475",
-      alt: "AI Integration",
+      src: "https://images.unsplash.com/photo-1580894894513-541e068a3e2b",
+      alt: "Digital Hive Mind",
+      caption: "Collective Intelligence Networks"
     },
     {
-      src: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6",
-      alt: "Enterprise Solutions",
+      src: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485",
+      alt: "AI Collaboration",
+      caption: "Autonomous Agent Orchestration"
     },
   ];
 
@@ -37,7 +40,7 @@ const Services = () => {
         <section className="pt-32 pb-16 px-4 relative">
           <div className="max-w-6xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Complete Business Automation Solutions
+              Agentic Hive Systems for Enterprise
             </h1>
             
             {/* Carousel Section */}
@@ -46,13 +49,18 @@ const Services = () => {
                 <CarouselContent>
                   {images.map((image, index) => (
                     <CarouselItem key={index}>
-                      <div className="relative aspect-video overflow-hidden rounded-xl">
+                      <div className="relative aspect-video overflow-hidden rounded-xl group">
                         <img
                           src={image.src}
                           alt={image.alt}
-                          className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 ease-in-out"
+                          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 ease-in-out"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+                          <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                            <h3 className="text-xl font-semibold mb-2">{image.alt}</h3>
+                            <p className="text-sm text-gray-200">{image.caption}</p>
+                          </div>
+                        </div>
                       </div>
                     </CarouselItem>
                   ))}
@@ -67,9 +75,9 @@ const Services = () => {
                 variant="default"
                 size="lg"
                 onClick={() => navigate("/start-project")}
-                className="group bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90"
+                className="group bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300"
               >
-                Start Your Project
+                Start Building
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button
