@@ -85,7 +85,11 @@ const Hero = () => {
           <div className="space-y-8">
             <motion.div 
               variants={itemVariants}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-6 shadow-lg hover:shadow-xl transition-shadow"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-6 shadow-lg hover:shadow-xl transition-shadow relative before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-r before:from-white/5 before:to-transparent before:rotate-45"
+              style={{
+                transform: "perspective(1000px) rotateX(2deg)",
+                boxShadow: "0 8px 16px -4px rgba(0,0,0,0.2), 0 0 8px -2px rgba(255,255,255,0.1)"
+              }}
             >
               <Sparkles className="w-4 h-4 text-secondary animate-pulse" />
               <span className="text-sm text-gray-300">From Premium Websites to Enterprise SaaS Solutions</span>
@@ -93,7 +97,10 @@ const Hero = () => {
             
             <motion.h1 
               variants={itemVariants}
-              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl"
+              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl relative"
+              style={{
+                textShadow: "0 4px 8px rgba(0,0,0,0.2)"
+              }}
             >
               Building{" "}
               <span className="relative">
@@ -117,23 +124,31 @@ const Hero = () => {
             
             <motion.p 
               variants={itemVariants}
-              className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto backdrop-blur-sm p-6 rounded-xl bg-accent/5 shadow-xl border border-accent/10"
+              className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto relative"
+              style={{
+                transform: "perspective(1000px) rotateX(1deg)",
+              }}
             >
-              <motion.span 
-                className="inline-block font-semibold text-transparent bg-clip-text bg-gradient-to-r from-secondary via-primary to-secondary"
-                animate={{
-                  scale: [1, 1.1, 1],
-                  filter: ["brightness(1)", "brightness(1.2)", "brightness(1)"],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              >
-                We build 20x faster
-              </motion.span>{" "}
-              than traditional methods, turning ideas into production-ready solutions at lightspeed.
+              <span className="block backdrop-blur-sm p-6 rounded-xl bg-accent/5 shadow-[0_8px_16px_-6px_rgba(0,0,0,0.2),0_0_12px_-2px_rgba(255,255,255,0.1)] border border-accent/10 relative before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/10 before:to-transparent before:rounded-xl">
+                <motion.span 
+                  className="inline-block font-semibold text-transparent bg-clip-text bg-gradient-to-r from-secondary via-primary to-secondary relative"
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    filter: ["brightness(1)", "brightness(1.3)", "brightness(1)"],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  style={{
+                    textShadow: "0 2px 4px rgba(0,0,0,0.1)"
+                  }}
+                >
+                  We build 20x faster
+                </motion.span>{" "}
+                than traditional methods, turning ideas into production-ready solutions at lightspeed.
+              </span>
             </motion.p>
             
             <motion.div 
@@ -142,8 +157,11 @@ const Hero = () => {
             >
               <Button
                 size="lg"
-                className="group relative overflow-hidden bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 transform hover:scale-105 min-w-[200px] shadow-lg hover:shadow-xl"
+                className="group relative overflow-hidden bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 transform hover:scale-105 min-w-[200px] shadow-[0_8px_16px_-6px_rgba(0,0,0,0.3)] hover:shadow-[0_12px_24px_-8px_rgba(0,0,0,0.4)] before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/20 before:to-transparent"
                 onClick={() => navigate('/start-project')}
+                style={{
+                  transform: "perspective(1000px) rotateX(1deg)",
+                }}
               >
                 Start Building
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -153,7 +171,10 @@ const Hero = () => {
                 variant="outline"
                 size="lg"
                 onClick={() => document.getElementById("services")?.scrollIntoView({ behavior: 'smooth' })}
-                className="border-gray-500 hover:border-white transition-colors min-w-[200px] backdrop-blur-sm shadow-lg hover:shadow-xl"
+                className="border-gray-500 hover:border-white transition-colors min-w-[200px] backdrop-blur-sm shadow-lg hover:shadow-xl relative before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/10 before:to-transparent before:rounded-lg"
+                style={{
+                  transform: "perspective(1000px) rotateX(1deg)",
+                }}
               >
                 Explore Solutions
               </Button>
