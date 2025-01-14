@@ -23,17 +23,20 @@ export const ResetPassword = () => {
       console.log("Session data:", session);
       console.log("Session error:", error);
       
-      if (error) {
-        console.error("Session error:", error);
-        setError("Invalid or expired password reset link. Please request a new one.");
-        return;
-      }
-
-      // Check if we have a recovery token in the URL
-      const fragment = new URLSearchParams(window.location.hash.substring(1));
+      // Get the hash fragment from the URL
+      const hash = window.location.hash;
+      console.log("URL hash:", hash);
+      
+      // Parse the hash fragment
+      const fragment = new URLSearchParams(hash.substring(1));
       const type = fragment.get('type');
+      const accessToken = fragment.get('access_token');
+      
+      console.log("Recovery type:", type);
+      console.log("Access token present:", !!accessToken);
       
       if (!session && type !== 'recovery') {
+        console.error("No valid session or recovery token found");
         setError("Invalid or expired password reset link. Please request a new one.");
         return;
       }
