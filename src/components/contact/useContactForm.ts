@@ -46,31 +46,24 @@ export const useContactForm = () => {
   const isLastStep = currentStep === formSteps.length - 1;
 
   const nextStep = async () => {
-    console.log("ContactForm: Attempting to move to next step", { currentStep, fieldsToValidate: formSteps[currentStep] });
     const fieldsToValidate = formSteps[currentStep];
     const isValid = await form.trigger(fieldsToValidate as any[]);
     
     if (isValid && currentStep < formSteps.length - 1) {
-      console.log("ContactForm: Step validation successful, moving to next step");
       setCurrentStep((prev) => prev + 1);
-    } else {
-      console.log("ContactForm: Step validation failed or last step reached", { isValid, currentStep });
     }
   };
 
   const prevStep = () => {
-    console.log("ContactForm: Moving to previous step", { currentStep });
     setCurrentStep((prev) => Math.max(prev - 1, 0));
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("ContactForm: Starting form submission with values:", values);
+    console.log("ContactForm: Starting submission with values:", values);
     setIsSubmitting(true);
     
     try {
-      // Step 1: Save contact submission
-      console.log("ContactForm: Attempting to save contact submission...");
-      const { error: submissionError, data: submissionData } = await supabase
+      const { error } = await supabase
         .from("contact_submissions")
         .insert({
           name: values.name,
@@ -78,114 +71,21 @@ export const useContactForm = () => {
           phone: values.phone || null,
           project_type: values.projectType,
           message: values.message,
-        })
-        .select()
-        .single();
-
-      if (submissionError) {
-        console.error("ContactForm: Database submission error:", submissionError);
-        throw submissionError;
-      }
-
-      console.log("ContactForm: Contact submission saved successfully:", submissionData);
-
-      // Step 2: Log initial automation attempt
-      console.log("ContactForm: Logging initial automation attempt...");
-      const { error: logError } = await supabase
-        .from("automation_logs")
-        .insert({
-          contact_submission_id: submissionData.id,
-          stage: "initial_submission",
-          status: "success",
-          metadata: {
-            form_data: values
-          }
         });
 
-      if (logError) {
-        console.error("ContactForm: Error logging automation:", logError);
-        // Don't throw here, continue with the process
+      if (error) {
+        console.error("ContactForm: Submission error:", error);
+        throw error;
       }
 
-      // Step 3: Trigger CRM automation
-      console.log("ContactForm: Triggering CRM automation...");
-      const { error: automationError, data: automationData } = await supabase.functions.invoke('crm-email-automation', {
-        body: {
-          ...values,
-          id: submissionData.id
-        }
-      });
-
-      if (automationError) {
-        console.error("ContactForm: CRM automation error:", automationError);
-        
-        // Log the automation error
-        await supabase
-          .from("automation_logs")
-          .insert({
-            contact_submission_id: submissionData.id,
-            stage: "crm_automation",
-            status: "error",
-            error_message: automationError.message,
-            error_context: { error: automationError }
-          });
-
-        // Add to retry queue
-        await supabase
-          .from("automation_retry_queue")
-          .insert({
-            contact_submission_id: submissionData.id,
-            stage: "crm_automation",
-            payload: {
-              ...values,
-              id: submissionData.id
-            }
-          });
-
-        // Update submission status
-        await supabase
-          .from("contact_submissions")
-          .update({
-            automation_status: "failed",
-            last_error: automationError.message
-          })
-          .eq("id", submissionData.id);
-
-        toast.error("Message saved but notification failed to send. Our team will still be in touch shortly.");
-      } else {
-        console.log("ContactForm: CRM automation completed successfully", automationData);
-        
-        // Log successful automation
-        await supabase
-          .from("automation_logs")
-          .insert({
-            contact_submission_id: submissionData.id,
-            stage: "crm_automation",
-            status: "success",
-            metadata: { automation_response: automationData }
-          });
-
-        // Update submission status
-        await supabase
-          .from("contact_submissions")
-          .update({
-            automation_status: "completed",
-            processed_at: new Date().toISOString()
-          })
-          .eq("id", submissionData.id);
-
-        toast.success("Message sent successfully!");
-      }
-
+      console.log("ContactForm: Submission successful");
+      toast.success("Message sent successfully!");
       form.reset();
       setCurrentStep(0);
     } catch (error) {
       console.error("ContactForm: Error in form submission:", error);
-      toast.error(
-        "Failed to send message. Please try again or contact support directly."
-      );
+      toast.error("Failed to send message. Please try again.");
     } finally {
-      console.log("ContactForm: Submission process completed");
       setIsSubmitting(false);
     }
   };
