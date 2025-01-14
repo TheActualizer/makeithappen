@@ -13,13 +13,15 @@ export const Messages = () => {
     messages,
     selectedConversation,
     setSelectedConversation,
-    fetchMessages
+    fetchMessages,
+    loading,
+    error
   } = useMessages();
 
   const {
     newMessage,
     setNewMessage,
-    isLoading,
+    isLoading: sendingMessage,
     sendMessage
   } = useMessageSender(selectedConversation, () => {
     if (selectedConversation) {
@@ -30,7 +32,6 @@ export const Messages = () => {
   const selectConversation = (conversationId: string) => {
     console.log('Selecting conversation:', conversationId);
     setSelectedConversation(conversationId);
-    fetchMessages(conversationId);
   };
 
   return (
@@ -47,7 +48,9 @@ export const Messages = () => {
           newMessage={newMessage}
           setNewMessage={setNewMessage}
           onSendMessage={sendMessage}
-          isLoading={isLoading}
+          isLoading={sendingMessage}
+          error={error}
+          loading={loading}
         />
       </div>
     </div>

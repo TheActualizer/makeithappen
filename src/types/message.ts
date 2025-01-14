@@ -1,23 +1,34 @@
-export interface Profile {
+export interface Message {
+  id: string;
+  conversation_id: string;
+  sender_id: string;
+  content: string;
+  type: 'text' | 'image' | 'file';
+  created_at: string;
+  updated_at: string;
+  is_admin_message: boolean;
+}
+
+export interface ProfileData {
+  id: string;
   first_name: string | null;
   last_name: string | null;
   email: string | null;
   avatar_url: string | null;
+  role: 'user' | 'admin';
 }
 
-export interface Message {
-  id: string;
-  content: string;
-  sender_id: string | null;
-  created_at: string;
-  conversation_id?: string;
-  type: 'text' | 'system' | 'ai';  // Made type required
-  profiles?: Profile | null;
+export interface MessageWithProfile extends Message {
+  profile: ProfileData;
 }
 
-export interface Conversation {
+export interface ConversationType {
   id: string;
-  title: string;
+  title: string | null;
+  created_by: string | null;
   created_at: string;
-  provider?: 'dify' | 'openai';
+  updated_at: string;
+  is_archived: boolean;
+  provider: 'dify' | 'openai';
+  provider_conversation_id: string | null;
 }
