@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { ChevronRight, ChevronDown } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { FormData } from "./project-start/types";
 import BasicInfoStep from "./project-start/BasicInfoStep";
 import ProjectDetailsStep from "./project-start/ProjectDetailsStep";
@@ -150,37 +150,32 @@ const ProjectStartModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleModalClose}>
-      <DialogContent className="sm:max-w-[95vw] md:max-w-[90vw] lg:max-w-[1000px] h-[90vh] sm:h-[90vh] overflow-hidden flex flex-col">
-        <DialogHeader className="p-4 sm:p-6 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shrink-0">
-          <DialogTitle className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-gradient">
-            {showCalendly ? "Schedule a Consultation" : "Project Intake Form"}
+      <DialogContent className="max-w-[600px] h-[85vh] flex flex-col bg-background/95 backdrop-blur-md">
+        <DialogHeader className="px-4 py-3 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-10">
+          <DialogTitle className="text-xl font-semibold">
+            {showCalendly ? "Schedule Consultation" : `Step ${step} of 3`}
           </DialogTitle>
-          <DialogDescription className="text-sm sm:text-base text-muted-foreground mt-2">
-            {showCalendly 
-              ? "Choose a time that works best for you."
-              : "Help us understand your project requirements and objectives"}
-          </DialogDescription>
-        </DialogHeader>
-
-        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4">
           {!showCalendly && (
-            <div className="mb-8 sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10 pb-4">
+            <div className="mt-2">
               <ProgressSteps currentStep={step} />
             </div>
           )}
-          <div className="space-y-6 pb-20">
+        </DialogHeader>
+
+        <div className="flex-1 overflow-y-auto px-4">
+          <div className="py-4 space-y-6">
             {renderStep()}
           </div>
         </div>
 
         {!showCalendly && (
-          <div className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-4 sm:p-6 sticky bottom-0 mt-auto shrink-0">
-            <div className="flex items-center justify-between gap-4 max-w-[1000px] mx-auto">
+          <div className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-4 sticky bottom-0 mt-auto">
+            <div className="flex justify-between gap-3">
               <Button
                 variant="ghost"
                 onClick={handleBack}
                 disabled={step === 1}
-                className="h-10 px-4 text-sm font-medium"
+                size="sm"
               >
                 Back
               </Button>
@@ -188,14 +183,16 @@ const ProjectStartModal = ({
                 <Button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="h-10 px-6 text-sm font-medium bg-primary hover:bg-primary/90 transition-colors"
+                  size="sm"
+                  className="bg-primary hover:bg-primary/90"
                 >
                   {isSubmitting ? "Saving..." : "Submit"}
                 </Button>
               ) : (
                 <Button 
-                  onClick={handleNext} 
-                  className="h-10 px-6 text-sm font-medium group inline-flex items-center bg-primary hover:bg-primary/90 transition-colors"
+                  onClick={handleNext}
+                  size="sm"
+                  className="group bg-primary hover:bg-primary/90"
                 >
                   Next
                   <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
