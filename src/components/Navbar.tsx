@@ -24,14 +24,14 @@ const Navbar = () => {
     hidden: { 
       opacity: 0,
       y: -20,
-      scale: 0.95
+      scale: 0.98
     },
     visible: { 
       opacity: 1,
       y: 0,
       scale: 1,
       transition: {
-        duration: 0.15,
+        duration: 0.2,
         type: "spring",
         stiffness: 300,
         damping: 25
@@ -40,23 +40,22 @@ const Navbar = () => {
     exit: {
       opacity: 0,
       y: -10,
-      scale: 0.95,
+      scale: 0.98,
       transition: {
-        duration: 0.1
+        duration: 0.15
       }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
+    hidden: { opacity: 0, y: 5 },
     visible: {
       opacity: 1,
-      x: 0,
+      y: 0,
       transition: {
         type: "spring",
-        stiffness: 300,
-        damping: 25,
-        duration: 0.15
+        stiffness: 400,
+        damping: 30
       }
     }
   };
@@ -69,8 +68,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed w-full bg-accent/95 backdrop-blur-md z-50 py-4 border-b border-secondary/20">
-      <div className="container mx-auto px-4 flex justify-between items-center">
+    <nav className="fixed w-full bg-accent/80 backdrop-blur-xl z-50 py-4 border-b border-secondary/20 shadow-lg">
+      <div className="container mx-auto px-4 flex justify-between items-center relative">
         <Link 
           to="/" 
           className={`text-2xl font-bold transition-colors ${
@@ -86,15 +85,15 @@ const Navbar = () => {
             <Link
               key={item.name}
               to={item.href}
-              className={`transition-colors relative ${
+              className={`transition-all duration-200 relative ${
                 isActive(item.href)
-                  ? 'text-secondary font-medium'
-                  : 'text-gray-300 hover:text-white'
+                  ? 'text-secondary font-medium translate-y-[-1px]'
+                  : 'text-gray-300 hover:text-white hover:translate-y-[-1px]'
               }`}
             >
               {item.name}
               {isActive(item.href) && (
-                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-secondary rounded-full" />
+                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-secondary rounded-full shadow-sm" />
               )}
             </Link>
           ))}
@@ -102,7 +101,7 @@ const Navbar = () => {
             <Button 
               variant="ghost"
               onClick={() => navigate('/login')}
-              className="text-white hover:bg-white/10"
+              className="text-white hover:bg-white/10 transition-all duration-200 hover:translate-y-[-1px]"
             >
               <User className="w-5 h-5 mr-2" />
               Login
@@ -110,7 +109,7 @@ const Navbar = () => {
             <Button 
               variant="secondary"
               onClick={() => navigate('/start-project')}
-              className="shadow-lg hover:shadow-secondary/20"
+              className="shadow-lg hover:shadow-secondary/20 transition-all duration-200 hover:translate-y-[-1px]"
             >
               Get Started
             </Button>
@@ -130,7 +129,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu with enhanced layering */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -140,11 +139,11 @@ const Navbar = () => {
             exit="exit"
             className="md:hidden absolute top-full left-0 right-0 mt-1"
           >
-            <div className="bg-accent/98 backdrop-blur-xl shadow-2xl border-2 border-secondary/50 rounded-b-2xl mx-2 overflow-hidden">
+            <div className="bg-accent/95 backdrop-blur-2xl shadow-2xl border-2 border-secondary/20 rounded-b-2xl mx-2 overflow-hidden">
               <div className="container mx-auto p-4">
                 <div className="space-y-4">
                   {/* Primary Navigation Items with ABC Highlight */}
-                  <div className="space-y-2">
+                  <div className="space-y-2 relative">
                     {primaryNavItems.map((item, i) => (
                       <motion.div
                         key={item.name}
@@ -157,11 +156,11 @@ const Navbar = () => {
                           onClick={() => setIsOpen(false)}
                           className={`block px-4 py-3 rounded-lg transition-all duration-200 ${
                             isActive(item.href)
-                              ? 'bg-secondary/20 text-secondary font-medium'
-                              : 'text-gray-300 hover:bg-white/5 hover:text-white'
+                              ? 'bg-secondary/20 text-secondary font-medium translate-y-[-1px] shadow-sm'
+                              : 'text-gray-300 hover:bg-white/5 hover:text-white hover:translate-y-[-1px]'
                           }`}
                         >
-                          <span className="text-secondary font-bold text-lg">
+                          <span className="text-secondary font-bold text-lg drop-shadow-sm">
                             {item.name[0]}
                           </span>
                           {item.name.slice(1)}
@@ -170,8 +169,8 @@ const Navbar = () => {
                     ))}
                   </div>
 
-                  {/* Gradient Divider */}
-                  <div className="h-px bg-gradient-to-r from-transparent via-secondary/50 to-transparent my-4" />
+                  {/* Enhanced Gradient Divider */}
+                  <div className="h-px bg-gradient-to-r from-transparent via-secondary/50 to-transparent my-4 shadow-sm" />
 
                   {/* Secondary Navigation Items */}
                   <div className="space-y-2">
@@ -186,8 +185,8 @@ const Navbar = () => {
                           onClick={() => setIsOpen(false)}
                           className={`block px-4 py-3 rounded-lg transition-all duration-200 ${
                             isActive(item.href)
-                              ? 'bg-secondary/20 text-secondary font-medium'
-                              : 'text-gray-300 hover:bg-white/5 hover:text-white'
+                              ? 'bg-secondary/20 text-secondary font-medium translate-y-[-1px] shadow-sm'
+                              : 'text-gray-300 hover:bg-white/5 hover:text-white hover:translate-y-[-1px]'
                           }`}
                         >
                           {item.name}
@@ -196,7 +195,7 @@ const Navbar = () => {
                     ))}
                   </div>
 
-                  {/* Action Buttons */}
+                  {/* Action Buttons with enhanced layering */}
                   <div className="pt-4 space-y-3 border-t border-secondary/30">
                     <motion.div variants={itemVariants}>
                       <Button 
@@ -205,7 +204,7 @@ const Navbar = () => {
                           setIsOpen(false);
                           navigate('/login');
                         }}
-                        className="w-full justify-start text-white hover:bg-white/10"
+                        className="w-full justify-start text-white hover:bg-white/10 transition-all duration-200 hover:translate-y-[-1px]"
                       >
                         <User className="w-5 h-5 mr-2" />
                         Login
@@ -218,7 +217,7 @@ const Navbar = () => {
                           setIsOpen(false);
                           navigate('/start-project');
                         }}
-                        className="w-full shadow-lg hover:shadow-secondary/20"
+                        className="w-full shadow-lg hover:shadow-secondary/20 transition-all duration-200 hover:translate-y-[-1px]"
                       >
                         Get Started
                       </Button>
