@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { Brain, Building2, Stethoscope, Landmark, ArrowRight, Sparkles, Globe, Users, Calculator, Megaphone, Scale, UserCog } from "lucide-react";
+import { Brain, Building2, Scale, Calculator, Truck, Factory, Search, Database, Shield, Code, Network, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -23,110 +23,110 @@ interface Service {
 const services: Service[] = [
   {
     id: 1,
-    title: "Digital Workforce Automation",
-    description: "Transform your entire business operations with AI-powered digital workforce",
-    icon: Brain,
+    title: "Finance & Markets Automation",
+    description: "Revolutionary AI systems for financial markets and accounting",
+    icon: Calculator,
     benefits: [
-      "Complete business process automation",
-      "AI agent orchestration",
-      "Policy & procedure digitization",
-      "Workforce simulation"
+      "Real-time market analysis",
+      "Automated accounting workflows",
+      "Risk assessment automation",
+      "Regulatory compliance"
     ],
-    metrics: "Reduce operational costs by 60%",
+    metrics: "85% reduction in processing time",
     caseStudy: {
-      title: "Enterprise Digital Transformation",
-      description: "Implemented full-scale digital workforce automation",
-      results: "Automated 80% of manual processes"
+      title: "Financial Markets Transformation",
+      description: "Implemented agentic trading system with real-time analysis",
+      results: "300% increase in trading efficiency"
     }
   },
   {
     id: 2,
-    title: "Website & CRM Solutions",
-    description: "AI-powered website development and customer relationship management",
-    icon: Globe,
+    title: "Legal Department Automation",
+    description: "HIPAA & GDPR compliant legal automation systems",
+    icon: Scale,
     benefits: [
-      "Intelligent website builder",
-      "Automated CRM setup",
-      "Customer journey automation",
-      "Smart content generation"
+      "Automated contract review",
+      "Compliance monitoring",
+      "Case management",
+      "Legal research automation"
     ],
-    metrics: "Increase customer engagement by 45%",
+    metrics: "75% faster document processing",
     caseStudy: {
-      title: "E-commerce Transformation",
-      description: "Built AI-powered website with integrated CRM",
-      results: "200% increase in lead conversion"
+      title: "Legal Tech Revolution",
+      description: "Deployed AI-powered legal operations system",
+      results: "90% reduction in review time"
     }
   },
   {
     id: 3,
-    title: "Accounting & Finance",
-    description: "Automated accounting systems and financial management",
-    icon: Calculator,
+    title: "Logistics & Manufacturing",
+    description: "End-to-end supply chain and manufacturing optimization",
+    icon: Truck,
     benefits: [
-      "Automated bookkeeping",
-      "Real-time financial reporting",
-      "Invoice processing automation",
-      "Tax compliance automation"
+      "Supply chain optimization",
+      "Predictive maintenance",
+      "Inventory management",
+      "Quality control automation"
     ],
-    metrics: "95% reduction in manual accounting tasks",
+    metrics: "60% improvement in efficiency",
     caseStudy: {
-      title: "Financial Operations Revolution",
-      description: "Implemented AI-driven accounting system",
-      results: "Saved 120+ hours monthly in accounting tasks"
+      title: "Manufacturing Excellence",
+      description: "Implemented smart factory automation",
+      results: "45% cost reduction"
     }
   },
   {
     id: 4,
-    title: "Marketing Automation",
-    description: "End-to-end marketing system setup and automation",
-    icon: Megaphone,
+    title: "Research & Development",
+    description: "Sakana AI methodologies for rapid prototyping",
+    icon: Search,
     benefits: [
-      "AI content generation",
-      "Campaign automation",
-      "Analytics & reporting",
-      "Social media management"
+      "Lightspeed prototyping",
+      "Research automation",
+      "Data analysis",
+      "Innovation acceleration"
     ],
-    metrics: "Increase marketing ROI by 80%",
+    metrics: "10x faster research cycles",
     caseStudy: {
-      title: "Marketing Automation Success",
-      description: "Deployed comprehensive marketing system",
-      results: "3x increase in qualified leads"
+      title: "R&D Transformation",
+      description: "Applied Sakana AI methodologies",
+      results: "5x increase in innovation rate"
     }
   },
   {
     id: 5,
-    title: "Legal Department Setup",
-    description: "AI-powered legal operations and compliance management",
-    icon: Scale,
+    title: "Data Architecture & Processing",
+    description: "Advanced data systems with AWS & Bedrock integration",
+    icon: Database,
     benefits: [
-      "Contract automation",
-      "Legal document processing",
-      "Compliance monitoring",
-      "Case management automation"
+      "Data enrichment",
+      "Vector processing",
+      "AWS integration",
+      "Real-time analytics"
     ],
-    metrics: "70% faster legal document processing",
+    metrics: "99.9% data accuracy achieved",
     caseStudy: {
-      title: "Legal Tech Implementation",
-      description: "Automated legal operations workflow",
-      results: "Reduced legal review time by 65%"
+      title: "Data Infrastructure",
+      description: "Built scalable vector database system",
+      results: "1M+ operations per second"
     }
   },
   {
     id: 6,
-    title: "HR Department Setup",
-    description: "Complete HR system automation and management",
-    icon: UserCog,
+    title: "Agentic Systems Development",
+    description: "Custom agent frameworks and memory systems",
+    icon: Brain,
     benefits: [
-      "Recruitment automation",
-      "Employee onboarding",
-      "Performance management",
-      "HR analytics"
+      "Agent orchestration",
+      "Memory systems",
+      "Decision frameworks",
+      "Workflow automation"
     ],
-    metrics: "Reduce HR administrative work by 50%",
+    metrics: "95% autonomous operation rate",
     caseStudy: {
-      title: "HR Digital Transformation",
-      description: "Implemented AI-driven HR system",
-      results: "90% faster onboarding process"
+      title: "Agentic Framework",
+      description: "Developed custom agent network",
+      results: "24/7 autonomous operations"
     }
   }
 ];
@@ -164,65 +164,26 @@ const ServiceCard = ({ service }: { service: Service }) => {
   );
 };
 
-const CaseStudyDialog = ({ service }: { service: Service }) => {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <button className="inline-flex items-center text-sm text-secondary hover:text-secondary/80 transition-colors">
-          View Case Study <ArrowRight className="ml-1 w-4 h-4" />
-        </button>
-      </DialogTrigger>
-      <DialogContent className="bg-accent/95 backdrop-blur-sm border-accent/20">
-        <DialogHeader>
-          <DialogTitle className="text-secondary flex items-center gap-2">
-            <Sparkles className="w-4 h-4" />
-            {service.caseStudy.title}
-          </DialogTitle>
-          <DialogDescription>
-            {service.caseStudy.description}
-            <div className="mt-4 p-4 bg-accent/40 rounded-lg border border-accent/20">
-              <p className="font-semibold text-secondary">Results:</p>
-              <p className="mt-2 text-gray-300">{service.caseStudy.results}</p>
-            </div>
-          </DialogDescription>
-        </DialogHeader>
-      </DialogContent>
-    </Dialog>
-  );
-};
-
 export const ServicesShowcase = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const navigate = useNavigate();
-
-  const filteredServices = selectedCategory 
-    ? services.filter(service => service.title === selectedCategory)
-    : services;
 
   return (
     <section className="py-24 px-4 md:px-6 lg:px-8 bg-background relative" id="services">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-6">
-            <Sparkles className="w-4 h-4 text-secondary" />
-            <span className="text-sm text-gray-300">Our Services</span>
-          </div>
           <h2 className="text-3xl font-bold tracking-tight text-white mb-6">
-            Complete Business Automation Solutions
+            Enterprise-Grade Automation Solutions
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
-            Transform your entire business with our comprehensive AI-powered automation solutions,
-            from digital workforce to departmental setups.
+          <p className="text-gray-400 max-w-3xl mx-auto">
+            Leverage cutting-edge AI and automation across your entire organization,
+            from financial operations to research and development.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredServices.map((service) => (
-            <div key={service.id} className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {services.map((service) => (
+            <div key={service.id}>
               <ServiceCard service={service} />
-              <div className="text-center">
-                <CaseStudyDialog service={service} />
-              </div>
             </div>
           ))}
         </div>
@@ -234,11 +195,10 @@ export const ServicesShowcase = () => {
             onClick={() => navigate("/start-project")}
             className="group bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300"
           >
-            Start Your Project
-            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            Start Your Digital Transformation
           </Button>
           <p className="mt-4 text-sm text-gray-400">
-            Ready to transform your business? Let's discuss your project in detail.
+            Ready to revolutionize your business operations? Let's discuss your project.
           </p>
         </div>
       </div>
