@@ -9,7 +9,9 @@ export const services = [
       "Custom API development",
       "ETL workflow automation"
     ],
-    icon: "Database"
+    icon: "Database",
+    tags: ["Data", "Integration", "API", "ETL"],
+    metrics: "99.9% uptime guarantee"
   },
   {
     id: 2,
@@ -21,7 +23,9 @@ export const services = [
       "Predictive analytics",
       "Automated reporting"
     ],
-    icon: "Cpu"
+    icon: "Cpu",
+    tags: ["AI", "Automation", "Analytics"],
+    metrics: "Up to 80% reduction in manual tasks"
   },
   {
     id: 3,
@@ -33,7 +37,9 @@ export const services = [
       "Document sharing & collaboration",
       "Client portal access"
     ],
-    icon: "Users"
+    icon: "Users",
+    tags: ["Project Management", "Collaboration"],
+    metrics: "30% faster project delivery"
   },
   {
     id: 4,
@@ -45,7 +51,9 @@ export const services = [
       "API authentication",
       "Rate limiting & caching"
     ],
-    icon: "Network"
+    icon: "Network",
+    tags: ["API", "Development", "Integration"],
+    metrics: "50+ successful API deployments"
   },
   {
     id: 5,
@@ -57,7 +65,9 @@ export const services = [
       "Automated reports",
       "Data visualization"
     ],
-    icon: "BarChart"
+    icon: "BarChart",
+    tags: ["Analytics", "Reporting", "Dashboards"],
+    metrics: "Process 1M+ data points daily"
   },
   {
     id: 6,
@@ -69,6 +79,8 @@ export const services = [
       "Legacy system connectivity",
       "Cloud service integration"
     ],
-    icon: "GitMerge"
+    icon: "GitMerge",
+    tags: ["Enterprise", "Integration", "Cloud"],
+    metrics: "200+ enterprise integrations"
   }
 ];

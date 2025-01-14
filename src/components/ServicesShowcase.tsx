@@ -31,10 +31,8 @@ export const ServicesShowcase = () => {
             return (
               <ServiceCard 
                 key={service.id} 
-                service={{
-                  ...service,
-                  Icon: IconComponent
-                }} 
+                service={service}
+                Icon={IconComponent}
               />
             );
           })}
