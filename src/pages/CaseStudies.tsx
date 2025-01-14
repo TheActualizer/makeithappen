@@ -5,8 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Award, ChartBar, Rocket } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Canvas } from '@react-three/fiber';
-import Globe from "@/components/Globe";
 
 const CaseStudies = () => {
   const navigate = useNavigate();
@@ -45,34 +43,24 @@ const CaseStudies = () => {
     <div className="min-h-screen bg-accent">
       <Navbar />
       
-      {/* Hero Section with Globe */}
-      <section className="pt-32 pb-16 px-4 relative">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div className="text-left">
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Global Impact Through Innovation
-              </h1>
-              <p className="text-xl text-gray-300 mb-8">
-                Transforming businesses across the globe with cutting-edge AI and automation solutions.
-              </p>
-              <Button 
-                variant="secondary"
-                size="lg"
-                onClick={() => navigate("/start-project")}
-                className="animate-float"
-              >
-                Start Your Success Story
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </div>
-            <div className="h-[500px] relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-accent via-transparent to-transparent z-10" />
-              <Canvas camera={{ position: [0, 0, 6], fov: 45 }}>
-                <Globe />
-              </Canvas>
-            </div>
-          </div>
+      {/* Hero Section */}
+      <section className="pt-32 pb-16 px-4">
+        <div className="max-w-6xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Transforming Businesses Through Innovation
+          </h1>
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+            Discover how we've helped organizations achieve breakthrough results with our cutting-edge AI and automation solutions.
+          </p>
+          <Button 
+            variant="secondary"
+            size="lg"
+            onClick={() => navigate("/start-project")}
+            className="animate-float"
+          >
+            Start Your Success Story
+            <ArrowRight className="ml-2 w-5 h-5" />
+          </Button>
         </div>
       </section>
 
