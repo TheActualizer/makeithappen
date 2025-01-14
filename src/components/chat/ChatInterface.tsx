@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { ArrowUp, Link2, Settings2, ChevronDown, MessageCircle, HelpCircle, Info } from "lucide-react";
+import { ArrowUp, Link2, Settings2, ChevronDown, MessageCircle, HelpCircle, Info, Network } from "lucide-react";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
 import { motion, AnimatePresence } from "framer-motion";
@@ -27,11 +27,11 @@ const ChatInterface = () => {
         >
           <div className="flex items-center gap-4">
             <div className="p-2.5 bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl border border-purple-500/20 shadow-lg">
-              <MessageCircle className="w-5 h-5 text-purple-100" />
+              <Network className="w-5 h-5 text-purple-100" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[15px] font-medium text-white/95 tracking-tight">The Make it happen app</span>
-              <span className="text-xs text-purple-200/70 font-light">Your AI Assistant</span>
+              <span className="text-[15px] font-medium text-white/95 tracking-tight">Agentic Hive Interface</span>
+              <span className="text-xs text-purple-200/70 font-light">Enterprise-Grade AI Orchestration</span>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -96,10 +96,10 @@ const ChatInterface = () => {
                     </div>
                   </div>
                   <div className="mt-3 flex items-center justify-between text-xs text-purple-200/60">
-                    <span className="font-light tracking-wide">Type / for commands</span>
+                    <span className="font-light tracking-wide">Access the Hive Swarm Network</span>
                     <div className="flex items-center gap-2">
                       <Info className="w-3 h-3" />
-                      <span className="font-light tracking-wide">AI-powered assistance</span>
+                      <span className="font-light tracking-wide">Connected to Enterprise Data Pipelines & Analytics</span>
                     </div>
                   </div>
                 </div>
