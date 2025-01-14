@@ -33,7 +33,10 @@ const formSchema = z.object({
   message: z.string()
     .min(10, "Message must be at least 10 characters")
     .refine(
-      (val) => val.trim() !== '' && !val.split('').every(char => char === ','),
+      (val) => {
+        const trimmed = val.trim();
+        return trimmed !== '' && !trimmed.split('').every(char => char === ',');
+      },
       "Message cannot be empty or contain only commas"
     ),
 });
@@ -89,8 +92,17 @@ export const ContactForm = () => {
     setIsSubmitting(true);
     
     try {
+      // First, validate the form data
+      const validationError = formSchema.safeParse(values);
+      if (!validationError.success) {
+        throw new Error("Form validation failed");
+      }
+
+      console.log("ContactForm: Form validation passed, proceeding with submission");
+
+      // Submit to Supabase
       console.log("ContactForm: Attempting to save submission to Supabase...");
-      const { error: submissionError } = await supabase
+      const { error: submissionError, data: submissionData } = await supabase
         .from("contact_submissions")
         .insert({
           name: values.name,
@@ -98,28 +110,35 @@ export const ContactForm = () => {
           phone: values.phone || null,
           project_type: values.projectType,
           message: values.message,
-        });
+        })
+        .select()
+        .single();
 
       if (submissionError) {
         console.error("ContactForm: Supabase submission error:", submissionError);
         throw submissionError;
       }
 
-      console.log("ContactForm: Contact submission saved successfully");
+      console.log("ContactForm: Contact submission saved successfully", submissionData);
 
-      // Trigger CRM automation
+      // Trigger CRM automation with better error handling
       console.log("ContactForm: Triggering CRM automation...");
-      const { error: automationError } = await supabase.functions.invoke('crm-email-automation', {
-        body: values
+      const { error: automationError, data: automationData } = await supabase.functions.invoke('crm-email-automation', {
+        body: {
+          ...values,
+          id: submissionData.id // Pass the submission ID to the automation
+        }
       });
 
       if (automationError) {
         console.error("ContactForm: CRM automation error:", automationError);
-        throw automationError;
+        // Don't throw here, we still want to show success for the submission
+        toast.error("Contact saved but notification failed to send. Our team will still be in touch shortly.");
+      } else {
+        console.log("ContactForm: CRM automation completed successfully", automationData);
+        toast.success("Message sent successfully!");
       }
 
-      console.log("ContactForm: CRM automation completed successfully");
-      toast.success("Message sent successfully!");
       form.reset();
       setCurrentStep(0);
     } catch (error) {
