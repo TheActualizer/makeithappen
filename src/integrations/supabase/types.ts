@@ -172,6 +172,70 @@ export type Database = {
           },
         ]
       }
+      contact_funnel: {
+        Row: {
+          assigned_to: string | null
+          contact_submission_id: string | null
+          created_at: string | null
+          current_stage: Database["public"]["Enums"]["funnel_stage"]
+          id: string
+          last_interaction_date: string | null
+          next_action_date: string | null
+          notes: string | null
+          project_id: string | null
+          status: Database["public"]["Enums"]["contact_status"]
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          contact_submission_id?: string | null
+          created_at?: string | null
+          current_stage?: Database["public"]["Enums"]["funnel_stage"]
+          id?: string
+          last_interaction_date?: string | null
+          next_action_date?: string | null
+          notes?: string | null
+          project_id?: string | null
+          status?: Database["public"]["Enums"]["contact_status"]
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          contact_submission_id?: string | null
+          created_at?: string | null
+          current_stage?: Database["public"]["Enums"]["funnel_stage"]
+          id?: string
+          last_interaction_date?: string | null
+          next_action_date?: string | null
+          notes?: string | null
+          project_id?: string | null
+          status?: Database["public"]["Enums"]["contact_status"]
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_funnel_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contact_funnel_contact_submission_id_fkey"
+            columns: ["contact_submission_id"]
+            isOneToOne: false
+            referencedRelation: "contact_submissions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contact_funnel_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_submissions: {
         Row: {
           created_at: string | null
@@ -273,6 +337,144 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      email_communications: {
+        Row: {
+          contact_funnel_id: string | null
+          created_at: string | null
+          email_data: Json | null
+          id: string
+          scheduled_for: string | null
+          sent_at: string | null
+          status: string
+          template_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          contact_funnel_id?: string | null
+          created_at?: string | null
+          email_data?: Json | null
+          id?: string
+          scheduled_for?: string | null
+          sent_at?: string | null
+          status?: string
+          template_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          contact_funnel_id?: string | null
+          created_at?: string | null
+          email_data?: Json | null
+          id?: string
+          scheduled_for?: string | null
+          sent_at?: string | null
+          status?: string
+          template_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_communications_contact_funnel_id_fkey"
+            columns: ["contact_funnel_id"]
+            isOneToOne: false
+            referencedRelation: "contact_funnel"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_communications_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "email_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      email_templates: {
+        Row: {
+          body: string
+          created_at: string | null
+          funnel_stage: Database["public"]["Enums"]["funnel_stage"] | null
+          id: string
+          name: string
+          subject: string
+          trigger_event: string
+          updated_at: string | null
+        }
+        Insert: {
+          body: string
+          created_at?: string | null
+          funnel_stage?: Database["public"]["Enums"]["funnel_stage"] | null
+          id?: string
+          name: string
+          subject: string
+          trigger_event: string
+          updated_at?: string | null
+        }
+        Update: {
+          body?: string
+          created_at?: string | null
+          funnel_stage?: Database["public"]["Enums"]["funnel_stage"] | null
+          id?: string
+          name?: string
+          subject?: string
+          trigger_event?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      meeting_resources: {
+        Row: {
+          contact_funnel_id: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          meeting_date: string | null
+          resource_type: string
+          title: string
+          updated_at: string | null
+          uploaded_by: string | null
+          url: string
+        }
+        Insert: {
+          contact_funnel_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          meeting_date?: string | null
+          resource_type: string
+          title: string
+          updated_at?: string | null
+          uploaded_by?: string | null
+          url: string
+        }
+        Update: {
+          contact_funnel_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          meeting_date?: string | null
+          resource_type?: string
+          title?: string
+          updated_at?: string | null
+          uploaded_by?: string | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meeting_resources_contact_funnel_id_fkey"
+            columns: ["contact_funnel_id"]
+            isOneToOne: false
+            referencedRelation: "contact_funnel"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "meeting_resources_uploaded_by_fkey"
+            columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       messages: {
         Row: {
@@ -866,6 +1068,22 @@ export type Database = {
         | "policy_automation"
         | "procedure_automation"
         | "agent_orchestration"
+      contact_status:
+        | "new"
+        | "contacted"
+        | "qualified"
+        | "proposal"
+        | "negotiation"
+        | "won"
+        | "lost"
+      funnel_stage:
+        | "inquiry"
+        | "consultation_scheduled"
+        | "consultation_completed"
+        | "project_started"
+        | "onboarding"
+        | "active"
+        | "completed"
       message_type: "text" | "system" | "ai"
       milestone_status: "not_started" | "in_progress" | "completed" | "blocked"
       post_status: "draft" | "published" | "archived"
