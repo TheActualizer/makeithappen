@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search as SearchIcon, ArrowLeft, Loader2 } from "lucide-react";
+import { Search as SearchIcon, ArrowLeft, Loader2, FileText, Book, FolderOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -12,10 +12,16 @@ import Navbar from "@/components/Navbar";
 interface SearchResult {
   id: string;
   title: string;
-  excerpt: string;
-  slug: string;
-  reading_time: number;
-  views: number;
+  description: string;
+  type: 'blog' | 'project' | 'document';
+  url: string;
+  metadata?: {
+    views?: number;
+    reading_time?: number;
+    excerpt?: string;
+    project_type?: string[];
+    file_type?: string;
+  };
 }
 
 const Search = () => {
@@ -37,20 +43,72 @@ const Search = () => {
     setIsSearching(true);
     try {
       console.log('Searching for:', query);
-      const { data, error } = await supabase
+      
+      // Search blog posts
+      const { data: blogPosts, error: blogError } = await supabase
         .from('blog_posts')
         .select('id, title, excerpt, slug, reading_time, views')
         .or(`title.ilike.%${query}%,excerpt.ilike.%${query}%,content.ilike.%${query}%`)
         .eq('status', 'published')
         .order('views', { ascending: false });
 
-      if (error) {
-        console.error('Search error:', error);
-        throw error;
-      }
+      if (blogError) throw blogError;
 
-      console.log('Search results:', data);
-      setResults(data || []);
+      // Search projects
+      const { data: projects, error: projectError } = await supabase
+        .from('projects')
+        .select('id, name, description, project_type')
+        .or(`name.ilike.%${query}%,description.ilike.%${query}%`)
+        .order('created_at', { ascending: false });
+
+      if (projectError) throw projectError;
+
+      // Search documents
+      const { data: documents, error: documentError } = await supabase
+        .from('documents')
+        .select('id, title, description, file_type')
+        .or(`title.ilike.%${query}%,description.ilike.%${query}%`)
+        .order('created_at', { ascending: false });
+
+      if (documentError) throw documentError;
+
+      // Combine and format results
+      const formattedResults: SearchResult[] = [
+        ...(blogPosts?.map(post => ({
+          id: post.id,
+          title: post.title,
+          description: post.excerpt || '',
+          type: 'blog' as const,
+          url: `/blog/${post.slug}`,
+          metadata: {
+            views: post.views,
+            reading_time: post.reading_time,
+          }
+        })) || []),
+        ...(projects?.map(project => ({
+          id: project.id,
+          title: project.name,
+          description: project.description,
+          type: 'project' as const,
+          url: `/projects/${project.id}`,
+          metadata: {
+            project_type: project.project_type,
+          }
+        })) || []),
+        ...(documents?.map(doc => ({
+          id: doc.id,
+          title: doc.title,
+          description: doc.description || '',
+          type: 'document' as const,
+          url: `/documents/${doc.id}`,
+          metadata: {
+            file_type: doc.file_type,
+          }
+        })) || [])
+      ];
+
+      console.log('Search results:', formattedResults);
+      setResults(formattedResults);
     } catch (error) {
       console.error('Error during search:', error);
       toast({
@@ -60,6 +118,17 @@ const Search = () => {
       });
     } finally {
       setIsSearching(false);
+    }
+  };
+
+  const getResultIcon = (type: SearchResult['type']) => {
+    switch (type) {
+      case 'blog':
+        return <Book className="h-5 w-5" />;
+      case 'project':
+        return <FolderOpen className="h-5 w-5" />;
+      case 'document':
+        return <FileText className="h-5 w-5" />;
     }
   };
 
@@ -77,18 +146,18 @@ const Search = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => navigate('/blog')}
+              onClick={() => navigate(-1)}
               className="text-white hover:text-primary"
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <h1 className="text-4xl font-bold text-white">Search Blog</h1>
+            <h1 className="text-4xl font-bold text-white">Search</h1>
           </div>
 
           <div className="flex gap-4 mb-8">
             <Input
               type="text"
-              placeholder="Search articles..."
+              placeholder="Search across blogs, projects, and documents..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -114,23 +183,54 @@ const Search = () => {
           <div className="space-y-4">
             {results.map((result) => (
               <motion.div
-                key={result.id}
+                key={`${result.type}-${result.id}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
               >
                 <Card
                   className="p-6 bg-white/5 hover:bg-white/10 transition-colors cursor-pointer border-white/10"
-                  onClick={() => navigate(`/blog/${result.slug}`)}
+                  onClick={() => navigate(result.url)}
                 >
-                  <h2 className="text-xl font-semibold text-white mb-2">
-                    {result.title}
-                  </h2>
-                  <p className="text-gray-300 mb-4">{result.excerpt}</p>
-                  <div className="flex items-center gap-4 text-sm text-gray-400">
-                    <span>{result.reading_time} min read</span>
-                    <span>•</span>
-                    <span>{result.views} views</span>
+                  <div className="flex items-start gap-4">
+                    <div className="p-2 bg-white/10 rounded-lg">
+                      {getResultIcon(result.type)}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h2 className="text-xl font-semibold text-white">
+                          {result.title}
+                        </h2>
+                        <span className="text-sm text-gray-400 capitalize">
+                          {result.type}
+                        </span>
+                      </div>
+                      <p className="text-gray-300 mb-4">{result.description}</p>
+                      {result.type === 'blog' && result.metadata && (
+                        <div className="flex items-center gap-4 text-sm text-gray-400">
+                          <span>{result.metadata.reading_time} min read</span>
+                          <span>•</span>
+                          <span>{result.metadata.views} views</span>
+                        </div>
+                      )}
+                      {result.type === 'project' && result.metadata?.project_type && (
+                        <div className="flex flex-wrap gap-2">
+                          {result.metadata.project_type.map((type, index) => (
+                            <span
+                              key={index}
+                              className="px-2 py-1 text-xs bg-white/10 rounded-full text-gray-300"
+                            >
+                              {type}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      {result.type === 'document' && result.metadata?.file_type && (
+                        <span className="text-sm text-gray-400">
+                          File type: {result.metadata.file_type}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </Card>
               </motion.div>
