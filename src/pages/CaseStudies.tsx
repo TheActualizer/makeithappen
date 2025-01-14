@@ -46,10 +46,10 @@ const CaseStudies = () => {
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-4">
         <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 animate-fade-in">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-[1.1]">
             Transforming Businesses Through Innovation
           </h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8 animate-fade-in [animation-delay:200ms]">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8 leading-[1.6] tracking-[0.0125em]">
             Discover how we've helped organizations achieve breakthrough results with our cutting-edge AI and automation solutions.
           </p>
           <Button 
@@ -73,9 +73,7 @@ const CaseStudies = () => {
               className="group bg-accent/40 backdrop-blur-sm relative overflow-hidden
                 before:absolute before:inset-0 before:border before:border-primary/10 before:rounded-lg
                 after:absolute after:inset-0 after:border after:border-primary/20 after:rounded-lg after:transition-transform after:duration-700
-                hover:after:scale-95 hover:before:scale-105
-                animate-fade-in [animation-delay:var(--delay)]"
-              style={{ '--delay': `${(index + 1) * 200}ms` } as React.CSSProperties}
+                hover:after:scale-95 hover:before:scale-105"
             >
               <CardHeader>
                 <div className="flex items-center justify-between mb-4">
@@ -94,7 +92,7 @@ const CaseStudies = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-300 mb-6">{study.description}</p>
+                <p className="text-gray-300 mb-6 leading-[1.6] tracking-[0.0125em]">{study.description}</p>
                 <div className="space-y-4">
                   <h4 className="text-sm font-semibold text-white">Key Impact:</h4>
                   <ul className="space-y-2">

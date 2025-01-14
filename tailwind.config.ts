@@ -19,18 +19,19 @@ export default {
     },
     extend: {
       fontSize: {
-        'xs': ['0.75rem', { lineHeight: '1.125rem' }],
-        'sm': ['0.875rem', { lineHeight: '1.375rem' }],
-        'base': ['1rem', { lineHeight: '1.625rem' }],
-        'lg': ['1.125rem', { lineHeight: '1.75rem' }],
-        'xl': ['1.25rem', { lineHeight: '2rem' }],
-        '2xl': ['1.5rem', { lineHeight: '2.25rem' }],
-        '3xl': ['1.875rem', { lineHeight: '2.5rem' }],
-        '4xl': ['2.25rem', { lineHeight: '3rem' }],
-        '5xl': ['3rem', { lineHeight: '3.75rem' }],
+        // Perfect fourth type scale (1.333)
+        'xs': ['0.75rem', { lineHeight: '1rem' }],           // 12px
+        'sm': ['0.875rem', { lineHeight: '1.25rem' }],       // 14px
+        'base': ['1rem', { lineHeight: '1.5rem' }],          // 16px
+        'lg': ['1.333rem', { lineHeight: '1.75rem' }],       // 21.328px
+        'xl': ['1.777rem', { lineHeight: '2.25rem' }],       // 28.43px
+        '2xl': ['2.369rem', { lineHeight: '2.75rem' }],      // 37.897px
+        '3xl': ['3.157rem', { lineHeight: '3.25rem' }],      // 50.517px
+        '4xl': ['4.209rem', { lineHeight: '4rem' }],         // 67.339px
+        '5xl': ['5.61rem', { lineHeight: '1' }],             // 89.749px
       },
       spacing: {
-        'text-spacing': '0.075em',
+        'text-spacing': '0.0125em',
       },
       colors: {
         border: "hsl(var(--border))",
