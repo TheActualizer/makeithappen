@@ -1,4 +1,5 @@
 import { ServicesShowcase } from "@/components/ServicesShowcase";
+import { WebsiteCategories } from "@/components/services/WebsiteCategories";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -15,11 +16,10 @@ const Services = () => {
         <section className="pt-32 pb-16 px-4 relative">
           <div className="max-w-6xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Complete Business Automation Solutions
+              Enterprise Solutions at 20x Speed
             </h1>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto mb-8">
-              Transform your business with our comprehensive suite of AI-powered automation solutions.
-              From digital workforce to departmental setups, we've got you covered.
+              From websites to advanced AI calculations, we deliver enterprise SaaS solutions that transform your business.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Button
@@ -42,6 +42,9 @@ const Services = () => {
             </div>
           </div>
         </section>
+
+        {/* Website Categories */}
+        <WebsiteCategories />
 
         {/* Services Showcase */}
         <ServicesShowcase />
