@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Bot, ChevronDown } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 import { FormData } from "./types";
 import { ServiceTypeSection } from "./sections/ServiceTypeSection";
 import { BudgetSection } from "./sections/BudgetSection";
@@ -17,6 +17,19 @@ interface ProjectDetailsStepProps {
   setFormData: (data: FormData) => void;
 }
 
+const PAIN_POINTS = [
+  { id: "time-consuming", label: "Time-consuming manual processes" },
+  { id: "inefficient-workflows", label: "Inefficient workflows" },
+  { id: "data-accuracy", label: "Data accuracy and consistency issues" },
+  { id: "scalability", label: "Difficulty scaling operations" },
+  { id: "integration", label: "Integration challenges with existing systems" },
+  { id: "user-experience", label: "Poor user experience" },
+  { id: "reporting", label: "Limited reporting and analytics" },
+  { id: "compliance", label: "Compliance and security concerns" },
+  { id: "cost", label: "High operational costs" },
+  { id: "communication", label: "Communication gaps" }
+];
+
 const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) => {
   const handleServiceTypeChange = (serviceValue: string) => {
     const currentServices = formData.projectType || [];
@@ -27,6 +40,18 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
     setFormData({
       ...formData,
       projectType: updatedServices
+    });
+  };
+
+  const handlePainPointChange = (pointId: string) => {
+    const currentPoints = formData.pain_points || [];
+    const updatedPoints = currentPoints.includes(pointId)
+      ? currentPoints.filter(point => point !== pointId)
+      : [...currentPoints, pointId];
+    
+    setFormData({
+      ...formData,
+      pain_points: updatedPoints
     });
   };
 
@@ -42,6 +67,31 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
               formData={formData}
               onServiceTypeChange={handleServiceTypeChange}
             />
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="pain-points">
+          <AccordionTrigger className="text-sm font-medium">
+            Current Challenges
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {PAIN_POINTS.map((point) => (
+                <div key={point.id} className="flex items-start space-x-2">
+                  <Checkbox
+                    id={point.id}
+                    checked={(formData.pain_points || []).includes(point.id)}
+                    onCheckedChange={() => handlePainPointChange(point.id)}
+                  />
+                  <label
+                    htmlFor={point.id}
+                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    {point.label}
+                  </label>
+                </div>
+              ))}
+            </div>
           </AccordionContent>
         </AccordionItem>
 
@@ -69,31 +119,19 @@ const ProjectDetailsStep = ({ formData, setFormData }: ProjectDetailsStepProps) 
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem value="ai">
+        <AccordionItem value="description">
           <AccordionTrigger className="text-sm font-medium">
-            AI & Automation Requirements
+            Dream Product
           </AccordionTrigger>
           <AccordionContent className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Digital Workforce Scope</label>
-              <Textarea
-                value={formData.workforce_simulation_scope || ''}
-                onChange={(e) =>
-                  setFormData({ ...formData, workforce_simulation_scope: e.target.value })
-                }
-                placeholder="Describe your digital workforce needs and objectives..."
-                className="min-h-[100px] resize-y"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Project Description</label>
+              <label className="text-sm font-medium">What would your dream product be? What would it do for you?</label>
               <Textarea
                 value={formData.description}
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                placeholder="Please provide details about your project requirements and goals..."
+                placeholder="Describe your ideal product and how it would transform your business..."
                 className="min-h-[100px] resize-y"
               />
             </div>
