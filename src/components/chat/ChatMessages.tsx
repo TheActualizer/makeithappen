@@ -1,24 +1,62 @@
 import React, { useEffect, useState } from 'react';
 import ChatMessage from './ChatMessage';
 import type { Message } from '@/types/message';
+import { supabase } from '@/integrations/supabase/client';
 
 const ChatMessages = () => {
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    console.log('Current messages in ChatMessages:', messages);
-  }, [messages]);
+    console.log('ChatMessages: Component mounted');
+    fetchMessages();
+    subscribeToMessages();
+  }, []);
 
-  // Function to add new message that can be called from ChatInput
-  const addMessage = (message: Message) => {
-    console.log('Adding new message:', message);
-    setMessages(prev => [...prev, message]);
+  const fetchMessages = async () => {
+    console.log('ChatMessages: Fetching messages from Supabase');
+    const { data, error } = await supabase
+      .from('messages')
+      .select('*, profiles(*)')
+      .order('created_at', { ascending: true });
+
+    if (error) {
+      console.error('ChatMessages: Error fetching messages:', error);
+      return;
+    }
+
+    console.log('ChatMessages: Successfully fetched messages:', data);
+    setMessages(data);
+  };
+
+  const subscribeToMessages = () => {
+    console.log('ChatMessages: Setting up real-time subscription');
+    const subscription = supabase
+      .channel('messages_channel')
+      .on('postgres_changes', 
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'messages' 
+        }, 
+        (payload) => {
+          console.log('ChatMessages: Received real-time update:', payload);
+          fetchMessages();
+        }
+      )
+      .subscribe((status) => {
+        console.log('ChatMessages: Subscription status:', status);
+      });
+
+    return () => {
+      console.log('ChatMessages: Cleaning up subscription');
+      subscription.unsubscribe();
+    };
   };
 
   return (
     <div className="space-y-6">
-      {messages.map((message, index) => (
-        <ChatMessage key={index} message={message} />
+      {messages.map((message) => (
+        <ChatMessage key={message.id} message={message} />
       ))}
     </div>
   );

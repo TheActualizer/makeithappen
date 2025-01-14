@@ -5,6 +5,7 @@ import { Link2, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { sendMessageToDify } from '@/utils/difyApi';
 import { v4 as uuidv4 } from 'uuid';
+import { supabase } from '@/integrations/supabase/client';
 
 const ChatInput = () => {
   const [newMessage, setNewMessage] = useState('');
@@ -14,46 +15,71 @@ const ChatInput = () => {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('ChatInput: Send message triggered', { newMessage, isLoading });
     
     if (!newMessage.trim() || isLoading) {
-      console.log('Message send prevented:', {
-        hasContent: !!newMessage.trim(),
-        isLoading
-      });
+      console.log('ChatInput: Send prevented - empty message or loading');
       return;
     }
 
     setIsLoading(true);
+    const messageContent = newMessage.trim();
     
     try {
-      console.log('Sending message:', {
-        content: newMessage,
-        conversationId
-      });
+      console.log('ChatInput: Storing user message in Supabase');
+      const { data: messageData, error: messageError } = await supabase
+        .from('messages')
+        .insert([
+          {
+            conversation_id: conversationId,
+            content: messageContent,
+            type: 'text',
+            is_admin_message: false
+          }
+        ])
+        .select()
+        .single();
 
-      const userMessage = {
-        id: uuidv4(),
-        content: newMessage,
-        type: 'text' as const,
-        sender_id: null,
-        created_at: new Date().toISOString()
-      };
+      if (messageError) {
+        console.error('ChatInput: Error storing message:', messageError);
+        throw messageError;
+      }
 
-      // Add user message to chat
-      const response = await sendMessageToDify(newMessage, conversationId);
-      
-      console.log('Dify response:', response);
+      console.log('ChatInput: Message stored successfully:', messageData);
+      setNewMessage(''); // Clear input after successful store
 
-      // Clear input after successful send
-      setNewMessage('');
-      
+      console.log('ChatInput: Sending message to Dify');
+      const difyResponse = await sendMessageToDify(messageContent, conversationId);
+      console.log('ChatInput: Dify response received:', difyResponse);
+
+      // Store AI response
+      if (difyResponse.answer) {
+        console.log('ChatInput: Storing AI response in Supabase');
+        const { error: aiError } = await supabase
+          .from('messages')
+          .insert([
+            {
+              conversation_id: conversationId,
+              content: difyResponse.answer,
+              type: 'ai',
+              is_admin_message: true
+            }
+          ]);
+
+        if (aiError) {
+          console.error('ChatInput: Error storing AI response:', aiError);
+          throw aiError;
+        }
+      }
+
       toast({
         title: "Message sent",
-        description: "Your message has been processed by the AI.",
+        description: "Your message has been processed.",
       });
 
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('ChatInput: Error in send message flow:', error);
+      setNewMessage(messageContent); // Restore message on error
       toast({
         variant: "destructive",
         title: "Error",
@@ -76,7 +102,7 @@ const ChatInput = () => {
       <Textarea
         value={newMessage}
         onChange={(e) => {
-          console.log('Message input changed:', e.target.value);
+          console.log('ChatInput: Input changed:', e.target.value);
           setNewMessage(e.target.value);
         }}
         onKeyDown={handleKeyDown}
