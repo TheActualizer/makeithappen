@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import ProjectStartModal from "@/components/ProjectStartModal";
+import { useNavigate } from "react-router-dom";
 
 const Services = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-accent via-accent/95 to-primary/20">

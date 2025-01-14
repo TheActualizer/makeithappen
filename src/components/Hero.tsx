@@ -1,14 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, ChevronDown } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { useState } from "react";
 import ProjectStartModal from "./ProjectStartModal";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 
 const Hero = () => {
   const navigate = useNavigate();
@@ -56,12 +50,22 @@ const Hero = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
               <div className="p-6 rounded-xl bg-accent/20 backdrop-blur-sm border border-accent/10 hover:border-accent/30 transition-all">
                 <h3 className="text-lg font-semibold text-[#F97316] mb-2">Website & Business Operations</h3>
-                <p className="text-sm text-gray-300">Custom websites with CRM integration, marketing automation, and AI-powered client management</p>
+                <p className="text-sm text-gray-300">AI-powered client management with CRM integration, meeting summaries, and automated follow-ups</p>
               </div>
               
               <div className="p-6 rounded-xl bg-accent/20 backdrop-blur-sm border border-accent/10 hover:border-accent/30 transition-all">
-                <h3 className="text-lg font-semibold text-[#0EA5E9] mb-2">Advanced Features</h3>
-                <p className="text-sm text-gray-300">AI meeting summaries, automated follow-ups, client portals, and intelligent dashboards</p>
+                <h3 className="text-lg font-semibold text-[#0EA5E9] mb-2">Extensive AI Agent Operations</h3>
+                <p className="text-sm text-gray-300">Multi-agent swarms automating policies, procedures, and complex business workflows</p>
+              </div>
+
+              <div className="p-6 rounded-xl bg-accent/20 backdrop-blur-sm border border-accent/10 hover:border-accent/30 transition-all">
+                <h3 className="text-lg font-semibold text-[#22C55E] mb-2">Advanced Industry Calculations</h3>
+                <p className="text-sm text-gray-300">Specialized computation engines for accounting, legal analysis, and engineering simulations</p>
+              </div>
+
+              <div className="p-6 rounded-xl bg-accent/20 backdrop-blur-sm border border-accent/10 hover:border-accent/30 transition-all">
+                <h3 className="text-lg font-semibold text-[#EC4899] mb-2">Healthcare Automation</h3>
+                <p className="text-sm text-gray-300">HIPAA-compliant, FHIR-integrated autonomous systems for healthcare operations</p>
               </div>
             </div>
             
