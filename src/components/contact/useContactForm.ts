@@ -63,7 +63,8 @@ export const useContactForm = () => {
     setIsSubmitting(true);
     
     try {
-      const { error } = await supabase
+      console.log("ContactForm: Attempting to insert into contact_submissions table...");
+      const { data, error } = await supabase
         .from("contact_submissions")
         .insert({
           name: values.name,
@@ -71,14 +72,15 @@ export const useContactForm = () => {
           phone: values.phone || null,
           project_type: values.projectType,
           message: values.message,
-        });
+        })
+        .select();
 
       if (error) {
         console.error("ContactForm: Submission error:", error);
         throw error;
       }
 
-      console.log("ContactForm: Submission successful");
+      console.log("ContactForm: Submission successful, received data:", data);
       toast.success("Message sent successfully!");
       form.reset();
       setCurrentStep(0);
