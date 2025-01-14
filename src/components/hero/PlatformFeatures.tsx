@@ -6,40 +6,44 @@ import {
   Mail,
   FileText,
   BarChart,
-  Lock
+  Lock,
+  LayoutDashboard,
+  Code,
+  Video,
+  MessageSquare
 } from "lucide-react";
 import { FeatureCard } from "./FeatureCard";
 
 const platformFeatures = [
   {
-    category: "Data & Integration",
+    category: "Website Development",
     features: [
-      "Multi-Database Synchronization",
-      "Real-time Data Pipelines",
-      "Custom API Development",
-      "ETL Automation"
+      "Custom Web Applications",
+      "Responsive Design",
+      "API Integration",
+      "Performance Optimization"
     ],
-    icon: Database,
-    description: "Enterprise-grade data integration and synchronization capabilities"
+    icon: Code,
+    description: "Professional web development with modern technologies and best practices"
   },
   {
-    category: "AI & Automation",
+    category: "Admin Panels & Dashboards",
     features: [
-      "Multi-Agent Orchestration",
-      "Natural Language Processing",
-      "Predictive Analytics",
-      "Automated Decision Making"
+      "Custom Admin Interfaces",
+      "Real-time Analytics",
+      "User Management",
+      "Role-based Access Control"
     ],
-    icon: Bot,
-    description: "Advanced AI-powered automation and analytics solutions"
+    icon: LayoutDashboard,
+    description: "Powerful administrative tools and intuitive dashboards"
   },
   {
     category: "Project Management",
     features: [
-      "Client Onboarding",
-      "Resource Planning",
-      "Progress Tracking",
-      "Team Collaboration"
+      "Smart Project Request Forms",
+      "AI-Powered Project Analysis",
+      "Client Onboarding Flow",
+      "Progress Tracking"
     ],
     icon: Users,
     description: "Comprehensive project and resource management tools"
@@ -47,12 +51,12 @@ const platformFeatures = [
   {
     category: "Meeting Management",
     features: [
-      "AI Meeting Scheduling",
-      "Automated Note Taking",
-      "Action Item Tracking",
+      "Zoom Integration",
+      "AI Meeting Summaries",
+      "Automated Scheduling",
       "Follow-up Automation"
     ],
-    icon: Calendar,
+    icon: Video,
     description: "Intelligent meeting coordination and documentation"
   },
   {
