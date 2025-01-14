@@ -1,20 +1,46 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Textarea } from "@/components/ui/textarea";
-import { useMessageSender } from '@/hooks/useMessageSender';
 import { uploadChatAttachment } from '@/utils/fileUpload';
 import { useToast } from "@/components/ui/use-toast";
-import { Link2 } from "lucide-react";
+import { Link2, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { sendMessageToDify } from '@/utils/difyApi';
 
 const ChatInput = () => {
-  const { newMessage, setNewMessage, sendMessage } = useMessageSender(null, () => {});
+  const [newMessage, setNewMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newMessage.trim() || isLoading) return;
+
+    setIsLoading(true);
+    try {
+      const response = await sendMessageToDify(newMessage);
+      console.log('Message sent successfully:', response);
+      setNewMessage('');
+      toast({
+        title: "Message sent",
+        description: "Your message has been processed by the AI.",
+      });
+    } catch (error) {
+      console.error('Error sending message:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      sendMessage(e);
+      handleSendMessage(e);
     }
   };
 
@@ -32,7 +58,6 @@ const ChatInput = () => {
         title: "File uploaded successfully",
         description: `${file.name} has been attached to your message.`,
       });
-      // You can now use the attachment URL in your message or store it
       console.log('Attachment uploaded:', attachment);
     } catch (error) {
       console.error('Error uploading attachment:', error);
@@ -60,14 +85,24 @@ const ChatInput = () => {
         className="hidden"
         accept="image/*,.pdf,.doc,.docx,.txt"
       />
-      <Button 
-        variant="ghost" 
-        size="icon" 
-        className="absolute right-2 bottom-2 w-8 h-8 hover:bg-white/10 text-purple-200/80 transition-colors duration-300"
-        onClick={handleAttachmentClick}
-      >
-        <Link2 className="w-4 h-4" />
-      </Button>
+      <div className="absolute right-2 bottom-2 flex items-center gap-2">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="w-8 h-8 hover:bg-white/10 text-purple-200/80 transition-colors duration-300"
+          onClick={handleAttachmentClick}
+        >
+          <Link2 className="w-4 h-4" />
+        </Button>
+        <Button 
+          size="icon" 
+          className="w-8 h-8 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 border border-purple-400/20 transition-all duration-300 shadow-lg hover:shadow-purple-500/20"
+          onClick={handleSendMessage}
+          disabled={isLoading}
+        >
+          <ArrowUp className="w-4 h-4" />
+        </Button>
+      </div>
     </div>
   );
 };
