@@ -138,25 +138,25 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-accent to-accent/95">
       <Navbar />
-      <div className="container mx-auto px-4 pt-24 pb-12">
+      <div className="container mx-auto px-4 pt-24 pb-12 max-w-7xl">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-16 mx-auto max-w-4xl"
         >
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-8 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
             Explore Our Tech Universe
           </h1>
-          <p className="text-gray-300 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+          <p className="text-gray-300 text-lg md:text-xl mx-auto leading-relaxed">
             Deep dive into cutting-edge AI technologies, industry transformations, and revolutionary frameworks shaping the future of business and technology.
           </p>
         </motion.div>
 
         {/* Featured Articles Section */}
-        <section className="mb-16">
-          <h2 className="text-2xl font-semibold text-white mb-8">Featured Articles</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <section className="mb-20">
+          <h2 className="text-2xl font-semibold text-white mb-8 text-center">Featured Articles</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {featuredArticles.map((article, index) => (
               <motion.div
                 key={index}
@@ -164,11 +164,11 @@ const Blog = () => {
                 className="h-full"
               >
                 <Card 
-                  className="h-full bg-accent-foreground/5 backdrop-blur-sm border-accent-foreground/10 hover:border-primary/50 transition-all duration-300 cursor-pointer"
+                  className="h-full bg-accent-foreground/5 backdrop-blur-sm border-accent-foreground/10 hover:border-primary/50 transition-all duration-300 cursor-pointer flex flex-col"
                   onClick={() => navigate(article.link)}
                 >
-                  <div className="p-8 flex flex-col h-full">
-                    <div className="mb-4">
+                  <div className="p-8 flex flex-col h-full items-center text-center">
+                    <div className="mb-6">
                       {article.icon}
                     </div>
                     <h3 className="text-2xl font-semibold text-white mb-4">
@@ -179,7 +179,7 @@ const Blog = () => {
                     </p>
                     <Button
                       variant="secondary"
-                      className="w-full group hover:bg-primary hover:text-white transition-all duration-300"
+                      className="w-full md:w-auto group hover:bg-primary hover:text-white transition-all duration-300"
                     >
                       Read Article
                       <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -193,8 +193,8 @@ const Blog = () => {
 
         {/* Categories Section */}
         <section>
-          <h2 className="text-2xl font-semibold text-white mb-8">Explore Topics</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <h2 className="text-2xl font-semibold text-white mb-8 text-center">Explore Topics</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {categories.map((category) => (
               <motion.div
                 key={category.id}
@@ -214,13 +214,13 @@ const Blog = () => {
                         </div>
                       </AccordionTrigger>
                       <AccordionContent className="px-6 pb-6">
-                        <div className="space-y-4">
+                        <div className="space-y-4 text-center">
                           <p className="text-gray-300">
                             {categoryDetails[category.slug] || category.description}
                           </p>
                           <Button
                             variant="secondary"
-                            className="w-full group hover:bg-primary hover:text-white transition-all duration-300"
+                            className="w-full md:w-auto group hover:bg-primary hover:text-white transition-all duration-300"
                             onClick={() => navigate(`/blog/category/${category.slug}`)}
                           >
                             Explore {category.name}
