@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import { useTexture } from '@react-three/drei';
+import { useLoader } from '@react-three/fiber';
+import { TextureLoader } from 'three';
 
 const locations = [
   { city: "Tel Aviv", coordinates: [32.0853, 34.7818], color: "#6D28D9" },
@@ -15,8 +16,8 @@ const Globe = () => {
   const globeRef = useRef<THREE.Mesh>(null);
   const markersGroup = useRef<THREE.Group>(null);
   
-  // Load texture
-  const earthMap = useTexture('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg');
+  // Load texture using useLoader instead of useTexture
+  const earthMap = useLoader(TextureLoader, 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg');
 
   useEffect(() => {
     if (!markersGroup.current) return;
