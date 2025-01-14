@@ -6,7 +6,7 @@ import ChatInput from "./ChatInput";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ChatInterface = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <motion.div
