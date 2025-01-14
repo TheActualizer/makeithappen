@@ -1,12 +1,17 @@
+export type MessageType = 'text' | 'system' | 'ai';
+
 export interface Message {
   id: string;
-  conversation_id: string;
-  sender_id: string;
   content: string;
-  type: 'text' | 'image' | 'file';
+  type: MessageType;
+  sender_id: string | null;
   created_at: string;
-  updated_at: string;
-  is_admin_message: boolean;
+  conversation_id?: string;
+  profiles?: ProfileData | null;
+}
+
+export interface MessageWithProfile extends Message {
+  profile: ProfileData;
 }
 
 export interface ProfileData {
@@ -15,14 +20,10 @@ export interface ProfileData {
   last_name: string | null;
   email: string | null;
   avatar_url: string | null;
-  role: 'user' | 'admin';
+  role: 'admin' | 'user';
 }
 
-export interface MessageWithProfile extends Message {
-  profile: ProfileData;
-}
-
-export interface ConversationType {
+export type ConversationType = {
   id: string;
   title: string | null;
   created_by: string | null;
@@ -31,4 +32,4 @@ export interface ConversationType {
   is_archived: boolean;
   provider: 'dify' | 'openai';
   provider_conversation_id: string | null;
-}
+};

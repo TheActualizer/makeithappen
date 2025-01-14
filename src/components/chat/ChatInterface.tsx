@@ -5,6 +5,7 @@ import ChatHeader from './ChatHeader';
 import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
 import { useChat } from '@/hooks/useChat';
+import type { Message } from '@/types/message';
 
 const ChatInterface = () => {
   const {
@@ -39,7 +40,7 @@ const ChatInterface = () => {
       <ChatButton />
       <SheetContent className="w-[400px] sm:w-[540px] h-full flex flex-col p-0">
         <ChatHeader selectedModel={selectedModel} onModelChange={setSelectedModel} />
-        <ChatMessages messages={messages} messagesEndRef={messagesEndRef} />
+        <ChatMessages messages={messages as Message[]} messagesEndRef={messagesEndRef} />
         <ChatInput
           newMessage={newMessage}
           setNewMessage={setNewMessage}

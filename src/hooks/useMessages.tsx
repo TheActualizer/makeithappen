@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import type { Message, MessageWithProfile, ConversationType, ProfileData } from '@/types/message';
+import type { Message, MessageWithProfile, ConversationType } from '@/types/message';
 
 export function useMessages() {
   const [messages, setMessages] = useState<MessageWithProfile[]>([]);
@@ -17,7 +17,13 @@ export function useMessages() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setConversations(data);
+      
+      // Filter out unsupported providers to match ConversationType
+      const filteredData = data.filter(conv => 
+        conv.provider === 'dify' || conv.provider === 'openai'
+      ) as ConversationType[];
+      
+      setConversations(filteredData);
     } catch (err) {
       console.error('Error fetching conversations:', err);
       setError('Failed to load conversations');
@@ -31,7 +37,7 @@ export function useMessages() {
         .from('messages')
         .select(`
           *,
-          profile:profiles(
+          profiles (
             id,
             first_name,
             last_name,
@@ -47,8 +53,8 @@ export function useMessages() {
 
       const messagesWithProfiles = messagesData.map((message: any) => ({
         ...message,
-        profile: message.profile as ProfileData
-      }));
+        profile: message.profiles
+      })) as MessageWithProfile[];
 
       setMessages(messagesWithProfiles);
     } catch (err) {
