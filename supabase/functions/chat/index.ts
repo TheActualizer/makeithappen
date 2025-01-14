@@ -27,7 +27,7 @@ serve(async (req) => {
       throw new Error('DIFY_API_KEY is not configured')
     }
 
-    console.log('Calling DIFY API...');
+    console.log('Calling DIFY API with message:', message);
     
     const response = await fetch('https://api.dify.ai/v1/chat-messages', {
       method: 'POST',
@@ -40,6 +40,7 @@ serve(async (req) => {
         query: message,
         user: conversationId,
         response_mode: 'blocking',
+        conversation_id: conversationId,
       }),
     })
 
@@ -53,7 +54,7 @@ serve(async (req) => {
     console.log('DIFY API response:', data);
 
     if (!data.answer) {
-      console.error('No answer in DIFY response');
+      console.error('No answer in DIFY response:', data);
       throw new Error('No answer received from DIFY API')
     }
 
