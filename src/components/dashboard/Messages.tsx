@@ -14,8 +14,7 @@ export const Messages = () => {
     selectedConversation,
     setSelectedConversation,
     fetchMessages,
-    loading,
-    error
+    loading
   } = useMessages();
 
   const {
@@ -49,7 +48,6 @@ export const Messages = () => {
           setNewMessage={setNewMessage}
           onSendMessage={sendMessage}
           isLoading={sendingMessage}
-          error={error}
           loading={loading}
         />
       </div>

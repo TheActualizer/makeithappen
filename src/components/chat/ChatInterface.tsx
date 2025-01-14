@@ -5,7 +5,7 @@ import ChatHeader from './ChatHeader';
 import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
 import { useChat } from '@/hooks/useChat';
-import type { Message } from '@/types/message';
+import type { Message, AIModel } from '@/types/message';
 
 const ChatInterface = () => {
   const {
@@ -35,11 +35,15 @@ const ChatInterface = () => {
     setIsOpen(open);
   };
 
+  const handleModelChange = (model: AIModel) => {
+    setSelectedModel(model);
+  };
+
   return (
     <Sheet open={isOpen} onOpenChange={handleOpen}>
       <ChatButton />
       <SheetContent className="w-[400px] sm:w-[540px] h-full flex flex-col p-0">
-        <ChatHeader selectedModel={selectedModel} onModelChange={setSelectedModel} />
+        <ChatHeader selectedModel={selectedModel} onModelChange={handleModelChange} />
         <ChatMessages messages={messages as Message[]} messagesEndRef={messagesEndRef} />
         <ChatInput
           newMessage={newMessage}
