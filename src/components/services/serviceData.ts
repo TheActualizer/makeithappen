@@ -1,11 +1,11 @@
-import { Brain, Calculator, Scale, Stethoscope, Bot, Network, Shield, Workflow, Mail, Calendar, Users, FileText, BarChart, MessageSquare, Cloud } from "lucide-react";
+import { Bot, Calculator, Scale, Stethoscope } from "lucide-react";
 
 export const services = [
   {
     id: 1,
     title: "Website & Business Operations",
     description: "Comprehensive digital transformation of your business operations with AI-powered automation.",
-    icon: Workflow,
+    icon: Scale,
     features: [
       "AI-powered client management system",
       "CRM integration with automated workflows",
@@ -21,7 +21,7 @@ export const services = [
     id: 2,
     title: "Extensive AI Agent Operations",
     description: "Multi-agent swarms that revolutionize your business processes through intelligent automation.",
-    icon: Brain,
+    icon: Bot,
     features: [
       "Policy automation and enforcement",
       "Complex workflow orchestration",
