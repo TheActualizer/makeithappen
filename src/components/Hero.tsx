@@ -1,6 +1,23 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, ChevronDown, Zap, Building2, Brain } from "lucide-react";
+import { 
+  ArrowRight, 
+  Sparkles, 
+  ChevronDown, 
+  Zap, 
+  Building2, 
+  Brain,
+  Database,
+  Bot,
+  Calendar,
+  Mail,
+  FileText,
+  BarChart,
+  Network,
+  Users,
+  Lock,
+  Workflow
+} from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -10,6 +27,89 @@ import {
 
 const Hero = () => {
   const navigate = useNavigate();
+
+  const platformFeatures = [
+    {
+      category: "Data & Integration",
+      features: [
+        "Multi-Database Synchronization",
+        "Real-time Data Pipelines",
+        "Custom API Development",
+        "ETL Automation"
+      ],
+      icon: Database
+    },
+    {
+      category: "AI & Automation",
+      features: [
+        "Multi-Agent Orchestration",
+        "Natural Language Processing",
+        "Predictive Analytics",
+        "Automated Decision Making"
+      ],
+      icon: Bot
+    },
+    {
+      category: "Project Management",
+      features: [
+        "Client Onboarding",
+        "Resource Planning",
+        "Progress Tracking",
+        "Team Collaboration"
+      ],
+      icon: Users
+    },
+    {
+      category: "Meeting Management",
+      features: [
+        "AI Meeting Scheduling",
+        "Automated Note Taking",
+        "Action Item Tracking",
+        "Follow-up Automation"
+      ],
+      icon: Calendar
+    },
+    {
+      category: "Communication",
+      features: [
+        "Email Automation",
+        "Client Portal",
+        "Document Sharing",
+        "Secure Messaging"
+      ],
+      icon: Mail
+    },
+    {
+      category: "Documentation",
+      features: [
+        "Auto-Generated Reports",
+        "Knowledge Base",
+        "Version Control",
+        "Compliance Tracking"
+      ],
+      icon: FileText
+    },
+    {
+      category: "Analytics",
+      features: [
+        "Performance Metrics",
+        "Custom Dashboards",
+        "ROI Tracking",
+        "Trend Analysis"
+      ],
+      icon: BarChart
+    },
+    {
+      category: "Security",
+      features: [
+        "Role-Based Access",
+        "Data Encryption",
+        "Audit Logging",
+        "Compliance Controls"
+      ],
+      icon: Lock
+    }
+  ];
 
   return (
     <div className="relative min-h-[90vh] flex items-center justify-center pt-8 overflow-hidden bg-[#f8f8f8]">
@@ -134,33 +234,39 @@ const Hero = () => {
                 <AccordionItem value="features" className="border-0">
                   <AccordionTrigger className="px-6 py-4 hover:bg-gray-50">
                     <span className="flex items-center gap-2 text-[#333]">
-                      <ChevronDown className="h-4 w-4 text-[#3665f3]" />
-                      Platform Features
+                      <Workflow className="h-5 w-5 text-primary" />
+                      <span className="text-lg font-semibold">Enterprise-Grade Platform Features</span>
                     </span>
                   </AccordionTrigger>
-                  <AccordionContent className="px-6 pb-4">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      {[
-                        "Client Onboarding",
-                        "Project Management",
-                        "Meeting Scheduling",
-                        "Document Sharing",
-                        "AI Meeting Notes",
-                        "Email Automation",
-                        "Client Dashboard",
-                        "Database Integration",
-                        "Progress Tracking",
-                        "Resource Planning",
-                        "Team Collaboration",
-                        "Analytics & Reports"
-                      ].map((feature, index) => (
-                        <div 
-                          key={index}
-                          className="p-3 text-sm text-[#666] bg-gray-50 rounded hover:bg-gray-100 transition-colors"
-                        >
-                          • {feature}
-                        </div>
-                      ))}
+                  <AccordionContent className="px-6 pb-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                      {platformFeatures.map((category, index) => {
+                        const Icon = category.icon;
+                        return (
+                          <div 
+                            key={index}
+                            className="space-y-3 p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
+                          >
+                            <div className="flex items-center gap-2">
+                              <div className="p-2 rounded-lg bg-primary/10">
+                                <Icon className="h-5 w-5 text-primary" />
+                              </div>
+                              <h3 className="font-medium text-[#333]">{category.category}</h3>
+                            </div>
+                            <ul className="space-y-2">
+                              {category.features.map((feature, featureIndex) => (
+                                <li 
+                                  key={featureIndex}
+                                  className="flex items-center gap-2 text-sm text-gray-600"
+                                >
+                                  <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
+                                  {feature}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        );
+                      })}
                     </div>
                   </AccordionContent>
                 </AccordionItem>
