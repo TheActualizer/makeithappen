@@ -7,7 +7,7 @@ export interface FormData {
   description: string;
   timeline: string;
   pain_points: string[];
-  complexity?: string;
+  complexity?: "simple" | "moderate" | "complex" | "enterprise";
   teamSize?: string;
   budgetRange?: string;
   has_existing_codebase?: boolean;
