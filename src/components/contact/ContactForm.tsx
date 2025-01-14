@@ -12,7 +12,7 @@ export const ContactForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 bg-accent/50 backdrop-blur-sm p-8 rounded-lg border border-gray-800"
+        className="space-y-6 bg-accent/50 backdrop-blur-sm p-8 rounded-lg border border-gray-800 shadow-xl transition-all duration-300 hover:shadow-primary/5"
       >
         <div className="space-y-4">
           <ContactFormFields form={form} isSubmitting={isSubmitting} />
@@ -20,7 +20,7 @@ export const ContactForm = () => {
 
         <Button
           type="submit"
-          className="w-full"
+          className="w-full transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
           disabled={isSubmitting}
         >
           {isSubmitting ? (

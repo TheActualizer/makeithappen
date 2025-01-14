@@ -29,12 +29,12 @@ export const ContactFormFields = ({ form, isSubmitting }: ContactFormFieldsProps
         name="name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Name</FormLabel>
+            <FormLabel className="text-gray-200">Name</FormLabel>
             <FormControl>
               <Input
                 placeholder="Your name"
                 {...field}
-                className="transition-all duration-300 focus:scale-[1.02]"
+                className="transition-all duration-300 focus:scale-[1.02] bg-accent/30 border-gray-700 focus:border-primary"
                 disabled={isSubmitting}
               />
             </FormControl>
@@ -48,13 +48,13 @@ export const ContactFormFields = ({ form, isSubmitting }: ContactFormFieldsProps
         name="email"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Email</FormLabel>
+            <FormLabel className="text-gray-200">Email</FormLabel>
             <FormControl>
               <Input
                 type="email"
                 placeholder="your.email@example.com"
                 {...field}
-                className="transition-all duration-300 focus:scale-[1.02]"
+                className="transition-all duration-300 focus:scale-[1.02] bg-accent/30 border-gray-700 focus:border-primary"
                 disabled={isSubmitting}
               />
             </FormControl>
@@ -68,12 +68,12 @@ export const ContactFormFields = ({ form, isSubmitting }: ContactFormFieldsProps
         name="phone"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Phone (Optional)</FormLabel>
+            <FormLabel className="text-gray-200">Phone (Optional)</FormLabel>
             <FormControl>
               <Input
                 placeholder="Your phone number"
                 {...field}
-                className="transition-all duration-300 focus:scale-[1.02]"
+                className="transition-all duration-300 focus:scale-[1.02] bg-accent/30 border-gray-700 focus:border-primary"
                 disabled={isSubmitting}
               />
             </FormControl>
@@ -87,18 +87,18 @@ export const ContactFormFields = ({ form, isSubmitting }: ContactFormFieldsProps
         name="projectType"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Project Type</FormLabel>
+            <FormLabel className="text-gray-200">Project Type</FormLabel>
             <Select
               onValueChange={field.onChange}
               defaultValue={field.value}
               disabled={isSubmitting}
             >
               <FormControl>
-                <SelectTrigger className="transition-all duration-300 focus:scale-[1.02]">
+                <SelectTrigger className="transition-all duration-300 focus:scale-[1.02] bg-accent/30 border-gray-700 focus:border-primary">
                   <SelectValue placeholder="Select a project type" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent className="bg-accent border-gray-700">
                 <SelectItem value="healthcare">Healthcare AI</SelectItem>
                 <SelectItem value="financial">Financial Automation</SelectItem>
                 <SelectItem value="realestate">Real Estate Underwriting</SelectItem>
@@ -115,11 +115,11 @@ export const ContactFormFields = ({ form, isSubmitting }: ContactFormFieldsProps
         name="message"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Message</FormLabel>
+            <FormLabel className="text-gray-200">Message</FormLabel>
             <FormControl>
               <Textarea
                 placeholder="Tell us about your project or inquiry"
-                className="min-h-[120px] transition-all duration-300 focus:scale-[1.02]"
+                className="min-h-[120px] transition-all duration-300 focus:scale-[1.02] bg-accent/30 border-gray-700 focus:border-primary resize-none"
                 {...field}
                 disabled={isSubmitting}
               />
