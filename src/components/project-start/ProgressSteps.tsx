@@ -5,7 +5,7 @@ interface ProgressStepsProps {
 }
 
 const ProgressSteps = ({ currentStep }: ProgressStepsProps) => {
-  const steps = [1, 2, 3];
+  const steps = [1, 2];
 
   return (
     <div className="flex items-center space-x-1">

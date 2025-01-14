@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { ChevronRight, Building, Briefcase, Calendar } from "lucide-react";
+import { ChevronRight, Building, Briefcase } from "lucide-react";
 import { FormData } from "@/components/project-start/types";
 import BasicInfoStep from "@/components/project-start/BasicInfoStep";
 import ProjectDetailsStep from "@/components/project-start/ProjectDetailsStep";
-import TimelineStep from "@/components/project-start/TimelineStep";
-import ProgressSteps from "@/components/project-start/ProgressSteps";
 import ConsultationScheduler from "@/components/project-start/ConsultationScheduler";
+import ProgressSteps from "@/components/project-start/ProgressSteps";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 
@@ -30,10 +28,9 @@ const StartProject = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showCalendly, setShowCalendly] = useState(false);
-  const navigate = useNavigate();
 
   const handleNext = () => {
-    if (step < 3) {
+    if (step < 2) {
       setStep(step + 1);
     }
   };
@@ -127,8 +124,6 @@ const StartProject = () => {
         return <BasicInfoStep formData={formData} setFormData={setFormData} />;
       case 2:
         return <ProjectDetailsStep formData={formData} setFormData={setFormData} />;
-      case 3:
-        return <TimelineStep formData={formData} setFormData={setFormData} />;
       default:
         return null;
     }
@@ -140,8 +135,6 @@ const StartProject = () => {
         return <Building className="w-5 h-5 text-primary" />;
       case 2:
         return <Briefcase className="w-5 h-5 text-primary" />;
-      case 3:
-        return <Calendar className="w-5 h-5 text-primary" />;
       default:
         return null;
     }
@@ -153,8 +146,6 @@ const StartProject = () => {
         return "Organization Details";
       case 2:
         return "Project Scope";
-      case 3:
-        return "Timeline";
       default:
         return "";
     }
@@ -206,7 +197,7 @@ const StartProject = () => {
                   >
                     Back
                   </Button>
-                  {step === 3 ? (
+                  {step === 2 ? (
                     <Button
                       onClick={handleSubmit}
                       disabled={isSubmitting}
