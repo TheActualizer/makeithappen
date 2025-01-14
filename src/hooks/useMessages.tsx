@@ -10,6 +10,22 @@ interface UseMessagesReturn {
   fetchMessages: (conversationId: string) => Promise<void>;
 }
 
+interface MessageWithProfile {
+  id: string;
+  content: string;
+  sender_id: string | null;
+  created_at: string;
+  conversation_id: string | null;
+  type: 'text' | 'system' | 'ai';
+  is_admin_message: boolean | null;
+  profiles: {
+    first_name: string | null;
+    last_name: string | null;
+    email: string | null;
+    avatar_url: string | null;
+  } | null;
+}
+
 export const useMessages = (): UseMessagesReturn => {
   const [conversations, setConversations] = useState<any[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -70,7 +86,7 @@ export const useMessages = (): UseMessagesReturn => {
       console.log('Messages fetched:', data);
       
       // Transform the data to match the Message interface
-      const typedMessages: Message[] = data?.map(msg => ({
+      const typedMessages: Message[] = (data as MessageWithProfile[])?.map(msg => ({
         id: msg.id,
         content: msg.content,
         sender_id: msg.sender_id,
