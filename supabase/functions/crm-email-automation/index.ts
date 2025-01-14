@@ -7,32 +7,27 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
 };
-
-interface ContactData {
-  name: string;
-  email: string;
-  phone?: string;
-  projectType: string;
-  message: string;
-}
 
 const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!);
 
 const handler = async (req: Request): Promise<Response> => {
   console.log("CRM Email Automation function triggered");
 
+  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     console.log("Handling CORS preflight request");
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const contactData: ContactData = await req.json();
+    const contactData = await req.json();
     console.log("Received contact data:", contactData);
 
     // 1. Create contact funnel entry
+    console.log("Creating contact funnel entry...");
     const { data: funnelData, error: funnelError } = await supabase
       .from("contact_funnel")
       .insert({
@@ -48,9 +43,10 @@ const handler = async (req: Request): Promise<Response> => {
       throw funnelError;
     }
 
-    console.log("Created funnel entry:", funnelData);
+    console.log("Contact funnel entry created:", funnelData);
 
     // 2. Get welcome email template
+    console.log("Fetching welcome email template...");
     const { data: templateData, error: templateError } = await supabase
       .from("email_templates")
       .select("*")
@@ -62,15 +58,18 @@ const handler = async (req: Request): Promise<Response> => {
       throw templateError;
     }
 
-    console.log("Found email template:", templateData);
+    console.log("Email template found:", templateData);
 
     // 3. Send welcome email via Resend
+    if (!RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY is not configured");
+    }
+
+    console.log("Sending welcome email...");
     const emailHtml = templateData.body
       .replace("{{name}}", contactData.name)
       .replace("{{projectType}}", contactData.projectType);
 
-    console.log("Sending welcome email to:", contactData.email);
-    
     const resendResponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -94,6 +93,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Welcome email sent successfully");
 
     // 4. Record the email communication
+    console.log("Recording email communication...");
     const { error: communicationError } = await supabase
       .from("email_communications")
       .insert({
@@ -114,6 +114,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Email communication recorded successfully");
 
     // 5. Send admin notification
+    console.log("Sending admin notification...");
     const adminEmailHtml = `
       <h2>New Contact Form Submission</h2>
       <p><strong>Name:</strong> ${contactData.name}</p>
@@ -123,8 +124,6 @@ const handler = async (req: Request): Promise<Response> => {
       <p><strong>Message:</strong></p>
       <p>${contactData.message}</p>
     `;
-
-    console.log("Sending admin notification");
 
     const adminNotification = await fetch("https://api.resend.com/emails", {
       method: "POST",
