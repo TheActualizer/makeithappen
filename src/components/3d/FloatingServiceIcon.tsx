@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Sphere, Box, Torus } from '@react-three/drei';
 import * as THREE from 'three';
@@ -26,15 +26,21 @@ const Icon = ({ iconType, color = '#6D28D9', hovered }: FloatingServiceIconProps
   
   return (
     <mesh ref={meshRef} scale={scale}>
-      {iconType === 'cube' && <Box args={[1, 1, 1]}>
-        <meshStandardMaterial color={color} />
-      </Box>}
-      {iconType === 'sphere' && <Sphere args={[0.5, 32, 32]}>
-        <meshStandardMaterial color={color} />
-      </Sphere>}
-      {iconType === 'torus' && <Torus args={[0.3, 0.15, 16, 32]}>
-        <meshStandardMaterial color={color} />
-      </Torus>}
+      {iconType === 'cube' && (
+        <Box args={[1, 1, 1]}>
+          <meshStandardMaterial color={color} />
+        </Box>
+      )}
+      {iconType === 'sphere' && (
+        <Sphere args={[0.5, 32, 32]}>
+          <meshStandardMaterial color={color} />
+        </Sphere>
+      )}
+      {iconType === 'torus' && (
+        <Torus args={[0.3, 0.15, 16, 32]}>
+          <meshStandardMaterial color={color} />
+        </Torus>
+      )}
     </mesh>
   );
 };
@@ -42,9 +48,16 @@ const Icon = ({ iconType, color = '#6D28D9', hovered }: FloatingServiceIconProps
 export const FloatingServiceIcon = ({ iconType, color, hovered }: FloatingServiceIconProps) => {
   return (
     <div className="w-16 h-16">
-      <Canvas camera={{ position: [0, 0, 4] }}>
+      <Canvas
+        camera={{ position: [0, 0, 4] }}
+        gl={{ 
+          antialias: true,
+          alpha: true,
+          powerPreference: "default"
+        }}
+      >
         <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} />
+        <pointLight position={[10, 10, 10]} intensity={1} />
         <Icon iconType={iconType} color={color} hovered={hovered} />
       </Canvas>
     </div>
