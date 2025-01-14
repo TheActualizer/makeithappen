@@ -88,7 +88,7 @@ const Hero = () => {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-6 shadow-lg hover:shadow-xl transition-shadow"
             >
               <Sparkles className="w-4 h-4 text-secondary animate-pulse" />
-              <span className="text-sm text-gray-300">From Simple Websites to Enterprise SaaS Solutions</span>
+              <span className="text-sm text-gray-300">From Premium Websites to Enterprise SaaS Solutions</span>
             </motion.div>
             
             <motion.h1 
