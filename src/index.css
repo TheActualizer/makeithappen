@@ -35,9 +35,21 @@
   body {
     @apply bg-background text-foreground font-sans;
     font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
   }
 
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  /* Smooth transition for all interactive elements */
+  a, button, input, select, textarea {
+    @apply transition-all duration-200;
+  }
+
+  /* Ensure content doesn't shift during page transitions */
+  #root {
+    @apply relative min-h-screen;
   }
 }
