@@ -11,11 +11,22 @@ const ConsultationScheduler = ({ formData }: ConsultationSchedulerProps) => {
 
   const getBudgetRangeText = (range?: string) => {
     if (!range) return 'Not specified';
-    const matches = range.match(/\d+/g);
-    if (!matches) return range;
-    return range === "under-10000" ? "Under $10,000" :
-           range === "200000+" ? "$200,000+" :
-           `$${matches[0]},000 - $${matches[1]},000`;
+    switch (range) {
+      case "under-10000":
+        return "Under $10,000";
+      case "10000-25000":
+        return "$10,000 - $25,000";
+      case "25000-50000":
+        return "$25,000 - $50,000";
+      case "50000-100000":
+        return "$50,000 - $100,000";
+      case "100000-200000":
+        return "$100,000 - $200,000";
+      case "200000+":
+        return "$200,000+";
+      default:
+        return range;
+    }
   };
 
   const formatPainPoints = (points?: string[] | null) => {
@@ -61,20 +72,9 @@ Business Context:
 
 Technical Requirements:
 - AI Agent Requirements: ${formatArrayOrDefault(formData.ai_agent_requirements)}
-- Integration Requirements: ${formatArrayOrDefault(formData.integration_requirements)}
-- Current Tech Stack: ${formData.current_tech_stack ? JSON.stringify(formData.current_tech_stack, null, 2) : 'Not specified'}
-- Preferred Technologies: ${formatArrayOrDefault(formData.preferred_technologies)}
-
-Business Goals:
-- Success Metrics: ${formatArrayOrDefault(formData.success_metrics)}
-- Business Objectives: ${formatArrayOrDefault(formData.business_objectives)}
-- Industry Vertical: ${formData.industry_vertical || 'Not specified'}
-- Expected ROI: ${formData.expected_roi || 'Not specified'}
 
 Timeline & Planning:
 - Timeline Preference: ${formData.timeline || 'Not specified'}
-- Target Completion: ${formData.target_completion_date ? new Date(formData.target_completion_date).toLocaleDateString() : 'Not specified'}
-- Project Constraints: ${formatArrayOrDefault(formData.project_constraints)}
 
 Contact Information:
 - Name: ${formData.name}
