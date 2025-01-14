@@ -16,6 +16,7 @@ import AITrends from "@/pages/blog/AITrends";
 import AgenticSystems from "@/pages/blog/AgenticSystems";
 import Search from "@/pages/blog/Search";
 import { Toaster } from "@/components/ui/toaster";
+import { CustomCursor } from "@/components/ui/custom-cursor";
 import { useEffect } from "react";
 import { supabase } from "./integrations/supabase/client";
 
@@ -33,6 +34,7 @@ function App() {
 
   return (
     <Router>
+      <CustomCursor />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/about" element={<About />} />
