@@ -1,211 +1,23 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { toast } from "sonner";
-import { motion } from "framer-motion";
-import { supabase } from "@/integrations/supabase/client";
+import { Form } from "@/components/ui/form";
 import { Loader2 } from "lucide-react";
-
-const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  phone: z.string().optional(),
-  projectType: z.enum(["healthcare", "financial", "realestate", "other"]),
-  message: z.string()
-    .min(10, "Message must be at least 10 characters")
-    .refine(
-      (val) => {
-        const trimmed = val.trim();
-        return trimmed !== '' && !trimmed.split('').every(char => char === ',');
-      },
-      "Message cannot be empty or contain only commas"
-    ),
-});
+import { ContactFormProgress } from "./ContactFormProgress";
+import { ContactFormStep } from "./ContactFormStep";
+import { ContactFormFields } from "./ContactFormFields";
+import { useContactForm } from "./useContactForm";
 
 export const ContactForm = () => {
-  console.log("ContactForm: Component initialized");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      projectType: "other",
-      message: "",
-    },
-  });
-
-  console.log("ContactForm: Form initialized with default values", form.getValues());
-
-  const formSteps = [
-    ["name", "email", "phone"],
-    ["projectType"],
-    ["message"],
-  ];
-
-  const currentFields = formSteps[currentStep];
-
-  const nextStep = async () => {
-    console.log("ContactForm: Attempting to move to next step", { currentStep, fieldsToValidate: formSteps[currentStep] });
-    const fieldsToValidate = formSteps[currentStep];
-    const isValid = await form.trigger(fieldsToValidate as any[]);
-    
-    if (isValid && currentStep < formSteps.length - 1) {
-      console.log("ContactForm: Step validation successful, moving to next step");
-      setCurrentStep((prev) => prev + 1);
-    } else {
-      console.log("ContactForm: Step validation failed or last step reached", { isValid, currentStep });
-    }
-  };
-
-  const prevStep = () => {
-    console.log("ContactForm: Moving to previous step", { currentStep });
-    setCurrentStep((prev) => Math.max(prev - 1, 0));
-  };
-
-  const isLastStep = currentStep === formSteps.length - 1;
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("ContactForm: Starting form submission with values:", values);
-    setIsSubmitting(true);
-    
-    try {
-      // First, save the contact submission
-      console.log("ContactForm: Saving contact submission to database...");
-      const { error: submissionError, data: submissionData } = await supabase
-        .from("contact_submissions")
-        .insert({
-          name: values.name,
-          email: values.email,
-          phone: values.phone || null,
-          project_type: values.projectType,
-          message: values.message,
-        })
-        .select()
-        .single();
-
-      if (submissionError) {
-        console.error("ContactForm: Database submission error:", submissionError);
-        throw submissionError;
-      }
-
-      // Log the initial automation attempt
-      console.log("ContactForm: Logging initial automation attempt...");
-      await supabase
-        .from("automation_logs")
-        .insert({
-          contact_submission_id: submissionData.id,
-          stage: "initial_submission",
-          status: "success",
-          metadata: {
-            form_data: values
-          }
-        });
-
-      // Trigger CRM automation with better error handling
-      console.log("ContactForm: Triggering CRM automation...");
-      const { error: automationError, data: automationData } = await supabase.functions.invoke('crm-email-automation', {
-        body: {
-          ...values,
-          id: submissionData.id
-        }
-      });
-
-      if (automationError) {
-        console.error("ContactForm: CRM automation error:", automationError);
-        
-        // Log the automation failure
-        await supabase
-          .from("automation_logs")
-          .insert({
-            contact_submission_id: submissionData.id,
-            stage: "crm_automation",
-            status: "error",
-            error_message: automationError.message,
-            error_context: { error: automationError }
-          });
-
-        // Add to retry queue
-        await supabase
-          .from("automation_retry_queue")
-          .insert({
-            contact_submission_id: submissionData.id,
-            stage: "crm_automation",
-            payload: {
-              ...values,
-              id: submissionData.id
-            }
-          });
-
-        // Update submission status
-        await supabase
-          .from("contact_submissions")
-          .update({
-            automation_status: "failed",
-            last_error: automationError.message
-          })
-          .eq("id", submissionData.id);
-
-        toast.error("Message saved but notification failed to send. Our team will still be in touch shortly.");
-      } else {
-        console.log("ContactForm: CRM automation completed successfully", automationData);
-        
-        // Log successful automation
-        await supabase
-          .from("automation_logs")
-          .insert({
-            contact_submission_id: submissionData.id,
-            stage: "crm_automation",
-            status: "success",
-            metadata: { automation_response: automationData }
-          });
-
-        // Update submission status
-        await supabase
-          .from("contact_submissions")
-          .update({
-            automation_status: "completed",
-            processed_at: new Date().toISOString()
-          })
-          .eq("id", submissionData.id);
-
-        toast.success("Message sent successfully!");
-      }
-
-      form.reset();
-      setCurrentStep(0);
-    } catch (error) {
-      console.error("ContactForm: Error in form submission:", error);
-      toast.error(
-        "Failed to send message. Please try again or contact support directly."
-      );
-    } finally {
-      console.log("ContactForm: Submission process completed");
-      setIsSubmitting(false);
-    }
-  };
+  const {
+    form,
+    isSubmitting,
+    currentStep,
+    currentFields,
+    isLastStep,
+    nextStep,
+    prevStep,
+    onSubmit,
+    formSteps,
+  } = useContactForm();
 
   return (
     <Form {...form}>
@@ -213,147 +25,15 @@ export const ContactForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-6 bg-accent/50 backdrop-blur-sm p-8 rounded-lg border border-gray-800"
       >
-        <div className="flex justify-between mb-8">
-          {formSteps.map((_, index) => (
-            <motion.div
-              key={index}
-              className={`h-2 rounded-full flex-1 mx-1 ${
-                index <= currentStep ? "bg-secondary" : "bg-gray-600"
-              }`}
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-            />
-          ))}
-        </div>
+        <ContactFormProgress currentStep={currentStep} totalSteps={formSteps.length} />
 
-        <motion.div
-          key={currentStep}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.3 }}
-          className="space-y-4"
-        >
-          {currentFields.includes("name") && (
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Your name"
-                      {...field}
-                      className="transition-all duration-300 focus:scale-[1.02]"
-                      disabled={isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
-
-          {currentFields.includes("email") && (
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="your.email@example.com"
-                      {...field}
-                      className="transition-all duration-300 focus:scale-[1.02]"
-                      disabled={isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
-
-          {currentFields.includes("phone") && (
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone (Optional)</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Your phone number"
-                      {...field}
-                      className="transition-all duration-300 focus:scale-[1.02]"
-                      disabled={isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
-
-          {currentFields.includes("projectType") && (
-            <FormField
-              control={form.control}
-              name="projectType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Project Type</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    disabled={isSubmitting}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="transition-all duration-300 focus:scale-[1.02]">
-                        <SelectValue placeholder="Select a project type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="healthcare">Healthcare AI</SelectItem>
-                      <SelectItem value="financial">
-                        Financial Automation
-                      </SelectItem>
-                      <SelectItem value="realestate">
-                        Real Estate Underwriting
-                      </SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
-
-          {currentFields.includes("message") && (
-            <FormField
-              control={form.control}
-              name="message"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Message</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Tell us about your project or inquiry"
-                      className="min-h-[120px] transition-all duration-300 focus:scale-[1.02]"
-                      {...field}
-                      disabled={isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
-        </motion.div>
+        <ContactFormStep currentStep={currentStep}>
+          <ContactFormFields
+            form={form}
+            currentFields={currentFields}
+            isSubmitting={isSubmitting}
+          />
+        </ContactFormStep>
 
         <div className="flex justify-between gap-4 pt-4">
           {currentStep > 0 && (
