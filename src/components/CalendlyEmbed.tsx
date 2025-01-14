@@ -190,14 +190,17 @@ const CalendlyEmbed = ({ url, prefill }: CalendlyEmbedProps) => {
   }, [prefill]);
 
   return (
-    <InlineWidget
-      url={url}
-      prefill={prefill}
-      styles={{
-        height: '100%',
-        width: '100%',
-      }}
-    />
+    <div className="w-full h-full">
+      <InlineWidget
+        url={url}
+        prefill={prefill}
+        styles={{
+          height: '100%',
+          width: '100%',
+          minHeight: '100%',
+        }}
+      />
+    </div>
   );
 };
 
