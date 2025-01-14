@@ -1,4 +1,61 @@
-import { Brain, Calculator, Scale, Truck, Search, Database, Bot, Network, Shield, Workflow, Mail, Calendar, Users, FileText, Chart, MessageSquare } from "lucide-react";
+import { Brain, Calculator, Scale, Truck, Search, Database, Bot, Network, Shield, Workflow, Mail, Calendar, Users, FileText, BarChart, MessageSquare } from "lucide-react";
+
+export const features = [
+  {
+    id: "client-onboarding",
+    title: "Smart Onboarding",
+    description: "Automated project intake & scheduling",
+    icon: Users,
+    features: ["Project Request Forms", "AI Meeting Notes", "Auto Follow-ups"],
+    metrics: "15min Setup ↓",
+    tags: ["Forms", "AI", "Automation"]
+  },
+  {
+    id: "meetings",
+    title: "Meeting Assistant",
+    description: "AI-powered meeting management",
+    icon: Calendar,
+    features: ["Zoom Integration", "AI Summary Notes", "Action Items"],
+    metrics: "24/7 Booking",
+    tags: ["Zoom", "AI", "Notes"]
+  },
+  {
+    id: "communication",
+    title: "Client Portal",
+    description: "Centralized client communication",
+    icon: MessageSquare,
+    features: ["Project Discussion", "File Sharing", "Updates"],
+    metrics: "2min Response ↓",
+    tags: ["Chat", "Files"]
+  },
+  {
+    id: "documents",
+    title: "Document Hub",
+    description: "Secure document management",
+    icon: FileText,
+    features: ["File Storage", "Version Control", "Sharing"],
+    metrics: "100% Paperless",
+    tags: ["Storage", "Security"]
+  },
+  {
+    id: "dashboard",
+    title: "Client Dashboard",
+    description: "Real-time project insights",
+    icon: BarChart,
+    features: ["Progress Tracking", "Analytics", "Reports"],
+    metrics: "Live Updates",
+    tags: ["Analytics", "Reports"]
+  },
+  {
+    id: "integrations",
+    title: "Data Integration",
+    description: "Seamless database connectivity",
+    icon: Database,
+    features: ["API Access", "Data Sync", "Automation"],
+    metrics: "10+ Integrations",
+    tags: ["API", "Database"]
+  }
+];
 
 export const services = [
   {
