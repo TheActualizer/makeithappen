@@ -12,16 +12,16 @@ serve(async (req) => {
   }
 
   try {
-    const { name } = await req.json()
-    const value = Deno.env.get(name)
+    const { key } = await req.json()
+    const value = Deno.env.get(key)
 
     if (!value) {
-      throw new Error(`Secret ${name} not found`)
+      throw new Error(`Secret ${key} not found`)
     }
 
     return new Response(
       JSON.stringify({ 
-        data: { [name]: value }
+        value: value 
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -29,6 +29,7 @@ serve(async (req) => {
       }
     )
   } catch (error) {
+    console.error('Error in get-secret function:', error)
     return new Response(
       JSON.stringify({ 
         error: error.message 
