@@ -136,7 +136,7 @@ const Blog = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-accent to-accent/95">
+    <div className="min-h-screen bg-gradient-to-br from-accent via-accent/95 to-primary/20">
       <Navbar />
       <div className="container mx-auto px-4 pt-24 pb-12 max-w-7xl">
         <motion.div 
@@ -145,7 +145,7 @@ const Blog = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16 mx-auto max-w-4xl"
         >
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-8 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+          <h1 className="text-5xl md:text-6xl font-bold mb-8 bg-gradient-to-r from-secondary via-primary to-secondary bg-clip-text text-transparent">
             Explore Our Tech Universe
           </h1>
           <p className="text-gray-300 text-lg md:text-xl mx-auto leading-relaxed">
@@ -164,7 +164,7 @@ const Blog = () => {
                 className="h-full"
               >
                 <Card 
-                  className="h-full bg-accent-foreground/5 backdrop-blur-sm border-accent-foreground/10 hover:border-primary/50 transition-all duration-300 cursor-pointer flex flex-col"
+                  className="h-full bg-gradient-to-br from-accent/95 via-primary/10 to-secondary/20 backdrop-blur-sm border-secondary/20 hover:border-primary/50 transition-all duration-300 cursor-pointer flex flex-col"
                   onClick={() => navigate(article.link)}
                 >
                   <div className="p-8 flex flex-col h-full items-center text-center">
@@ -179,7 +179,7 @@ const Blog = () => {
                     </p>
                     <Button
                       variant="secondary"
-                      className="w-full md:w-auto group hover:bg-primary hover:text-white transition-all duration-300"
+                      className="w-full md:w-auto group bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300"
                     >
                       Read Article
                       <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -202,7 +202,7 @@ const Blog = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <Card className="bg-accent/40 backdrop-blur-sm border border-accent/20 hover:border-primary/50 transition-all duration-300">
+                <Card className="bg-gradient-to-br from-accent/95 via-primary/10 to-secondary/20 backdrop-blur-sm border-secondary/20 hover:border-primary/50 transition-all duration-300">
                   <Accordion type="single" collapsible>
                     <AccordionItem value={category.slug} className="border-none">
                       <AccordionTrigger className="p-6 hover:no-underline">
@@ -220,7 +220,7 @@ const Blog = () => {
                           </p>
                           <Button
                             variant="secondary"
-                            className="w-full md:w-auto group hover:bg-primary hover:text-white transition-all duration-300"
+                            className="w-full md:w-auto group bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300"
                             onClick={() => navigate(`/blog/category/${category.slug}`)}
                           >
                             Explore {category.name}
@@ -249,7 +249,7 @@ const Blog = () => {
             <Button
               variant="secondary"
               size="icon"
-              className="rounded-full shadow-lg hover:shadow-xl transition-all duration-300 animate-float"
+              className="rounded-full shadow-lg bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 animate-float"
               onClick={scrollToTop}
             >
               <ArrowUp className="h-5 w-5" />
@@ -257,7 +257,7 @@ const Blog = () => {
             <Button
               variant="secondary"
               size="icon"
-              className="rounded-full shadow-lg hover:shadow-xl transition-all duration-300 animate-float"
+              className="rounded-full shadow-lg bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 animate-float"
               onClick={() => navigate('/contact')}
             >
               <MessageSquare className="h-5 w-5" />
@@ -265,7 +265,7 @@ const Blog = () => {
             <Button
               variant="secondary"
               size="icon"
-              className="rounded-full shadow-lg hover:shadow-xl transition-all duration-300 animate-float"
+              className="rounded-full shadow-lg bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 animate-float"
               onClick={() => navigate('/blog/search')}
             >
               <Search className="h-5 w-5" />
