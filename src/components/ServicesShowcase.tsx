@@ -136,7 +136,7 @@ const ServiceCard = ({ service }: { service: Service }) => {
   const Icon = service.icon;
   
   // Map service types to 3D icon types
-  const getIconType = (title: string) => {
+  const getIconType = (title: string): 'cube' | 'sphere' | 'torus' => {
     switch (title) {
       case "Finance & Markets Automation":
         return "cube";
@@ -144,7 +144,7 @@ const ServiceCard = ({ service }: { service: Service }) => {
         return "torus";
       default:
         return "sphere";
-    } as const;
+    }
   };
   
   return (
