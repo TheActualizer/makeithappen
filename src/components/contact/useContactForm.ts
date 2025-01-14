@@ -51,11 +51,19 @@ export const useContactForm = () => {
       console.log("ContactForm: Submission successful, triggering webhook...");
       
       // Trigger the webhook function
-      const { error: webhookError } = await supabase.functions.invoke('contact-webhook');
+      const { error: webhookError, data: webhookData } = await supabase.functions.invoke('contact-webhook', {
+        body: { 
+          name: values.name,
+          email: values.email,
+          phone: values.phone,
+          project_type: values.projectType,
+          message: values.message
+        }
+      });
       
       if (webhookError) {
         console.error("ContactForm: Webhook error:", webhookError);
-        // Don't throw here, as the submission was successful
+        throw webhookError;
       }
 
       console.log("ContactForm: Process completed successfully");
