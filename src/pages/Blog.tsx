@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
-import { motion, AnimatePresence } from "framer-motion";
 import { 
   BookOpen, TrendingUp, Building2, Scale, Brain, 
   Wrench, Database, FileCode, Workflow, Heart, 
@@ -152,26 +152,26 @@ const Blog = () => {
             <div className="max-w-4xl mx-auto text-center space-y-6">
               <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#1DA1F2]/10 border border-[#1DA1F2]/20 mb-6">
                 <span className="text-sm font-medium bg-gradient-to-r from-[#1DA1F2] to-[#33C3F0] bg-clip-text text-transparent">
-                  Enterprise Tech Insights
+                  Disruptive Innovation Hub
                 </span>
               </div>
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
-                Discover Advanced{" "}
+                Building the{" "}
                 <span className="bg-gradient-to-r from-[#1DA1F2] to-[#33C3F0] bg-clip-text text-transparent">
-                  Enterprise Solutions
+                  Future of Tech
                 </span>
               </h1>
 
               <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
-                Expert insights on AI integration, automation, and digital transformation strategies for modern enterprises.
+                Explore groundbreaking solutions that challenge the status quo and redefine what's possible in technology.
               </p>
 
               <div className="max-w-2xl mx-auto mt-8">
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Search articles..."
+                    placeholder="Search revolutionary ideas..."
                     className="w-full px-6 py-4 bg-white/5 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1DA1F2] text-gray-200 placeholder-gray-400"
                   />
                   <Button 
@@ -186,15 +186,15 @@ const Blog = () => {
               <div className="grid grid-cols-3 gap-4 max-w-2xl mx-auto mt-12">
                 <div className="px-4 py-3 bg-white/5 rounded-lg border border-gray-700/50">
                   <div className="text-2xl font-bold text-[#1DA1F2]">200+</div>
-                  <div className="text-sm text-gray-400">Articles</div>
+                  <div className="text-sm text-gray-400">Innovations</div>
                 </div>
                 <div className="px-4 py-3 bg-white/5 rounded-lg border border-gray-700/50">
                   <div className="text-2xl font-bold text-[#33C3F0]">50k+</div>
-                  <div className="text-sm text-gray-400">Readers</div>
+                  <div className="text-sm text-gray-400">Pioneers</div>
                 </div>
                 <div className="px-4 py-3 bg-white/5 rounded-lg border border-gray-700/50">
                   <div className="text-2xl font-bold text-[#1DA1F2]">12</div>
-                  <div className="text-sm text-gray-400">Categories</div>
+                  <div className="text-sm text-gray-400">Tech Domains</div>
                 </div>
               </div>
             </div>
