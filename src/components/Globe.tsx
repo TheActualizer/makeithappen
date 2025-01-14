@@ -15,10 +15,9 @@ const Globe = () => {
   const globeRef = useRef<THREE.Mesh>(null);
   const markersGroup = useRef<THREE.Group>(null);
   
-  const [earthMap, earthBump, earthSpec] = useTexture([
-    '/earth-day.jpg',
-    '/earth-bump.jpg',
-    '/earth-spec.jpg'
+  // Using NASA's Blue Marble imagery
+  const [earthMap] = useTexture([
+    'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg'
   ]);
 
   useEffect(() => {
@@ -64,10 +63,6 @@ const Globe = () => {
         <sphereGeometry args={[2, 64, 64]} />
         <meshPhongMaterial
           map={earthMap}
-          bumpMap={earthBump}
-          bumpScale={0.1}
-          specularMap={earthSpec}
-          specular={new THREE.Color('#909090')}
           shininess={5}
         />
       </mesh>
