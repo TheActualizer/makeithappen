@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, ChevronDown } from "lucide-react";
+import { motion } from "framer-motion";
 import {
   Accordion,
   AccordionContent,
@@ -11,41 +12,121 @@ import {
 const Hero = () => {
   const navigate = useNavigate();
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+  };
+
   return (
     <div className="relative min-h-[90vh] flex items-center justify-center pt-8 overflow-hidden">
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-accent to-secondary/20" />
-        <div className="absolute top-1/4 -right-20 w-[500px] h-[500px] bg-primary/20 rounded-[20%] blur-3xl animate-pulse transform rotate-45" />
-        <div className="absolute -bottom-32 -left-40 w-[600px] h-[600px] bg-secondary/20 rounded-[30%] blur-3xl animate-pulse delay-700 transform -rotate-12" />
-        <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-accent/10 rounded-[25%] blur-3xl animate-pulse delay-1000 transform rotate-90" />
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5 }}
+          className="absolute inset-0 bg-gradient-to-br from-primary/30 via-accent to-secondary/20" 
+        />
+        <motion.div 
+          animate={{ 
+            rotate: [0, 360],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{ 
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute top-1/4 -right-20 w-[500px] h-[500px] bg-primary/20 rounded-[20%] blur-3xl transform"
+        />
+        <motion.div 
+          animate={{ 
+            rotate: [0, -360],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{ 
+            duration: 25,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute -bottom-32 -left-40 w-[600px] h-[600px] bg-secondary/20 rounded-[30%] blur-3xl transform"
+        />
+        <motion.div 
+          animate={{ 
+            rotate: [0, 360],
+            scale: [1, 1.15, 1],
+          }}
+          transition={{ 
+            duration: 30,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-accent/10 rounded-[25%] blur-3xl transform"
+        />
         <div className="absolute inset-0 bg-[linear-gradient(45deg,#4f4f4f2e_1px,transparent_1px)] bg-[size:50px_50px] bg-opacity-20 transform rotate-45" />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="container mx-auto px-4 relative z-10"
+      >
         <div className="text-center max-w-4xl mx-auto">
           <div className="space-y-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-6 animate-fade-in">
+            <motion.div 
+              variants={itemVariants}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-6"
+            >
               <Sparkles className="w-4 h-4 text-secondary animate-pulse" />
               <span className="text-sm text-gray-300">From Simple Websites to Enterprise SaaS Solutions</span>
-            </div>
+            </motion.div>
             
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+            <motion.h1 
+              variants={itemVariants}
+              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
+            >
               Building{" "}
               <span className="relative">
-                <span className="absolute -inset-1 blur-xl bg-gradient-to-r from-secondary via-primary to-secondary opacity-30"></span>
+                <motion.span 
+                  animate={{ 
+                    opacity: [0.2, 0.5, 0.2],
+                  }}
+                  transition={{ 
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="absolute -inset-1 blur-xl bg-gradient-to-r from-secondary via-primary to-secondary"
+                />
                 <span className="relative bg-gradient-to-r from-secondary via-primary to-secondary bg-clip-text text-transparent">
                   Next-Generation
                 </span>
               </span>{" "}
               Digital Solutions
-            </h1>
+            </motion.h1>
             
-            <p className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto backdrop-blur-sm">
+            <motion.p 
+              variants={itemVariants}
+              className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto backdrop-blur-sm"
+            >
               Accelerate your vision with AI-powered development. We build 20x faster 
               than traditional methods, turning ideas into production-ready solutions at lightspeed.
-            </p>
+            </motion.p>
             
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-8">
+            <motion.div 
+              variants={itemVariants}
+              className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-8"
+            >
               <Button
                 size="lg"
                 className="group relative overflow-hidden bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 transform hover:scale-105 min-w-[200px]"
@@ -63,26 +144,41 @@ const Hero = () => {
               >
                 Explore Solutions
               </Button>
-            </div>
+            </motion.div>
 
-            <div className="mt-16 max-w-5xl mx-auto">
+            <motion.div 
+              variants={itemVariants}
+              className="mt-16 max-w-5xl mx-auto"
+            >
               <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div className="p-4 rounded-lg bg-accent/10 backdrop-blur-sm border border-accent/20 hover:bg-accent/20 transition-colors">
-                  <h3 className="text-lg font-semibold text-white mb-2">Digital Business Suite</h3>
-                  <p className="text-sm text-gray-300">Custom websites, CRM & automation</p>
-                </div>
-                <div className="p-4 rounded-lg bg-accent/10 backdrop-blur-sm border border-accent/20 hover:bg-accent/20 transition-colors">
-                  <h3 className="text-lg font-semibold text-white mb-2">Business Process AI</h3>
-                  <p className="text-sm text-gray-300">90% workflow automation</p>
-                </div>
-                <div className="p-4 rounded-lg bg-accent/10 backdrop-blur-sm border border-accent/20 hover:bg-accent/20 transition-colors">
-                  <h3 className="text-lg font-semibold text-white mb-2">Precision Systems</h3>
-                  <p className="text-sm text-gray-300">Engineering-grade calculations</p>
-                </div>
-                <div className="p-4 rounded-lg bg-accent/10 backdrop-blur-sm border border-accent/20 hover:bg-accent/20 transition-colors">
-                  <h3 className="text-lg font-semibold text-white mb-2">Healthcare Suite</h3>
-                  <p className="text-sm text-gray-300">HIPAA & FHIR compliant</p>
-                </div>
+                {[
+                  {
+                    title: "Digital Business Suite",
+                    description: "Custom websites, CRM & automation"
+                  },
+                  {
+                    title: "Business Process AI",
+                    description: "90% workflow automation"
+                  },
+                  {
+                    title: "Precision Systems",
+                    description: "Engineering-grade calculations"
+                  },
+                  {
+                    title: "Healthcare Suite",
+                    description: "HIPAA & FHIR compliant"
+                  }
+                ].map((service, index) => (
+                  <motion.div
+                    key={service.title}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="p-4 rounded-lg bg-accent/10 backdrop-blur-sm border border-accent/20 hover:bg-accent/20 transition-colors"
+                  >
+                    <h3 className="text-lg font-semibold text-white mb-2">{service.title}</h3>
+                    <p className="text-sm text-gray-300">{service.description}</p>
+                  </motion.div>
+                ))}
               </div>
 
               <Accordion type="single" collapsible className="w-full backdrop-blur-sm">
@@ -95,38 +191,33 @@ const Hero = () => {
                   </AccordionTrigger>
                   <AccordionContent>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-gray-400">
-                      <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
-                        • Custom Websites & CRM
-                      </div>
-                      <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
-                        • AI Workflow Automation
-                      </div>
-                      <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
-                        • Technical Calculations
-                      </div>
-                      <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
-                        • HIPAA Compliance
-                      </div>
-                      <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
-                        • Zoom Integration
-                      </div>
-                      <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
-                        • Multi-Agent Systems
-                      </div>
-                      <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
-                        • Legal & Finance AI
-                      </div>
-                      <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
-                        • FHIR Integration
-                      </div>
+                      {[
+                        "Custom Websites & CRM",
+                        "AI Workflow Automation",
+                        "Technical Calculations",
+                        "HIPAA Compliance",
+                        "Zoom Integration",
+                        "Multi-Agent Systems",
+                        "Legal & Finance AI",
+                        "FHIR Integration"
+                      ].map((capability, index) => (
+                        <motion.div
+                          key={capability}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors"
+                        >
+                          • {capability}
+                        </motion.div>
+                      ))}
                     </div>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
