@@ -184,28 +184,30 @@ const Blog = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mb-20"
         >
-          <Carousel className="w-full max-w-6xl mx-auto">
-            <CarouselContent className="-ml-2 md:-ml-4">
+          <Carousel className="w-full max-w-5xl mx-auto">
+            <CarouselContent>
               {carouselItems.map((item, index) => (
-                <CarouselItem key={index} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3">
-                  <Card className="overflow-hidden bg-gradient-to-br from-accent/95 via-primary/10 to-secondary/20 backdrop-blur-sm border-secondary/20 h-full">
-                    <div className="aspect-[16/10] relative overflow-hidden">
-                      <img 
-                        src={item.image} 
-                        alt={item.title}
-                        className="object-cover w-full h-full transform hover:scale-105 transition-transform duration-300"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-accent/90 via-accent/50 to-transparent flex flex-col justify-end p-6">
-                        <h3 className="text-xl md:text-2xl font-semibold text-white mb-2">{item.title}</h3>
-                        <p className="text-gray-200 text-sm md:text-base">{item.description}</p>
+                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                  <div className="p-2">
+                    <Card className="overflow-hidden bg-gradient-to-br from-accent/95 via-primary/10 to-secondary/20 backdrop-blur-sm border-secondary/20">
+                      <div className="aspect-video relative overflow-hidden">
+                        <img 
+                          src={item.image} 
+                          alt={item.title}
+                          className="object-cover w-full h-full transform hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-accent/80 to-transparent flex flex-col justify-end p-4">
+                          <h3 className="text-xl font-semibold text-white mb-1">{item.title}</h3>
+                          <p className="text-gray-200 text-sm">{item.description}</p>
+                        </div>
                       </div>
-                    </div>
-                  </Card>
+                    </Card>
+                  </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:flex -left-12 bg-secondary/20 hover:bg-secondary/30 border-secondary/30" />
-            <CarouselNext className="hidden md:flex -right-12 bg-secondary/20 hover:bg-secondary/30 border-secondary/30" />
+            <CarouselPrevious className="hidden md:flex" />
+            <CarouselNext className="hidden md:flex" />
           </Carousel>
         </motion.div>
 
