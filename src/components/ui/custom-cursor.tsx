@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 export const CustomCursor = () => {
@@ -7,60 +7,42 @@ export const CustomCursor = () => {
   const [isHidden, setIsHidden] = useState(false);
   const [scale, setScale] = useState(1);
 
-  // Debounced cursor style update
-  const updateCursorStyle = useCallback(() => {
-    const hoveredElement = document.elementFromPoint(position.x, position.y);
-    if (hoveredElement) {
-      const computedStyle = window.getComputedStyle(hoveredElement);
-      const isInteractive = 
-        hoveredElement.tagName === 'BUTTON' || 
-        hoveredElement.tagName === 'A' || 
-        computedStyle.cursor === 'pointer';
-      
-      setIsPointer(computedStyle.cursor === 'pointer');
-      setScale(isInteractive ? 1.5 : 1);
-    }
-  }, [position.x, position.y]);
-
   useEffect(() => {
-    let rafId: number;
-    
     const updateCursorPosition = (e: MouseEvent) => {
-      // Use requestAnimationFrame for smooth updates
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
-        setPosition({ x: e.clientX, y: e.clientY });
-      });
+      // Direct DOM update for maximum performance
+      const cursor = document.querySelector('.custom-cursor') as HTMLElement;
+      if (cursor) {
+        cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+      }
+      setPosition({ x: e.clientX, y: e.clientY });
+      
+      // Immediate style check without throttling
+      const hoveredElement = document.elementFromPoint(e.clientX, e.clientY);
+      if (hoveredElement) {
+        const computedStyle = window.getComputedStyle(hoveredElement);
+        const isInteractive = 
+          hoveredElement.tagName === 'BUTTON' || 
+          hoveredElement.tagName === 'A' || 
+          computedStyle.cursor === 'pointer';
+        
+        setIsPointer(computedStyle.cursor === 'pointer');
+        setScale(isInteractive ? 1.5 : 1);
+      }
     };
 
     const handleMouseEnter = () => setIsHidden(false);
     const handleMouseLeave = () => setIsHidden(true);
 
-    // Throttle mousemove event
-    let throttleTimeout: NodeJS.Timeout;
-    const throttledUpdateStyle = (e: MouseEvent) => {
-      if (!throttleTimeout) {
-        throttleTimeout = setTimeout(() => {
-          updateCursorStyle();
-          throttleTimeout = null;
-        }, 100); // Update style every 100ms max
-      }
-    };
-
     document.addEventListener('mousemove', updateCursorPosition, { passive: true });
-    document.addEventListener('mousemove', throttledUpdateStyle, { passive: true });
     document.addEventListener('mouseenter', handleMouseEnter);
     document.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
       document.removeEventListener('mousemove', updateCursorPosition);
-      document.removeEventListener('mousemove', throttledUpdateStyle);
       document.removeEventListener('mouseenter', handleMouseEnter);
       document.removeEventListener('mouseleave', handleMouseLeave);
-      cancelAnimationFrame(rafId);
-      clearTimeout(throttleTimeout);
     };
-  }, [updateCursorStyle]);
+  }, []);
 
   // Skip rendering on server
   if (typeof window === 'undefined') return null;
@@ -68,7 +50,7 @@ export const CustomCursor = () => {
   return (
     <div
       className={cn(
-        "fixed pointer-events-none z-[999] transition-opacity duration-300 will-change-transform",
+        "custom-cursor fixed pointer-events-none z-[999] transition-opacity duration-300 will-change-transform",
         isHidden && "opacity-0"
       )}
       style={{
@@ -79,7 +61,7 @@ export const CustomCursor = () => {
       <div
         className={cn(
           "fixed -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary",
-          "w-8 h-8 transition-all duration-200 will-change-transform",
+          "w-8 h-8 transition-all duration-100 will-change-transform",
           isPointer && "border-secondary"
         )}
         style={{
@@ -90,7 +72,7 @@ export const CustomCursor = () => {
       <div
         className={cn(
           "fixed -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary",
-          "w-1 h-1 transition-colors duration-200",
+          "w-1 h-1 transition-colors duration-100",
           isPointer && "bg-secondary"
         )}
       />
