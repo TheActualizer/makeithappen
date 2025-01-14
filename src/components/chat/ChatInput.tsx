@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/integrations/supabase/client';
 
 const ChatInput = () => {
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState('I am experiencing issues with Dify message handling in my React application. Could you help me understand the best practices for: 1) Proper message storage in Supabase, 2) Real-time updates with Supabase subscriptions, and 3) Error handling in the Dify response flow? Please provide specific code examples and configuration steps.');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const [conversationId] = useState(() => uuidv4());
