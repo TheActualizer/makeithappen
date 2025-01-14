@@ -70,8 +70,10 @@ export const ContactForm = () => {
         throw submissionError;
       }
 
+      console.log("Contact submission saved:", submission);
+
       // Trigger CRM automation
-      const { error: automationError } = await supabase.functions.invoke(
+      const { data: automationData, error: automationError } = await supabase.functions.invoke(
         "crm-email-automation",
         {
           body: { ...values, id: submission.id },
@@ -82,6 +84,8 @@ export const ContactForm = () => {
         console.error("Error in CRM automation:", automationError);
         throw automationError;
       }
+
+      console.log("CRM automation completed:", automationData);
 
       toast.success(
         "Message sent successfully! Check your email for further information."
