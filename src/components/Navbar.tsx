@@ -10,7 +10,6 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Track scroll position for dynamic opacity
   useEffect(() => {
     const handleScroll = () => {
       setScrollPosition(window.scrollY);
