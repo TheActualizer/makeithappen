@@ -1,68 +1,58 @@
-import { Bot, Calculator, Scale, Stethoscope } from "lucide-react";
+import { Bot, Building2, Cog } from "lucide-react";
 
 export const services = [
   {
     id: 1,
-    title: "Website & Business Operations",
-    description: "Comprehensive digital transformation of your business operations with AI-powered automation.",
-    icon: Scale,
+    title: "Enterprise Digital Transformation",
+    description: "Complete digital transformation of your enterprise with AI-powered automation and workflow optimization.",
+    icon: Building2,
     features: [
-      "AI-powered client management system",
-      "CRM integration with automated workflows",
-      "Zoom integration with AI meeting summaries",
-      "Intelligent follow-up automation",
-      "Document processing and management",
-      "Client portal development"
+      "AI-powered business process automation",
+      "Custom enterprise software development",
+      "Legacy system modernization",
+      "Intelligent document processing",
+      "Workflow optimization & automation",
+      "Enterprise data integration",
+      "Custom CRM & ERP solutions",
+      "Secure client portals"
     ],
-    tags: ["AI-Powered", "Automation", "Integration"],
-    metrics: "Average 85% reduction in manual operations"
+    tags: ["Enterprise", "Digital Transformation", "Integration"],
+    metrics: "85% reduction in operational costs"
   },
   {
     id: 2,
-    title: "Extensive AI Agent Operations",
-    description: "Multi-agent swarms that revolutionize your business processes through intelligent automation.",
+    title: "Autonomous AI Workforce",
+    description: "Deploy intelligent AI agents that work 24/7 to automate complex business processes and decision-making.",
     icon: Bot,
     features: [
-      "Policy automation and enforcement",
-      "Complex workflow orchestration",
-      "Multi-agent swarm coordination",
-      "Business process optimization",
-      "Automated decision systems",
-      "Intelligent task distribution"
+      "Multi-agent orchestration systems",
+      "Automated decision engines",
+      "Natural language processing",
+      "Intelligent data analysis",
+      "Process automation bots",
+      "AI-powered customer service",
+      "Predictive analytics",
+      "Automated reporting systems"
     ],
-    tags: ["Multi-Agent", "Orchestration", "Optimization"],
-    metrics: "Up to 95% faster process execution"
+    tags: ["AI Agents", "Automation", "Intelligence"],
+    metrics: "24/7 autonomous operations"
   },
   {
     id: 3,
-    title: "Advanced Industry Calculations",
-    description: "Specialized computation engines tailored for professional services and technical industries.",
-    icon: Calculator,
+    title: "Industry-Specific Solutions",
+    description: "Specialized solutions tailored for healthcare, finance, legal, and other regulated industries.",
+    icon: Cog,
     features: [
-      "Accounting automation systems",
-      "Legal analysis and compliance",
-      "Engineering simulations",
-      "Financial modeling",
-      "Risk assessment calculations",
-      "Technical documentation generation"
+      "HIPAA-compliant healthcare systems",
+      "Financial compliance automation",
+      "Legal document processing",
+      "Regulatory reporting automation",
+      "Industry-specific workflows",
+      "Compliance monitoring",
+      "Risk assessment systems",
+      "Audit trail automation"
     ],
-    tags: ["Automation", "Analysis", "Compliance"],
-    metrics: "99.9% calculation accuracy"
-  },
-  {
-    id: 4,
-    title: "Healthcare Automation",
-    description: "HIPAA-compliant autonomous systems for modern healthcare operations.",
-    icon: Stethoscope,
-    features: [
-      "HIPAA-compliant systems",
-      "FHIR integration",
-      "Patient data management",
-      "Healthcare workflow automation",
-      "Medical record processing",
-      "Compliance monitoring"
-    ],
-    tags: ["HIPAA", "Healthcare", "Compliance"],
-    metrics: "100% HIPAA compliance maintained"
+    tags: ["Industry Solutions", "Compliance", "Automation"],
+    metrics: "100% compliance maintained"
   }
 ];
