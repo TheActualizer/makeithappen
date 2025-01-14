@@ -263,7 +263,7 @@ const Blog = () => {
               <MessageSquare className="h-5 w-5" />
             </Button>
             <Button
-              variant="primary"
+              variant="secondary"
               size="icon"
               className="rounded-full shadow-lg hover:shadow-xl transition-all duration-300 animate-float"
               onClick={() => navigate('/blog/search')}
