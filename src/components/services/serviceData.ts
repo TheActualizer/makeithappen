@@ -1,58 +1,60 @@
-import { Bot, Building2, Cog } from "lucide-react";
+import { Bot, Calculator, Scale, Stethoscope } from "lucide-react";
 
 export const services = [
   {
     id: 1,
-    title: "Enterprise Digital Transformation",
-    description: "Complete digital transformation of your enterprise with AI-powered automation and workflow optimization.",
-    icon: Building2,
+    title: "Website & Business Operations",
+    description: "Comprehensive digital transformation of your business operations with AI-powered automation.",
+    icon: Scale,
     features: [
-      "AI-powered business process automation",
-      "Custom enterprise software development",
-      "Legacy system modernization",
-      "Intelligent document processing",
-      "Workflow optimization & automation",
-      "Enterprise data integration",
-      "Custom CRM & ERP solutions",
-      "Secure client portals"
-    ],
-    tags: ["Enterprise", "Digital Transformation", "Integration"],
-    metrics: "85% reduction in operational costs"
+      "AI-powered client management system",
+      "CRM integration with automated workflows",
+      "Zoom integration with AI meeting summaries",
+      "Intelligent follow-up automation",
+      "Document processing and management",
+      "Client portal development"
+    ]
   },
   {
     id: 2,
-    title: "Autonomous AI Workforce",
-    description: "Deploy intelligent AI agents that work 24/7 to automate complex business processes and decision-making.",
+    title: "Extensive AI Agent Operations",
+    description: "Multi-agent swarms that revolutionize your business processes through intelligent automation.",
     icon: Bot,
     features: [
-      "Multi-agent orchestration systems",
-      "Automated decision engines",
-      "Natural language processing",
-      "Intelligent data analysis",
-      "Process automation bots",
-      "AI-powered customer service",
-      "Predictive analytics",
-      "Automated reporting systems"
-    ],
-    tags: ["AI Agents", "Automation", "Intelligence"],
-    metrics: "24/7 autonomous operations"
+      "Policy automation and enforcement",
+      "Complex workflow orchestration",
+      "Multi-agent swarm coordination",
+      "Business process optimization",
+      "Automated decision systems",
+      "Intelligent task distribution"
+    ]
   },
   {
     id: 3,
-    title: "Industry-Specific Solutions",
-    description: "Specialized solutions tailored for healthcare, finance, legal, and other regulated industries.",
-    icon: Cog,
+    title: "Advanced Industry Calculations",
+    description: "Specialized computation engines tailored for professional services and technical industries.",
+    icon: Calculator,
     features: [
-      "HIPAA-compliant healthcare systems",
-      "Financial compliance automation",
-      "Legal document processing",
-      "Regulatory reporting automation",
-      "Industry-specific workflows",
-      "Compliance monitoring",
-      "Risk assessment systems",
-      "Audit trail automation"
-    ],
-    tags: ["Industry Solutions", "Compliance", "Automation"],
-    metrics: "100% compliance maintained"
+      "Accounting automation systems",
+      "Legal analysis and compliance",
+      "Engineering simulations",
+      "Financial modeling",
+      "Risk assessment calculations",
+      "Technical documentation generation"
+    ]
+  },
+  {
+    id: 4,
+    title: "Healthcare Automation",
+    description: "HIPAA-compliant autonomous systems for modern healthcare operations.",
+    icon: Stethoscope,
+    features: [
+      "HIPAA-compliant systems",
+      "FHIR integration",
+      "Patient data management",
+      "Healthcare workflow automation",
+      "Medical record processing",
+      "Compliance monitoring"
+    ]
   }
 ];

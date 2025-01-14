@@ -8,8 +8,8 @@ interface Service {
   description: string;
   icon: LucideIcon;
   features: string[];
-  metrics?: string;
-  tags?: string[];
+  metrics: string;
+  tags: string[];
 }
 
 interface ServiceCardProps {
@@ -37,19 +37,17 @@ export const ServiceCard = ({ service }: ServiceCardProps) => {
           </div>
         </div>
 
-        {service.tags && (
-          <div className="mt-4 flex flex-wrap gap-1">
-            {service.tags.map((tag) => (
-              <Badge 
-                key={tag} 
-                variant="secondary" 
-                className="bg-accent/30 hover:bg-accent/40"
-              >
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        )}
+        <div className="mt-4 flex flex-wrap gap-1">
+          {service.tags.map((tag) => (
+            <Badge 
+              key={tag} 
+              variant="secondary" 
+              className="bg-accent/30 hover:bg-accent/40"
+            >
+              {tag}
+            </Badge>
+          ))}
+        </div>
 
         <div className="mt-4 grid grid-cols-1 gap-2">
           {service.features.map((feature, index) => (
@@ -63,13 +61,11 @@ export const ServiceCard = ({ service }: ServiceCardProps) => {
           ))}
         </div>
 
-        {service.metrics && (
-          <div className="mt-4 pt-4 border-t border-accent/20">
-            <p className="text-sm font-medium text-secondary">
-              {service.metrics}
-            </p>
-          </div>
-        )}
+        <div className="mt-4 pt-4 border-t border-accent/20">
+          <p className="text-sm font-medium text-secondary">
+            {service.metrics}
+          </p>
+        </div>
       </CardContent>
     </Card>
   );
