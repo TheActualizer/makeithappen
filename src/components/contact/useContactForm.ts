@@ -33,7 +33,7 @@ export const useContactForm = () => {
     
     try {
       console.log("ContactForm: Attempting to insert into contact_submissions table...");
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("contact_submissions")
         .insert({
           name: values.name,
@@ -41,9 +41,7 @@ export const useContactForm = () => {
           phone: values.phone || null,
           project_type: values.projectType,
           message: values.message,
-        })
-        .select()
-        .single();
+        });
 
       if (error) {
         console.error("ContactForm: Submission error:", error);
