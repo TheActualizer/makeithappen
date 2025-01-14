@@ -13,19 +13,27 @@ export const DashboardStats = ({ isAdmin }: DashboardStatsProps) => {
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
       
+      if (!user) {
+        return {
+          totalProjects: 0,
+          totalContacts: 0,
+          totalUsers: 0,
+        };
+      }
+      
       const [projects, contacts, profiles] = await Promise.all([
         isAdmin
           ? supabase.from("projects").select("count")
           : supabase
               .from("projects")
               .select("count")
-              .eq("user_id", user?.id),
+              .eq("user_id", user.id),
         isAdmin
           ? supabase.from("contact_submissions").select("count")
           : supabase
               .from("contact_submissions")
               .select("count")
-              .eq("email", user?.email),
+              .eq("email", user.email),
         isAdmin
           ? supabase.from("profiles").select("count")
           : { count: null },

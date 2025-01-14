@@ -26,6 +26,8 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
   const [activeSprintId, setActiveSprintId] = useState<string | null>(null);
   const { toast } = useToast();
 
+  const effectiveProjectId = projectId || paramProjectId;
+
   const calculateProgress = (items: any[], statusField: string = 'status') => {
     if (!items || items.length === 0) return 0;
     const completedItems = items.filter(item => 
@@ -94,12 +96,12 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
   };
 
   const syncWithAirtable = async () => {
-    if (!projectId) return;
+    if (!effectiveProjectId) return;
     
     setSyncing(true);
     try {
       const { data, error } = await supabase.functions.invoke('airtable-sync', {
-        body: { projectId, operation: 'sync' }
+        body: { projectId: effectiveProjectId, operation: 'sync' }
       });
 
       if (error) throw error;
@@ -125,44 +127,51 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
   };
 
   const fetchProjectData = async () => {
-    if (!projectId) {
+    if (!effectiveProjectId) {
       console.log("No projectId available, skipping data fetch");
       setLoading(false);
       return;
     }
 
-    console.log("Fetching project data for projectId:", projectId);
+    console.log("Fetching project data for projectId:", effectiveProjectId);
     try {
-      const [milestonesData, sprintsData, tasksData] = await Promise.all([
-        supabase
-          .from("milestones")
-          .select("*")
-          .eq("project_id", projectId)
-          .order("created_at", { ascending: true }),
-        supabase
-          .from("sprints")
-          .select("*, tasks(*)")
-          .eq("project_id", projectId)
-          .order("start_date", { ascending: true }),
-        supabase
-          .from("tasks")
-          .select("*")
-          .eq("project_id", projectId)
-          .order("created_at", { ascending: true })
-      ]);
+      // First, fetch milestones for the project
+      const { data: milestonesData, error: milestonesError } = await supabase
+        .from("milestones")
+        .select("*")
+        .eq("project_id", effectiveProjectId)
+        .order("created_at", { ascending: true });
 
-      if (milestonesData.error) throw milestonesData.error;
-      if (sprintsData.error) throw sprintsData.error;
-      if (tasksData.error) throw tasksData.error;
+      if (milestonesError) throw milestonesError;
 
-      console.log("Fetched data:", { milestonesData, sprintsData, tasksData });
+      // Then fetch sprints with their associated tasks
+      const { data: sprintsData, error: sprintsError } = await supabase
+        .from("sprints")
+        .select(`
+          *,
+          tasks (*)
+        `)
+        .eq("project_id", effectiveProjectId)
+        .order("start_date", { ascending: true });
 
-      setMilestones(milestonesData.data || []);
-      setSprints(sprintsData.data || []);
-      setTasks(tasksData.data || []);
+      if (sprintsError) throw sprintsError;
+
+      // Get all tasks for the project through sprints
+      const allTasks = sprintsData?.reduce((acc: Task[], sprint) => {
+        if (sprint.tasks) {
+          return [...acc, ...sprint.tasks];
+        }
+        return acc;
+      }, []) || [];
+
+      console.log("Fetched data:", { milestonesData, sprintsData, allTasks });
+
+      setMilestones(milestonesData || []);
+      setSprints(sprintsData || []);
+      setTasks(allTasks);
       
-      if (sprintsData.data && sprintsData.data.length > 0) {
-        setActiveSprintId(sprintsData.data[0].id);
+      if (sprintsData && sprintsData.length > 0) {
+        setActiveSprintId(sprintsData[0].id);
       }
     } catch (error) {
       console.error("Error fetching project data:", error);
@@ -179,7 +188,7 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
   useEffect(() => {
     console.log("ProjectProgress useEffect triggered");
     fetchProjectData();
-  }, [projectId]);
+  }, [effectiveProjectId]);
 
   if (loading) {
     return (
@@ -274,7 +283,7 @@ export function ProjectProgress({ projectId }: ProjectProgressProps) {
                 <TabsContent key={sprint.id} value={sprint.id}>
                   <KanbanBoard
                     sprintId={sprint.id}
-                    tasks={tasks}
+                    tasks={tasks.filter(task => task.sprint_id === sprint.id)}
                     onDragEnd={handleDragEnd}
                   />
                 </TabsContent>
