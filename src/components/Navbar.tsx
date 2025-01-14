@@ -81,19 +81,28 @@ const Navbar = () => {
   return (
     <nav className="fixed w-full bg-accent/90 backdrop-blur-xl z-50 py-4 border-b border-secondary/20 shadow-lg">
       <div className="container mx-auto px-4 flex justify-between items-center relative">
-        <Link 
-          to="/" 
-          className={`text-2xl font-bold transition-all duration-300 ${
-            isActive('/') 
-              ? 'text-secondary drop-shadow-[0_0_8px_rgba(6,182,212,0.3)]' 
-              : 'text-white hover:text-secondary/90'
+        {/* Dynamic Logo Section */}
+        <motion.div 
+          className={`flex-1 md:flex-none transition-all duration-300 ${
+            isOpen ? 'md:translate-x-0' : ''
           }`}
+          layout
         >
-          MakeITHappen
-        </Link>
+          <Link 
+            to="/" 
+            className={`text-xl md:text-2xl font-bold transition-all duration-300 ${
+              isActive('/') 
+                ? 'text-secondary drop-shadow-[0_0_8px_rgba(6,182,212,0.3)]' 
+                : 'text-white hover:text-secondary/90'
+            }`}
+          >
+            <span className="hidden sm:inline">MakeITHappen</span>
+            <span className="sm:hidden">MIH</span>
+          </Link>
+        </motion.div>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-8">
+        <div className="hidden md:flex items-center justify-center flex-1 space-x-8">
           {[...primaryNavItems, ...secondaryNavItems].map((item) => (
             <Link
               key={item.name}
@@ -113,7 +122,11 @@ const Navbar = () => {
               )}
             </Link>
           ))}
-          <div className="flex items-center space-x-4">
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center space-x-2 md:space-x-4 flex-1 md:flex-none justify-end">
+          <div className="hidden sm:flex items-center space-x-4">
             <Button 
               variant="ghost"
               onClick={() => navigate('/login')}
@@ -130,15 +143,13 @@ const Navbar = () => {
               Get Started
             </Button>
           </div>
-        </div>
 
-        {/* Mobile Menu Toggle */}
-        <div className="md:hidden">
+          {/* Mobile Menu Toggle */}
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setIsOpen(!isOpen)}
-            className="text-white hover:bg-white/10 transition-all duration-300"
+            className="md:hidden text-white hover:bg-white/10 transition-all duration-300"
           >
             <AnimatePresence mode="wait">
               {isOpen ? (
@@ -179,9 +190,9 @@ const Navbar = () => {
               <div className="bg-accent/95 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-2 border-secondary/20 rounded-2xl mx-2 overflow-hidden">
                 <div className="container mx-auto p-4">
                   <div className="space-y-4">
-                    {/* Primary Navigation Items */}
+                    {/* Navigation Items */}
                     <div className="space-y-2">
-                      {primaryNavItems.map((item) => (
+                      {[...primaryNavItems, ...secondaryNavItems].map((item) => (
                         <motion.div
                           key={item.name}
                           variants={itemVariants}
@@ -202,35 +213,7 @@ const Navbar = () => {
                       ))}
                     </div>
 
-                    {/* Animated Divider */}
-                    <motion.div 
-                      variants={itemVariants}
-                      className="h-px bg-gradient-to-r from-transparent via-secondary/50 to-transparent shadow-[0_0_8px_rgba(6,182,212,0.2)]"
-                    />
-
-                    {/* Secondary Navigation Items */}
-                    <div className="space-y-2">
-                      {secondaryNavItems.map((item) => (
-                        <motion.div
-                          key={item.name}
-                          variants={itemVariants}
-                        >
-                          <Link
-                            to={item.href}
-                            onClick={() => setIsOpen(false)}
-                            className={`block px-4 py-3 rounded-xl transition-all duration-300 ${
-                              isActive(item.href)
-                                ? 'bg-secondary/20 text-secondary font-medium translate-x-2 shadow-[0_0_15px_rgba(6,182,212,0.15)]'
-                                : 'text-gray-300 hover:bg-white/5 hover:text-white hover:translate-x-2'
-                            }`}
-                          >
-                            {item.name}
-                          </Link>
-                        </motion.div>
-                      ))}
-                    </div>
-
-                    {/* Action Buttons */}
+                    {/* Mobile Action Buttons */}
                     <motion.div 
                       variants={itemVariants}
                       className="pt-4 space-y-3 border-t border-secondary/30"
