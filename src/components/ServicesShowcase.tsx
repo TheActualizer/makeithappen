@@ -138,8 +138,8 @@ const ServiceCard = ({ service }: { service: Service }) => {
     <HoverCard>
       <HoverCardTrigger asChild>
         <Card className="relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 cursor-pointer border-accent/20 bg-accent/40 backdrop-blur-sm group">
-          <CardHeader className="text-center"> {/* Added text-center */}
-            <div className="flex justify-center mb-4"> {/* Changed to flex container with center justification */}
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
               <div className="inline-flex p-3 rounded-lg bg-accent/30 group-hover:bg-accent/40 transition-colors">
                 <Icon className="w-6 h-6 text-secondary" />
               </div>
@@ -173,6 +173,11 @@ export const ServicesShowcase = () => {
     <section className="py-12 px-4 md:px-6 lg:px-8 bg-background relative" id="services">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-3">
+            <Sparkles className="w-4 h-4 text-secondary animate-pulse" />
+            <span className="text-sm text-gray-300">From Simple Websites to Enterprise SaaS Solutions</span>
+          </div>
+          
           <h2 className="text-3xl font-bold tracking-tight text-white mb-4">
             Enterprise-Grade Automation Solutions
           </h2>
