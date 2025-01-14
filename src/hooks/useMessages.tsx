@@ -85,7 +85,7 @@ export const useMessages = () => {
           created_at,
           conversation_id,
           type,
-          profiles (
+          sender:sender_id (
             first_name,
             last_name,
             email,
@@ -107,11 +107,11 @@ export const useMessages = () => {
         created_at: msg.created_at,
         conversation_id: msg.conversation_id,
         type: msg.type || 'text',
-        profiles: msg.profiles ? {
-          first_name: msg.profiles.first_name,
-          last_name: msg.profiles.last_name,
-          email: msg.profiles.email,
-          avatar_url: msg.profiles.avatar_url
+        profiles: msg.sender ? {
+          first_name: msg.sender.first_name,
+          last_name: msg.sender.last_name,
+          email: msg.sender.email,
+          avatar_url: msg.sender.avatar_url
         } : null
       }));
 

@@ -27,8 +27,30 @@ serve(async (req) => {
       throw new Error('DIFY_API_KEY is not configured')
     }
 
-    console.log('Calling DIFY API with message:', message);
+    // First, create or get conversation in Dify
+    console.log('Creating/getting Dify conversation...');
+    const conversationResponse = await fetch('https://api.dify.ai/v1/conversations', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${difyApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        conversation_id: conversationId,
+      }),
+    });
+
+    if (!conversationResponse.ok) {
+      const errorText = await conversationResponse.text();
+      console.error('Dify conversation creation error:', { status: conversationResponse.status, body: errorText });
+      throw new Error(`Dify conversation creation error: ${conversationResponse.status} ${errorText}`);
+    }
+
+    const conversationData = await conversationResponse.json();
+    console.log('Dify conversation created/retrieved:', conversationData);
     
+    // Then send the message
+    console.log('Calling DIFY API with message:', message);
     const response = await fetch('https://api.dify.ai/v1/chat-messages', {
       method: 'POST',
       headers: {
