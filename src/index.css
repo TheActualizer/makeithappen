@@ -33,7 +33,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans text-base leading-relaxed tracking-wide;
     font-family: 'Inter', sans-serif;
     overflow-x: hidden;
   }
@@ -41,6 +41,32 @@
   html {
     scroll-behavior: smooth;
     overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-normal leading-tight;
+    letter-spacing: -0.02em;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl mb-6;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl mb-5;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl mb-4;
+  }
+
+  p {
+    @apply mb-4 leading-relaxed tracking-wide;
+  }
+
+  /* Increase spacing between paragraphs */
+  p + p {
+    @apply mt-6;
   }
 
   /* Smooth transition for all interactive elements */
