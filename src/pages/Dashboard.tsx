@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   BarChart, Users, Calendar, MessageSquare, FileText,
   Activity, PlusCircle, Briefcase, ExternalLink, DollarSign,
-  ChevronDown,
+  ChevronDown, History
 } from "lucide-react";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { DashboardDocuments } from "@/components/dashboard/DashboardDocuments";
@@ -19,6 +19,7 @@ import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { Button } from "@/components/ui/button";
 import ProjectStartModal from "@/components/ProjectStartModal";
 import { useNavigate } from "react-router-dom";
+import { useMessages } from "@/hooks/useMessages";
 import {
   Collapsible,
   CollapsibleContent,
@@ -31,6 +32,7 @@ const Dashboard = () => {
   const [activeProjectId, setActiveProjectId] = useState<string | undefined>();
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { messages } = useMessages();
 
   useEffect(() => {
     const fetchFirstProject = async () => {
@@ -80,10 +82,6 @@ const Dashboard = () => {
   if (isLoadingAdmin) {
     return <div className="min-h-screen bg-background"><DashboardHeader />Loading...</div>;
   }
-
-  const handleExpandSection = (section: string) => {
-    navigate(`/dashboard/${section}`);
-  };
 
   const renderSectionHeader = (title: string, icon: React.ReactNode, onExpand?: () => void) => (
     <div className="flex justify-between items-center mb-4">
@@ -207,6 +205,41 @@ const Dashboard = () => {
             </CollapsibleTrigger>
             <CollapsibleContent className="pt-4">
               <DashboardActivity isAdmin={isAdmin} />
+            </CollapsibleContent>
+          </Collapsible>
+
+          {/* Chat History Section */}
+          <Collapsible>
+            <CollapsibleTrigger className="w-full">
+              <div className="flex items-center justify-between w-full p-4 bg-background border rounded-lg hover:bg-accent">
+                {renderSectionHeader("Chat History", <History className="h-5 w-5" />)}
+                <ChevronDown className="h-4 w-4" />
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="pt-4">
+              <Card className="p-6">
+                <div className="space-y-4">
+                  {messages?.map((message, index) => (
+                    <div
+                      key={message.id || index}
+                      className="flex items-center justify-between py-2 border-b last:border-0"
+                    >
+                      <div className="flex flex-col">
+                        <span className="font-medium">{message.content}</span>
+                        <span className="text-sm text-muted-foreground">
+                          {message.type === 'ai' ? 'AI Assistant' : 'You'}
+                        </span>
+                      </div>
+                      <span className="text-sm text-muted-foreground">
+                        {new Date(message.created_at || '').toLocaleString()}
+                      </span>
+                    </div>
+                  ))}
+                  {(!messages || messages.length === 0) && (
+                    <p className="text-muted-foreground">No chat history available.</p>
+                  )}
+                </div>
+              </Card>
             </CollapsibleContent>
           </Collapsible>
 
