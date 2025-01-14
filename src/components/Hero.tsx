@@ -15,15 +15,10 @@ const Hero = () => {
     <div className="relative min-h-[90vh] flex items-center justify-center pt-8 overflow-hidden">
       {/* Enhanced animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Isometric grid background */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-accent to-secondary/20" />
-        
-        {/* Animated geometric shapes */}
         <div className="absolute top-1/4 -right-20 w-[500px] h-[500px] bg-primary/20 rounded-[20%] blur-3xl animate-pulse transform rotate-45" />
         <div className="absolute -bottom-32 -left-40 w-[600px] h-[600px] bg-secondary/20 rounded-[30%] blur-3xl animate-pulse delay-700 transform -rotate-12" />
         <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-accent/10 rounded-[25%] blur-3xl animate-pulse delay-1000 transform rotate-90" />
-        
-        {/* Isometric grid overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(45deg,#4f4f4f2e_1px,transparent_1px)] bg-[size:50px_50px] bg-opacity-20 transform rotate-45" />
       </div>
 
@@ -71,38 +66,61 @@ const Hero = () => {
               </Button>
             </div>
 
-            <Accordion type="single" collapsible className="w-full max-w-2xl mx-auto mt-12">
-              <AccordionItem value="capabilities" className="border-accent/20">
-                <AccordionTrigger className="text-gray-300 hover:text-white">
-                  <span className="flex items-center gap-2">
-                    <ChevronDown className="h-4 w-4" />
-                    Our Capabilities
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent className="text-left">
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-gray-400">
-                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
-                      • Advanced AI Integration
+            <div className="mt-16 max-w-5xl mx-auto">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                <div className="p-4 rounded-lg bg-accent/10 backdrop-blur-sm border border-accent/20 hover:bg-accent/20 transition-colors">
+                  <h3 className="text-lg font-semibold text-white mb-2">Advanced AI</h3>
+                  <p className="text-sm text-gray-300">Custom agent networks & LLM orchestration</p>
+                </div>
+                <div className="p-4 rounded-lg bg-accent/10 backdrop-blur-sm border border-accent/20 hover:bg-accent/20 transition-colors">
+                  <h3 className="text-lg font-semibold text-white mb-2">SaaS Platforms</h3>
+                  <p className="text-sm text-gray-300">Scalable cloud-native solutions</p>
+                </div>
+                <div className="p-4 rounded-lg bg-accent/10 backdrop-blur-sm border border-accent/20 hover:bg-accent/20 transition-colors">
+                  <h3 className="text-lg font-semibold text-white mb-2">Enterprise Apps</h3>
+                  <p className="text-sm text-gray-300">Custom business automation</p>
+                </div>
+              </div>
+
+              <Accordion type="single" collapsible className="w-full backdrop-blur-sm">
+                <AccordionItem value="capabilities" className="border-accent/20">
+                  <AccordionTrigger className="text-gray-300 hover:text-white">
+                    <span className="flex items-center gap-2">
+                      <ChevronDown className="h-4 w-4" />
+                      View All Capabilities
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-gray-400">
+                      <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
+                        • Process Automation
+                      </div>
+                      <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
+                        • Digital Workforce
+                      </div>
+                      <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
+                        • Data Analytics
+                      </div>
+                      <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
+                        • Cloud Integration
+                      </div>
+                      <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
+                        • API Development
+                      </div>
+                      <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
+                        • Machine Learning
+                      </div>
+                      <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
+                        • DevOps & CI/CD
+                      </div>
+                      <div className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-colors">
+                        • Security & Compliance
+                      </div>
                     </div>
-                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
-                      • Custom SaaS Platforms
-                    </div>
-                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
-                      • Enterprise Solutions
-                    </div>
-                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
-                      • Web Applications
-                    </div>
-                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
-                      • Digital Transformation
-                    </div>
-                    <div className="p-3 rounded-lg bg-accent/10 backdrop-blur-sm">
-                      • Process Automation
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
           </div>
         </div>
       </div>
