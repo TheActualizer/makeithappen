@@ -3,9 +3,31 @@ import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const Services = () => {
   const navigate = useNavigate();
+
+  const images = [
+    {
+      src: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
+      alt: "Technology Infrastructure",
+    },
+    {
+      src: "https://images.unsplash.com/photo-1518770660439-4636190af475",
+      alt: "AI Integration",
+    },
+    {
+      src: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6",
+      alt: "Enterprise Solutions",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-accent via-accent/95 to-primary/20">
@@ -17,10 +39,29 @@ const Services = () => {
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
               Complete Business Automation Solutions
             </h1>
-            <p className="text-lg text-gray-300 max-w-2xl mx-auto mb-8">
-              Transform your business with our comprehensive suite of AI-powered automation solutions.
-              From digital workforce to departmental setups, we've got you covered.
-            </p>
+            
+            {/* Carousel Section */}
+            <div className="max-w-4xl mx-auto mb-8 relative">
+              <Carousel className="w-full" opts={{ loop: true }}>
+                <CarouselContent>
+                  {images.map((image, index) => (
+                    <CarouselItem key={index}>
+                      <div className="relative aspect-video overflow-hidden rounded-xl">
+                        <img
+                          src={image.src}
+                          alt={image.alt}
+                          className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 ease-in-out"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-4" />
+                <CarouselNext className="right-4" />
+              </Carousel>
+            </div>
+
             <div className="flex flex-wrap gap-4 justify-center">
               <Button
                 variant="default"
