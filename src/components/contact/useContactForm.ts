@@ -1,11 +1,9 @@
-import React from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { Sparkles, CheckCircle2 } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -52,6 +50,7 @@ export const useContactForm = () => {
 
       console.log("ContactForm: Submission successful, triggering webhook...");
       
+      // Trigger the webhook function
       const { error: webhookError, data: webhookData } = await supabase.functions.invoke('contact-webhook', {
         body: { 
           name: values.name,
@@ -68,34 +67,7 @@ export const useContactForm = () => {
       }
 
       console.log("ContactForm: Process completed successfully");
-      
-      // Enhanced success toast with animation
-      toast.custom((id: string) => (
-        <div 
-          className={`
-            max-w-md w-full bg-gradient-to-r from-violet-500 via-purple-500 to-indigo-500 
-            text-white rounded-lg shadow-lg p-6 flex items-center gap-4
-            transform transition-all duration-500 ease-out
-            animate-in fade-in-50 zoom-in-95
-          `}
-        >
-          <div className="flex-shrink-0 relative">
-            <CheckCircle2 className="w-8 h-8 animate-pulse" />
-            <Sparkles className="w-4 h-4 text-yellow-300 absolute -top-1 -right-1 animate-bounce" />
-          </div>
-          <div className="flex-1">
-            <h3 className="font-semibold text-lg mb-1 animate-fade-in">
-              Message Sent Successfully! ✨
-            </h3>
-            <p className="text-sm opacity-90">
-              Thank you for reaching out. We'll get back to you soon!
-            </p>
-          </div>
-        </div>
-      ), {
-        duration: 4000,
-      });
-      
+      toast.success("Message sent successfully!");
       form.reset();
     } catch (error) {
       console.error("ContactForm: Error in form submission:", error);
