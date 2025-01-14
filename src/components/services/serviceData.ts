@@ -1,4 +1,4 @@
-import { Brain, Calculator, Scale, Truck, Search, Database, Bot, Network, Shield, Workflow, Mail, Calendar, Users, FileText, Chart, MessageSquare } from "lucide-react";
+import { Brain, Calculator, Scale, Truck, Search, Database, Bot, Network, Shield, Workflow, Mail, Calendar, Users, FileText, ChartBar, MessageSquare } from "lucide-react";
 
 export const services = [
   {
@@ -50,7 +50,7 @@ export const services = [
     id: 6,
     title: "Analytics Suite",
     description: "Real-time business insights",
-    icon: Chart,
+    icon: ChartBar,
     features: ["Performance", "Trends", "Forecasts"],
     metrics: "Live Metrics",
     tags: ["Data", "Reports"]
