@@ -10,6 +10,13 @@ interface UseMessagesReturn {
   fetchMessages: (conversationId: string) => Promise<void>;
 }
 
+interface ProfileData {
+  first_name: string | null;
+  last_name: string | null;
+  email: string | null;
+  avatar_url: string | null;
+}
+
 export const useMessages = (): UseMessagesReturn => {
   const [conversations, setConversations] = useState<any[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -52,7 +59,7 @@ export const useMessages = (): UseMessagesReturn => {
           conversation_id,
           type,
           is_admin_message,
-          profiles:sender_id (
+          profiles!sender_id (
             first_name,
             last_name,
             email,
@@ -77,12 +84,7 @@ export const useMessages = (): UseMessagesReturn => {
         created_at: msg.created_at,
         conversation_id: msg.conversation_id,
         type: msg.type || 'text',
-        profiles: msg.profiles ? {
-          first_name: msg.profiles.first_name,
-          last_name: msg.profiles.last_name,
-          email: msg.profiles.email,
-          avatar_url: msg.profiles.avatar_url
-        } : null
+        profiles: msg.profiles as ProfileData | null
       })) || [];
 
       setMessages(typedMessages);
