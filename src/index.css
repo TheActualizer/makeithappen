@@ -33,7 +33,7 @@
   }
 
   body {
-    @apply bg-gradient-to-b from-accent to-accent/90 text-foreground font-sans text-base leading-relaxed tracking-wide min-h-screen;
+    @apply bg-gradient-to-br from-accent via-accent/95 to-primary/20 text-foreground font-sans text-base leading-relaxed tracking-wide min-h-screen;
     font-family: 'Inter', sans-serif;
   }
 

@@ -79,13 +79,13 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed w-full bg-accent/90 backdrop-blur-xl z-50 py-4 border-b border-secondary/20 shadow-lg">
+    <nav className="fixed w-full bg-gradient-to-r from-accent/95 via-primary/20 to-secondary/30 backdrop-blur-xl z-50 py-4 border-b border-secondary/20 shadow-lg">
       <div className="container mx-auto px-4 flex justify-between items-center relative">
         <Link 
           to="/" 
           className={`text-2xl font-bold transition-all duration-300 ${
             isActive('/') 
-              ? 'text-secondary drop-shadow-[0_0_8px_rgba(6,182,212,0.3)]' 
+              ? 'bg-gradient-to-r from-secondary via-primary to-secondary bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(6,182,212,0.3)]' 
               : 'text-white hover:text-secondary/90'
           }`}
         >
@@ -125,7 +125,7 @@ const Navbar = () => {
             <Button 
               variant="secondary"
               onClick={() => navigate('/start-project')}
-              className="shadow-lg hover:shadow-secondary/30 transition-all duration-300"
+              className="bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 shadow-lg hover:shadow-secondary/30 transition-all duration-300"
             >
               Get Started
             </Button>
@@ -176,7 +176,7 @@ const Navbar = () => {
               exit="exit"
               className="absolute top-full left-0 right-0 mt-2"
             >
-              <div className="bg-accent/95 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-2 border-secondary/20 rounded-2xl mx-2 overflow-hidden">
+              <div className="bg-gradient-to-br from-accent/95 via-primary/20 to-secondary/30 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] border-2 border-secondary/20 rounded-2xl mx-2 overflow-hidden">
                 <div className="container mx-auto p-4">
                   <div className="space-y-4">
                     {/* Primary Navigation Items */}
