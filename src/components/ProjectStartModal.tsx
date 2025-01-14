@@ -42,7 +42,7 @@ const ProjectStartModal = ({
   const navigate = useNavigate();
 
   // Simulate loading state
-  React.useEffect(() => {
+  useState(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
