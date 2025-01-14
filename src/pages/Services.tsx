@@ -31,8 +31,8 @@ const Services = () => {
     {
       title: "Website & Business Operations",
       description: "Comprehensive digital transformation of your business operations with AI-powered automation.",
-      icon: <Zap className="w-6 h-6 text-[#F97316]" />,
-      color: "text-[#F97316]",
+      icon: <Zap className="w-6 h-6 text-primary" />,
+      color: "text-primary",
       features: [
         "AI-powered client management system",
         "CRM integration with automated workflows",
@@ -45,8 +45,8 @@ const Services = () => {
     {
       title: "Extensive AI Agent Operations",
       description: "Multi-agent swarms that revolutionize your business processes through intelligent automation.",
-      icon: <Brain className="w-6 h-6 text-[#0EA5E9]" />,
-      color: "text-[#0EA5E9]",
+      icon: <Brain className="w-6 h-6 text-primary" />,
+      color: "text-primary",
       features: [
         "Policy automation and enforcement",
         "Complex workflow orchestration",
@@ -59,8 +59,8 @@ const Services = () => {
     {
       title: "Advanced Industry Calculations",
       description: "Specialized computation engines tailored for professional services and technical industries.",
-      icon: <Calculator className="w-6 h-6 text-[#22C55E]" />,
-      color: "text-[#22C55E]",
+      icon: <Calculator className="w-6 h-6 text-primary" />,
+      color: "text-primary",
       features: [
         "Accounting automation systems",
         "Legal analysis and compliance",
@@ -73,8 +73,8 @@ const Services = () => {
     {
       title: "Healthcare Automation",
       description: "HIPAA-compliant autonomous systems for modern healthcare operations.",
-      icon: <Activity className="w-6 h-6 text-[#EC4899]" />,
-      color: "text-[#EC4899]",
+      icon: <Activity className="w-6 h-6 text-primary" />,
+      color: "text-primary",
       features: [
         "HIPAA-compliant systems",
         "FHIR integration",
@@ -92,14 +92,14 @@ const Services = () => {
         {/* Header Section */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-4">
-            <Sparkles className="w-4 h-4 text-[#F97316] animate-pulse" />
-            <span className="text-sm font-light tracking-wider text-[#D946EF]">
+            <Sparkles className="w-4 h-4 text-primary animate-pulse" />
+            <span className="text-sm font-light tracking-wider text-primary">
               Next-Generation Solutions
             </span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Transform Your Business with{" "}
-            <span className="bg-gradient-to-r from-[#8B5CF6] via-[#D946EF] to-[#F97316] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
               AI-Powered Solutions
             </span>
           </h1>
@@ -119,7 +119,7 @@ const Services = () => {
             <motion.div
               key={index}
               variants={itemVariants}
-              className="p-8 rounded-xl bg-accent/20 backdrop-blur-sm border border-accent/10 hover:border-accent/30 transition-all"
+              className="p-8 rounded-xl bg-accent/20 backdrop-blur-sm border border-accent/10 hover:border-primary/30 transition-all"
             >
               <div className="flex items-center gap-4 mb-4">
                 {service.icon}
@@ -131,7 +131,7 @@ const Services = () => {
               <ul className="space-y-3">
                 {service.features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-center gap-2 text-gray-300">
-                    <ArrowRight className="w-4 h-4 text-gray-500" />
+                    <ArrowRight className="w-4 h-4 text-primary/60" />
                     {feature}
                   </li>
                 ))}
@@ -144,7 +144,7 @@ const Services = () => {
         <div className="text-center pb-16">
           <Button
             size="lg"
-            className="group relative overflow-hidden bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] hover:from-[#8B5CF6]/90 hover:to-[#D946EF]/90 transition-all duration-300 transform hover:scale-105"
+            className="group relative overflow-hidden bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-300 transform hover:scale-105"
             onClick={() => navigate("/start-project")}
           >
             Start Your Transformation
