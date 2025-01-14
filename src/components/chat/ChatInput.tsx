@@ -5,12 +5,14 @@ import { useToast } from "@/components/ui/use-toast";
 import { Link2, ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { sendMessageToDify } from '@/utils/difyApi';
+import { v4 as uuidv4 } from 'uuid';
 
 const ChatInput = () => {
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const [conversationId] = useState(() => uuidv4()); // Generate a stable conversation ID
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,7 +20,7 @@ const ChatInput = () => {
 
     setIsLoading(true);
     try {
-      const response = await sendMessageToDify(newMessage);
+      const response = await sendMessageToDify(newMessage, conversationId);
       console.log('Message sent successfully:', response);
       setNewMessage('');
       toast({

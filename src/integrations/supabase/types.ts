@@ -399,6 +399,143 @@ export type Database = {
         }
         Relationships: []
       }
+      dify_error_logs: {
+        Row: {
+          context: Json | null
+          created_at: string | null
+          error_code: string | null
+          error_message: string | null
+          error_stack: string | null
+          id: string
+          message_log_id: string | null
+        }
+        Insert: {
+          context?: Json | null
+          created_at?: string | null
+          error_code?: string | null
+          error_message?: string | null
+          error_stack?: string | null
+          id?: string
+          message_log_id?: string | null
+        }
+        Update: {
+          context?: Json | null
+          created_at?: string | null
+          error_code?: string | null
+          error_message?: string | null
+          error_stack?: string | null
+          id?: string
+          message_log_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dify_error_logs_message_log_id_fkey"
+            columns: ["message_log_id"]
+            isOneToOne: false
+            referencedRelation: "dify_message_logs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dify_message_logs: {
+        Row: {
+          conversation_id: string | null
+          created_at: string | null
+          dify_conversation_id: string | null
+          direction: Database["public"]["Enums"]["message_direction"]
+          error_message: string | null
+          id: string
+          message_id: string | null
+          metadata: Json | null
+          processing_time_ms: number | null
+          request_payload: Json
+          response_payload: Json | null
+          status: Database["public"]["Enums"]["message_status"]
+          updated_at: string | null
+        }
+        Insert: {
+          conversation_id?: string | null
+          created_at?: string | null
+          dify_conversation_id?: string | null
+          direction: Database["public"]["Enums"]["message_direction"]
+          error_message?: string | null
+          id?: string
+          message_id?: string | null
+          metadata?: Json | null
+          processing_time_ms?: number | null
+          request_payload?: Json
+          response_payload?: Json | null
+          status?: Database["public"]["Enums"]["message_status"]
+          updated_at?: string | null
+        }
+        Update: {
+          conversation_id?: string | null
+          created_at?: string | null
+          dify_conversation_id?: string | null
+          direction?: Database["public"]["Enums"]["message_direction"]
+          error_message?: string | null
+          id?: string
+          message_id?: string | null
+          metadata?: Json | null
+          processing_time_ms?: number | null
+          request_payload?: Json
+          response_payload?: Json | null
+          status?: Database["public"]["Enums"]["message_status"]
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dify_message_logs_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dify_message_logs_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dify_performance_metrics: {
+        Row: {
+          avg_response_time_ms: number | null
+          failed_requests: number | null
+          id: string
+          period_end: string | null
+          period_start: string | null
+          successful_requests: number | null
+          timestamp: string | null
+          total_requests: number | null
+          unique_conversations: number | null
+        }
+        Insert: {
+          avg_response_time_ms?: number | null
+          failed_requests?: number | null
+          id?: string
+          period_end?: string | null
+          period_start?: string | null
+          successful_requests?: number | null
+          timestamp?: string | null
+          total_requests?: number | null
+          unique_conversations?: number | null
+        }
+        Update: {
+          avg_response_time_ms?: number | null
+          failed_requests?: number | null
+          id?: string
+          period_end?: string | null
+          period_start?: string | null
+          successful_requests?: number | null
+          timestamp?: string | null
+          total_requests?: number | null
+          unique_conversations?: number | null
+        }
+        Relationships: []
+      }
       documents: {
         Row: {
           created_at: string | null
@@ -1150,6 +1287,17 @@ export type Database = {
         }
         Relationships: []
       }
+      dify_analytics: {
+        Row: {
+          avg_processing_time: number | null
+          direction: Database["public"]["Enums"]["message_direction"] | null
+          error_count: number | null
+          message_count: number | null
+          status: Database["public"]["Enums"]["message_status"] | null
+          time_bucket: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
@@ -1193,6 +1341,8 @@ export type Database = {
         | "onboarding"
         | "active"
         | "completed"
+      message_direction: "outbound" | "inbound"
+      message_status: "pending" | "sent" | "received" | "failed" | "processed"
       message_type: "text" | "system" | "ai"
       milestone_status: "not_started" | "in_progress" | "completed" | "blocked"
       post_status: "draft" | "published" | "archived"
