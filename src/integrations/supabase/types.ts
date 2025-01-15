@@ -868,42 +868,69 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          bio: string | null
+          connections: string[] | null
           created_at: string | null
+          education: Json | null
           email: string | null
+          experience: Json | null
           first_name: string | null
+          headline: string | null
           id: string
           last_login_at: string | null
           last_name: string | null
+          location: string | null
           phone: string | null
           preferences: Json | null
           role: Database["public"]["Enums"]["user_role"] | null
+          skills: string[] | null
+          social_links: Json | null
           updated_at: string | null
+          website: string | null
         }
         Insert: {
           avatar_url?: string | null
+          bio?: string | null
+          connections?: string[] | null
           created_at?: string | null
+          education?: Json | null
           email?: string | null
+          experience?: Json | null
           first_name?: string | null
+          headline?: string | null
           id: string
           last_login_at?: string | null
           last_name?: string | null
+          location?: string | null
           phone?: string | null
           preferences?: Json | null
           role?: Database["public"]["Enums"]["user_role"] | null
+          skills?: string[] | null
+          social_links?: Json | null
           updated_at?: string | null
+          website?: string | null
         }
         Update: {
           avatar_url?: string | null
+          bio?: string | null
+          connections?: string[] | null
           created_at?: string | null
+          education?: Json | null
           email?: string | null
+          experience?: Json | null
           first_name?: string | null
+          headline?: string | null
           id?: string
           last_login_at?: string | null
           last_name?: string | null
+          location?: string | null
           phone?: string | null
           preferences?: Json | null
           role?: Database["public"]["Enums"]["user_role"] | null
+          skills?: string[] | null
+          social_links?: Json | null
           updated_at?: string | null
+          website?: string | null
         }
         Relationships: []
       }

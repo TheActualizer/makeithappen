@@ -15,6 +15,7 @@ import { ProjectScope } from "@/components/dashboard/ProjectScope";
 import { FinancialMetrics } from "@/components/dashboard/FinancialMetrics";
 import { ChatHistorySection } from "@/components/dashboard/ChatHistorySection";
 import { DashboardSection } from "@/components/dashboard/DashboardSection";
+import { SocialMarketplace } from "@/components/dashboard/SocialMarketplace";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { Button } from "@/components/ui/button";
 import ProjectStartModal from "@/components/ProjectStartModal";
@@ -104,6 +105,10 @@ const Dashboard = () => {
         <div className="grid gap-6">
           <DashboardSection title="Overview" icon={<BarChart className="h-5 w-5" />}>
             <DashboardStats isAdmin={isAdmin} />
+          </DashboardSection>
+
+          <DashboardSection title="Professional Network" icon={<Users className="h-5 w-5" />}>
+            <SocialMarketplace />
           </DashboardSection>
 
           <DashboardSection 
