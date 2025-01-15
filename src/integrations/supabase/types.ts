@@ -659,6 +659,63 @@ export type Database = {
         }
         Relationships: []
       }
+      matches: {
+        Row: {
+          created_at: string | null
+          id: string
+          meeting_time: string | null
+          status: string | null
+          updated_at: string | null
+          user1_decision: boolean | null
+          user1_id: string | null
+          user2_decision: boolean | null
+          user2_id: string | null
+          zoom_meeting_id: string | null
+          zoom_meeting_url: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          meeting_time?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user1_decision?: boolean | null
+          user1_id?: string | null
+          user2_decision?: boolean | null
+          user2_id?: string | null
+          zoom_meeting_id?: string | null
+          zoom_meeting_url?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          meeting_time?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user1_decision?: boolean | null
+          user1_id?: string | null
+          user2_decision?: boolean | null
+          user2_id?: string | null
+          zoom_meeting_id?: string | null
+          zoom_meeting_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "matches_user1_id_fkey"
+            columns: ["user1_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "matches_user2_id_fkey"
+            columns: ["user2_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       meeting_resources: {
         Row: {
           contact_funnel_id: string | null
@@ -811,42 +868,69 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          bio: string | null
+          connections: string[] | null
           created_at: string | null
+          education: Json | null
           email: string | null
+          experience: Json | null
           first_name: string | null
+          headline: string | null
           id: string
           last_login_at: string | null
           last_name: string | null
+          location: string | null
           phone: string | null
           preferences: Json | null
           role: Database["public"]["Enums"]["user_role"] | null
+          skills: string[] | null
+          social_links: Json | null
           updated_at: string | null
+          website: string | null
         }
         Insert: {
           avatar_url?: string | null
+          bio?: string | null
+          connections?: string[] | null
           created_at?: string | null
+          education?: Json | null
           email?: string | null
+          experience?: Json | null
           first_name?: string | null
+          headline?: string | null
           id: string
           last_login_at?: string | null
           last_name?: string | null
+          location?: string | null
           phone?: string | null
           preferences?: Json | null
           role?: Database["public"]["Enums"]["user_role"] | null
+          skills?: string[] | null
+          social_links?: Json | null
           updated_at?: string | null
+          website?: string | null
         }
         Update: {
           avatar_url?: string | null
+          bio?: string | null
+          connections?: string[] | null
           created_at?: string | null
+          education?: Json | null
           email?: string | null
+          experience?: Json | null
           first_name?: string | null
+          headline?: string | null
           id?: string
           last_login_at?: string | null
           last_name?: string | null
+          location?: string | null
           phone?: string | null
           preferences?: Json | null
           role?: Database["public"]["Enums"]["user_role"] | null
+          skills?: string[] | null
+          social_links?: Json | null
           updated_at?: string | null
+          website?: string | null
         }
         Relationships: []
       }
@@ -1282,6 +1366,50 @@ export type Database = {
           },
         ]
       }
+      user_matching_preferences: {
+        Row: {
+          bio: string | null
+          created_at: string | null
+          gender_identity: Database["public"]["Enums"]["gender_identity"]
+          id: string
+          interests: string[] | null
+          is_active: boolean | null
+          seeking_gender: Database["public"]["Enums"]["gender_identity"][]
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string | null
+          gender_identity: Database["public"]["Enums"]["gender_identity"]
+          id?: string
+          interests?: string[] | null
+          is_active?: boolean | null
+          seeking_gender: Database["public"]["Enums"]["gender_identity"][]
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string | null
+          gender_identity?: Database["public"]["Enums"]["gender_identity"]
+          id?: string
+          interests?: string[] | null
+          is_active?: boolean | null
+          seeking_gender?: Database["public"]["Enums"]["gender_identity"][]
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_matching_preferences_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       automation_health_metrics: {
@@ -1348,6 +1476,7 @@ export type Database = {
         | "onboarding"
         | "active"
         | "completed"
+      gender_identity: "male" | "female" | "other"
       message_direction: "outbound" | "inbound"
       message_status: "pending" | "sent" | "received" | "failed" | "processed"
       message_type: "text" | "system" | "ai"
