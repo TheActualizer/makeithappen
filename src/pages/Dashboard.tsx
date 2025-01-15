@@ -5,7 +5,6 @@ import {
   BarChart, Users, Calendar, MessageSquare, FileText,
   Activity, PlusCircle, Briefcase, DollarSign, History
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { DashboardDocuments } from "@/components/dashboard/DashboardDocuments";
 import { DashboardCalendar } from "@/components/dashboard/DashboardCalendar";
@@ -164,4 +163,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
