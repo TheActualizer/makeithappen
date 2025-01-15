@@ -41,6 +41,7 @@ export const DashboardHeader = () => {
 
   const sections = [
     { name: "Overview", href: "/dashboard" },
+    { name: "Professional Network", href: "/dashboard/network" },
     { name: "Projects", href: "/dashboard/projects" },
     { name: "Calendar", href: "/dashboard/calendar" },
     { name: "Messages", href: "/dashboard/messages" },
