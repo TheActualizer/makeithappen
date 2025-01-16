@@ -9,6 +9,7 @@ import ZoomConnect from "@/components/ZoomConnect";
 import { ProfileMetadata } from "@/components/profile/ProfileMetadata";
 import { InfrastructureMetrics } from "@/components/dashboard/InfrastructureMetrics";
 import { UnitySystemDashboard } from "@/components/unity/UnitySystemDashboard";
+import { UnityAgentDashboard } from "@/components/unity/UnityAgentDashboard";
 import { Activity, Cloud, Database, Shield, Command, Grid3X3, Users, Settings } from "lucide-react";
 
 const systemStats = [
@@ -99,6 +100,10 @@ const Index = () => {
             </div>
 
             <div className="space-y-6">
+              <Card className="p-6">
+                <h2 className="text-xl font-semibold mb-4">Unity Agent Status</h2>
+                <UnityAgentDashboard />
+              </Card>
               <Suspense fallback={
                 <div className="w-full h-64 flex items-center justify-center">
                   <motion.div
