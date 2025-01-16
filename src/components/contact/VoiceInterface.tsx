@@ -77,38 +77,31 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange }) => 
       {!isConnected ? (
         <Button 
           onClick={startConversation}
-          className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white shadow-lg hover:shadow-purple-500/20"
-          size="lg"
+          size="icon"
+          className="bg-bland-500/80 hover:bg-bland-500 text-bland-100 shadow-glow hover:shadow-glow-strong transition-all duration-500"
           disabled={isConnecting}
         >
           {isConnecting ? (
-            <>
-              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-              Connecting...
-            </>
+            <Loader2 className="w-5 h-5 animate-spin" />
           ) : (
-            <>
-              <Mic className="w-5 h-5 mr-2" />
-              Start Voice Chat
-            </>
+            <Mic className="w-5 h-5" />
           )}
         </Button>
       ) : (
         <Button 
           onClick={endConversation}
           variant="destructive"
-          size="lg"
-          className="shadow-lg"
+          size="icon"
+          className="shadow-glow hover:shadow-glow-strong transition-all duration-500"
         >
-          <MicOff className="w-5 h-5 mr-2" />
-          End Voice Chat
+          <MicOff className="w-5 h-5" />
         </Button>
       )}
       {isConnected && (
         <motion.div
           animate={isSpeaking ? { scale: [1, 1.2, 1] } : { scale: 1 }}
           transition={{ repeat: isSpeaking ? Infinity : 0, duration: 1 }}
-          className="w-3 h-3 rounded-full bg-green-500"
+          className="w-3 h-3 rounded-full bg-green-500 shadow-glow"
         />
       )}
     </motion.div>
