@@ -4,6 +4,7 @@ import { ServiceCard } from "./services/ServiceCard";
 import ServicesHeader from "./services/ServicesHeader";
 import { services } from "./services/serviceData";
 import { ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 import { memo } from "react";
 
 const ServicesShowcase = memo(() => {
