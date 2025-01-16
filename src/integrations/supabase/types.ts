@@ -865,39 +865,6 @@ export type Database = {
           },
         ]
       }
-      portal_metrics: {
-        Row: {
-          achievements: Json | null
-          created_at: string | null
-          current_level: number | null
-          id: string
-          points_earned: number | null
-          threads_connected: number | null
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          achievements?: Json | null
-          created_at?: string | null
-          current_level?: number | null
-          id?: string
-          points_earned?: number | null
-          threads_connected?: number | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          achievements?: Json | null
-          created_at?: string | null
-          current_level?: number | null
-          id?: string
-          points_earned?: number | null
-          threads_connected?: number | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
       profiles: {
         Row: {
           avatar_url: string | null
