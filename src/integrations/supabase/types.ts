@@ -415,6 +415,60 @@ export type Database = {
           },
         ]
       }
+      case_studies: {
+        Row: {
+          challenge: string
+          client_name: string | null
+          content: string
+          created_at: string | null
+          id: string
+          image_url: string | null
+          industry: string
+          published_at: string | null
+          results: string
+          slug: string
+          solution: string
+          summary: string
+          technologies: string[] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          challenge: string
+          client_name?: string | null
+          content: string
+          created_at?: string | null
+          id?: string
+          image_url?: string | null
+          industry: string
+          published_at?: string | null
+          results: string
+          slug: string
+          solution: string
+          summary: string
+          technologies?: string[] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          challenge?: string
+          client_name?: string | null
+          content?: string
+          created_at?: string | null
+          id?: string
+          image_url?: string | null
+          industry?: string
+          published_at?: string | null
+          results?: string
+          slug?: string
+          solution?: string
+          summary?: string
+          technologies?: string[] | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       contact_funnel: {
         Row: {
           assigned_to: string | null
