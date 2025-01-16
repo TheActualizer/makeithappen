@@ -11,6 +11,7 @@ import { InfrastructureMetrics } from "@/components/dashboard/InfrastructureMetr
 import { UnitySystemDashboard } from "@/components/unity/UnitySystemDashboard";
 import { UnityAgentDashboard } from "@/components/unity/UnityAgentDashboard";
 import { Activity, Cloud, Database, Shield, Command, Grid3X3, Users, Settings } from "lucide-react";
+import { Card } from "@/components/ui/card";
 
 const systemStats = [
   {
@@ -145,3 +146,4 @@ const Index = () => {
 };
 
 export default Index;
+
