@@ -1,8 +1,10 @@
-import { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
+import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import PageTransition from "@/components/PageTransition";
+import { SessionContextProvider } from "@supabase/auth-helpers-react";
+import { supabase } from "@/integrations/supabase/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 
 // Lazy load pages
@@ -17,31 +19,32 @@ const ResetPassword = lazy(() => import("@/pages/ResetPassword"));
 const StartProject = lazy(() => import("@/pages/StartProject"));
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
 
-// Configure QueryClient with optimized settings
+// Configure QueryClient with optimized caching settings
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      gcTime: 1000 * 60 * 60, // 1 hour
-      retry: 1,
-      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 5, // Data stays fresh for 5 minutes
+      gcTime: 1000 * 60 * 30, // Cache persists for 30 minutes (renamed from cacheTime)
+      retry: 1, // Only retry failed requests once
+      refetchOnWindowFocus: false, // Prevent unnecessary refetches
     },
   },
 });
 
+// Loading fallback component with improved UX
+const LoadingFallback = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+  </div>
+);
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <div className="min-h-screen flex flex-col">
-          <Suspense
-            fallback={
-              <div className="flex items-center justify-center min-h-screen">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              </div>
-            }
-          >
-            <PageTransition>
+      <SessionContextProvider supabaseClient={supabase}>
+        <Router>
+          <PageTransition>
+            <Suspense fallback={<LoadingFallback />}>
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/about" element={<About />} />
@@ -54,11 +57,11 @@ function App() {
                 <Route path="/start-project" element={<StartProject />} />
                 <Route path="/dashboard" element={<Dashboard />} />
               </Routes>
-            </PageTransition>
-          </Suspense>
+            </Suspense>
+          </PageTransition>
           <Toaster />
-        </div>
-      </Router>
+        </Router>
+      </SessionContextProvider>
     </QueryClientProvider>
   );
 }

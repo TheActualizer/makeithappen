@@ -2,121 +2,126 @@ import React from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { ArrowRight, BarChart3, Rocket, Zap, Timer, DollarSign, LineChart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Network, Zap, Brain, Workflow } from "lucide-react";
-import { motion } from "framer-motion";
 
 const CaseStudies = () => {
-  // Fetch active threads and connections
-  const { data: threads, isLoading } = useQuery({
-    queryKey: ['active-threads'],
-    queryFn: async () => {
-      console.log('Fetching active threads...');
-      const { data, error } = await supabase
-        .from('conversations')
-        .select(`
-          *,
-          messages (
-            content,
-            type,
-            created_at
-          )
-        `)
-        .eq('is_archived', false)
-        .order('created_at', { ascending: false });
+  const navigate = useNavigate();
 
-      if (error) {
-        console.error('Error fetching threads:', error);
-        throw error;
-      }
-
-      console.log('Threads fetched:', data);
-      return data;
+  const caseStudies = [
+    {
+      title: "Process Automation",
+      company: "Manufacturing Solutions Co",
+      metrics: [
+        { icon: <Timer className="w-5 h-5" />, value: "75%", label: "Time Saved" },
+        { icon: <BarChart3 className="w-5 h-5" />, value: "98%", label: "Accuracy" },
+        { icon: <DollarSign className="w-5 h-5" />, value: "150K", label: "Annual Savings" }
+      ],
+      image: "https://images.unsplash.com/photo-1518770660439-4636190af475",
+      tags: ["AI Automation", "Process Optimization"],
+      color: "from-violet-500 to-purple-500"
+    },
+    {
+      title: "Smart Workflows",
+      company: "Regional Financial Services",
+      metrics: [
+        { icon: <Zap className="w-5 h-5" />, value: "60%", label: "Faster Response" },
+        { icon: <Timer className="w-5 h-5" />, value: "16/5", label: "Operation Hours" },
+        { icon: <LineChart className="w-5 h-5" />, value: "85%", label: "Task Reduction" }
+      ],
+      image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
+      tags: ["Workflow Automation", "AI Integration"],
+      color: "from-blue-500 to-cyan-500"
+    },
+    {
+      title: "Document Intelligence",
+      company: "Healthcare Provider",
+      metrics: [
+        { icon: <BarChart3 className="w-5 h-5" />, value: "25K+", label: "Monthly Docs" },
+        { icon: <Timer className="w-5 h-5" />, value: "99%", label: "Accuracy Rate" },
+        { icon: <DollarSign className="w-5 h-5" />, value: "40%", label: "Cost Reduction" }
+      ],
+      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
+      tags: ["Document Processing", "Healthcare"],
+      color: "from-emerald-500 to-green-500"
     }
-  });
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-accent to-background">
+    <div className="min-h-screen bg-accent">
       <Navbar />
       
-      {/* Portal Header */}
+      {/* Hero Section */}
       <section className="relative pt-24 pb-12 overflow-hidden">
         <div className="absolute inset-0 bg-grid-white/5 bg-[size:32px_32px] opacity-25" />
         <div className="container px-4 mx-auto relative">
           <div className="flex flex-col items-center text-center mb-12">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex items-center gap-3 mb-4"
+            <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary animate-fade-in">
+              Success Stories
+            </h1>
+            <Button 
+              variant="secondary"
+              size="lg"
+              onClick={() => navigate("/start-project")}
+              className="mt-8 group animate-fade-in [animation-delay:200ms]"
             >
-              <Network className="w-6 h-6 text-primary" />
-              <h2 className="text-lg font-medium text-primary">Agentic Portal v0.1</h2>
-            </motion.div>
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary"
-            >
-              Thread Connection Hub
-            </motion.h1>
+              Start Your Success Story
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
           </div>
+        </div>
+      </section>
 
-          {/* Active Threads Display */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-            {isLoading ? (
-              <div className="col-span-full flex justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      {/* Case Studies Grid */}
+      <section className="pb-24 px-4">
+        <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {caseStudies.map((study, index) => (
+            <Card 
+              key={index}
+              className="group bg-accent/40 backdrop-blur-sm border-accent/20 overflow-hidden
+                hover:shadow-lg hover:shadow-primary/5 transition-all duration-500
+                animate-fade-in [animation-delay:var(--delay)]"
+              style={{ '--delay': `${(index + 1) * 200}ms` } as React.CSSProperties}
+            >
+              <div className="relative h-48 overflow-hidden">
+                <div className={`absolute inset-0 bg-gradient-to-br ${study.color} opacity-80`} />
+                <img 
+                  src={study.image} 
+                  alt={study.title}
+                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                  <h3 className="text-xl font-semibold text-white">{study.title}</h3>
+                  <p className="text-sm text-gray-200">{study.company}</p>
+                </div>
               </div>
-            ) : threads?.map((thread, index) => (
-              <motion.div
-                key={thread.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="bg-accent/40 backdrop-blur-sm border-accent/20 overflow-hidden hover:shadow-lg hover:shadow-primary/5 transition-all duration-500">
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-3 mb-4">
-                      {thread.provider === 'dify' ? (
-                        <Brain className="w-5 h-5 text-primary" />
-                      ) : (
-                        <Workflow className="w-5 h-5 text-secondary" />
-                      )}
-                      <h3 className="text-lg font-semibold text-white">
-                        {thread.title || 'New Thread'}
-                      </h3>
+              
+              <CardContent className="p-6">
+                <div className="grid grid-cols-3 gap-4 mb-6">
+                  {study.metrics.map((metric, idx) => (
+                    <div key={idx} className="text-center group-hover:transform group-hover:translate-y-[-2px] transition-transform duration-300">
+                      <div className="mb-2 flex justify-center text-primary">{metric.icon}</div>
+                      <div className="font-semibold text-white">{metric.value}</div>
+                      <div className="text-xs text-gray-400">{metric.label}</div>
                     </div>
-                    
-                    <div className="space-y-2 mb-4">
-                      <p className="text-sm text-gray-300">
-                        {thread.messages?.[0]?.content?.slice(0, 120)}...
-                      </p>
-                      <div className="flex gap-2">
-                        <Badge variant="outline" className="bg-accent/50">
-                          {thread.provider}
-                        </Badge>
-                        <Badge variant="outline" className="bg-accent/50">
-                          {thread.messages?.length || 0} messages
-                        </Badge>
-                      </div>
-                    </div>
-
-                    <Button 
-                      variant="secondary" 
-                      size="sm"
-                      className="w-full mt-4"
+                  ))}
+                </div>
+                
+                <div className="flex flex-wrap gap-2">
+                  {study.tags.map((tag, i) => (
+                    <Badge 
+                      key={i}
+                      variant="outline"
+                      className="bg-accent/50 text-gray-300 border-accent/30 hover:bg-accent"
                     >
-                      <Zap className="w-4 h-4 mr-2" />
-                      Connect Thread
-                    </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </section>
     </div>
