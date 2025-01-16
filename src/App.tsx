@@ -12,6 +12,7 @@ const Blog = lazy(() => import("@/pages/Blog"));
 const Contact = lazy(() => import("@/pages/Contact"));
 const Services = lazy(() => import("@/pages/Services"));
 const CaseStudies = lazy(() => import("@/pages/CaseStudies"));
+const ThreadPortal = lazy(() => import("@/pages/ThreadPortal"));
 const Login = lazy(() => import("@/pages/Login"));
 const ResetPassword = lazy(() => import("@/pages/ResetPassword"));
 const StartProject = lazy(() => import("@/pages/StartProject"));
@@ -49,6 +50,7 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/services" element={<Services />} />
                 <Route path="/case-studies" element={<CaseStudies />} />
+                <Route path="/thread-portal" element={<ThreadPortal />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/start-project" element={<StartProject />} />
