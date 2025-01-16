@@ -1,4 +1,4 @@
-import { IconProps } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 import {
   Building,
   Globe,
@@ -14,7 +14,7 @@ import {
 export type PageCategory = {
   name: string;
   description: string;
-  icon: React.ComponentType<IconProps>;
+  icon: LucideIcon;
   pages: PageInfo[];
 };
 

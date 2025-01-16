@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Phone, Video, Share2, Mic, MicOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { VoiceInterface } from '@/components/contact/VoiceInterface';
+import VoiceInterface from '@/components/contact/VoiceInterface';
 
 export const SpaceshipCallBeacon = () => {
   const { toast } = useToast();
