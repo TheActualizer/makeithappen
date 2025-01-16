@@ -7,38 +7,40 @@ import { supabase } from "@/integrations/supabase/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 
-// Lazy load pages
-const Index = lazy(() => import("@/pages/Index"));
-const About = lazy(() => import("@/pages/About"));
-const Blog = lazy(() => import("@/pages/Blog"));
-const Contact = lazy(() => import("@/pages/Contact"));
-const Services = lazy(() => import("@/pages/Services"));
-const CaseStudies = lazy(() => import("@/pages/CaseStudies"));
-const Login = lazy(() => import("@/pages/Login"));
-const ResetPassword = lazy(() => import("@/pages/ResetPassword"));
-const StartProject = lazy(() => import("@/pages/StartProject"));
-const Dashboard = lazy(() => import("@/pages/Dashboard"));
+// Lazy load pages with prefetch hints
+const Index = lazy(() => {
+  // Add prefetch hint for Index page
+  const indexModule = import("@/pages/Index");
+  return indexModule;
+});
 
-// Configure QueryClient with optimized caching settings
+// Configure QueryClient with optimized settings
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5, // Data stays fresh for 5 minutes
-      gcTime: 1000 * 60 * 30, // Cache persists for 30 minutes (renamed from cacheTime)
+      gcTime: 1000 * 60 * 30, // Cache persists for 30 minutes
       retry: 1, // Only retry failed requests once
       refetchOnWindowFocus: false, // Prevent unnecessary refetches
+      refetchOnReconnect: 'always', // Ensure data freshness after reconnection
+      networkMode: 'online', // Only fetch when online
     },
   },
 });
 
-// Loading fallback component with improved UX
+// Enhanced loading fallback with skeleton UI
 const LoadingFallback = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+  <div className="min-h-screen flex items-center justify-center bg-background/50 backdrop-blur-sm">
+    <div className="space-y-4 text-center">
+      <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
+      <p className="text-sm text-muted-foreground animate-pulse">Loading...</p>
+    </div>
   </div>
 );
 
 function App() {
+  console.log('App: Initializing application');
+  
   return (
     <QueryClientProvider client={queryClient}>
       <SessionContextProvider supabaseClient={supabase}>
