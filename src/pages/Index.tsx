@@ -5,6 +5,7 @@ import Hero from "@/components/Hero";
 import ServicesShowcase from "@/components/ServicesShowcase";
 import DifyChat from "@/components/chat/DifyChat";
 import SkipToContent from "@/components/SkipToContent";
+import ZoomConnect from "@/components/ZoomConnect";
 import { Activity, Cloud, Database, Shield, Command, Grid3X3, Users, Settings } from "lucide-react";
 
 const Index = () => {
@@ -59,6 +60,10 @@ const Index = () => {
           transition={{ duration: 0.5 }}
           className="container mx-auto px-4 py-8"
         >
+          <div className="flex justify-end mb-4">
+            <ZoomConnect />
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
             {systemStats.map((stat, index) => (
               <motion.div
