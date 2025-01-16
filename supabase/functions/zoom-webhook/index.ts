@@ -1,39 +1,88 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createHmac } from "https://deno.land/std@0.182.0/crypto/mod.ts";
-
-const ZOOM_WEBHOOK_SECRET_TOKEN = Deno.env.get('ZOOM_WEBHOOK_SECRET_TOKEN');
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createHmac } from "https://deno.land/std@0.168.0/crypto/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+}
+
+async function getZoomAccessToken() {
+  const clientId = Deno.env.get('ZOOM_CLIENT_ID');
+  const clientSecret = Deno.env.get('ZOOM_CLIENT_SECRET');
+  
+  if (!clientId || !clientSecret) {
+    throw new Error('Zoom credentials not configured');
+  }
+
+  const credentials = `${clientId}:${clientSecret}`;
+  const encodedCredentials = btoa(credentials);
+
+  const response = await fetch('https://zoom.us/oauth/token?grant_type=client_credentials', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Basic ${encodedCredentials}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to get Zoom access token: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  return data.access_token;
+}
+
+async function createZoomMeeting(accessToken: string, startTime: string, duration: number = 30) {
+  const response = await fetch('https://api.zoom.us/v2/users/me/meetings', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      topic: 'Consultation Meeting',
+      type: 2, // Scheduled meeting
+      start_time: startTime,
+      duration: duration,
+      settings: {
+        host_video: true,
+        participant_video: true,
+        join_before_host: true,
+        waiting_room: false,
+        auto_recording: 'none',
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to create Zoom meeting: ${response.statusText}`);
+  }
+
+  return response.json();
+}
 
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders });
+    return new Response('ok', { headers: corsHeaders })
   }
 
   try {
-    console.log('Zoom webhook: Starting execution');
-    
-    // Get the Zoom message signature from headers
-    const zoomSignature = req.headers.get('x-zm-signature') || '';
-    const zoomTimestamp = req.headers.get('x-zm-request-timestamp') || '';
-    
-    // Get the raw request body
-    const rawBody = await req.text();
-    console.log('Zoom webhook: Received payload:', rawBody);
+    const signature = req.headers.get('x-zm-signature') || '';
+    const timestamp = req.headers.get('x-zm-request-timestamp') || '';
+    const webhookToken = Deno.env.get('ZOOM_WEBHOOK_SECRET_TOKEN');
 
-    // Verify the webhook signature
-    const message = `v0:${zoomTimestamp}:${rawBody}`;
-    const hashForVerify = createHmac('sha256', ZOOM_WEBHOOK_SECRET_TOKEN!)
-      .update(message)
-      .toString('hex');
-    const signature = `v0=${hashForVerify}`;
+    if (!webhookToken) {
+      throw new Error('Webhook secret token not configured');
+    }
 
-    if (signature !== zoomSignature) {
-      console.error('Zoom webhook: Invalid signature');
+    // Verify webhook signature
+    const message = `v0:${timestamp}:${await req.text()}`;
+    const hmac = createHmac('sha256', webhookToken);
+    hmac.update(message);
+    const hashForVerify = `v0=${hmac.toString('hex')}`;
+
+    if (signature !== hashForVerify) {
       return new Response(
         JSON.stringify({ error: 'Invalid signature' }),
         { 
@@ -43,43 +92,37 @@ serve(async (req) => {
       );
     }
 
-    // Parse the verified webhook payload
-    const payload = JSON.parse(rawBody);
-    console.log('Zoom webhook: Verified payload:', payload);
+    // Process the webhook event
+    const body = JSON.parse(message.split(':')[2]);
+    console.log('Received Zoom webhook event:', body);
 
     // Handle different event types
-    switch (payload.event) {
+    switch (body.event) {
       case 'meeting.started':
-        console.log('Zoom webhook: Meeting started:', payload.payload.object);
-        // Add your meeting started logic here
+        console.log('Meeting started:', body.payload.object);
         break;
-      
       case 'meeting.ended':
-        console.log('Zoom webhook: Meeting ended:', payload.payload.object);
-        // Add your meeting ended logic here
+        console.log('Meeting ended:', body.payload.object);
         break;
-      
-      // Add more event types as needed
       default:
-        console.log('Zoom webhook: Unhandled event type:', payload.event);
+        console.log('Unhandled event type:', body.event);
     }
 
     return new Response(
       JSON.stringify({ success: true }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200
+        status: 200 
       }
     );
-
   } catch (error) {
-    console.error('Zoom webhook: Error:', error);
+    console.error('Error processing Zoom webhook:', error);
     return new Response(
       JSON.stringify({ error: error.message }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500
+        status: 500 
       }
     );
   }
-});
+})
