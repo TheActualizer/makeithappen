@@ -1,4 +1,4 @@
-import { ServicesShowcase } from "@/components/ServicesShowcase";
+import { lazy, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -10,6 +10,19 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+
+// Lazy load ServicesShowcase component
+const ServicesShowcase = lazy(() => import("@/components/ServicesShowcase"));
+
+// Loading fallback for ServicesShowcase
+const ShowcaseLoader = () => (
+  <div className="h-96 flex items-center justify-center bg-accent/5">
+    <div className="animate-pulse space-y-4">
+      <div className="h-8 w-64 bg-accent/10 rounded" />
+      <div className="h-4 w-48 bg-accent/10 rounded" />
+    </div>
+  </div>
+);
 
 const Services = () => {
   const navigate = useNavigate();
@@ -43,7 +56,7 @@ const Services = () => {
               Agentic Hive Systems for Enterprise
             </h1>
             
-            {/* Carousel Section */}
+            {/* Carousel Section with loading optimization */}
             <div className="max-w-4xl mx-auto mb-8 relative">
               <Carousel className="w-full" opts={{ loop: true }}>
                 <CarouselContent>
@@ -54,6 +67,7 @@ const Services = () => {
                           src={image.src}
                           alt={image.alt}
                           className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 ease-in-out"
+                          loading="lazy"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
                           <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -92,8 +106,10 @@ const Services = () => {
           </div>
         </section>
 
-        {/* Services Showcase */}
-        <ServicesShowcase />
+        {/* Lazy loaded ServicesShowcase */}
+        <Suspense fallback={<ShowcaseLoader />}>
+          <ServicesShowcase />
+        </Suspense>
       </main>
     </div>
   );

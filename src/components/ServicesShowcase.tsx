@@ -4,8 +4,9 @@ import { ServiceCard } from "./services/ServiceCard";
 import ServicesHeader from "./services/ServicesHeader";
 import { services } from "./services/serviceData";
 import { ArrowRight } from "lucide-react";
+import { memo } from "react";
 
-export const ServicesShowcase = () => {
+const ServicesShowcase = memo(() => {
   const navigate = useNavigate();
 
   return (
@@ -33,4 +34,8 @@ export const ServicesShowcase = () => {
       </div>
     </section>
   );
-};
+});
+
+ServicesShowcase.displayName = "ServicesShowcase";
+
+export default ServicesShowcase;
