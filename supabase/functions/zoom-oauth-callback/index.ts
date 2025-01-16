@@ -5,6 +5,70 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Define all required Zoom scopes
+const ZOOM_SCOPES = [
+  // Account scopes
+  'account:master',
+  'account:read:admin',
+  'account:write:admin',
+  'account_profile:read:admin',
+  'account_profile:write:admin',
+  'account_settings:read:admin',
+  'account_settings:write:admin',
+  
+  // User management
+  'user:read:admin',
+  'user:write:admin',
+  'user_profile:read:admin',
+  'user_profile:write:admin',
+  
+  // Meeting scopes
+  'meeting:read:admin',
+  'meeting:write:admin',
+  'meeting_token:read:admin',
+  'meeting_security:read:admin',
+  'meeting_security:write:admin',
+  
+  // Recording scopes
+  'recording:read:admin',
+  'recording:write:admin',
+  'recording_token:read:admin',
+  
+  // Webinar
+  'webinar:read:admin',
+  'webinar:write:admin',
+  
+  // Calendar
+  'calendar:read:admin',
+  'calendar:write:admin',
+  
+  // Chat
+  'chat_channel:read:admin',
+  'chat_channel:write:admin',
+  'chat_message:read:admin',
+  'chat_message:write:admin',
+  
+  // Phone
+  'phone:read:admin',
+  'phone:write:admin',
+  
+  // Billing
+  'billing:read:admin',
+  'billing:write:admin',
+  
+  // Reports
+  'report:read:admin',
+  'report:write:admin',
+  
+  // Rooms
+  'room:read:admin',
+  'room:write:admin',
+  
+  // Contact Center
+  'contact_center:read:admin',
+  'contact_center:write:admin'
+].join(' ');
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -41,6 +105,7 @@ serve(async (req) => {
         grant_type: 'authorization_code',
         code: code,
         redirect_uri: `${url.origin}/functions/v1/zoom-oauth-callback`,
+        scope: ZOOM_SCOPES,
       }),
     });
 
