@@ -9,6 +9,8 @@ const Blog = () => {
   const sessionId = uuidv4(); // Generate unique session ID
 
   useEffect(() => {
+    let isSubscribed = true;
+
     const logPageView = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
@@ -32,6 +34,8 @@ const Blog = () => {
           referrer: document.referrer || null
         };
 
+        if (!isSubscribed) return;
+
         const { error } = await supabase
           .from('interaction_logs')
           .insert({
@@ -49,7 +53,8 @@ const Blog = () => {
             },
             session_id: sessionId,
             client_info: clientInfo
-          });
+          })
+          .single();
 
         if (error) {
           console.error('Error logging page view:', error);
@@ -64,7 +69,13 @@ const Blog = () => {
       }
     };
 
+    // Only log once when component mounts
     logPageView();
+
+    // Cleanup subscription flag
+    return () => {
+      isSubscribed = false;
+    };
   }, [sessionId, toast]);
 
   return (
