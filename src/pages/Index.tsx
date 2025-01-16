@@ -7,15 +7,8 @@ import DifyChat from "@/components/chat/DifyChat";
 import SkipToContent from "@/components/SkipToContent";
 import ZoomConnect from "@/components/ZoomConnect";
 import { ProfileMetadata } from "@/components/profile/ProfileMetadata";
+import { InfrastructureMetrics } from "@/components/dashboard/InfrastructureMetrics";
 import { Activity, Cloud, Database, Shield, Command, Grid3X3, Users, Settings } from "lucide-react";
-
-const Index = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    setIsLoaded(true);
-  }, []);
 
   const systemStats = [
     {
@@ -48,6 +41,14 @@ const Index = () => {
     { icon: <Shield className="w-5 h-5" />, label: "Security" },
     { icon: <Settings className="w-5 h-5" />, label: "Settings" }
   ];
+
+const Index = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    setIsLoaded(true);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-accent via-accent/95 to-primary/20">
@@ -85,6 +86,10 @@ const Index = () => {
                 </div>
               </motion.div>
             ))}
+          </div>
+
+          <div className="mb-8">
+            <InfrastructureMetrics />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
