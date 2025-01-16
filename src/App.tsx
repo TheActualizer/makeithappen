@@ -19,7 +19,7 @@ const ResetPassword = lazy(() => import("@/pages/ResetPassword"));
 const StartProject = lazy(() => import("@/pages/StartProject"));
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
 
-// Configure QueryClient with caching settings
+// Configure QueryClient with optimized caching settings
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -31,7 +31,7 @@ const queryClient = new QueryClient({
   },
 });
 
-// Loading fallback component
+// Loading fallback component with improved UX
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center">
     <Loader2 className="h-8 w-8 animate-spin text-primary" />
