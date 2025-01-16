@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import type { Json } from '@/integrations/supabase/types';
 
 interface ClientInfo {
   timestamp: string;
@@ -12,13 +13,14 @@ interface ClientInfo {
 }
 
 interface LogEntry {
+  profile_id?: string | null;
   interaction_type: string;
   component_name: string;
-  details?: Record<string, unknown>;
-  metadata?: Record<string, unknown>;
-  performance_metrics?: Record<string, unknown>;
+  details?: Json;
+  metadata?: Json;
+  performance_metrics?: Json;
   session_id?: string;
-  client_info?: ClientInfo;
+  client_info?: Json;
 }
 
 class LoggingService {
@@ -67,7 +69,7 @@ class LoggingService {
         
         const { data: { user } } = await supabase.auth.getUser();
         
-        const clientInfo: ClientInfo = {
+        const clientInfo: Json = {
           timestamp: new Date().toISOString(),
           timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           screen: {
@@ -79,6 +81,7 @@ class LoggingService {
         };
 
         const logEntry: LogEntry = {
+          profile_id: user?.id || null,
           interaction_type: 'page_view',
           component_name: componentName,
           details: {
@@ -99,10 +102,7 @@ class LoggingService {
 
         const { error } = await supabase
           .from('interaction_logs')
-          .insert([{
-            ...logEntry,
-            profile_id: user?.id || null
-          }]);
+          .insert(logEntry);
 
         if (error) {
           console.error('LoggingService: Error logging page view:', error);
