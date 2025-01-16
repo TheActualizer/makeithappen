@@ -9,6 +9,54 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      ai_interactions: {
+        Row: {
+          context: Json | null
+          conversation_id: string | null
+          created_at: string | null
+          id: string
+          message: string
+          metadata: Json | null
+          response_to: string | null
+          sender_role: string
+        }
+        Insert: {
+          context?: Json | null
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string
+          message: string
+          metadata?: Json | null
+          response_to?: string | null
+          sender_role: string
+        }
+        Update: {
+          context?: Json | null
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string
+          message?: string
+          metadata?: Json | null
+          response_to?: string | null
+          sender_role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_interactions_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_interactions_response_to_fkey"
+            columns: ["response_to"]
+            isOneToOne: false
+            referencedRelation: "ai_interactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       appointments: {
         Row: {
           consultation_date: string
