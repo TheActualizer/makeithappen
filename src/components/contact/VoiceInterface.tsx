@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { RealtimeChat } from '@/utils/RealtimeAudio';
-import { Mic, MicOff } from 'lucide-react';
+import { Mic, MicOff, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface VoiceInterfaceProps {
@@ -13,6 +13,7 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange }) => 
   const { toast } = useToast();
   const [isConnected, setIsConnected] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
   const chatRef = useRef<RealtimeChat | null>(null);
 
   const handleMessage = (event: any) => {
@@ -30,10 +31,12 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange }) => 
   const startConversation = async () => {
     try {
       console.log('VoiceInterface: Starting conversation');
+      setIsConnecting(true);
+      
       chatRef.current = new RealtimeChat(handleMessage);
       await chatRef.current.init();
-      setIsConnected(true);
       
+      setIsConnected(true);
       toast({
         title: "Voice Interface Connected",
         description: "You can now speak with the AI assistant",
@@ -45,6 +48,8 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange }) => 
         description: error instanceof Error ? error.message : 'Failed to start conversation',
         variant: "destructive",
       });
+    } finally {
+      setIsConnecting(false);
     }
   };
 
@@ -74,9 +79,19 @@ const VoiceInterface: React.FC<VoiceInterfaceProps> = ({ onSpeakingChange }) => 
           onClick={startConversation}
           className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white shadow-lg hover:shadow-purple-500/20"
           size="lg"
+          disabled={isConnecting}
         >
-          <Mic className="w-5 h-5 mr-2" />
-          Start Voice Chat
+          {isConnecting ? (
+            <>
+              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+              Connecting...
+            </>
+          ) : (
+            <>
+              <Mic className="w-5 h-5 mr-2" />
+              Start Voice Chat
+            </>
+          )}
         </Button>
       ) : (
         <Button 
