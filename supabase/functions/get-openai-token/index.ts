@@ -13,13 +13,13 @@ serve(async (req) => {
   }
 
   try {
+    console.log('get-openai-token: Generating ephemeral token');
+    
     const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
     if (!OPENAI_API_KEY) {
       throw new Error('OPENAI_API_KEY is not set');
     }
 
-    console.log('Requesting ephemeral token from OpenAI');
-    
     // Request an ephemeral token from OpenAI
     const response = await fetch("https://api.openai.com/v1/realtime/sessions", {
       method: "POST",

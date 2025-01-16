@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import VoiceInterface from '@/components/contact/VoiceInterface';
 
 declare global {
   interface Window {
@@ -11,6 +12,8 @@ declare global {
 }
 
 const DifyChat = () => {
+  const [isSpeaking, setIsSpeaking] = useState(false);
+
   useEffect(() => {
     const initializeDifyChat = async () => {
       try {
@@ -39,9 +42,12 @@ const DifyChat = () => {
   }, []);
 
   return (
-    <div id="dify-chat-container" className="fixed bottom-5 right-5 z-50">
-      {/* Dify chat will be mounted here */}
-    </div>
+    <>
+      <div id="dify-chat-container" className="fixed bottom-5 right-5 z-50">
+        {/* Dify chat will be mounted here */}
+      </div>
+      <VoiceInterface onSpeakingChange={setIsSpeaking} />
+    </>
   );
 };
 
