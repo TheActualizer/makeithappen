@@ -12,6 +12,7 @@ interface UnityAgent {
   status: string;
   capabilities: string[];
   last_active_at: string;
+  configuration: Record<string, unknown>;
 }
 
 export const UnityAgentSystem = () => {
@@ -29,7 +30,12 @@ export const UnityAgentSystem = () => {
         console.error('UnityAgentSystem: Error fetching agents:', error);
       } else {
         console.log('UnityAgentSystem: Agents fetched:', data);
-        setAgents(data || []);
+        // Transform the JSONB capabilities to string array
+        const transformedAgents = data?.map(agent => ({
+          ...agent,
+          capabilities: Array.isArray(agent.capabilities) ? agent.capabilities : []
+        })) || [];
+        setAgents(transformedAgents);
       }
     };
 
