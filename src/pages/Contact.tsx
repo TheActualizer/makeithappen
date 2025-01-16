@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import { ContactForm } from '@/components/contact/ContactForm';
 import { SpaceshipCallBeacon } from '@/components/contact/SpaceshipCallBeacon';
+import VoiceInterface from '@/components/contact/VoiceInterface';
 import { Toaster } from 'sonner';
 
 const Contact = () => {
@@ -74,6 +75,7 @@ const Contact = () => {
           </motion.div>
         </motion.div>
       </motion.div>
+      <VoiceInterface />
       <Toaster />
     </motion.div>
   );
