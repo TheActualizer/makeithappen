@@ -20,7 +20,7 @@ const CaseStudies = () => {
               transition={{ delay: 0.1 }}
               className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary"
             >
-              Success Stories
+              Case Studies
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}

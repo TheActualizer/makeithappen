@@ -43,7 +43,7 @@ const Navbar = () => {
 
   const secondaryNavItems = [
     { name: "Services", href: "/services" },
-    { name: "Success Stories", href: "/case-studies" },
+    { name: "Case Studies", href: "/case-studies" },
   ];
 
   const menuVariants = {
