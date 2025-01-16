@@ -6,25 +6,25 @@
 
 @layer base {
   :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 262.1 83.3% 57.8%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 187.9 100% 42.2%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 226.7 57.9% 10.2%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --background: 252 250 255;
+    --foreground: 20 20 20;
+    --card: 255 255 255;
+    --card-foreground: 20 20 20;
+    --popover: 255 255 255;
+    --popover-foreground: 20 20 20;
+    --primary: 255 86 245;
+    --primary-foreground: 255 255 255;
+    --secondary: 241 240 251;
+    --secondary-foreground: 107 114 128;
+    --muted: 241 240 251;
+    --muted-foreground: 107 114 128;
+    --accent: 249 115 22;
+    --accent-foreground: 255 255 255;
+    --destructive: 255 86 82;
+    --destructive-foreground: 255 255 255;
+    --border: 241 240 251;
+    --input: 241 240 251;
+    --ring: 155 135 245;
     --radius: 0.5rem;
   }
 
@@ -37,18 +37,17 @@
   }
 
   body {
-    @apply bg-gradient-to-br from-accent via-accent/95 to-primary/20 text-foreground font-sans text-base leading-relaxed tracking-wide min-h-screen antialiased;
+    @apply bg-gradient-to-br from-secondary via-secondary/95 to-primary/10 text-foreground font-sans text-base leading-relaxed tracking-wide min-h-screen antialiased;
     font-family: 'Inter', sans-serif;
   }
 
-  /* Improved typography scale with responsive adjustments */
   h1, h2, h3, h4, h5, h6 {
     @apply font-semibold tracking-tight;
     letter-spacing: -0.02em;
   }
 
   h1 {
-    @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
+    @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-primary;
   }
 
   h2 {
@@ -59,31 +58,26 @@
     @apply text-xl sm:text-2xl md:text-3xl mb-2 sm:mb-4;
   }
 
-  /* Enhanced form elements with better touch targets */
   input, select, textarea {
-    @apply bg-background/50 backdrop-blur-sm border-border/10 focus:border-primary/50 transition-all duration-200;
+    @apply bg-white/50 backdrop-blur-sm border-border/10 focus:border-primary/50 transition-all duration-200;
     @apply min-h-[44px] px-4 py-2 rounded-lg;
   }
 
-  /* Card enhancements with responsive padding */
   .card {
-    @apply bg-background/40 backdrop-blur-md border border-border/10 shadow-xl;
+    @apply bg-white/40 backdrop-blur-md border border-primary/10 shadow-xl;
     @apply p-4 sm:p-6 rounded-xl;
-    box-shadow: 0 4px 32px -2px rgba(0, 0, 0, 0.1), 0 2px 8px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 32px -2px rgba(155, 135, 245, 0.1), 0 2px 8px -2px rgba(155, 135, 245, 0.05);
   }
 
-  /* Button improvements with better touch targets */
   button {
     @apply transition-all duration-200 active:scale-95;
     @apply min-h-[44px] px-4;
   }
 
-  /* Container system with responsive padding */
   .container {
     @apply px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl;
   }
 
-  /* Animation utilities */
   .animate-float {
     animation: float 3s ease-in-out infinite;
   }
@@ -104,14 +98,12 @@
     animation: gradient 8s linear infinite;
   }
 
-  /* Grid background with responsive sizing */
   .bg-grid-white {
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-                      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-image: linear-gradient(to right, rgba(155, 135, 245, 0.05) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(155, 135, 245, 0.05) 1px, transparent 1px);
     @apply bg-[length:20px_20px] sm:bg-[length:24px_24px] md:bg-[length:32px_32px];
   }
 
-  /* Safe area insets for modern mobile devices */
   .safe-area-padding {
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
@@ -119,13 +111,12 @@
     padding-right: env(safe-area-inset-right);
   }
 
-  /* Improved scrollbar styling */
   ::-webkit-scrollbar {
     @apply w-2;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-background/20;
+    @apply bg-secondary/20;
   }
 
   ::-webkit-scrollbar-thumb {
