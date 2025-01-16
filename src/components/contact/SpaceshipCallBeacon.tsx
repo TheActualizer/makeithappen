@@ -27,16 +27,15 @@ export const SpaceshipCallBeacon = () => {
   return (
     <div className="relative w-full max-w-4xl mx-auto">
       {/* Background effects */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-secondary/10 to-accent/5 rounded-xl blur-xl" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#7E69AB]/5 via-[#33C3F0]/10 to-[#F1F0FB]/5 rounded-xl blur-xl" />
       
       {/* Main beacon container */}
       <motion.div 
-        className="relative z-10 p-8 rounded-xl bg-accent/50 backdrop-blur-lg border border-primary/20 shadow-2xl"
+        className="relative z-10 p-8 rounded-xl bg-[#F1F0FB]/10 backdrop-blur-lg border border-[#7E69AB]/20 shadow-2xl"
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Pulsing beacon effect */}
         <motion.div
           className="absolute inset-0 rounded-xl bg-primary/5"
           animate={{

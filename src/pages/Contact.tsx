@@ -32,7 +32,7 @@ const Contact = () => {
 
   return (
     <motion.div 
-      className="min-h-screen bg-accent overflow-hidden"
+      className="min-h-screen bg-gradient-to-br from-[#7E69AB] via-[#6E59A5]/95 to-[#33C3F0]/20"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -53,13 +53,13 @@ const Contact = () => {
         <motion.div variants={itemVariants} className="max-w-2xl mx-auto">
           <div className="text-center mb-12">
             <motion.h1 
-              className="text-4xl font-bold text-white mb-4"
+              className="text-4xl font-bold text-[#F1F0FB] mb-4"
               variants={itemVariants}
             >
               Let's Connect Across the Stars
             </motion.h1>
             <motion.p 
-              className="text-gray-300"
+              className="text-[#D6BCFA]"
               variants={itemVariants}
             >
               Send a transmission or initiate a direct communication link
