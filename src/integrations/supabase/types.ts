@@ -898,6 +898,47 @@ export type Database = {
         }
         Relationships: []
       }
+      profile_metadata: {
+        Row: {
+          availability_schedule: Json | null
+          created_at: string | null
+          expertise_areas: string[] | null
+          id: string
+          platform_settings: Json | null
+          profile_id: string
+          service_preferences: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          availability_schedule?: Json | null
+          created_at?: string | null
+          expertise_areas?: string[] | null
+          id?: string
+          platform_settings?: Json | null
+          profile_id: string
+          service_preferences?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          availability_schedule?: Json | null
+          created_at?: string | null
+          expertise_areas?: string[] | null
+          id?: string
+          platform_settings?: Json | null
+          profile_id?: string
+          service_preferences?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_metadata_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -1272,6 +1313,44 @@ export type Database = {
           workforce_simulation_scope?: string | null
         }
         Relationships: []
+      }
+      service_usage: {
+        Row: {
+          created_at: string | null
+          id: string
+          last_accessed: string | null
+          profile_id: string
+          service_name: string
+          updated_at: string | null
+          usage_metrics: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          last_accessed?: string | null
+          profile_id: string
+          service_name: string
+          updated_at?: string | null
+          usage_metrics?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          last_accessed?: string | null
+          profile_id?: string
+          service_name?: string
+          updated_at?: string | null
+          usage_metrics?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_usage_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       sprints: {
         Row: {

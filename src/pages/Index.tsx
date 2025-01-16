@@ -6,6 +6,7 @@ import ServicesShowcase from "@/components/ServicesShowcase";
 import DifyChat from "@/components/chat/DifyChat";
 import SkipToContent from "@/components/SkipToContent";
 import ZoomConnect from "@/components/ZoomConnect";
+import { ProfileMetadata } from "@/components/profile/ProfileMetadata";
 import { Activity, Cloud, Database, Shield, Command, Grid3X3, Users, Settings } from "lucide-react";
 
 const Index = () => {
@@ -107,7 +108,9 @@ const Index = () => {
                     </motion.button>
                   ))}
                 </div>
-                <div className="w-full h-[500px] rounded-lg bg-accent/20 border border-accent/10" />
+                <div className="w-full h-[500px] rounded-lg bg-accent/20 border border-accent/10">
+                  <ProfileMetadata />
+                </div>
               </motion.div>
             </div>
 
