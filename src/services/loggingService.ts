@@ -58,6 +58,35 @@ class LoggingService {
     }
   }
 
+  private sanitizeData(obj: any): any {
+    if (!obj) return obj;
+    
+    // Convert Request objects to their basic properties
+    if (obj instanceof Request) {
+      return {
+        url: obj.url,
+        method: obj.method,
+        headers: Array.from(obj.headers.entries())
+      };
+    }
+    
+    // Handle arrays
+    if (Array.isArray(obj)) {
+      return obj.map(item => this.sanitizeData(item));
+    }
+    
+    // Handle objects
+    if (typeof obj === 'object') {
+      const sanitized: any = {};
+      for (const [key, value] of Object.entries(obj)) {
+        sanitized[key] = this.sanitizeData(value);
+      }
+      return sanitized;
+    }
+    
+    return obj;
+  }
+
   public async logPageView(
     componentName: string,
     sessionId: string,
@@ -84,18 +113,18 @@ class LoggingService {
           profile_id: user?.id || null,
           interaction_type: 'page_view',
           component_name: componentName,
-          details: {
+          details: this.sanitizeData({
             path: window.location.pathname,
             referrer: document.referrer || null
-          },
-          metadata: {
+          }),
+          metadata: this.sanitizeData({
             userAgent: navigator.userAgent,
             language: navigator.language,
             screenSize: {
               width: window.innerWidth,
               height: window.innerHeight
             }
-          },
+          }),
           session_id: sessionId,
           client_info: clientInfo
         };
