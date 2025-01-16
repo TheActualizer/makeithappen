@@ -1731,6 +1731,113 @@ export type Database = {
           },
         ]
       }
+      unity_agent_messages: {
+        Row: {
+          agent_id: string
+          content: Json
+          created_at: string | null
+          flow_id: string | null
+          id: string
+          message_type: string
+          processed: boolean | null
+        }
+        Insert: {
+          agent_id: string
+          content: Json
+          created_at?: string | null
+          flow_id?: string | null
+          id?: string
+          message_type: string
+          processed?: boolean | null
+        }
+        Update: {
+          agent_id?: string
+          content?: Json
+          created_at?: string | null
+          flow_id?: string | null
+          id?: string
+          message_type?: string
+          processed?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "unity_agent_messages_flow_id_fkey"
+            columns: ["flow_id"]
+            isOneToOne: false
+            referencedRelation: "unity_data_flows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      unity_agents: {
+        Row: {
+          agent_type: string
+          capabilities: Json | null
+          configuration: Json | null
+          created_at: string | null
+          id: string
+          last_active_at: string | null
+          name: string
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          agent_type: string
+          capabilities?: Json | null
+          configuration?: Json | null
+          created_at?: string | null
+          id?: string
+          last_active_at?: string | null
+          name: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          agent_type?: string
+          capabilities?: Json | null
+          configuration?: Json | null
+          created_at?: string | null
+          id?: string
+          last_active_at?: string | null
+          name?: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      unity_data_flows: {
+        Row: {
+          created_at: string | null
+          flow_type: string
+          id: string
+          input_data: Json | null
+          metadata: Json | null
+          output_data: Json | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          flow_type: string
+          id?: string
+          input_data?: Json | null
+          metadata?: Json | null
+          output_data?: Json | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          flow_type?: string
+          id?: string
+          input_data?: Json | null
+          metadata?: Json | null
+          output_data?: Json | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       user_matching_preferences: {
         Row: {
           bio: string | null

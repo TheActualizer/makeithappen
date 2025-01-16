@@ -8,39 +8,40 @@ import SkipToContent from "@/components/SkipToContent";
 import ZoomConnect from "@/components/ZoomConnect";
 import { ProfileMetadata } from "@/components/profile/ProfileMetadata";
 import { InfrastructureMetrics } from "@/components/dashboard/InfrastructureMetrics";
+import { UnitySystemDashboard } from "@/components/unity/UnitySystemDashboard";
 import { Activity, Cloud, Database, Shield, Command, Grid3X3, Users, Settings } from "lucide-react";
 
-  const systemStats = [
-    {
-      icon: <Activity className="w-5 h-5 text-emerald-400" />,
-      label: "System Status",
-      value: "All Systems Operational",
-      bgColor: "bg-emerald-500/10",
-      borderColor: "border-emerald-500/20"
-    },
-    {
-      icon: <Cloud className="w-5 h-5 text-blue-400" />,
-      label: "Cloud Resources",
-      value: "24 Active Instances",
-      bgColor: "bg-blue-500/10",
-      borderColor: "border-blue-500/20"
-    },
-    {
-      icon: <Database className="w-5 h-5 text-purple-400" />,
-      label: "Data Processing",
-      value: "1.2TB Processed",
-      bgColor: "bg-purple-500/10",
-      borderColor: "border-purple-500/20"
-    }
-  ];
+const systemStats = [
+  {
+    icon: <Activity className="w-5 h-5 text-emerald-400" />,
+    label: "System Status",
+    value: "All Systems Operational",
+    bgColor: "bg-emerald-500/10",
+    borderColor: "border-emerald-500/20"
+  },
+  {
+    icon: <Cloud className="w-5 h-5 text-blue-400" />,
+    label: "Cloud Resources",
+    value: "24 Active Instances",
+    bgColor: "bg-blue-500/10",
+    borderColor: "border-blue-500/20"
+  },
+  {
+    icon: <Database className="w-5 h-5 text-purple-400" />,
+    label: "Data Processing",
+    value: "1.2TB Processed",
+    bgColor: "bg-purple-500/10",
+    borderColor: "border-purple-500/20"
+  }
+];
 
-  const navigationItems = [
-    { icon: <Command className="w-5 h-5" />, label: "Command Center" },
-    { icon: <Grid3X3 className="w-5 h-5" />, label: "System Analysis" },
-    { icon: <Users className="w-5 h-5" />, label: "Agent Coordination" },
-    { icon: <Shield className="w-5 h-5" />, label: "Security" },
-    { icon: <Settings className="w-5 h-5" />, label: "Settings" }
-  ];
+const navigationItems = [
+  { icon: <Command className="w-5 h-5" />, label: "Command Center" },
+  { icon: <Grid3X3 className="w-5 h-5" />, label: "System Analysis" },
+  { icon: <Users className="w-5 h-5" />, label: "Agent Coordination" },
+  { icon: <Shield className="w-5 h-5" />, label: "Security" },
+  { icon: <Settings className="w-5 h-5" />, label: "Settings" }
+];
 
 const Index = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -94,29 +95,7 @@ const Index = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             <div className="lg:col-span-2">
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="p-6 rounded-xl border border-accent/20 bg-accent/10 backdrop-blur-lg h-[600px]"
-              >
-                <h2 className="text-xl font-semibold text-white mb-4">Shared Interface</h2>
-                <div className="flex gap-4 mb-6">
-                  {["Stop Sharing", "Video Call", "Voice Chat", "Screen Record"].map((action, index) => (
-                    <motion.button
-                      key={action}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-sm font-medium text-white transition-colors"
-                    >
-                      {action}
-                    </motion.button>
-                  ))}
-                </div>
-                <div className="w-full h-[500px] rounded-lg bg-accent/20 border border-accent/10">
-                  <ProfileMetadata />
-                </div>
-              </motion.div>
+              <UnitySystemDashboard />
             </div>
 
             <div className="space-y-6">
