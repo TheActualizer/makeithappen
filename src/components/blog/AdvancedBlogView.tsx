@@ -16,11 +16,19 @@ const AdvancedBlogView = () => {
 
       try {
         // Get Mapbox token from Supabase Edge Function
-        const { data: { value } } = await supabase.functions.invoke('get-secret', {
+        const { data, error } = await supabase.functions.invoke('get-secret', {
           body: { name: 'MAPBOX_PUBLIC_TOKEN' }
         });
 
-        mapboxgl.accessToken = value;
+        if (error) {
+          throw error;
+        }
+
+        if (!data?.value) {
+          throw new Error('Mapbox token not found');
+        }
+
+        mapboxgl.accessToken = data.value;
         
         map.current = new mapboxgl.Map({
           container: mapContainer.current,
