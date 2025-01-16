@@ -32,54 +32,55 @@
     @apply border-border;
   }
 
+  html {
+    @apply h-full scroll-smooth;
+  }
+
   body {
-    @apply bg-gradient-to-br from-accent via-accent/95 to-primary/20 text-foreground font-sans text-base leading-relaxed tracking-wide min-h-screen;
+    @apply bg-gradient-to-br from-accent via-accent/95 to-primary/20 text-foreground font-sans text-base leading-relaxed tracking-wide min-h-screen antialiased;
     font-family: 'Inter', sans-serif;
   }
 
-  /* Improved typography scale */
+  /* Improved typography scale with responsive adjustments */
   h1, h2, h3, h4, h5, h6 {
     @apply font-semibold tracking-tight;
     letter-spacing: -0.02em;
   }
 
   h1 {
-    @apply text-4xl md:text-5xl mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
+    @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
   }
 
   h2 {
-    @apply text-3xl md:text-4xl mb-5;
+    @apply text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-5;
   }
 
   h3 {
-    @apply text-2xl md:text-3xl mb-4;
+    @apply text-xl sm:text-2xl md:text-3xl mb-2 sm:mb-4;
   }
 
-  /* Enhanced form elements */
+  /* Enhanced form elements with better touch targets */
   input, select, textarea {
     @apply bg-background/50 backdrop-blur-sm border-border/10 focus:border-primary/50 transition-all duration-200;
+    @apply min-h-[44px] px-4 py-2 rounded-lg;
   }
 
-  /* Card enhancements */
+  /* Card enhancements with responsive padding */
   .card {
     @apply bg-background/40 backdrop-blur-md border border-border/10 shadow-xl;
+    @apply p-4 sm:p-6 rounded-xl;
     box-shadow: 0 4px 32px -2px rgba(0, 0, 0, 0.1), 0 2px 8px -2px rgba(0, 0, 0, 0.05);
   }
 
-  /* Button improvements */
+  /* Button improvements with better touch targets */
   button {
     @apply transition-all duration-200 active:scale-95;
+    @apply min-h-[44px] px-4;
   }
 
-  /* Smooth scrolling */
-  html {
-    scroll-behavior: smooth;
-    @apply overflow-x-hidden;
-  }
-
-  /* Container system */
+  /* Container system with responsive padding */
   .container {
-    @apply px-4 mx-auto max-w-7xl;
+    @apply px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl;
   }
 
   /* Animation utilities */
@@ -103,9 +104,31 @@
     animation: gradient 8s linear infinite;
   }
 
-  /* Grid background */
+  /* Grid background with responsive sizing */
   .bg-grid-white {
     background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
                       linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    @apply bg-[length:20px_20px] sm:bg-[length:24px_24px] md:bg-[length:32px_32px];
+  }
+
+  /* Safe area insets for modern mobile devices */
+  .safe-area-padding {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* Improved scrollbar styling */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-background/20;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary/20 rounded-full hover:bg-primary/30 transition-colors;
   }
 }
