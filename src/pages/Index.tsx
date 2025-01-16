@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import { ServicesShowcase } from "@/components/ServicesShowcase";
+import ServicesShowcase from "@/components/ServicesShowcase";
 import DifyChat from "@/components/chat/DifyChat";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
