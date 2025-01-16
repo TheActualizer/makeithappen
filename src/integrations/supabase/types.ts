@@ -811,6 +811,53 @@ export type Database = {
         }
         Relationships: []
       }
+      interaction_logs: {
+        Row: {
+          client_info: Json | null
+          component_name: string
+          created_at: string | null
+          details: Json | null
+          id: string
+          interaction_type: string
+          metadata: Json | null
+          performance_metrics: Json | null
+          profile_id: string | null
+          session_id: string | null
+        }
+        Insert: {
+          client_info?: Json | null
+          component_name: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          interaction_type: string
+          metadata?: Json | null
+          performance_metrics?: Json | null
+          profile_id?: string | null
+          session_id?: string | null
+        }
+        Update: {
+          client_info?: Json | null
+          component_name?: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          interaction_type?: string
+          metadata?: Json | null
+          performance_metrics?: Json | null
+          profile_id?: string | null
+          session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interaction_logs_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       matches: {
         Row: {
           created_at: string | null
