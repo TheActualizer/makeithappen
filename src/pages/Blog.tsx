@@ -15,28 +15,41 @@ const Blog = () => {
         
         console.log('Logging blog page view');
         
-        const { error } = await supabase.from('interaction_logs').insert({
-          profile_id: user?.id,
-          interaction_type: 'page_view',
-          component_name: 'Blog',
-          details: {
-            path: window.location.pathname,
-            referrer: document.referrer
+        // Create a serializable object with only the necessary data
+        const clientInfo = {
+          timestamp: new Date().toISOString(),
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          screen: {
+            width: window.innerWidth,
+            height: window.innerHeight
           },
-          metadata: {
-            userAgent: navigator.userAgent,
-            language: navigator.language,
-            screenSize: {
-              width: window.innerWidth,
-              height: window.innerHeight
-            }
-          },
-          session_id: sessionId,
-          client_info: {
-            timestamp: new Date().toISOString(),
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-          }
-        });
+          userAgent: navigator.userAgent,
+          language: navigator.language
+        };
+
+        const details = {
+          path: window.location.pathname,
+          referrer: document.referrer || null
+        };
+
+        const { error } = await supabase
+          .from('interaction_logs')
+          .insert({
+            profile_id: user?.id || null,
+            interaction_type: 'page_view',
+            component_name: 'Blog',
+            details,
+            metadata: {
+              userAgent: navigator.userAgent,
+              language: navigator.language,
+              screenSize: {
+                width: window.innerWidth,
+                height: window.innerHeight
+              }
+            },
+            session_id: sessionId,
+            client_info: clientInfo
+          });
 
         if (error) {
           console.error('Error logging page view:', error);
