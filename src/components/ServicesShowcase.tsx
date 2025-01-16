@@ -5,7 +5,7 @@ import ServicesHeader from "./services/ServicesHeader";
 import { services } from "./services/serviceData";
 import { ArrowRight } from "lucide-react";
 import { motion, useInView } from "framer-motion";
-import { memo, useRef, useCallback, useMemo, useEffect } from "react";
+import { memo, useRef, useCallback, useMemo } from "react";
 
 const ServicesShowcase = memo(() => {
   const navigate = useNavigate();
@@ -44,16 +44,6 @@ const ServicesShowcase = memo(() => {
       }
     }
   }), []);
-
-  // Preload images from service data
-  useEffect(() => {
-    services.forEach(service => {
-      if (service.imageUrl) {
-        const img = new Image();
-        img.src = service.imageUrl;
-      }
-    });
-  }, []);
 
   return (
     <section 
