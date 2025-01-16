@@ -8,11 +8,16 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 
 // Lazy load pages with prefetch hints
-const Index = lazy(() => {
-  // Add prefetch hint for Index page
-  const indexModule = import("@/pages/Index");
-  return indexModule;
-});
+const Index = lazy(() => import("@/pages/Index"));
+const About = lazy(() => import("@/pages/About"));
+const Blog = lazy(() => import("@/pages/Blog"));
+const Contact = lazy(() => import("@/pages/Contact"));
+const Services = lazy(() => import("@/pages/Services"));
+const CaseStudies = lazy(() => import("@/pages/CaseStudies"));
+const Login = lazy(() => import("@/pages/Login"));
+const ResetPassword = lazy(() => import("@/pages/ResetPassword"));
+const StartProject = lazy(() => import("@/pages/StartProject"));
+const Dashboard = lazy(() => import("@/pages/Dashboard"));
 
 // Configure QueryClient with optimized settings
 const queryClient = new QueryClient({
