@@ -1,5 +1,4 @@
 import { supabase } from '@/integrations/supabase/client';
-import { v4 as uuidv4 } from 'uuid';
 
 interface ClientInfo {
   timestamp: string;
@@ -12,9 +11,14 @@ interface ClientInfo {
   language: string;
 }
 
-interface PageViewDetails {
-  path: string;
-  referrer: string | null;
+interface LogEntry {
+  interaction_type: string;
+  component_name: string;
+  details?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
+  performance_metrics?: Record<string, unknown>;
+  session_id?: string;
+  client_info?: ClientInfo;
 }
 
 class LoggingService {
@@ -22,7 +26,9 @@ class LoggingService {
   private isLogging: boolean = false;
   private logQueue: Array<() => Promise<void>> = [];
 
-  private constructor() {}
+  private constructor() {
+    console.log('LoggingService: Initialized');
+  }
 
   public static getInstance(): LoggingService {
     if (!LoggingService.instance) {
@@ -41,7 +47,7 @@ class LoggingService {
         await logFunction();
       }
     } catch (error) {
-      console.error('Error processing log queue:', error);
+      console.error('LoggingService: Error processing log queue:', error);
     } finally {
       this.isLogging = false;
       if (this.logQueue.length > 0) {
@@ -57,7 +63,7 @@ class LoggingService {
   ): Promise<void> {
     const logFunction = async () => {
       try {
-        console.log(`[LoggingService] Logging page view for ${componentName}`);
+        console.log(`LoggingService: Logging page view for ${componentName}`);
         
         const { data: { user } } = await supabase.auth.getUser();
         
@@ -72,38 +78,40 @@ class LoggingService {
           language: navigator.language
         };
 
-        const details: PageViewDetails = {
-          path: window.location.pathname,
-          referrer: document.referrer || null
+        const logEntry: LogEntry = {
+          interaction_type: 'page_view',
+          component_name: componentName,
+          details: {
+            path: window.location.pathname,
+            referrer: document.referrer || null
+          },
+          metadata: {
+            userAgent: navigator.userAgent,
+            language: navigator.language,
+            screenSize: {
+              width: window.innerWidth,
+              height: window.innerHeight
+            }
+          },
+          session_id: sessionId,
+          client_info: clientInfo
         };
 
         const { error } = await supabase
           .from('interaction_logs')
-          .insert({
-            profile_id: user?.id || null,
-            interaction_type: 'page_view',
-            component_name: componentName,
-            details,
-            metadata: {
-              userAgent: navigator.userAgent,
-              language: navigator.language,
-              screenSize: {
-                width: window.innerWidth,
-                height: window.innerHeight
-              }
-            },
-            session_id: sessionId,
-            client_info: clientInfo
-          });
+          .insert([{
+            ...logEntry,
+            profile_id: user?.id || null
+          }]);
 
         if (error) {
-          console.error('[LoggingService] Error logging page view:', error);
+          console.error('LoggingService: Error logging page view:', error);
           onError?.(error);
         } else {
-          console.log('[LoggingService] Successfully logged page view');
+          console.log('LoggingService: Successfully logged page view');
         }
       } catch (error) {
-        console.error('[LoggingService] Error in logPageView:', error);
+        console.error('LoggingService: Error in logPageView:', error);
         onError?.(error);
       }
     };
