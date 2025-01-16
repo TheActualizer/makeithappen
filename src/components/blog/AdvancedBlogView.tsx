@@ -20,20 +20,26 @@ const AdvancedBlogView = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [mapError, setMapError] = useState<string | null>(null);
+  const [isMapLoading, setIsMapLoading] = useState(true);
 
   useEffect(() => {
     const initializeMap = async () => {
-      if (!mapContainer.current) return;
+      if (!mapContainer.current) {
+        console.error('Map container not found');
+        return;
+      }
 
       try {
         console.log('Initializing map...');
+        setIsMapLoading(true);
+        
         const { data, error } = await supabase.functions.invoke('get-secret', {
           body: { name: 'MAPBOX_PUBLIC_TOKEN' }
         });
 
         if (error) {
           console.error('Error fetching Mapbox token:', error);
-          setMapError('Failed to initialize map');
+          setMapError('Unable to initialize map service');
           toast.error('Map initialization failed');
           throw error;
         }
@@ -48,30 +54,66 @@ const AdvancedBlogView = () => {
         console.log('Mapbox token retrieved successfully');
         mapboxgl.accessToken = data.value;
         
-        map.current = new mapboxgl.Map({
+        const newMap = new mapboxgl.Map({
           container: mapContainer.current,
           style: 'mapbox://styles/mapbox/dark-v11',
-          center: [0, 0],
+          center: [0, 20],
           zoom: 2,
-          projection: 'globe'
+          projection: 'globe',
+          pitch: 45
         });
 
-        map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+        newMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-        map.current.on('style.load', () => {
-          map.current?.setFog({
+        // Add atmosphere and fog effects
+        newMap.on('style.load', () => {
+          newMap.setFog({
             color: 'rgb(186, 210, 235)',
             'high-color': 'rgb(36, 92, 223)',
-            'horizon-blend': 0.02
+            'horizon-blend': 0.02,
+            'space-color': 'rgb(11, 11, 25)',
+            'star-intensity': 0.6
           });
+          
+          console.log('Map style loaded successfully');
+          setIsMapLoading(false);
+          toast.success('Map loaded successfully');
         });
 
+        // Handle map load error
+        newMap.on('error', (e) => {
+          console.error('Map error:', e);
+          setMapError('Error loading map');
+          toast.error('Map error occurred');
+        });
+
+        map.current = newMap;
+
+        // Auto-rotation animation
+        const rotateCamera = () => {
+          if (!map.current) return;
+          
+          const secondsPerRevolution = 120;
+          const center = map.current.getCenter();
+          center.lng -= 360 / (secondsPerRevolution * 60);
+          
+          map.current.easeTo({
+            center,
+            duration: 1000,
+            easing: (n) => n
+          });
+          
+          requestAnimationFrame(rotateCamera);
+        };
+
+        rotateCamera();
+
         console.log('Map initialized successfully');
-        toast.success('Map loaded successfully');
 
       } catch (error) {
         console.error('Error initializing map:', error);
         setMapError('Failed to load map');
+        setIsMapLoading(false);
       }
     };
 
@@ -111,7 +153,16 @@ const AdvancedBlogView = () => {
             </p>
           </div>
         ) : (
-          <div ref={mapContainer} className="w-full h-full" />
+          <div className="relative w-full h-full">
+            <div ref={mapContainer} className="w-full h-full" />
+            {isMapLoading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm">
+                <div className="text-white/80 bg-secondary/20 px-4 py-2 rounded-lg backdrop-blur-sm">
+                  Loading map...
+                </div>
+              </div>
+            )}
+          </div>
         )}
       </div>
 
@@ -128,7 +179,9 @@ const AdvancedBlogView = () => {
                 className="relative"
               >
                 <div 
-                  className={`p-4 rounded-xl bg-gradient-to-br ${service.color} backdrop-blur-md border border-white/10 hover:scale-105 transition-transform duration-200 cursor-pointer`}
+                  className={`p-4 rounded-xl bg-gradient-to-br ${service.color} backdrop-blur-md 
+                    border border-white/10 transform transition-all duration-300 
+                    hover:scale-105 hover:shadow-lg hover:border-white/20`}
                 >
                   <service.icon className="w-6 h-6 text-white/80 mb-2" />
                   <h3 className="text-sm font-medium text-white/90">{service.label}</h3>
