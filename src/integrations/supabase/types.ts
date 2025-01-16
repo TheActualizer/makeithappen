@@ -57,6 +57,110 @@ export type Database = {
           },
         ]
       }
+      api_endpoints: {
+        Row: {
+          airtable_record_id: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          integration_id: string | null
+          metadata: Json | null
+          method: string
+          parameters: Json | null
+          path: string
+          request_body: Json | null
+          responses: Json | null
+          summary: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          airtable_record_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          integration_id?: string | null
+          metadata?: Json | null
+          method: string
+          parameters?: Json | null
+          path: string
+          request_body?: Json | null
+          responses?: Json | null
+          summary?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          airtable_record_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          integration_id?: string | null
+          metadata?: Json | null
+          method?: string
+          parameters?: Json | null
+          path?: string
+          request_body?: Json | null
+          responses?: Json | null
+          summary?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_endpoints_integration_id_fkey"
+            columns: ["integration_id"]
+            isOneToOne: false
+            referencedRelation: "api_integrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      api_integrations: {
+        Row: {
+          airtable_record_id: string | null
+          base_url: string | null
+          created_at: string | null
+          description: string | null
+          dify_agent_config: Json | null
+          documentation_url: string | null
+          id: string
+          integration_type: string
+          metadata: Json | null
+          name: string
+          status: string | null
+          swagger_spec: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          airtable_record_id?: string | null
+          base_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          dify_agent_config?: Json | null
+          documentation_url?: string | null
+          id?: string
+          integration_type: string
+          metadata?: Json | null
+          name: string
+          status?: string | null
+          swagger_spec?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          airtable_record_id?: string | null
+          base_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          dify_agent_config?: Json | null
+          documentation_url?: string | null
+          id?: string
+          integration_type?: string
+          metadata?: Json | null
+          name?: string
+          status?: string | null
+          swagger_spec?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       appointments: {
         Row: {
           consultation_date: string
