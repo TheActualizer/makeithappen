@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, memo } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -11,52 +11,62 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-// Lazy load ServicesShowcase component
-const ServicesShowcase = lazy(() => import("@/components/ServicesShowcase"));
+// Lazy load ServicesShowcase with a more efficient loading boundary
+const ServicesShowcase = lazy(() => 
+  import("@/components/ServicesShowcase").then(module => ({
+    default: memo(module.default)
+  }))
+);
 
-// Loading fallback for ServicesShowcase
-const ShowcaseLoader = () => (
+// Optimized loading component
+const ShowcaseLoader = memo(() => (
   <div className="h-96 flex items-center justify-center bg-accent/5">
     <div className="animate-pulse space-y-4">
       <div className="h-8 w-64 bg-accent/10 rounded" />
       <div className="h-4 w-48 bg-accent/10 rounded" />
     </div>
   </div>
-);
+));
 
-const Services = () => {
+// Preload images for better performance
+const images = [
+  {
+    src: "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
+    alt: "AI Network Visualization",
+    caption: "Multi-Agent Systems Working in Harmony"
+  },
+  {
+    src: "https://images.unsplash.com/photo-1580894894513-541e068a3e2b",
+    alt: "Digital Hive Mind",
+    caption: "Collective Intelligence Networks"
+  },
+  {
+    src: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485",
+    alt: "AI Collaboration",
+    caption: "Autonomous Agent Orchestration"
+  },
+].map(img => {
+  // Preload images
+  const image = new Image();
+  image.src = img.src;
+  return img;
+});
+
+const Services = memo(() => {
   const navigate = useNavigate();
-
-  const images = [
-    {
-      src: "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
-      alt: "AI Network Visualization",
-      caption: "Multi-Agent Systems Working in Harmony"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1580894894513-541e068a3e2b",
-      alt: "Digital Hive Mind",
-      caption: "Collective Intelligence Networks"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485",
-      alt: "AI Collaboration",
-      caption: "Autonomous Agent Orchestration"
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-accent via-accent/95 to-primary/20">
       <Navbar />
       <main className="relative">
-        {/* Hero Section */}
+        {/* Hero Section - Optimized with will-change */}
         <section className="pt-32 pb-16 px-4 relative">
           <div className="max-w-6xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 will-change-transform">
               Agentic Hive Systems for Enterprise
             </h1>
             
-            {/* Carousel Section with loading optimization */}
+            {/* Optimized Carousel Section */}
             <div className="max-w-4xl mx-auto mb-8 relative">
               <Carousel className="w-full" opts={{ loop: true }}>
                 <CarouselContent>
@@ -66,8 +76,10 @@ const Services = () => {
                         <img
                           src={image.src}
                           alt={image.alt}
-                          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 ease-in-out"
+                          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 ease-in-out will-change-transform"
                           loading="lazy"
+                          decoding="async"
+                          fetchPriority={index === 0 ? "high" : "low"}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
                           <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -89,7 +101,7 @@ const Services = () => {
                 variant="default"
                 size="lg"
                 onClick={() => navigate("/start-project")}
-                className="group bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300"
+                className="group bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 will-change-transform"
               >
                 Start Building
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -106,13 +118,15 @@ const Services = () => {
           </div>
         </section>
 
-        {/* Lazy loaded ServicesShowcase */}
+        {/* Optimized lazy loading with transition */}
         <Suspense fallback={<ShowcaseLoader />}>
           <ServicesShowcase />
         </Suspense>
       </main>
     </div>
   );
-};
+});
+
+Services.displayName = "Services";
 
 export default Services;

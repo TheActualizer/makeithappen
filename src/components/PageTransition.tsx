@@ -1,17 +1,16 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState, memo } from "react";
 import { useLocation } from "react-router-dom";
 
 interface PageTransitionProps {
   children: ReactNode;
 }
 
-const PageTransition = ({ children }: PageTransitionProps) => {
+const PageTransition = memo(({ children }: PageTransitionProps) => {
   const location = useLocation();
   const [isFirstMount, setIsFirstMount] = useState(true);
 
   useEffect(() => {
-    // Skip animation on first mount
     if (isFirstMount) {
       setIsFirstMount(false);
     }
@@ -31,12 +30,15 @@ const PageTransition = ({ children }: PageTransitionProps) => {
         style={{
           willChange: "transform, opacity",
           isolation: "isolate",
+          contain: "paint layout"
         }}
       >
         {children}
       </motion.div>
     </AnimatePresence>
   );
-};
+});
+
+PageTransition.displayName = "PageTransition";
 
 export default PageTransition;

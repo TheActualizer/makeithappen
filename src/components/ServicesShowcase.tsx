@@ -5,7 +5,7 @@ import ServicesHeader from "./services/ServicesHeader";
 import { services } from "./services/serviceData";
 import { ArrowRight } from "lucide-react";
 import { motion, useInView } from "framer-motion";
-import { memo, useRef, useCallback } from "react";
+import { memo, useRef, useCallback, useMemo } from "react";
 
 const ServicesShowcase = memo(() => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const ServicesShowcase = memo(() => {
     navigate("/start-project");
   }, [navigate]);
 
-  const containerVariants = {
+  const containerVariants = useMemo(() => ({
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -26,12 +26,17 @@ const ServicesShowcase = memo(() => {
         delayChildren: 0.2,
       },
     },
-  };
+  }), []);
+
+  const itemVariants = useMemo(() => ({
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+  }), []);
 
   return (
     <section 
       ref={ref}
-      className="relative py-24 px-4 md:px-8 lg:px-12 bg-gradient-to-b from-background via-background/95 to-background/90 backdrop-blur-lg"
+      className="relative py-24 px-4 md:px-8 lg:px-12 bg-gradient-to-b from-background via-background/95 to-background/90 backdrop-blur-lg will-change-transform"
       id="services"
     >
       <div className="max-w-7xl mx-auto">
@@ -49,11 +54,11 @@ const ServicesShowcase = memo(() => {
           {services.map((service, index) => (
             <motion.div
               key={service.id}
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0 }
-              }}
+              variants={itemVariants}
               className="flex"
+              style={{
+                willChange: 'transform, opacity'
+              }}
             >
               <ServiceCard service={service} />
             </motion.div>
@@ -66,7 +71,7 @@ const ServicesShowcase = memo(() => {
             variant="default" 
             size="lg"
             onClick={handleStartBuilding}
-            className="group relative bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 px-8 py-6 text-lg"
+            className="group relative bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 px-8 py-6 text-lg will-change-transform"
           >
             Start Building
             <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
