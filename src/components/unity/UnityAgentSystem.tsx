@@ -4,16 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Activity, Brain, Workflow } from 'lucide-react';
 import { motion } from 'framer-motion';
-
-interface UnityAgent {
-  id: string;
-  name: string;
-  agent_type: string;
-  status: string;
-  capabilities: string[];
-  last_active_at: string;
-  configuration: Record<string, unknown>;
-}
+import { UnityAgent, transformAgent } from '@/types/unity';
 
 export const UnityAgentSystem = () => {
   const [agents, setAgents] = useState<UnityAgent[]>([]);
@@ -30,16 +21,11 @@ export const UnityAgentSystem = () => {
         console.error('UnityAgentSystem: Error fetching agents:', error);
       } else {
         console.log('UnityAgentSystem: Agents fetched:', data);
-        // Transform the JSONB capabilities to string array
-        const transformedAgents = data?.map(agent => ({
-          ...agent,
-          capabilities: Array.isArray(agent.capabilities) ? agent.capabilities : []
-        })) || [];
+        const transformedAgents = (data || []).map(transformAgent);
         setAgents(transformedAgents);
       }
     };
 
-    // Set up real-time subscription for agent updates
     const channel = supabase
       .channel('unity_agent_changes')
       .on(

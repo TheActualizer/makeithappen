@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Activity, Brain, Network, Workflow } from 'lucide-react';
-import type { UnityAgent, UnityDataFlow, transformAgent, transformDataFlow } from '@/types/unity';
+import { UnityAgent, UnityDataFlow, transformAgent, transformDataFlow } from '@/types/unity';
 
 interface AgentMetrics {
   totalFlows: number;
