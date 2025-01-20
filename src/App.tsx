@@ -27,8 +27,8 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <SessionContextProvider supabaseClient={supabase}>
+    <SessionContextProvider supabaseClient={supabase}>
+      <QueryClientProvider client={queryClient}>
         <Router>
           <PageTransition>
             <Routes>
@@ -47,8 +47,8 @@ function App() {
           <VoiceInterface />
           <Toaster />
         </Router>
-      </SessionContextProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </SessionContextProvider>
   );
 }
 
