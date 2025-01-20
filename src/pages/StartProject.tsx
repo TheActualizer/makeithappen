@@ -152,29 +152,28 @@ const StartProject = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#F7F7F7] via-white to-[#F7F7F7]">
+    <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-background">
       <Navbar />
-      
-      <div className="flex-1 container max-w-4xl mx-auto px-4 py-8 pb-24 md:pb-8">
+      <div className="container max-w-4xl mx-auto px-4 py-8">
         <div className="space-y-6">
           {!showCalendly && (
-            <div className="text-center space-y-3 mb-8">
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-[#001e00]">
+            <div className="text-center space-y-2">
+              <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-primary">
                 Start Your Project
               </h1>
-              <p className="text-[#5e6d55] text-base max-w-xl mx-auto">
+              <p className="text-muted-foreground text-sm max-w-xl mx-auto">
                 Tell us about your project, and we'll help bring it to life with our expertise in AI and automation.
               </p>
             </div>
           )}
 
-          <div className="bg-white rounded-xl shadow-sm border border-[#e4ebe4] overflow-hidden relative">
+          <div className="bg-card/30 backdrop-blur-sm rounded-xl shadow-lg border border-accent/10 overflow-hidden">
             {!showCalendly && (
-              <div className="p-6 border-b border-[#e4ebe4] bg-[#f7faf7]">
+              <div className="p-4 border-b border-accent/10">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     {renderStepIcon(step)}
-                    <h2 className="text-lg font-semibold text-[#001e00]">{getStepTitle(step)}</h2>
+                    <h2 className="text-base font-medium">{getStepTitle(step)}</h2>
                   </div>
                   <ProgressSteps currentStep={step} />
                 </div>
@@ -186,79 +185,41 @@ const StartProject = () => {
                 {renderStep()}
               </div>
             </div>
+
+            {!showCalendly && (
+              <div className="border-t border-accent/10 p-4 bg-accent/5">
+                <div className="flex justify-between gap-3">
+                  <Button
+                    variant="ghost"
+                    onClick={handleBack}
+                    disabled={step === 1}
+                    className="w-28"
+                  >
+                    Back
+                  </Button>
+                  {step === 2 ? (
+                    <Button
+                      onClick={handleSubmit}
+                      disabled={isSubmitting}
+                      className="w-28 bg-primary hover:bg-primary/90"
+                    >
+                      {isSubmitting ? "Saving..." : "Submit"}
+                    </Button>
+                  ) : (
+                    <Button 
+                      onClick={handleNext}
+                      className="w-28 group bg-primary hover:bg-primary/90"
+                    >
+                      Next
+                      <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                    </Button>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
-
-      {/* Fixed bottom navigation bar on mobile */}
-      {!showCalendly && (
-        <div className="fixed bottom-0 left-0 right-0 md:hidden border-t border-[#e4ebe4] bg-white shadow-lg p-4 z-50">
-          <div className="container max-w-4xl mx-auto">
-            <div className="flex justify-between gap-3">
-              <Button
-                variant="outline"
-                onClick={handleBack}
-                disabled={step === 1}
-                className="w-28 border-[#e4ebe4] text-[#001e00] hover:bg-[#f7faf7]"
-              >
-                Back
-              </Button>
-              {step === 2 ? (
-                <Button
-                  onClick={handleSubmit}
-                  disabled={isSubmitting}
-                  className="w-28 bg-[#108a00] hover:bg-[#14a800] text-white"
-                >
-                  {isSubmitting ? "Saving..." : "Submit"}
-                </Button>
-              ) : (
-                <Button 
-                  onClick={handleNext}
-                  className="w-28 group bg-[#108a00] hover:bg-[#14a800] text-white"
-                >
-                  Next
-                  <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Desktop navigation */}
-      {!showCalendly && (
-        <div className="hidden md:block border-t border-[#e4ebe4] bg-[#f7faf7] p-4">
-          <div className="container max-w-4xl mx-auto">
-            <div className="flex justify-between gap-3">
-              <Button
-                variant="outline"
-                onClick={handleBack}
-                disabled={step === 1}
-                className="w-28 border-[#e4ebe4] text-[#001e00] hover:bg-white"
-              >
-                Back
-              </Button>
-              {step === 2 ? (
-                <Button
-                  onClick={handleSubmit}
-                  disabled={isSubmitting}
-                  className="w-28 bg-[#108a00] hover:bg-[#14a800] text-white"
-                >
-                  {isSubmitting ? "Saving..." : "Submit"}
-                </Button>
-              ) : (
-                <Button 
-                  onClick={handleNext}
-                  className="w-28 group bg-[#108a00] hover:bg-[#14a800] text-white"
-                >
-                  Next
-                  <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

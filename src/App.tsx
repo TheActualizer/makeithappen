@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { StrictMode } from "react";
 import Index from "@/pages/Index";
 import About from "@/pages/About";
 import Blog from "@/pages/Blog";
@@ -28,30 +27,28 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <SessionContextProvider supabaseClient={supabase}>
-          <Router>
-            <PageTransition>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/case-studies" element={<CaseStudies />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                <Route path="/start-project" element={<StartProject />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-              </Routes>
-            </PageTransition>
-            <VoiceInterface />
-            <Toaster />
-          </Router>
-        </SessionContextProvider>
-      </QueryClientProvider>
-    </StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <SessionContextProvider supabaseClient={supabase}>
+        <Router>
+          <PageTransition>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/case-studies" element={<CaseStudies />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/start-project" element={<StartProject />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Routes>
+          </PageTransition>
+          <VoiceInterface />
+          <Toaster />
+        </Router>
+      </SessionContextProvider>
+    </QueryClientProvider>
   );
 }
 
