@@ -152,9 +152,10 @@ const StartProject = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-background">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-accent/5 to-background">
       <Navbar />
-      <div className="container max-w-4xl mx-auto px-4 py-8">
+      
+      <div className="flex-1 container max-w-4xl mx-auto px-4 py-8 pb-24 md:pb-8">
         <div className="space-y-6">
           {!showCalendly && (
             <div className="text-center space-y-2">
@@ -167,7 +168,7 @@ const StartProject = () => {
             </div>
           )}
 
-          <div className="bg-card/30 backdrop-blur-sm rounded-xl shadow-lg border border-accent/10 overflow-hidden">
+          <div className="bg-card/30 backdrop-blur-sm rounded-xl shadow-lg border border-accent/10 overflow-hidden relative">
             {!showCalendly && (
               <div className="p-4 border-b border-accent/10">
                 <div className="flex items-center justify-between">
@@ -185,41 +186,79 @@ const StartProject = () => {
                 {renderStep()}
               </div>
             </div>
-
-            {!showCalendly && (
-              <div className="border-t border-accent/10 p-4 bg-accent/5">
-                <div className="flex justify-between gap-3">
-                  <Button
-                    variant="ghost"
-                    onClick={handleBack}
-                    disabled={step === 1}
-                    className="w-28"
-                  >
-                    Back
-                  </Button>
-                  {step === 2 ? (
-                    <Button
-                      onClick={handleSubmit}
-                      disabled={isSubmitting}
-                      className="w-28 bg-primary hover:bg-primary/90"
-                    >
-                      {isSubmitting ? "Saving..." : "Submit"}
-                    </Button>
-                  ) : (
-                    <Button 
-                      onClick={handleNext}
-                      className="w-28 group bg-primary hover:bg-primary/90"
-                    >
-                      Next
-                      <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
-                    </Button>
-                  )}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
+
+      {/* Fixed bottom navigation bar on mobile */}
+      {!showCalendly && (
+        <div className="fixed bottom-0 left-0 right-0 md:hidden border-t border-accent/10 bg-background/95 backdrop-blur-md p-4 z-50">
+          <div className="container max-w-4xl mx-auto">
+            <div className="flex justify-between gap-3">
+              <Button
+                variant="ghost"
+                onClick={handleBack}
+                disabled={step === 1}
+                className="w-28"
+              >
+                Back
+              </Button>
+              {step === 2 ? (
+                <Button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className="w-28 bg-primary hover:bg-primary/90"
+                >
+                  {isSubmitting ? "Saving..." : "Submit"}
+                </Button>
+              ) : (
+                <Button 
+                  onClick={handleNext}
+                  className="w-28 group bg-primary hover:bg-primary/90"
+                >
+                  Next
+                  <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Desktop navigation */}
+      {!showCalendly && (
+        <div className="hidden md:block border-t border-accent/10 p-4 bg-accent/5">
+          <div className="container max-w-4xl mx-auto">
+            <div className="flex justify-between gap-3">
+              <Button
+                variant="ghost"
+                onClick={handleBack}
+                disabled={step === 1}
+                className="w-28"
+              >
+                Back
+              </Button>
+              {step === 2 ? (
+                <Button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className="w-28 bg-primary hover:bg-primary/90"
+                >
+                  {isSubmitting ? "Saving..." : "Submit"}
+                </Button>
+              ) : (
+                <Button 
+                  onClick={handleNext}
+                  className="w-28 group bg-primary hover:bg-primary/90"
+                >
+                  Next
+                  <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
