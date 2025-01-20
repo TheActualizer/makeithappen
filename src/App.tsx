@@ -11,6 +11,7 @@ import StartProject from "@/pages/StartProject";
 import Dashboard from "@/pages/Dashboard";
 import { Toaster } from "@/components/ui/toaster";
 import PageTransition from "@/components/PageTransition";
+import VoiceInterface from "@/components/VoiceInterface";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -18,8 +19,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      retry: 1, // Only retry failed queries once
+      staleTime: 5 * 60 * 1000,
+      retry: 1,
     },
   },
 });
@@ -43,6 +44,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
           </PageTransition>
+          <VoiceInterface />
           <Toaster />
         </Router>
       </SessionContextProvider>
