@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowUp, Link2, Settings2, ChevronDown, MessageCircle, HelpCircle, Info, Network, Database, Cpu, GitBranch, Workflow } from "lucide-react";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
-import AICivilEngineer from "./AICivilEngineer";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Popover,
@@ -13,7 +12,6 @@ import {
 
 const ChatInterface = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [showEngineer, setShowEngineer] = useState(true);
 
   return (
     <motion.div
@@ -174,7 +172,7 @@ const ChatInterface = () => {
             >
               <div className="h-[500px] flex flex-col">
                 <div className="flex-1 overflow-y-auto p-5 space-y-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-                  {showEngineer ? <AICivilEngineer /> : <ChatMessages />}
+                  <ChatMessages />
                 </div>
 
                 <div className="border-t border-white/10 p-5 bg-purple-900/20 backdrop-blur-sm">
@@ -197,19 +195,10 @@ const ChatInterface = () => {
                     </div>
                   </div>
                   <div className="mt-3 flex items-center justify-between text-xs text-purple-200/60">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setShowEngineer(!showEngineer)}
-                      className="text-xs hover:bg-purple-500/20"
-                    >
-                      {showEngineer ? "Switch to General Chat" : "Switch to Civil Engineer"}
-                    </Button>
+                    <span className="font-light tracking-wide">Access the Hive Swarm Network</span>
                     <div className="flex items-center gap-2">
                       <Info className="w-3 h-3" />
-                      <span className="font-light tracking-wide">
-                        {showEngineer ? "Connected to AI Civil Engineer" : "Connected to Enterprise Data Pipelines & Analytics"}
-                      </span>
+                      <span className="font-light tracking-wide">Connected to Enterprise Data Pipelines & Analytics</span>
                     </div>
                   </div>
                 </div>

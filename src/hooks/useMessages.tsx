@@ -1,21 +1,16 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { Message, MessageWithProfile, ConversationType } from '@/types/message';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export function useMessages() {
+  const [messages, setMessages] = useState<MessageWithProfile[]>([]);
+  const [conversations, setConversations] = useState<ConversationType[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
-  const queryClient = useQueryClient();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // Optimized conversations query
-  const { 
-    data: conversations = [], 
-    isLoading: conversationsLoading,
-    error: conversationsError 
-  } = useQuery({
-    queryKey: ['conversations'],
-    queryFn: async () => {
-      console.log('useMessages: Fetching conversations');
+  const fetchConversations = async () => {
+    try {
       const { data, error } = await supabase
         .from('conversations')
         .select('*')
@@ -23,24 +18,21 @@ export function useMessages() {
 
       if (error) throw error;
       
-      return data.filter(conv => 
+      // Filter out unsupported providers to match ConversationType
+      const filteredData = data.filter(conv => 
         conv.provider === 'dify' || conv.provider === 'openai'
       ) as ConversationType[];
-    },
-    staleTime: 1000 * 60 * 5, // Stay fresh for 5 minutes
-  });
-
-  // Optimized messages query with real-time updates
-  const { 
-    data: messages = [],
-    isLoading: messagesLoading,
-    error: messagesError
-  } = useQuery({
-    queryKey: ['messages', selectedConversation],
-    queryFn: async () => {
-      if (!selectedConversation) return [];
       
-      console.log('useMessages: Fetching messages for conversation:', selectedConversation);
+      setConversations(filteredData);
+    } catch (err) {
+      console.error('Error fetching conversations:', err);
+      setError('Failed to load conversations');
+    }
+  };
+
+  const fetchMessages = async (conversationId: string) => {
+    try {
+      setLoading(true);
       const { data: messagesData, error: messagesError } = await supabase
         .from('messages')
         .select(`
@@ -54,56 +46,34 @@ export function useMessages() {
             role
           )
         `)
-        .eq('conversation_id', selectedConversation)
+        .eq('conversation_id', conversationId)
         .order('created_at', { ascending: true });
 
       if (messagesError) throw messagesError;
 
-      return messagesData.map((message: any) => ({
+      const messagesWithProfiles = messagesData.map((message: any) => ({
         ...message,
         profile: message.profiles
       })) as MessageWithProfile[];
-    },
-    enabled: !!selectedConversation,
-  });
 
-  // Set up real-time subscription
+      setMessages(messagesWithProfiles);
+    } catch (err) {
+      console.error('Error fetching messages:', err);
+      setError('Failed to load messages');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    if (!selectedConversation) return;
+    fetchConversations();
+  }, []);
 
-    console.log('useMessages: Setting up real-time subscription');
-    const channel = supabase
-      .channel('messages-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'messages',
-          filter: `conversation_id=eq.${selectedConversation}`
-        },
-        (payload) => {
-          console.log('useMessages: Received real-time update:', payload);
-          queryClient.invalidateQueries({ queryKey: ['messages', selectedConversation] });
-        }
-      )
-      .subscribe();
-
-    return () => {
-      console.log('useMessages: Cleaning up real-time subscription');
-      supabase.removeChannel(channel);
-    };
-  }, [selectedConversation, queryClient]);
-
-  const error = useMemo(() => 
-    conversationsError || messagesError, 
-    [conversationsError, messagesError]
-  );
-
-  const loading = useMemo(() => 
-    conversationsLoading || messagesLoading, 
-    [conversationsLoading, messagesLoading]
-  );
+  useEffect(() => {
+    if (selectedConversation) {
+      fetchMessages(selectedConversation);
+    }
+  }, [selectedConversation]);
 
   return {
     messages,
@@ -111,6 +81,7 @@ export function useMessages() {
     selectedConversation,
     setSelectedConversation,
     loading,
-    error
+    error,
+    fetchMessages
   };
 }

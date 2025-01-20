@@ -8,11 +8,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 const Hero = () => {
   const navigate = useNavigate();
-  const isMobile = useIsMobile();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -29,28 +27,8 @@ const Hero = () => {
     visible: { opacity: 1, y: 0 }
   };
 
-  const services = [
-    {
-      title: "AI Business Suite",
-      description: "Custom websites, CRM & automation"
-    },
-    {
-      title: "Business Process AI",
-      description: "90% workflow automation"
-    },
-    {
-      title: "Precision Systems",
-      description: "Engineering-grade calculations"
-    },
-    {
-      title: "Healthcare Suite",
-      description: "HIPAA & FHIR compliant"
-    }
-  ];
-
   return (
     <div className="relative min-h-[90vh] flex items-center justify-center pt-8 overflow-hidden">
-      {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div 
           initial={{ opacity: 0 }}
@@ -58,7 +36,43 @@ const Hero = () => {
           transition={{ duration: 1.5 }}
           className="absolute inset-0 bg-gradient-to-br from-primary/30 via-accent to-secondary/20" 
         />
-        <div className="absolute inset-0 bg-grid-white/5 bg-[size:50px_50px] bg-opacity-20" />
+        <motion.div 
+          animate={{ 
+            rotate: [0, 360],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{ 
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute top-1/4 -right-20 w-[500px] h-[500px] bg-primary/20 rounded-[20%] blur-3xl transform"
+        />
+        <motion.div 
+          animate={{ 
+            rotate: [0, -360],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{ 
+            duration: 25,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute -bottom-32 -left-40 w-[600px] h-[600px] bg-secondary/20 rounded-[30%] blur-3xl transform"
+        />
+        <motion.div 
+          animate={{ 
+            rotate: [0, 360],
+            scale: [1, 1.15, 1],
+          }}
+          transition={{ 
+            duration: 30,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-accent/10 rounded-[25%] blur-3xl transform"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(45deg,#4f4f4f2e_1px,transparent_1px)] bg-[size:50px_50px] bg-opacity-20 transform rotate-45" />
       </div>
 
       <motion.div 
@@ -67,107 +81,176 @@ const Hero = () => {
         animate="visible"
         className="container mx-auto px-4 relative z-10"
       >
-        <div className="text-center max-w-4xl mx-auto space-y-8">
-          {/* Badge */}
-          <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-6">
-            <Sparkles className="w-4 h-4 text-secondary" />
-            <span className="text-sm text-gray-300">From Premium Websites to Enterprise SaaS Solutions</span>
-          </motion.div>
-          
-          {/* Title */}
-          <motion.h1 variants={itemVariants} className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            Building{" "}
-            <span className="relative">
-              <span className="bg-gradient-to-r from-secondary via-primary to-secondary bg-clip-text text-transparent">
-                AI-Powered
-              </span>
-            </span>{" "}
-            Solutions
-          </motion.h1>
-          
-          {/* Description */}
-          <motion.p variants={itemVariants} className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
-            <span className="block backdrop-blur-sm p-6 rounded-xl bg-accent/5 border border-accent/10">
-              We build{" "}
-              <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-secondary via-primary to-secondary">
-                20x faster
-              </span>{" "}
-              than traditional methods, turning ideas into production-ready solutions at lightspeed.
-            </span>
-          </motion.p>
-          
-          {/* Action Buttons */}
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-8">
-            <Button
-              size="lg"
-              className="group relative bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 min-w-[200px]"
-              onClick={() => navigate('/start-project')}
+        <div className="text-center max-w-4xl mx-auto">
+          <div className="space-y-8">
+            <motion.div 
+              variants={itemVariants}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/30 backdrop-blur-sm border border-accent/10 mb-6 shadow-lg hover:shadow-xl transition-shadow relative before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-r before:from-white/5 before:to-transparent before:rotate-45"
+              style={{
+                transform: "perspective(1000px) rotateX(2deg)",
+                boxShadow: "0 8px 16px -4px rgba(0,0,0,0.2), 0 0 8px -2px rgba(255,255,255,0.1)"
+              }}
             >
-              Start Building
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
+              <Sparkles className="w-4 h-4 text-secondary animate-pulse" />
+              <span className="text-sm text-gray-300">From Premium Websites to Enterprise SaaS Solutions</span>
+            </motion.div>
             
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => document.getElementById("services")?.scrollIntoView({ behavior: 'smooth' })}
-              className="border-gray-500 hover:border-white min-w-[200px]"
+            <motion.h1 
+              variants={itemVariants}
+              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-2xl relative"
+              style={{
+                textShadow: "0 4px 8px rgba(0,0,0,0.2)"
+              }}
             >
-              Explore Solutions
-            </Button>
-          </motion.div>
-
-          {/* Services Grid */}
-          <motion.div variants={itemVariants} className="mt-16">
-            <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2 md:grid-cols-4'} gap-4`}>
-              {services.map((service) => (
-                <motion.div
-                  key={service.title}
-                  whileHover={{ scale: 1.05 }}
-                  className="p-6 rounded-xl bg-accent/10 backdrop-blur-sm border border-accent/20 hover:bg-accent/20 transition-all"
+              Building{" "}
+              <span className="relative">
+                <motion.span 
+                  animate={{ 
+                    opacity: [0.2, 0.5, 0.2],
+                  }}
+                  transition={{ 
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="absolute -inset-1 blur-xl bg-gradient-to-r from-secondary via-primary to-secondary"
+                />
+                <span className="relative bg-gradient-to-r from-secondary via-primary to-secondary bg-clip-text text-transparent">
+                  AI-Powered
+                </span>
+              </span>{" "}
+              Solutions
+            </motion.h1>
+            
+            <motion.p 
+              variants={itemVariants}
+              className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto relative"
+              style={{
+                transform: "perspective(1000px) rotateX(1deg)",
+              }}
+            >
+              <span className="block backdrop-blur-sm p-6 rounded-xl bg-accent/5 shadow-[0_8px_16px_-6px_rgba(0,0,0,0.2),0_0_12px_-2px_rgba(255,255,255,0.1)] border border-accent/10 relative before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/10 before:to-transparent before:rounded-xl">
+                <motion.span 
+                  className="inline-block font-semibold text-transparent bg-clip-text bg-gradient-to-r from-secondary via-primary to-secondary relative"
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    filter: ["brightness(1)", "brightness(1.3)", "brightness(1)"],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  style={{
+                    textShadow: "0 2px 4px rgba(0,0,0,0.1)"
+                  }}
                 >
-                  <h3 className="text-lg font-semibold text-white mb-2">{service.title}</h3>
-                  <p className="text-sm text-gray-300">{service.description}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+                  We build 20x faster
+                </motion.span>{" "}
+                than traditional methods, turning ideas into production-ready solutions at lightspeed.
+              </span>
+            </motion.p>
+            
+            <motion.div 
+              variants={itemVariants}
+              className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-8"
+            >
+              <Button
+                size="lg"
+                className="group relative overflow-hidden bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300 transform hover:scale-105 min-w-[200px] shadow-[0_8px_16px_-6px_rgba(0,0,0,0.3)] hover:shadow-[0_12px_24px_-8px_rgba(0,0,0,0.4)] before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/20 before:to-transparent"
+                onClick={() => navigate('/start-project')}
+                style={{
+                  transform: "perspective(1000px) rotateX(1deg)",
+                }}
+              >
+                Start Building
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => document.getElementById("services")?.scrollIntoView({ behavior: 'smooth' })}
+                className="border-gray-500 hover:border-white transition-colors min-w-[200px] backdrop-blur-sm shadow-lg hover:shadow-xl relative before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/10 before:to-transparent before:rounded-lg"
+                style={{
+                  transform: "perspective(1000px) rotateX(1deg)",
+                }}
+              >
+                Explore Solutions
+              </Button>
+            </motion.div>
 
-          {/* Capabilities Accordion */}
-          <motion.div variants={itemVariants}>
-            <Accordion type="single" collapsible className="w-full backdrop-blur-sm">
-              <AccordionItem value="capabilities" className="border-accent/20">
-                <AccordionTrigger className="text-gray-300 hover:text-white px-6">
-                  <span className="flex items-center gap-2">
-                    <ChevronDown className="h-4 w-4" />
-                    View All Capabilities
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent className="px-6 pb-4">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-gray-400">
-                    {[
-                      "Custom Websites & CRM",
-                      "AI Workflow Automation",
-                      "Technical Calculations",
-                      "HIPAA Compliance",
-                      "Zoom Integration",
-                      "Multi-Agent Systems",
-                      "Legal & Finance AI",
-                      "FHIR Integration"
-                    ].map((capability) => (
-                      <motion.div
-                        key={capability}
-                        whileHover={{ scale: 1.05 }}
-                        className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-all border border-accent/10"
-                      >
-                        • {capability}
-                      </motion.div>
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </motion.div>
+            <motion.div 
+              variants={itemVariants}
+              className="mt-16 max-w-5xl mx-auto"
+            >
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                {[
+                  {
+                    title: "AI Business Suite",
+                    description: "Custom websites, CRM & automation"
+                  },
+                  {
+                    title: "Business Process AI",
+                    description: "90% workflow automation"
+                  },
+                  {
+                    title: "Precision Systems",
+                    description: "Engineering-grade calculations"
+                  },
+                  {
+                    title: "Healthcare Suite",
+                    description: "HIPAA & FHIR compliant"
+                  }
+                ].map((service, index) => (
+                  <motion.div
+                    key={service.title}
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="p-6 rounded-xl bg-accent/10 backdrop-blur-sm border border-accent/20 hover:bg-accent/20 transition-all duration-300 shadow-lg hover:shadow-xl relative overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent" />
+                    <h3 className="text-lg font-semibold text-white mb-2 relative z-10">{service.title}</h3>
+                    <p className="text-sm text-gray-300 relative z-10">{service.description}</p>
+                  </motion.div>
+                ))}
+              </div>
+
+              <Accordion type="single" collapsible className="w-full backdrop-blur-sm">
+                <AccordionItem value="capabilities" className="border-accent/20 rounded-xl shadow-lg hover:shadow-xl transition-shadow bg-accent/5">
+                  <AccordionTrigger className="text-gray-300 hover:text-white px-6">
+                    <span className="flex items-center gap-2">
+                      <ChevronDown className="h-4 w-4" />
+                      View All Capabilities
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-6 pb-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-gray-400">
+                      {[
+                        "Custom Websites & CRM",
+                        "AI Workflow Automation",
+                        "Technical Calculations",
+                        "HIPAA Compliance",
+                        "Zoom Integration",
+                        "Multi-Agent Systems",
+                        "Legal & Finance AI",
+                        "FHIR Integration"
+                      ].map((capability, index) => (
+                        <motion.div
+                          key={capability}
+                          whileHover={{ scale: 1.05, y: -2 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="p-3 rounded-lg bg-accent/10 hover:bg-accent/20 transition-all duration-300 shadow-md hover:shadow-lg border border-accent/10"
+                        >
+                          • {capability}
+                        </motion.div>
+                      ))}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </motion.div>
+          </div>
         </div>
       </motion.div>
     </div>

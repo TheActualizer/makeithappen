@@ -1,25 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { MessageCircle, X } from "lucide-react";
 import { SheetTrigger } from "@/components/ui/sheet";
 import { motion, AnimatePresence } from "framer-motion";
-import { useModalStore } from '@/stores/modalStore';
 
 const ChatButton = () => {
-  const { activeModal, setActiveModal, closeModal } = useModalStore();
-  const isOpen = activeModal === 'chat';
+  const [isOpen, setIsOpen] = useState(false);
+  const [showSparkle, setShowSparkle] = useState(false);
 
-  const handleClick = () => {
-    if (isOpen) {
-      closeModal();
-    } else {
-      setActiveModal('chat');
-    }
-  };
+  useEffect(() => {
+    setShowSparkle(true);
+    const timer = setTimeout(() => {
+      setShowSparkle(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
-      <SheetTrigger asChild onClick={handleClick}>
+      <SheetTrigger asChild onClick={() => setIsOpen(!isOpen)}>
         <motion.div
           initial={false}
           animate={{
@@ -54,7 +54,7 @@ const ChatButton = () => {
             </motion.div>
           </Button>
           <AnimatePresence>
-            {!isOpen && (
+            {showSparkle && !isOpen && (
               <motion.div
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}

@@ -1,144 +1,50 @@
-import { useEffect, useState, Suspense } from "react";
-import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import ServicesShowcase from "@/components/ServicesShowcase";
+import { ServicesShowcase } from "@/components/ServicesShowcase";
 import DifyChat from "@/components/chat/DifyChat";
-import SkipToContent from "@/components/SkipToContent";
-import ZoomConnect from "@/components/ZoomConnect";
-import { ProfileMetadata } from "@/components/profile/ProfileMetadata";
-import { InfrastructureMetrics } from "@/components/dashboard/InfrastructureMetrics";
-import { UnitySystemDashboard } from "@/components/unity/UnitySystemDashboard";
-import { UnityAgentDashboard } from "@/components/unity/UnityAgentDashboard";
-import { Activity, Cloud, Database, Shield, Command, Grid3X3, Users, Settings } from "lucide-react";
-import { Card } from "@/components/ui/card";
-
-const systemStats = [
-  {
-    icon: <Activity className="w-5 h-5 text-emerald-400" />,
-    label: "System Status",
-    value: "All Systems Operational",
-    bgColor: "bg-emerald-500/10",
-    borderColor: "border-emerald-500/20"
-  },
-  {
-    icon: <Cloud className="w-5 h-5 text-blue-400" />,
-    label: "Cloud Resources",
-    value: "24 Active Instances",
-    bgColor: "bg-blue-500/10",
-    borderColor: "border-blue-500/20"
-  },
-  {
-    icon: <Database className="w-5 h-5 text-purple-400" />,
-    label: "Data Processing",
-    value: "1.2TB Processed",
-    bgColor: "bg-purple-500/10",
-    borderColor: "border-purple-500/20"
-  }
-];
-
-const navigationItems = [
-  { icon: <Command className="w-5 h-5" />, label: "Command Center" },
-  { icon: <Grid3X3 className="w-5 h-5" />, label: "System Analysis" },
-  { icon: <Users className="w-5 h-5" />, label: "Agent Coordination" },
-  { icon: <Shield className="w-5 h-5" />, label: "Security" },
-  { icon: <Settings className="w-5 h-5" />, label: "Settings" }
-];
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const Index = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-    setIsLoaded(true);
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-accent via-accent/95 to-primary/20">
-      <SkipToContent />
       <Navbar />
       
-      <main id="main-content" tabIndex={-1}>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isLoaded ? 1 : 0 }}
-          transition={{ duration: 0.5 }}
-          className="container mx-auto px-4 py-8"
-        >
-          <div className="flex justify-end mb-4">
-            <ZoomConnect />
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
-            {systemStats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className={`p-6 rounded-xl border ${stat.borderColor} ${stat.bgColor} backdrop-blur-lg`}
-              >
-                <div className="flex items-center gap-4">
-                  <div className="p-2 rounded-lg bg-white/10">
-                    {stat.icon}
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-200">{stat.label}</h3>
-                    <p className="text-lg font-semibold text-white">{stat.value}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="mb-8">
-            <InfrastructureMetrics />
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-            <div className="lg:col-span-2">
-              <UnitySystemDashboard />
-            </div>
-
-            <div className="space-y-6">
-              <Card className="p-6">
-                <h2 className="text-xl font-semibold mb-4">Unity Agent Status</h2>
-                <UnityAgentDashboard />
-              </Card>
-              <Suspense fallback={
-                <div className="w-full h-64 flex items-center justify-center">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full"
-                  />
-                </div>
-              }>
-                <ServicesShowcase />
-              </Suspense>
-            </div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex justify-center gap-4 p-4 rounded-xl bg-accent/10 backdrop-blur-lg border border-accent/20"
+      <motion.main 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="relative mx-auto px-4 sm:px-6 lg:px-8"
+      >
+        <div className="space-y-24 pb-24">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="pt-20 lg:pt-24"
           >
-            {navigationItems.map((item, index) => (
-              <motion.button
-                key={item.label}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1 }}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white/10 text-white transition-colors"
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </motion.button>
-            ))}
+            <Hero />
           </motion.div>
-        </motion.div>
-      </main>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="mx-auto max-w-7xl"
+          >
+            <ServicesShowcase />
+          </motion.div>
+        </div>
+      </motion.main>
 
       <DifyChat />
     </div>
@@ -146,4 +52,3 @@ const Index = () => {
 };
 
 export default Index;
-

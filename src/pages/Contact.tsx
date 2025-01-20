@@ -1,10 +1,7 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import Navbar from '@/components/Navbar';
-import { ContactForm } from '@/components/contact/ContactForm';
-import { SpaceshipCallBeacon } from '@/components/contact/SpaceshipCallBeacon';
-import VoiceInterface from '@/components/contact/VoiceInterface';
-import { Toaster } from 'sonner';
+import { motion } from "framer-motion";
+import Navbar from "@/components/Navbar";
+import { ContactForm } from "@/components/contact/ContactForm";
+import { Toaster } from "sonner";
 
 const Contact = () => {
   const containerVariants = {
@@ -30,39 +27,101 @@ const Contact = () => {
     },
   };
 
+  const floatingVariants = {
+    initial: { y: 0 },
+    animate: {
+      y: [-10, 10],
+      transition: {
+        duration: 4,
+        repeat: Infinity,
+        repeatType: "mirror" as const,
+        ease: "easeInOut",
+      },
+    },
+  };
+
+  // Generate random stars with enhanced animation properties
+  const stars = Array.from({ length: 100 }, (_, i) => ({
+    id: i,
+    size: Math.random() * 3 + 1, // Larger stars
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    duration: Math.random() * 8 + 5, // Longer duration for base animation
+    shimmerDelay: Math.random() * 10, // Varied delays for shimmer effect
+  }));
+
   return (
     <motion.div 
-      className="min-h-screen bg-gradient-to-br from-[#7E69AB] via-[#6E59A5]/95 to-[#33C3F0]/20"
+      className="min-h-screen bg-accent overflow-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
       <Navbar />
       <motion.div 
-        className="container mx-auto px-4 pt-24 pb-12 space-y-12"
+        className="container mx-auto px-4 pt-24 pb-12"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        {/* Beacon Section */}
-        <motion.div variants={itemVariants}>
-          <SpaceshipCallBeacon />
-        </motion.div>
+        <div className="max-w-2xl mx-auto relative">
+          {/* Fixed stars background with gradient overlay */}
+          <div className="fixed inset-0 -z-10 bg-gradient-to-b from-accent to-accent/95">
+            {stars.map((star) => (
+              <motion.div
+                key={star.id}
+                className="absolute rounded-full bg-white"
+                style={{
+                  width: star.size,
+                  height: star.size,
+                  left: `${star.x}%`,
+                  top: `${star.y}%`,
+                }}
+                animate={{
+                  opacity: [0.4, 1, 0.4],
+                  scale: [1, 1.2, 1],
+                  filter: [
+                    "brightness(1)",
+                    "brightness(1.5)",
+                    "brightness(1)",
+                  ],
+                }}
+                transition={{
+                  duration: star.duration,
+                  repeat: Infinity,
+                  delay: star.shimmerDelay,
+                  ease: "easeInOut",
+                }}
+              />
+            ))}
+          </div>
 
-        {/* Contact Form Section */}
-        <motion.div variants={itemVariants} className="max-w-2xl mx-auto">
-          <div className="text-center mb-12">
+          {/* Decorative elements */}
+          <motion.div
+            className="absolute -left-20 -top-20 w-40 h-40 bg-primary/10 rounded-full blur-3xl"
+            variants={floatingVariants}
+            initial="initial"
+            animate="animate"
+          />
+          <motion.div
+            className="absolute -right-20 -bottom-20 w-40 h-40 bg-secondary/10 rounded-full blur-3xl"
+            variants={floatingVariants}
+            initial="initial"
+            animate="animate"
+          />
+
+          <div className="text-center mb-12 relative">
             <motion.h1 
-              className="text-4xl font-bold text-[#F1F0FB] mb-4"
+              className="text-4xl font-bold text-white mb-4 relative z-10"
               variants={itemVariants}
             >
-              Let's Connect Across the Stars
+              Let's Innovate Together
             </motion.h1>
             <motion.p 
-              className="text-[#D6BCFA]"
+              className="text-gray-300"
               variants={itemVariants}
             >
-              Send a transmission or initiate a direct communication link
+              Reach out to start your rapid transformation journey
             </motion.p>
           </div>
 
@@ -70,12 +129,12 @@ const Contact = () => {
             variants={itemVariants}
             whileHover={{ scale: 1.01 }}
             transition={{ duration: 0.2 }}
+            className="relative z-10"
           >
             <ContactForm />
           </motion.div>
-        </motion.div>
+        </div>
       </motion.div>
-      <VoiceInterface />
       <Toaster />
     </motion.div>
   );

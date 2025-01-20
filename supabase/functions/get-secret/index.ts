@@ -15,40 +15,19 @@ serve(async (req) => {
     const { name } = await req.json()
     
     if (!name) {
-      console.error('Secret name is required')
-      return new Response(
-        JSON.stringify({ 
-          error: 'Secret name is required',
-          value: null 
-        }),
-        { 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          status: 400
-        }
-      )
+      throw new Error('Secret name is required')
     }
 
     console.log('Fetching secret:', name)
     const value = Deno.env.get(name)
 
     if (!value) {
-      console.error(`Secret ${name} not found`)
-      return new Response(
-        JSON.stringify({ 
-          error: `Secret ${name} not found`,
-          value: null 
-        }),
-        { 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          status: 404
-        }
-      )
+      throw new Error(`Secret ${name} not found`)
     }
 
     console.log('Secret found for:', name)
     return new Response(
       JSON.stringify({ 
-        error: null,
         value: value 
       }),
       { 
@@ -60,12 +39,11 @@ serve(async (req) => {
     console.error('Error in get-secret function:', error)
     return new Response(
       JSON.stringify({ 
-        error: error.message,
-        value: null 
+        error: error.message 
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500
+        status: 500 
       }
     )
   }

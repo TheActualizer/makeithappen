@@ -1,10 +1,4 @@
 project_id = "kmakgvgtduxtactdiwyp"
 
-[functions.zoom-webhook]
-verify_jwt = false
-
-[functions.send-consultation-email]
-verify_jwt = false
-
-[functions.zoom-oauth-callback]
+[functions.airtable-sync]
 verify_jwt = false

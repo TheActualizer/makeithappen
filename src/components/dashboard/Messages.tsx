@@ -13,6 +13,7 @@ export const Messages = () => {
     messages,
     selectedConversation,
     setSelectedConversation,
+    fetchMessages,
     loading
   } = useMessages();
 
@@ -22,8 +23,9 @@ export const Messages = () => {
     isLoading: sendingMessage,
     sendMessage
   } = useMessageSender(selectedConversation, () => {
-    // Refresh messages will be handled by real-time subscription
-    console.log('Message sent, real-time updates will refresh the messages');
+    if (selectedConversation) {
+      fetchMessages(selectedConversation);
+    }
   });
 
   const selectConversation = (conversationId: string) => {
