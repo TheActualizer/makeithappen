@@ -20,6 +20,7 @@ import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { Button } from "@/components/ui/button";
 import ProjectStartModal from "@/components/ProjectStartModal";
 import { useNavigate } from "react-router-dom";
+import { Card } from "@/components/ui/card";
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -163,3 +164,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

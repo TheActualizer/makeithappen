@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { Link2, ArrowUp } from "lucide-react";
@@ -6,147 +6,46 @@ import { Button } from "@/components/ui/button";
 import { sendMessageToDify } from '@/utils/difyApi';
 import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/integrations/supabase/client';
+import { useChatStore } from '@/stores/chatStore';
 
 const ChatInput = () => {
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const [conversationId] = useState(() => uuidv4());
-
-  useEffect(() => {
-    const createConversation = async () => {
-      console.log('ChatInput: Creating new conversation');
-      const { data: existingConv, error: checkError } = await supabase
-        .from('conversations')
-        .select('id')
-        .eq('id', conversationId)
-        .maybeSingle();
-
-      if (checkError) {
-        console.error('ChatInput: Error checking existing conversation:', checkError);
-      }
-
-      if (!existingConv) {
-        console.log('ChatInput: No existing conversation found, creating new one...');
-        const { error: createError } = await supabase
-          .from('conversations')
-          .insert([
-            {
-              id: conversationId,
-              title: 'New Conversation',
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString(),
-              provider: 'dify'
-            }
-          ]);
-
-        if (createError) {
-          console.error('ChatInput: Error creating conversation:', createError);
-          return;
-        }
-        console.log('ChatInput: Conversation created successfully with ID:', conversationId);
-      } else {
-        console.log('ChatInput: Found existing conversation:', existingConv.id);
-      }
-    };
-
-    createConversation();
-  }, [conversationId]);
+  const conversationId = useChatStore(state => state.conversationId);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('ChatInput: Send message triggered', { 
-      messageLength: newMessage.length,
-      conversationId,
-      isLoading 
-    });
-    
-    if (!newMessage.trim() || isLoading) {
-      console.log('ChatInput: Send prevented - empty message or loading state', {
-        isEmpty: !newMessage.trim(),
-        isLoading
-      });
-      return;
-    }
+    if (!newMessage.trim() || isLoading) return;
 
     setIsLoading(true);
     const messageContent = newMessage.trim();
-    const timestamp = new Date().toISOString();
     
     try {
-      // Clear input immediately for better UX
       setNewMessage('');
       
-      console.log('ChatInput: Storing user message in Supabase', {
-        conversationId,
-        messageLength: messageContent.length,
-        timestamp
-      });
-
-      const { data: messageData, error: messageError } = await supabase
+      const { error: messageError } = await supabase
         .from('messages')
-        .insert([
-          {
-            conversation_id: conversationId,
-            content: messageContent,
-            type: 'text',
-            is_admin_message: false,
-            created_at: timestamp,
-            updated_at: timestamp
-          }
-        ])
-        .select()
-        .single();
+        .insert([{
+          conversation_id: conversationId,
+          content: messageContent,
+          type: 'text',
+          is_admin_message: false,
+        }]);
 
-      if (messageError) {
-        console.error('ChatInput: Error storing message:', messageError);
-        throw messageError;
-      }
+      if (messageError) throw messageError;
 
-      console.log('ChatInput: Message stored successfully:', {
-        messageId: messageData.id,
-        timestamp: messageData.created_at
-      });
-
-      console.log('ChatInput: Sending message to Dify', {
-        messageLength: messageContent.length,
-        conversationId
-      });
-      
       const difyResponse = await sendMessageToDify(messageContent, conversationId);
-      console.log('ChatInput: Dify response received:', {
-        hasAnswer: !!difyResponse.answer,
-        responseLength: difyResponse.answer?.length
-      });
-
-      // Store AI response
+      
       if (difyResponse.answer) {
-        const aiTimestamp = new Date().toISOString();
-        console.log('ChatInput: Storing AI response in Supabase', {
-          conversationId,
-          responseLength: difyResponse.answer.length,
-          timestamp: aiTimestamp
-        });
-
-        const { error: aiError } = await supabase
+        await supabase
           .from('messages')
-          .insert([
-            {
-              conversation_id: conversationId,
-              content: difyResponse.answer,
-              type: 'ai',
-              is_admin_message: true,
-              created_at: aiTimestamp,
-              updated_at: aiTimestamp
-            }
-          ]);
-
-        if (aiError) {
-          console.error('ChatInput: Error storing AI response:', aiError);
-          throw aiError;
-        }
-        
-        console.log('ChatInput: AI response stored successfully');
+          .insert([{
+            conversation_id: conversationId,
+            content: difyResponse.answer,
+            type: 'ai',
+            is_admin_message: true,
+          }]);
       }
 
       toast({
@@ -155,8 +54,7 @@ const ChatInput = () => {
       });
 
     } catch (error) {
-      console.error('ChatInput: Error in send message flow:', error);
-      // Only restore message on error
+      console.error('Error:', error);
       setNewMessage(messageContent);
       toast({
         variant: "destructive",
@@ -165,7 +63,6 @@ const ChatInput = () => {
       });
     } finally {
       setIsLoading(false);
-      console.log('ChatInput: Message flow completed');
     }
   };
 
@@ -180,10 +77,7 @@ const ChatInput = () => {
     <div className="relative">
       <Textarea
         value={newMessage}
-        onChange={(e) => {
-          console.log('ChatInput: Input changed:', e.target.value);
-          setNewMessage(e.target.value);
-        }}
+        onChange={(e) => setNewMessage(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Ask me anything..."
         className="min-h-[60px] w-full pr-20 bg-white/5 border-white/10 focus:ring-purple-400/30 resize-none rounded-lg placeholder-purple-200/40 text-purple-100"
