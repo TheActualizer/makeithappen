@@ -56,8 +56,8 @@ export default defineConfig(({ mode }) => ({
       }
     }),
     viteCompression({
-      algorithm: 'br', // Changed from 'brotli' to 'br'
-      ext: '.br'
+      algorithm: 'gzip', // Changed to 'gzip' which is a valid algorithm type
+      ext: '.gz'
     })
   ].filter(Boolean),
   resolve: {
