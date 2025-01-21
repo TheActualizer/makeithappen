@@ -18,71 +18,16 @@ const LoadingSpinner = () => (
 const PageTransition = ({ children }: PageTransitionProps) => {
   const location = useLocation();
 
-  // Preload adjacent routes
   useEffect(() => {
     const preloadAdjacentRoutes = async () => {
-      const routes = ['/about', '/blog', '/contact', '/services'];
-      const currentIndex = routes.indexOf(location.pathname);
-      
-      if (currentIndex !== -1) {
-        try {
-          // Load current route
-          switch (location.pathname) {
-            case '/about':
-              await import('../pages/About');
-              break;
-            case '/blog':
-              await import('../pages/Blog');
-              break;
-            case '/contact':
-              await import('../pages/Contact');
-              break;
-            case '/services':
-              await import('../pages/Services');
-              break;
-            case '/':
-              await import('../pages/Index');
-              break;
-          }
-          
-          // Load adjacent routes
-          const nextRoute = routes[(currentIndex + 1) % routes.length];
-          const prevRoute = routes[(currentIndex - 1 + routes.length) % routes.length];
-          
-          // Preload next route
-          switch (nextRoute) {
-            case '/about':
-              await import('../pages/About');
-              break;
-            case '/blog':
-              await import('../pages/Blog');
-              break;
-            case '/contact':
-              await import('../pages/Contact');
-              break;
-            case '/services':
-              await import('../pages/Services');
-              break;
-          }
-          
-          // Preload previous route
-          switch (prevRoute) {
-            case '/about':
-              await import('../pages/About');
-              break;
-            case '/blog':
-              await import('../pages/Blog');
-              break;
-            case '/contact':
-              await import('../pages/Contact');
-              break;
-            case '/services':
-              await import('../pages/Services');
-              break;
-          }
-        } catch (error) {
-          console.error('Error preloading routes:', error);
+      try {
+        // Preload current route
+        if (location.pathname === '/blog') {
+          await import('../pages/Blog');
+          console.log('Blog page preloaded successfully');
         }
+      } catch (error) {
+        console.error('Error preloading routes:', error);
       }
     };
 

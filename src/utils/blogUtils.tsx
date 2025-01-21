@@ -1,7 +1,9 @@
 import React from 'react';
-import { BookOpen, TrendingUp, Building2, Scale, Brain, 
-  Wrench, Database, FileCode, Workflow, Heart, 
-  Github, Rocket } from "lucide-react";
+import { 
+  BookOpen, TrendingUp, Building2, Scale, Brain,
+  Wrench, Database, FileCode, Workflow, Heart,
+  Github, Rocket 
+} from "lucide-react";
 
 export const getCategoryIcon = (slug: string) => {
   const icons: Record<string, JSX.Element> = {
