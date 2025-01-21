@@ -21,18 +21,38 @@ const PageTransition = ({ children }: PageTransitionProps) => {
 
   // Preload adjacent routes
   useEffect(() => {
-    const preloadAdjacentRoutes = () => {
+    const preloadAdjacentRoutes = async () => {
       const routes = ['/about', '/blog', '/contact', '/services'];
       const currentIndex = routes.indexOf(location.pathname);
       
-      // Preload next and previous routes
       if (currentIndex !== -1) {
         const nextRoute = routes[(currentIndex + 1) % routes.length];
         const prevRoute = routes[(currentIndex - 1 + routes.length) % routes.length];
         
-        // Prefetch components
-        import(`@/pages${nextRoute === '/' ? '/Index' : nextRoute}.tsx`);
-        import(`@/pages${prevRoute === '/' ? '/Index' : prevRoute}.tsx`);
+        try {
+          // Use more specific dynamic imports that Vite can understand
+          if (nextRoute === '/about') {
+            await import('@/pages/About');
+          } else if (nextRoute === '/blog') {
+            await import('@/pages/Blog');
+          } else if (nextRoute === '/contact') {
+            await import('@/pages/Contact');
+          } else if (nextRoute === '/services') {
+            await import('@/pages/Services');
+          }
+
+          if (prevRoute === '/about') {
+            await import('@/pages/About');
+          } else if (prevRoute === '/blog') {
+            await import('@/pages/Blog');
+          } else if (prevRoute === '/contact') {
+            await import('@/pages/Contact');
+          } else if (prevRoute === '/services') {
+            await import('@/pages/Services');
+          }
+        } catch (error) {
+          console.error('Error preloading routes:', error);
+        }
       }
     };
 
