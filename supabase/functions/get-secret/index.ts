@@ -12,38 +12,47 @@ serve(async (req) => {
   }
 
   try {
+    // Parse the request body
     const { name } = await req.json()
     
     if (!name) {
       throw new Error('Secret name is required')
     }
 
-    console.log('Fetching secret:', name)
+    console.log(`Fetching secret: ${name}`)
     const value = Deno.env.get(name)
 
     if (!value) {
-      throw new Error(`Secret ${name} not found`)
+      console.error(`Secret ${name} not found`)
+      return new Response(
+        JSON.stringify({ 
+          error: `Secret ${name} not found` 
+        }), 
+        { 
+          status: 404,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      )
     }
 
-    console.log('Secret found for:', name)
+    console.log(`Successfully retrieved secret: ${name}`)
     return new Response(
-      JSON.stringify({ 
-        value: value 
-      }),
+      JSON.stringify({ value }), 
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200 
       }
     )
+
   } catch (error) {
-    console.error('Error in get-secret function:', error)
+    console.error('Error in get-secret function:', error.message)
     return new Response(
       JSON.stringify({ 
         error: error.message 
-      }),
+      }), 
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500 
+        status: 400
       }
     )
   }
