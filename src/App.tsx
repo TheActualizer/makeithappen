@@ -24,7 +24,8 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: 5 * 60 * 1000,
       retry: 1,
-      suspense: true, // Enable suspense mode
+      // Remove suspense option as it's not needed here
+      // The Suspense component in PageTransition will handle loading states
     },
   },
 });
