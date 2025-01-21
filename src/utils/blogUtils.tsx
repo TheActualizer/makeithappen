@@ -1,3 +1,4 @@
+import React from 'react';
 import { BookOpen, TrendingUp, Building2, Scale, Brain, 
   Wrench, Database, FileCode, Workflow, Heart, 
   Github, Rocket } from "lucide-react";
@@ -17,5 +18,6 @@ export const getCategoryIcon = (slug: string) => {
     'rapid-prototyping': <Rocket className="w-8 h-8 text-primary" />,
     'manufacturing': <BookOpen className="w-8 h-8 text-primary" />
   };
+  
   return icons[slug] || <BookOpen className="w-8 h-8 text-primary" />;
 };
