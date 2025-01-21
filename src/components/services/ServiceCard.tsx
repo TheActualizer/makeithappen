@@ -10,7 +10,6 @@ interface Service {
   features: string[];
   metrics?: string;
   tags?: string[];
-  link?: string;
 }
 
 interface ServiceCardProps {
@@ -30,18 +29,7 @@ export const ServiceCard = ({ service }: ServiceCardProps) => {
           
           <div className="space-y-1 flex-1">
             <h3 className="font-semibold text-lg text-foreground group-hover:text-secondary transition-colors">
-              {service.link ? (
-                <a 
-                  href={service.link} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="hover:underline"
-                >
-                  {service.title}
-                </a>
-              ) : (
-                service.title
-              )}
+              {service.title}
             </h3>
             <p className="text-sm text-muted-foreground">
               {service.description}
