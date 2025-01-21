@@ -1,68 +1,98 @@
-import { Bot, Calculator, Scale, Stethoscope } from "lucide-react";
+import { 
+  Calculator, 
+  Map, 
+  Building2, 
+  MessageSquare, 
+  Search, 
+  Store, 
+  Settings, 
+  Users, 
+  LineChart 
+} from "lucide-react";
 
 export const services = [
   {
     id: 1,
-    title: "Digital Business Suite",
-    description: "Comprehensive digital transformation with custom websites, CRM integration, and intelligent automation.",
-    icon: Scale,
+    title: "Calculations & Analysis",
+    description: "Advanced engineering calculations and structural analysis",
+    icon: Calculator,
+    link: "https://ai-civil-engineer-calculations.lovable.app/",
     features: [
-      "Custom website development with AI-powered features",
-      "Advanced CRM with Zoom integration",
-      "Intelligent email automation workflows",
-      "Document processing and management",
-      "Meeting summaries and follow-up automation",
-      "Client portal with real-time updates"
+      "Structural calculations",
+      "Load analysis",
+      "Material specifications",
+      "Safety factor calculations"
     ],
-    tags: ["Website", "CRM", "Automation", "Integration"],
-    metrics: "Reduce manual tasks by 60%"
+    tags: ["Engineering", "Analysis", "Structural"]
   },
   {
     id: 2,
-    title: "Advanced Business Process Automation",
-    description: "Revolutionary AI agents that take over complex business processes with high accuracy.",
-    icon: Bot,
+    title: "Geospatial Services",
+    description: "Comprehensive mapping and spatial analysis solutions",
+    icon: Map,
+    link: "https://ai-civil-engineer-geo-spacial.lovable.app/",
     features: [
-      "Autonomous workflow orchestration",
-      "Multi-agent decision systems",
-      "Business process automation up to 90%",
-      "Intelligent document processing",
-      "Advanced data analysis and reporting",
-      "24/7 automated operations"
+      "GIS mapping",
+      "Spatial analysis",
+      "Site surveys",
+      "Terrain modeling"
     ],
-    tags: ["AI Agents", "Workflow", "Automation"],
-    metrics: "Up to 90% process automation"
+    tags: ["GIS", "Mapping", "Analysis"]
   },
   {
     id: 3,
-    title: "Professional Precision Systems",
-    description: "Engineering-grade calculation engines for professional services and technical industries.",
-    icon: Calculator,
+    title: "Property Dashboard",
+    description: "Complete property management and analysis platform",
+    icon: Building2,
+    link: "https://aicivilengineerpropertydashboard.lovable.app/",
     features: [
-      "Legal compliance analysis engines",
-      "Architectural computation systems",
-      "Financial modeling & risk assessment",
-      "Advanced accounting automation",
-      "Underwriting decision systems",
-      "Technical documentation generation"
+      "Property analytics",
+      "Maintenance tracking",
+      "Asset management",
+      "Performance metrics"
     ],
-    tags: ["Engineering", "Finance", "Legal", "Architecture"],
-    metrics: "99.9% calculation accuracy"
+    tags: ["Property", "Management", "Analytics"]
   },
   {
     id: 4,
-    title: "Healthcare Innovation Suite",
-    description: "HIPAA-compliant systems with FHIR integration and advanced privacy protocols.",
-    icon: Stethoscope,
+    title: "Messaging Platform",
+    description: "Real-time communication and collaboration tools",
+    icon: MessageSquare,
+    link: "https://aicivilengineermessaging.lovable.app/",
     features: [
-      "HIPAA-compliant infrastructure",
-      "FHIR integration framework",
-      "Advanced privacy protocols",
-      "Secure patient data management",
-      "Healthcare workflow automation",
-      "Compliance monitoring & reporting"
+      "Real-time chat",
+      "Project discussions",
+      "File sharing",
+      "Team collaboration"
     ],
-    tags: ["Healthcare", "HIPAA", "FHIR", "Privacy"],
-    metrics: "100% HIPAA compliance"
+    tags: ["Communication", "Collaboration"]
+  },
+  {
+    id: 5,
+    title: "Address Search",
+    description: "Advanced property and location search capabilities",
+    icon: Search,
+    link: "https://ai-civil-engineer-search-address.lovable.app/",
+    features: [
+      "Property lookup",
+      "Address verification",
+      "Location analytics",
+      "Spatial search"
+    ],
+    tags: ["Search", "Location", "Analytics"]
+  },
+  {
+    id: 6,
+    title: "Engineering Store",
+    description: "Professional engineering tools and resources",
+    icon: Store,
+    link: "https://o-5732.lovable.app",
+    features: [
+      "Engineering tools",
+      "Professional resources",
+      "Technical documentation",
+      "Software solutions"
+    ],
+    tags: ["Store", "Resources", "Tools"]
   }
 ];
