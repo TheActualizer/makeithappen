@@ -10,7 +10,7 @@ const Contact = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1, // Faster stagger
+        staggerChildren: 0.1,
         delayChildren: 0.1,
         type: "spring",
         stiffness: 500,
@@ -36,7 +36,7 @@ const Contact = () => {
     },
   };
 
-  // Optimized floating animation
+  // Optimized floating animation with correct type for repeatType
   const floatingVariants = {
     initial: { y: 0 },
     animate: {
@@ -44,8 +44,8 @@ const Contact = () => {
       transition: {
         duration: 2,
         repeat: Infinity,
-        repeatType: "mirror",
-        ease: "easeInOut",
+        repeatType: "mirror" as const, // Fixed type here
+        ease: "easeInOut"
       },
     },
   };
