@@ -11,6 +11,25 @@
     <link rel="apple-touch-icon" href="/pwa-192x192.png" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    
+    <!-- Performance optimizations -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta http-equiv="Cache-Control" content="max-age=31536000" />
+    <link rel="modulepreload" href="/src/main.tsx" />
+    
+    <!-- WebGL and hardware acceleration -->
+    <meta name="renderer" content="webkit" />
+    <meta name="force-rendering" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="HandheldFriendly" content="true" />
+    
+    <!-- PWA enhancement -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Lightspeed" />
+    <meta name="apple-mobile-web-app-title" content="Lightspeed" />
+    <meta name="msapplication-starturl" content="/" />
+    <meta name="msapplication-navbutton-color" content="#6D28D9" />
   </head>
   <body>
     <div id="root"></div>
@@ -20,11 +39,23 @@
           navigator.serviceWorker.register('/sw.js')
             .then(registration => {
               console.log('ServiceWorker registration successful');
+              registration.update();
             })
             .catch(err => {
               console.log('ServiceWorker registration failed: ', err);
             });
         });
+      }
+
+      // WebGL detection
+      try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+        if (!gl) {
+          console.warn('WebGL not supported. Using fallback renderer.');
+        }
+      } catch (e) {
+        console.error('Error initializing WebGL:', e);
       }
     </script>
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
