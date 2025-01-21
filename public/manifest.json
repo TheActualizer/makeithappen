@@ -1,12 +1,23 @@
 {
-  "name": "Lightspeed Prototyping",
-  "short_name": "Lightspeed",
-  "description": "AI-Powered Development Platform",
+  "name": "MakeITHappen",
+  "short_name": "MakeITHappen",
+  "description": "AI-Powered Business Solutions & Digital Transformation",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#6D28D9",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "any",
   "icons": [
+    {
+      "src": "/pwa-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/pwa-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
     {
       "src": "/pwa-192x192.png",
       "sizes": "192x192",
@@ -19,5 +30,35 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "shortcuts": [
+    {
+      "name": "Start Project",
+      "url": "/start-project",
+      "description": "Start a new project",
+      "icons": [{ "src": "/pwa-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Services",
+      "url": "/services",
+      "description": "View our services",
+      "icons": [{ "src": "/pwa-96x96.png", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/home.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "Homescreen of MakeITHappen"
+    }
+  ],
+  "categories": ["business", "productivity", "utilities"],
+  "dir": "ltr",
+  "lang": "en",
+  "prefer_related_applications": false,
+  "scope": "/",
+  "iarc_rating_id": "",
+  "related_applications": []
 }
