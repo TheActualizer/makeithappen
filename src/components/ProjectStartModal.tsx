@@ -70,28 +70,40 @@ const ProjectStartModal = ({
     return `[${min},${max}]`;
   };
 
+  const cleanFormData = (data: FormData) => {
+    const cleaned = {
+      name: data.name,
+      email: data.email,
+      phone: data.phone || null,
+      company: data.company || null,
+      project_type: data.projectType || [],
+      description: data.description,
+      timeline: data.timeline,
+      pain_points: data.pain_points || [],
+      complexity: data.complexity || null,
+      team_size: data.teamSize ? parseInt(data.teamSize) : null,
+      budget_range: formatBudgetRange(data.budgetRange),
+      workforce_simulation_scope: data.workforce_simulation_scope || null,
+      ai_agent_requirements: data.ai_agent_requirements || []
+    };
+
+    // Remove any undefined values
+    Object.keys(cleaned).forEach(key => {
+      if (cleaned[key] === undefined) {
+        cleaned[key] = null;
+      }
+    });
+
+    return cleaned;
+  };
+
   const handleSubmit = async () => {
     try {
       setIsSubmitting(true);
       console.log("Submitting form data:", formData);
 
-      const projectData = {
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        company: formData.company,
-        project_type: formData.projectType,
-        description: formData.description,
-        timeline: formData.timeline,
-        pain_points: formData.pain_points || [],
-        complexity: formData.complexity,
-        team_size: formData.teamSize ? parseInt(formData.teamSize) : null,
-        budget_range: formatBudgetRange(formData.budgetRange),
-        workforce_simulation_scope: formData.workforce_simulation_scope,
-        ai_agent_requirements: formData.ai_agent_requirements || []
-      };
-
-      console.log("Formatted project data:", projectData);
+      const projectData = cleanFormData(formData);
+      console.log("Cleaned project data:", projectData);
 
       const { error } = await supabase
         .from('projects')
