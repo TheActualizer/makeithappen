@@ -16,7 +16,6 @@ import VoiceInterface from "@/components/VoiceInterface";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AnimatePresence } from "framer-motion";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,24 +31,90 @@ const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <SessionContextProvider supabaseClient={supabase}>
         <Router>
-          <AnimatePresence mode="wait">
-            <PageTransition>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/case-studies" element={<CaseStudies />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                <Route path="/start-project" element={<StartProject />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-              </Routes>
-            </PageTransition>
-            <VoiceInterface />
-            <Toaster />
-          </AnimatePresence>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <PageTransition>
+                  <Index />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/about"
+              element={
+                <PageTransition>
+                  <About />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/blog"
+              element={
+                <PageTransition>
+                  <Blog />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/contact"
+              element={
+                <PageTransition>
+                  <Contact />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/services"
+              element={
+                <PageTransition>
+                  <Services />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/case-studies"
+              element={
+                <PageTransition>
+                  <CaseStudies />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <PageTransition>
+                  <Login />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/reset-password"
+              element={
+                <PageTransition>
+                  <ResetPassword />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/start-project"
+              element={
+                <PageTransition>
+                  <StartProject />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <PageTransition>
+                  <Dashboard />
+                </PageTransition>
+              }
+            />
+          </Routes>
+          <VoiceInterface />
+          <Toaster />
         </Router>
       </SessionContextProvider>
     </QueryClientProvider>

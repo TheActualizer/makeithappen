@@ -8,6 +8,10 @@ import { ArrowRight } from "lucide-react";
 export const ServicesShowcase = () => {
   const navigate = useNavigate();
 
+  const handleStartBuilding = () => {
+    navigate("/start-project");
+  };
+
   return (
     <section className="py-12 px-4 md:px-6 lg:px-8 bg-background relative" id="services">
       <div className="max-w-7xl mx-auto">
@@ -23,7 +27,7 @@ export const ServicesShowcase = () => {
           <Button 
             variant="default" 
             size="lg"
-            onClick={() => navigate("/start-project")}
+            onClick={handleStartBuilding}
             className="group bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 transition-all duration-300"
           >
             Start Building
