@@ -35,6 +35,9 @@
   body {
     @apply bg-gradient-to-br from-accent via-accent/95 to-primary/20 text-foreground font-sans text-base leading-relaxed tracking-wide min-h-screen;
     font-family: 'Inter', sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   /* Improved typography scale */
@@ -60,21 +63,26 @@
     @apply bg-background/50 backdrop-blur-sm border-border/10 focus:border-primary/50 transition-all duration-200;
   }
 
-  /* Card enhancements */
+  /* Card enhancements with hardware acceleration */
   .card {
     @apply bg-background/40 backdrop-blur-md border border-border/10 shadow-xl;
     box-shadow: 0 4px 32px -2px rgba(0, 0, 0, 0.1), 0 2px 8px -2px rgba(0, 0, 0, 0.05);
+    transform: translateZ(0);
+    will-change: transform;
   }
 
-  /* Button improvements */
+  /* Button improvements with hardware acceleration */
   button {
     @apply transition-all duration-200 active:scale-95;
+    transform: translateZ(0);
+    will-change: transform;
   }
 
-  /* Smooth scrolling */
+  /* Smooth scrolling with improved performance */
   html {
     scroll-behavior: smooth;
     @apply overflow-x-hidden;
+    text-size-adjust: 100%;
   }
 
   /* Container system */
@@ -82,9 +90,11 @@
     @apply px-4 mx-auto max-w-7xl;
   }
 
-  /* Animation utilities */
+  /* Animation utilities with hardware acceleration */
   .animate-float {
     animation: float 3s ease-in-out infinite;
+    transform: translateZ(0);
+    will-change: transform;
   }
 
   @keyframes float {
@@ -101,11 +111,26 @@
   .animate-gradient {
     background-size: 200% auto;
     animation: gradient 8s linear infinite;
+    will-change: background-position;
   }
 
-  /* Grid background */
+  /* Grid background with performance optimization */
   .bg-grid-white {
     background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
                       linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* Performance optimizations */
+  * {
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
+  .gpu {
+    transform: translateZ(0);
+    will-change: transform;
   }
 }

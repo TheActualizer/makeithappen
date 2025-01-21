@@ -7,8 +7,14 @@ import { Toaster } from "@/components/ui/toaster";
 import PageTransition from "@/components/PageTransition";
 import VoiceInterface from "@/components/VoiceInterface";
 
-// Lazy load pages
-const Index = lazy(() => import("@/pages/Index"));
+// Lazy load pages with prefetch
+const Index = lazy(() => {
+  const component = import("@/pages/Index");
+  // Prefetch other routes
+  import("@/pages/About");
+  import("@/pages/Blog");
+  return component;
+});
 const About = lazy(() => import("@/pages/About"));
 const Blog = lazy(() => import("@/pages/Blog"));
 const Contact = lazy(() => import("@/pages/Contact"));
