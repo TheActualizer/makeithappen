@@ -56,7 +56,7 @@ export default defineConfig(({ mode }) => ({
       }
     }),
     viteCompression({
-      algorithm: 'brotli',
+      algorithm: 'br', // Changed from 'brotli' to 'br'
       ext: '.br'
     })
   ].filter(Boolean),
