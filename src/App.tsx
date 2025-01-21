@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -7,28 +7,31 @@ import { Toaster } from "@/components/ui/toaster";
 import PageTransition from "@/components/PageTransition";
 import VoiceInterface from "@/components/VoiceInterface";
 
-// Pages
-import Index from "@/pages/Index";
-import About from "@/pages/About";
-import Blog from "@/pages/Blog";
-import Contact from "@/pages/Contact";
-import Services from "@/pages/Services";
-import CaseStudies from "@/pages/CaseStudies";
-import Login from "@/pages/Login";
-import ResetPassword from "@/pages/ResetPassword";
-import StartProject from "@/pages/StartProject";
-import Dashboard from "@/pages/Dashboard";
+// Lazy load pages
+const Index = lazy(() => import("@/pages/Index"));
+const About = lazy(() => import("@/pages/About"));
+const Blog = lazy(() => import("@/pages/Blog"));
+const Contact = lazy(() => import("@/pages/Contact"));
+const Services = lazy(() => import("@/pages/Services"));
+const CaseStudies = lazy(() => import("@/pages/CaseStudies"));
+const Login = lazy(() => import("@/pages/Login"));
+const ResetPassword = lazy(() => import("@/pages/ResetPassword"));
+const StartProject = lazy(() => import("@/pages/StartProject"));
+const Dashboard = lazy(() => import("@/pages/Dashboard"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000,
       retry: 1,
+      suspense: true, // Enable suspense mode
     },
   },
 });
 
 const App: React.FC = () => {
+  console.log("App rendering - Route transition started");
+
   return (
     <QueryClientProvider client={queryClient}>
       <SessionContextProvider supabaseClient={supabase}>
