@@ -30,24 +30,14 @@
 
   * {
     @apply border-border;
-    -webkit-backface-visibility: hidden;
-    -moz-backface-visibility: hidden;
-    backface-visibility: hidden;
-    transform: translate3d(0, 0, 0);
   }
 
   body {
     @apply bg-gradient-to-br from-accent via-accent/95 to-primary/20 text-foreground font-sans text-base leading-relaxed tracking-wide min-h-screen;
     font-family: 'Inter', sans-serif;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
-    transform: translate3d(0, 0, 0);
-    perspective: 1000;
-    will-change: transform;
   }
 
+  /* Improved typography scale */
   h1, h2, h3, h4, h5, h6 {
     @apply font-semibold tracking-tight;
     letter-spacing: -0.02em;
@@ -68,45 +58,33 @@
   /* Enhanced form elements */
   input, select, textarea {
     @apply bg-background/50 backdrop-blur-sm border-border/10 focus:border-primary/50 transition-all duration-200;
-    transform: translate3d(0, 0, 0);
-    will-change: transform;
   }
 
-  /* Card enhancements with maximum performance */
+  /* Card enhancements */
   .card {
     @apply bg-background/40 backdrop-blur-md border border-border/10 shadow-xl;
     box-shadow: 0 4px 32px -2px rgba(0, 0, 0, 0.1), 0 2px 8px -2px rgba(0, 0, 0, 0.05);
-    transform: translate3d(0, 0, 0);
-    will-change: transform;
-    backface-visibility: hidden;
   }
 
-  /* Button improvements with maximum performance */
+  /* Button improvements */
   button {
     @apply transition-all duration-200 active:scale-95;
-    transform: translate3d(0, 0, 0);
-    will-change: transform;
-    backface-visibility: hidden;
   }
 
-  /* High-performance scrolling */
+  /* Smooth scrolling */
   html {
     scroll-behavior: smooth;
     @apply overflow-x-hidden;
-    text-size-adjust: 100%;
-    -webkit-overflow-scrolling: touch;
   }
 
+  /* Container system */
   .container {
     @apply px-4 mx-auto max-w-7xl;
   }
 
-  /* High-performance animation utilities */
+  /* Animation utilities */
   .animate-float {
     animation: float 3s ease-in-out infinite;
-    transform: translate3d(0, 0, 0);
-    will-change: transform;
-    backface-visibility: hidden;
   }
 
   @keyframes float {
@@ -123,35 +101,11 @@
   .animate-gradient {
     background-size: 200% auto;
     animation: gradient 8s linear infinite;
-    will-change: background-position;
-    transform: translate3d(0, 0, 0);
   }
 
-  /* Optimized grid background */
+  /* Grid background */
   .bg-grid-white {
     background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
                       linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-    transform: translate3d(0, 0, 0);
-    will-change: transform;
-    backface-visibility: hidden;
-  }
-
-  /* Maximum performance optimizations */
-  .gpu {
-    transform: translate3d(0, 0, 0);
-    will-change: transform;
-    backface-visibility: hidden;
-    perspective: 1000;
-  }
-
-  /* Instant transitions */
-  .instant {
-    transition: none !important;
-    animation: none !important;
-  }
-
-  /* Smooth animations */
-  .smooth {
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
