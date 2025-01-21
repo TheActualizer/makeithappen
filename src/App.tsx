@@ -1,5 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { SessionContextProvider } from "@supabase/auth-helpers-react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Toaster } from "@/components/ui/toaster";
+import PageTransition from "@/components/PageTransition";
+import VoiceInterface from "@/components/VoiceInterface";
+
+// Pages
 import Index from "@/pages/Index";
 import About from "@/pages/About";
 import Blog from "@/pages/Blog";
@@ -10,12 +18,6 @@ import Login from "@/pages/Login";
 import ResetPassword from "@/pages/ResetPassword";
 import StartProject from "@/pages/StartProject";
 import Dashboard from "@/pages/Dashboard";
-import { Toaster } from "@/components/ui/toaster";
-import PageTransition from "@/components/PageTransition";
-import VoiceInterface from "@/components/VoiceInterface";
-import { SessionContextProvider } from "@supabase/auth-helpers-react";
-import { supabase } from "@/integrations/supabase/client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient({
   defaultOptions: {
