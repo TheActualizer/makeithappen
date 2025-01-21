@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ReactNode, Suspense } from "react";
-import { useLocation } from "react-router-dom";
+import { ReactNode, Suspense, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface PageTransitionProps {
   children: ReactNode;
@@ -17,29 +17,55 @@ const LoadingSpinner = () => (
 
 const PageTransition = ({ children }: PageTransitionProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // Preload adjacent routes
+  useEffect(() => {
+    const preloadAdjacentRoutes = () => {
+      const routes = ['/about', '/blog', '/contact', '/services'];
+      const currentIndex = routes.indexOf(location.pathname);
+      
+      // Preload next and previous routes
+      if (currentIndex !== -1) {
+        const nextRoute = routes[(currentIndex + 1) % routes.length];
+        const prevRoute = routes[(currentIndex - 1 + routes.length) % routes.length];
+        
+        // Prefetch components
+        import(`@/pages${nextRoute === '/' ? '/Index' : nextRoute}.tsx`);
+        import(`@/pages${prevRoute === '/' ? '/Index' : prevRoute}.tsx`);
+      }
+    };
+
+    preloadAdjacentRoutes();
+  }, [location.pathname]);
+
   console.log("Page transition triggered:", location.pathname);
 
   return (
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={location.pathname}
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, x: 0 }}
         animate={{ 
-          opacity: 1, 
-          y: 0,
+          opacity: 1,
+          x: 0,
           transition: {
             type: "spring",
-            stiffness: 380,
-            damping: 30
+            mass: 0.2,
+            stiffness: 500,
+            damping: 30,
+            velocity: 2
           }
         }}
         exit={{ 
-          opacity: 0, 
-          y: -10,
+          opacity: 0,
+          x: 0,
           transition: {
-            duration: 0.15
+            duration: 0.1,
+            ease: "easeOut"
           }
         }}
+        className="gpu will-change-transform"
       >
         <Suspense fallback={<LoadingSpinner />}>
           {children}
