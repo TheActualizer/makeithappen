@@ -12,7 +12,7 @@ import StartProject from "@/pages/StartProject";
 import Dashboard from "@/pages/Dashboard";
 import { Toaster } from "@/components/ui/toaster";
 import PageTransition from "@/components/PageTransition";
-import VoiceInterface from "@/components/VoiceInterface";
+
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -116,7 +116,6 @@ const App: React.FC = () => {
                   }
                 />
               </Routes>
-              <VoiceInterface />
               <Toaster />
             </Router>
           </SessionContextProvider>
