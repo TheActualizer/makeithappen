@@ -95,6 +95,28 @@ const StartProject = () => {
 
       console.log('Project saved successfully');
 
+      // Trigger Make.com webhook
+      try {
+        const makeWebhookUrl = "https://hook.us1.make.com/ik8rx2r1wkn0d79f1fcyfgfrwnrusefc";
+        
+        await fetch(makeWebhookUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          mode: "no-cors",
+          body: JSON.stringify({
+            ...projectData,
+            submitted_at: new Date().toISOString(),
+            source: "project_form"
+          }),
+        });
+        
+        console.log("Make.com webhook triggered successfully");
+      } catch (webhookError) {
+        console.error("Make.com webhook failed:", webhookError);
+      }
+
       toast({
         title: "Success!",
         description: "Your project details have been saved. Let's schedule a consultation!",
